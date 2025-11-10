@@ -115,17 +115,29 @@ export default function Purificacao() {
             {/* Container Visual para as Três Fases */}
             <div className="bg-white/5 backdrop-blur-xl p-8 pr-16 rounded-3xl shadow-2xl border border-white/10 relative">
               
-              {/* Título da Seção */}
-              <div className="text-center mb-10">
-                <h2 className="text-4xl md:text-5xl font-semibold bg-linear-to-r from-[#E8D48F] via-[#D4AF37] to-[#E8D48F] bg-clip-text text-transparent" 
+              {/* Título da Seção - Elevado e Luminoso */}
+              <div className="text-center mb-10 relative">
+                {/* Glow de fundo */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-96 h-32 bg-gradient-to-r from-transparent via-amber-400/20 to-transparent blur-2xl"></div>
+                </div>
+                
+                <h2 className="text-4xl md:text-5xl font-light bg-gradient-to-r from-white via-amber-100 to-white bg-clip-text text-transparent relative z-10" 
                     style={{ 
                       fontFamily: "'Poppins', sans-serif",
-                      letterSpacing: '0.02em',
-                      textShadow: '0 0 20px rgba(212,175,55,0.3), 0 0 40px rgba(212,175,55,0.2)',
-                      filter: 'drop-shadow(0 2px 3px rgba(0,0,0,0.4))'
+                      letterSpacing: '0.08em',
+                      textShadow: '0 0 30px rgba(255,255,255,0.5), 0 0 60px rgba(251,191,36,0.4), 0 0 90px rgba(251,191,36,0.3)',
+                      filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.3))'
                     }}>
-                  As Três Fases do Processo
+                  AS TRÊS FASES DO PROCESSO
                 </h2>
+                
+                {/* Linha decorativa luminosa */}
+                <div className="flex items-center justify-center gap-2 mt-4">
+                  <div className="h-px w-16 bg-gradient-to-r from-transparent to-amber-400/50"></div>
+                  <div className="w-2 h-2 rounded-full bg-amber-400/70 shadow-lg shadow-amber-400/50"></div>
+                  <div className="h-px w-16 bg-gradient-to-l from-transparent to-amber-400/50"></div>
+                </div>
               </div>
               
               {/* Linha do Tempo Vertical com Conexões */}
