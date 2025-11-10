@@ -149,7 +149,7 @@ const App = () => {
   return (
     <TooltipProvider>
       <Toaster />
-      <BrowserRouter>
+      <BrowserRouter basename="/site-igreja-v5">
         <ScrollToTop />
         <Navigation />
 
