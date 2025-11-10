@@ -1,17 +1,17 @@
 ﻿Set-Location 'C:\temp\Site_Igreja_Meta\V5_SiteIgreja\workspace\shadcn-ui'
-$logFile = 'C:\temp\Site_Igreja_Meta\V5_SiteIgreja\workspace\shadcn-ui\logs\deploy-2025-11-10_04-14-06.log'
+$logFile = 'C:\temp\Site_Igreja_Meta\V5_SiteIgreja\workspace\shadcn-ui\logs\deploy-20251110-041757.log'
 
 # Funcao para logar
 function Write-Log {
     param([string]$msg)
-    $timestamp = Get-Date -Format 'HH:mm:ss'
+    $timestamp = Get-Date -Format 'HHmmss'
     "[$timestamp] $msg" | Out-File $logFile -Append
 }
 
 # Iniciar log
 "========================================" | Out-File $logFile
 Write-Log "DEPLOY INICIADO"
-Write-Log "Mensagem: test: deploy background que realmente cria logs"
+Write-Log "Mensagem: feat: simplificar script para deployAutomatico e limpar logs"
 "========================================" | Out-File $logFile -Append
 
 try {
@@ -27,7 +27,7 @@ try {
     
     Write-Log ""
     Write-Log "[3/4] Git commit..."
-    git commit -m "test: deploy background que realmente cria logs" 2>&1 | Out-File $logFile -Append
+    git commit -m "feat: simplificar script para deployAutomatico e limpar logs" 2>&1 | Out-File $logFile -Append
     Write-Log "[OK] Git commit concluido!"
     
     Write-Log ""
@@ -38,7 +38,7 @@ try {
     Write-Log ""
     "========================================" | Out-File $logFile -Append
     Write-Log "[SUCCESS] Deploy concluido com sucesso!"
-    Write-Log "Finalizado: $(Get-Date -Format 'dd/MM/yyyy HH:mm:ss')"
+    Write-Log "Finalizado: $(Get-Date -Format 'yyyyMMdd HHmmss')"
     "========================================" | Out-File $logFile -Append
     
 } catch {

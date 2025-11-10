@@ -7,7 +7,7 @@ param(
 )
 
 $projectRoot = Split-Path -Parent $PSScriptRoot
-$timestamp = Get-Date -Format "yyyy-MM-dd_HH-mm-ss"
+$timestamp = Get-Date -Format "yyyyMMdd-HHmmss"
 $logDir = Join-Path $projectRoot "logs"
 $logFile = Join-Path $logDir "deploy-$timestamp.log"
 
@@ -30,7 +30,7 @@ Set-Location '$projectRoot'
 # Funcao para logar
 function Write-Log {
     param([string]`$msg)
-    `$timestamp = Get-Date -Format 'HH:mm:ss'
+    `$timestamp = Get-Date -Format 'HHmmss'
     "[`$timestamp] `$msg" | Out-File `$logFile -Append
 }
 
@@ -64,7 +64,7 @@ try {
     Write-Log ""
     "========================================" | Out-File `$logFile -Append
     Write-Log "[SUCCESS] Deploy concluido com sucesso!"
-    Write-Log "Finalizado: `$(Get-Date -Format 'dd/MM/yyyy HH:mm:ss')"
+    Write-Log "Finalizado: `$(Get-Date -Format 'yyyyMMdd HHmmss')"
     "========================================" | Out-File `$logFile -Append
     
 } catch {
