@@ -42,11 +42,11 @@ const BACKUP_DIR = path.join(__dirname, '../backups/supabase');
 const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
 const CURRENT_BACKUP_DIR = path.join(BACKUP_DIR, timestamp);
 
-// Tabelas a fazer backup (adicione suas tabelas aqui)
+// Tabelas a fazer backup (todas as tabelas do banco)
 const TABLES = [
-  'page_styles',
-  'page_history',
-  // Adicione outras tabelas conforme necessário
+  'page_contents',  // JSONs dos textos das páginas
+  'page_styles',    // CSS das páginas
+  'page_history',   // Histórico de versões
 ];
 
 /**
