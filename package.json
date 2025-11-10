@@ -18,6 +18,9 @@
     "fix-ids:fix": "node scripts/fix-ids.js --fix",
     "backup": "node scripts/backup-supabase.js",
     "backup:verbose": "node scripts/backup-supabase.js --verbose",
+    "backup:list": "powershell -File scripts/list-backups.ps1",
+    "backup:list:detailed": "powershell -File scripts/list-backups.ps1 -Detailed",
+    "backup:compare": "powershell -File scripts/list-backups.ps1 -Compare",
     "restore": "node scripts/restore-supabase.js",
     "restore:latest": "node scripts/restore-supabase.js --latest",
     "restore:dry": "node scripts/restore-supabase.js --latest --dry-run"

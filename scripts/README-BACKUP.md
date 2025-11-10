@@ -10,10 +10,16 @@ Scripts para fazer backup e restaurar dados do banco Supabase.
 # Fazer backup
 pnpm backup
 
-# Fazer backup com log detalhado
-pnpm backup:verbose
+# Listar backups disponíveis
+pnpm backup:list
 
-# Restaurar último backup (com confirmação)
+# Listar com detalhes completos
+pnpm backup:list:detailed
+
+# Comparar último com anterior
+pnpm backup:compare
+
+# Restaurar último backup
 pnpm restore:latest
 
 # Preview de restauração (sem alterar dados)
@@ -104,7 +110,31 @@ backups/supabase/
 - 📊 Insere dados em lotes de 100 registros
 - 🔍 Modo dry-run para testar sem alterar dados
 
-### Comandos
+### Listar Backups Disponíveis
+
+```bash
+# Listar todos os backups (mostra nomes dos backups disponíveis)
+node scripts/restore-supabase.js
+
+# Via PowerShell - lista completa com detalhes
+Get-ChildItem backups\supabase -Directory | Sort-Object LastWriteTime -Descending
+
+# Ver detalhes de um backup específico
+Get-Content backups\supabase\2025-11-10T10-30-00\_metadata.json | ConvertFrom-Json
+
+# Listar com estatísticas
+Get-ChildItem backups\supabase -Directory | ForEach-Object {
+    $meta = Get-Content "$($_.FullName)\_metadata.json" | ConvertFrom-Json
+    [PSCustomObject]@{
+        Data = $_.Name
+        Tabelas = $meta.successful
+        Registros = $meta.totalRecords
+        Tamanho = "$($meta.totalSize) KB"
+    }
+} | Sort-Object Data -Descending | Format-Table -AutoSize
+```
+
+### Comandos de Restauração
 
 ```bash
 # Restaurar último backup (com confirmação)
@@ -113,17 +143,17 @@ pnpm restore:latest
 # Preview sem alterar dados
 pnpm restore:dry
 
-# Restaurar backup específico
+# Restaurar backup específico por data/hora
 node scripts/restore-supabase.js --backup=2025-11-10T10-30-00
 
-# Restaurar sem confirmação
+# Restaurar sem confirmação (CUIDADO!)
 node scripts/restore-supabase.js --latest --force
 
 # Restaurar tabela específica
-node scripts/restore-supabase.js --latest --table=page_texts
+node scripts/restore-supabase.js --latest --table=page_styles
 
-# Listar backups disponíveis
-node scripts/restore-supabase.js
+# Restaurar backup específico + tabela específica
+node scripts/restore-supabase.js --backup=2025-11-10T10-30-00 --table=page_contents
 ```
 
 ### Processo de restauração
@@ -163,6 +193,67 @@ const TABLES = [
 
 ---
 
+## 📊 Gestão de Versões de Backup
+
+### Listar e Comparar Backups
+
+```powershell
+# Lista completa com informações
+Get-ChildItem backups\supabase -Directory | ForEach-Object {
+    $meta = Get-Content "$($_.FullName)\_metadata.json" | ConvertFrom-Json
+    [PSCustomObject]@{
+        'Data/Hora' = [DateTime]::Parse($meta.timestamp).ToString('dd/MM/yyyy HH:mm')
+        'Pasta' = $_.Name
+        'Tabelas OK' = $meta.successful
+        'Tabelas Falha' = $meta.failed
+        'Total Registros' = $meta.totalRecords
+        'Tamanho (KB)' = $meta.totalSize
+    }
+} | Sort-Object 'Data/Hora' -Descending | Format-Table -AutoSize
+
+# Ver conteúdo de um backup específico
+Get-ChildItem backups\supabase\2025-11-10T10-30-00 | Select-Object Name, Length
+
+# Comparar dois backups
+$backup1 = Get-Content backups\supabase\2025-11-10T10-30-00\_metadata.json | ConvertFrom-Json
+$backup2 = Get-Content backups\supabase\2025-11-10T11-00-00\_metadata.json | ConvertFrom-Json
+Write-Host "Backup 1: $($backup1.totalRecords) registros"
+Write-Host "Backup 2: $($backup2.totalRecords) registros"
+Write-Host "Diferença: $($backup2.totalRecords - $backup1.totalRecords) registros"
+```
+
+### Restaurar Versão Específica por Data
+
+```bash
+# 1. Listar backups com datas legíveis
+node scripts/restore-supabase.js
+
+# 2. Escolher backup pela data/hora
+node scripts/restore-supabase.js --backup=2025-11-10T10-30-00
+
+# 3. Ou usar o mais recente
+node scripts/restore-supabase.js --latest
+```
+
+### Manter Backups Importantes
+
+```powershell
+# Sistema mantém últimos 10 automaticamente
+# Para manter um backup específico permanentemente, mova para fora da pasta:
+
+# Criar pasta de backups permanentes
+New-Item -ItemType Directory -Path backups\permanentes -Force
+
+# Mover backup importante
+Move-Item backups\supabase\2025-11-10T10-30-00 backups\permanentes\2025-11-10-antes-migracao
+
+# Para restaurar backup permanente, mova de volta temporariamente
+Copy-Item backups\permanentes\2025-11-10-antes-migracao backups\supabase\2025-11-10T10-30-00 -Recurse
+node scripts/restore-supabase.js --backup=2025-11-10T10-30-00
+```
+
+---
+
 ## 📊 Exemplos de Uso
 
 ### Rotina de backup diário
@@ -175,13 +266,53 @@ pnpm backup
 ### Antes de mudanças grandes
 
 ```bash
-# Fazer backup antes de modificar dados
+# 1. Fazer backup antes de modificar dados
 pnpm backup:verbose
 
-# Fazer as mudanças...
+# 2. Fazer as mudanças...
 
-# Se algo der errado, restaurar
+# 3. Se algo der errado, listar backups
+node scripts/restore-supabase.js
+
+# 4. Restaurar o backup anterior
 pnpm restore:latest
+```
+
+### Workflow Completo com Versionamento
+
+```bash
+# Segunda-feira: Backup de segurança
+pnpm backup:verbose
+# Criado: backups/supabase/2025-11-10T08-00-00
+
+# Durante a semana: Fazer mudanças normalmente
+
+# Sexta-feira: Problema detectado!
+# Listar todos os backups
+node scripts/restore-supabase.js
+
+# Ver qual backup tem os dados corretos
+Get-Content backups\supabase\2025-11-10T08-00-00\_metadata.json | ConvertFrom-Json
+
+# Testar restauração (dry-run)
+node scripts/restore-supabase.js --backup=2025-11-10T08-00-00 --dry-run
+
+# Restaurar para segunda-feira
+node scripts/restore-supabase.js --backup=2025-11-10T08-00-00
+```
+
+### Restaurar Apenas Uma Tabela
+
+```bash
+# Situação: page_styles está ok, mas page_contents precisa ser restaurado
+
+# 1. Listar backups
+node scripts/restore-supabase.js
+
+# 2. Restaurar apenas page_contents de um backup específico
+node scripts/restore-supabase.js --backup=2025-11-10T10-30-00 --table=page_contents
+
+# Outras tabelas permanecem intactas
 ```
 
 ### Testar restauração sem risco

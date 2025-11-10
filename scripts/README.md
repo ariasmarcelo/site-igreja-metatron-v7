@@ -20,12 +20,13 @@ pnpm fix-ids
 pnpm fix-ids:fix
 
 # Backup
-pnpm backup
-pnpm restore:latest
+pnpm backup              # Fazer backup
+pnpm backup:list         # Listar backups
+pnpm restore:latest      # Restaurar último
 
 # Deploy
-.\scripts\deploy.ps1 "msg"
-.\scripts\deploy.ps1 -b "msg"
+.\scripts\deploy.ps1 "msg"      # Síncrono
+.\scripts\deploy.ps1 -b "msg"   # Background
 ```
 
 ---
