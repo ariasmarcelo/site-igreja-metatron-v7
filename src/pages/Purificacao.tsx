@@ -110,10 +110,9 @@ export default function Purificacao() {
               
               {/* Título da Seção */}
               <div className="text-center mb-10">
-                <h2 className="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-linear-to-r from-[#CFAF5A] via-[#B38938] to-[#CFAF5A]" 
+                <h2 className="text-4xl md:text-5xl font-extrabold bg-linear-to-r from-[#CFAF5A] via-[#B38938] to-[#CFAF5A] bg-clip-text text-transparent" 
                     style={{ 
-                      textShadow: '0 4px 8px rgba(0,0,0,0.15), 0 8px 16px rgba(0,0,0,0.1), 0 16px 32px rgba(0,0,0,0.05)',
-                      filter: 'drop-shadow(0 2px 4px rgba(207,175,90,0.4))'
+                      filter: 'drop-shadow(0 4px 6px rgba(179,137,56,0.4)) drop-shadow(0 8px 12px rgba(179,137,56,0.25)) drop-shadow(0 12px 20px rgba(179,137,56,0.15))'
                     }}>
                   As Três Fases do Processo
                 </h2>
