@@ -109,8 +109,10 @@ export default function Purificacao() {
             <div className="bg-linear-to-br from-gray-50 via-white to-gray-50 p-8 pr-16 rounded-2xl shadow-xl border border-gray-200 relative">
               
               {/* Título da Seção */}
-              <div className="text-center mb-8">
-                <h2 className="text-4xl font-bold text-gray-800">As Três Fases do Processo</h2>
+              <div className="text-center mb-10">
+                <h2 className="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-linear-to-r from-red-600 via-blue-600 to-amber-600 drop-shadow-lg">
+                  As Três Fases do Processo
+                </h2>
               </div>
               
               {/* Linha do Tempo Vertical com Conexões */}
