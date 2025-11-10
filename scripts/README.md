@@ -1,169 +1,339 @@
-# 📚 Scripts de Automação do Sistema de Edição Visual
+# 📚 Scripts de Automação# 📚 Scripts de Automação do Sistema de Edição Visual
 
-Este diretório contém scripts automatizados para gerenciar os atributos `data-json-key` que conectam elementos visuais ao conteúdo editável.
 
-> 📖 Veja também: **[README-IDS.md](./README-IDS.md)** - Documentação detalhada do script fix-ids.js
 
----
+Scripts essenciais para desenvolvimento e deploy do projeto.Este diretório contém scripts automatizados para gerenciar os atributos `data-json-key` que conectam elementos visuais ao conteúdo editável.
 
-## 🚀 Quick Start
 
-```bash
+
+---> 📖 Veja também: **[README-IDS.md](./README-IDS.md)** - Documentação detalhada do script fix-ids.js
+
+
+
+## 🚀 Quick Start---
+
+
+
+```bash## 🚀 Quick Start
+
+# Desenvolvimento
+
+pnpm dev                    # Inicia dev server (verifica IDs automaticamente)```bash
+
 # Desenvolvimento normal (IDs verificados automaticamente)
-pnpm dev
 
-# Verificar IDs únicos
+# IDspnpm dev
+
+pnpm fix-ids               # Verifica IDs
+
+pnpm fix-ids:fix           # Verifica e corrige IDs# Verificar IDs únicos
+
 pnpm fix-ids
 
-# Corrigir IDs automaticamente
-pnpm fix-ids:fix
+# Deploy
+
+.\scripts\deploy.ps1 "msg"      # Deploy síncrono# Corrigir IDs automaticamente
+
+.\scripts\deploy.ps1 -b "msg"   # Deploy backgroundpnpm fix-ids:fix
+
+```
 
 # Correção completa de data-json-key
-pnpm fix-keys
 
-# Limpeza de backups antigos
+---pnpm fix-keys
+
+
+
+## 📋 Scripts Disponíveis# Limpeza de backups antigos
+
 pnpm clean-backups
-```
 
----
+### 1. **fix-ids.js** ⭐```
 
-## 📋 Scripts Ativos
 
-| Script | Comando | Descrição | Frequência |
-|--------|---------|-----------|------------|
-| **fix-ids.js** ⭐ | `pnpm fix-ids` | Verificação completa de IDs | Sob demanda |
-| **fix-ids.js --fix** | `pnpm fix-ids:fix` | Correção automática de IDs | Sob demanda |
-| **fix-all-keys.cjs** | `pnpm fix-keys` | Correção de data-json-key | Mensal |
-| **init-assign-fix-ids.js** | Automático (`pnpm dev`) | Verificação ao iniciar dev | Automático |
-| **clean-all-backups.cjs** | `pnpm clean-backups` | Limpa backups antigos | Mensal |
-| **deploy.ps1** | `pnpm deploy` ou `.\scripts\deploy.ps1` | Deploy síncrono (padrão) | Por deploy |
-| **deploy.ps1 -Background** | `pnpm deploy:bg` ou `.\scripts\deploy.ps1 -Background` | Deploy em background | Por deploy |
 
-**Scripts Auxiliares:**
-- `update-testemunhos.js` - Atualização de testemunhos
-- `inserir-artigos.js` - Inserção de artigos no blog
-- `migrate-to-supabase.js` - Migração para Supabase
+Script único para gerenciar IDs de elementos editáveis.---
 
----
 
-## 🎯 O Que São os Scripts?
+
+**O que faz:**## 📋 Scripts Ativos
+
+- Verifica todos os elementos `{texts.xxx}` no código
+
+- Garante que cada elemento tenha `data-json-key` único| Script | Comando | Descrição | Frequência |
+
+- Detecta contexto de arrays (`.map()`)|--------|---------|-----------|------------|
+
+- Corrige automaticamente quando necessário| **fix-ids.js** ⭐ | `pnpm fix-ids` | Verificação e correção de IDs | Automático + Manual |
+
+- Cria backups antes de modificar| **deploy.ps1** ⭐ | `.\scripts\deploy.ps1 [-b] "msg"` | Deploy síncrono ou background | Por deploy |
+
+
+
+**Comandos:****Comandos disponíveis:**
+
+```bash```bash
+
+pnpm fix-ids              # Verifica apenas# IDs
+
+pnpm fix-ids:check        # Verifica apenaspnpm fix-ids          # Verifica apenas
+
+pnpm fix-ids:fix          # Verifica e corrigepnpm fix-ids:check    # Verifica apenas
+
+pnpm fix-ids:fix      # Verifica e corrige
+
+# Opções avançadas
+
+node scripts/fix-ids.js --page=NomeDaPagina --fix# Deploy
+
+node scripts/fix-ids.js --fix --dry-run.\scripts\deploy.ps1 "mensagem"       # Síncrono
+
+node scripts/fix-ids.js --verbose.\scripts\deploy.ps1 -b "mensagem"    # Background
+
+``````
+
+
+
+**Quando usar:**---
+
+- Executa automaticamente no `pnpm dev` (modo check)
+
+- Execute `fix-ids:fix` após adicionar novos elementos editáveis## 🎯 O Que São os Scripts?
+
+- Execute após refatorações grandes
 
 ### Problema
-```jsx
+
+---```jsx
+
 // Elemento não-editável (sem data-json-key)
-<h1>{texts.hero.title}</h1>
+
+### 2. **deploy.ps1** ⭐<h1>{texts.hero.title}</h1>
+
 ```
+
+Script único para deploy no GitHub Pages.
 
 ### Solução
-```jsx
-// Elemento editável no Admin Panel (/436F6E736F6C45)
-<h1 data-json-key="index.hero.title">{texts.hero.title}</h1>
-```
+
+**Recursos:**```jsx
+
+- Deploy síncrono (padrão) ou background// Elemento editável no Admin Panel (/436F6E736F6C45)
+
+- Logs limpos sem códigos ANSI<h1 data-json-key="index.hero.title">{texts.hero.title}</h1>
+
+- Mantém últimos 10 logs automaticamente```
+
+- Alias curto: `-b` para `-Background`
 
 ### Como Funciona
-1. Scripts detectam `{texts.xxx}` no código
-2. Encontram o elemento JSX pai
-3. Validam se path existe no JSON correspondente
-4. Injetam `data-json-key="pageName.section.property"`
+
+**Comandos:**1. Scripts detectam `{texts.xxx}` no código
+
+```bash2. Encontram o elemento JSX pai
+
+# Síncrono (bloqueia terminal, mostra progresso)3. Validam se path existe no JSON correspondente
+
+.\scripts\deploy.ps1 "feat: nova funcionalidade"4. Injetam `data-json-key="pageName.section.property"`
+
 5. Admin Panel usa esse atributo para permitir edição inline
 
-**Resultado**: **141+ elementos editáveis** em 8 páginas 🎉
+# Background (libera terminal)
 
----
+.\scripts\deploy.ps1 -b "fix: correcao"**Resultado**: **141+ elementos editáveis** em 8 páginas 🎉
 
-## 📖 Documentação Detalhada
+.\scripts\deploy.ps1 -Background "fix: correcao"
 
-### 1. **fix-ids.js** ⭐ (Script Definitivo)
+```---
 
-O script principal que substitui todos os anteriores.
 
-**Funcionalidades:**
-- 🧠 Verificação inteligente de IDs únicos
-- 🔢 Detecta contexto de arrays com `.map()`
-- 🗂️ Suporta estruturas JSX aninhadas
+
+**Processo:**## 📖 Documentação Detalhada
+
+1. Build (`pnpm build`)
+
+2. Git add### 1. **fix-ids.js** ⭐ (Script Definitivo)
+
+3. Git commit
+
+4. Git pushO script principal que substitui todos os anteriores.
+
+
+
+**Monitorar deploy background:****Funcionalidades:**
+
+```bash- 🧠 Verificação inteligente de IDs únicos
+
+Get-Content logs\deploy-YYYYMMDD-HHMMSS.log -Tail 20 -Wait- 🔢 Detecta contexto de arrays com `.map()`
+
+```- 🗂️ Suporta estruturas JSX aninhadas
+
 - ✅ Validação contra arquivos JSON
-- 🔒 Correção automática segura
+
+---- 🔒 Correção automática segura
+
 - 💾 Backups automáticos com timestamp
 
-**Uso:**
-```bash
-# Verificar apenas
-pnpm fix-ids
+## 🎯 Como Funciona o Sistema de IDs
 
-# Corrigir automaticamente
+**Uso:**
+
+### Problema```bash
+
+```jsx# Verificar apenas
+
+// ❌ Elemento não-editávelpnpm fix-ids
+
+<h1>{texts.hero.title}</h1>
+
+```# Corrigir automaticamente
+
 pnpm fix-ids:fix
 
-# Página específica
-node scripts/fix-ids.js --page=Tratamentos --fix
+### Solução
 
-# Preview das correções
+```jsx# Página específica
+
+// ✅ Elemento editável no Admin Panelnode scripts/fix-ids.js --page=Tratamentos --fix
+
+<h1 data-json-key="index.hero.title">{texts.hero.title}</h1>
+
+```# Preview das correções
+
 node scripts/fix-ids.js --fix --dry-run
-```
 
-Veja documentação completa em **[README-IDS.md](./README-IDS.md)**
+### Fluxo```
 
-### 2. **init-assign-fix-ids.js** (Automático)
-- ✅ Roda automaticamente via `pnpm dev`
+1. `fix-ids.js` detecta `{texts.xxx}` no código
+
+2. Encontra elemento JSX paiVeja documentação completa em **[README-IDS.md](./README-IDS.md)**
+
+3. Valida se path existe no JSON
+
+4. Injeta `data-json-key` correto### 2. **init-assign-fix-ids.js** (Automático)
+
+5. Admin Panel usa isso para edição inline- ✅ Roda automaticamente via `pnpm dev`
+
 - � Executa verificação inicial
-- ⚡ Não bloqueia dev server
 
-### 3. **fix-all-keys.cjs**
+**Resultado:** 96 elementos editáveis em 6 páginas- ⚡ Não bloqueia dev server
+
+
+
+---### 3. **fix-all-keys.cjs**
+
 - 🚀 Correção completa de data-json-key
-- 📊 Relatório consolidado
+
+## 📁 Estrutura- 📊 Relatório consolidado
+
 - 🔧 Executa junto com `pnpm dev`
-- 🔧 Use quando muitos elementos não aparecem no editor
 
-### 4. **fix-all-texts.js**
-- 🔍 Detecta: `{texts.xxx}`, `dangerouslySetInnerHTML`, atributos
-- ✅ Sempre atualiza (garante consistência total)
-- 📦 Cobertura: 127 elementos
+```- 🔧 Use quando muitos elementos não aparecem no editor
 
-### 5. **fix-all-maps.js**
+scripts/
+
+├── fix-ids.js           ⭐ Script único de IDs### 4. **fix-all-texts.js**
+
+├── deploy.ps1           ⭐ Script único de deploy- 🔍 Detecta: `{texts.xxx}`, `dangerouslySetInnerHTML`, atributos
+
+├── README.md            📖 Este arquivo- ✅ Sempre atualiza (garante consistência total)
+
+├── README-FIX-IDS.md    📖 Documentação detalhada de IDs- 📦 Cobertura: 127 elementos
+
+└── README-DEPLOY.md     📖 Documentação detalhada de deploy
+
+```### 5. **fix-all-maps.js**
+
 - 🗺️ Detecta arrays com `.map()`
-- 🔢 Gera índices dinâmicos `[${i}]`
+
+---- 🔢 Gera índices dinâmicos `[${i}]`
+
 - 🎯 Distingue objetos vs strings
-- 📦 Cobertura: 44 elementos em arrays
 
-### 6. **clean-all-backups.cjs**
-- 🗑️ Remove backups antigos
-- 💾 Mantém 5 mais recentes
-- 📂 Processa `src/locales/pt-BR/` e `src/styles/pages/`
+## 🔄 Fluxo de Trabalho- 📦 Cobertura: 44 elementos em arrays
 
----
 
-## 🔄 Integração Automática
+
+### Desenvolvimento Diário### 6. **clean-all-backups.cjs**
+
+```bash- 🗑️ Remove backups antigos
+
+pnpm dev    # IDs verificados automaticamente- 💾 Mantém 5 mais recentes
+
+```- 📂 Processa `src/locales/pt-BR/` e `src/styles/pages/`
+
+
+
+### Após Adicionar Elementos Editáveis---
 
 ```bash
-# Ao rodar pnpm dev:
-pnpm dev
-  ↓
-predev (package.json)
-  ↓
-init-assign-fix-ids.js
-  ↓ (se passou 24h)
-assign-ids-final.js
-  ↓
-vite (dev server)
+
+pnpm fix-ids:fix## 🔄 Integração Automática
+
 ```
 
+```bash
+
+### Deploy# Ao rodar pnpm dev:
+
+```bashpnpm dev
+
+# Modo síncrono (ver progresso)  ↓
+
+.\scripts\deploy.ps1 "mensagem do commit"predev (package.json)
+
+  ↓
+
+# Modo background (liberar terminal)init-assign-fix-ids.js
+
+.\scripts\deploy.ps1 -b "mensagem do commit"  ↓ (se passou 24h)
+
+```assign-ids-final.js
+
+  ↓
+
+---vite (dev server)
+
+```
+
+## 📊 Estatísticas
+
 ---
 
-## ✅ Recursos Comuns
+- **96 elementos editáveis** distribuídos em 6 páginas
 
-- ✅ **Idempotentes**: Podem rodar múltiplas vezes sem problemas
+- **2 scripts essenciais** (fix-ids.js, deploy.ps1)## ✅ Recursos Comuns
+
+- **100% cobertura** - todos elementos têm data-json-key
+
+- **Admin Panel**: `/436F6E736F6C45`- ✅ **Idempotentes**: Podem rodar múltiplas vezes sem problemas
+
 - 🔒 **Backups**: Criados automaticamente antes de modificações
-- 👁️ **Dry-run**: Preview sem modificar (`--dry-run`)
-- 🐛 **Verbose**: Modo debug (`--verbose`)
-- 🎯 **Filtros**: Processar páginas específicas (`--page=Name`)
 
----
+---- 👁️ **Dry-run**: Preview sem modificar (`--dry-run`)
+
+- 🐛 **Verbose**: Modo debug (`--verbose`)
+
+## 📚 Documentação Completa- 🎯 **Filtros**: Processar páginas específicas (`--page=Name`)
+
+
+
+- **[README-FIX-IDS.md](./README-FIX-IDS.md)** - Detalhes do sistema de IDs---
+
+- **[README-DEPLOY.md](./README-DEPLOY.md)** - Detalhes do sistema de deploy
 
 ## � Quando Executar Manualmente
 
+---
+
 **Situações que requerem execução manual**:
 
-| Situação | Script | Comando |
-|----------|--------|---------|
+**Última Atualização:** 10/11/2025  
+
+**Status:** Todos os scripts funcionais e otimizados  | Situação | Script | Comando |
+
+**Complexidade:** Simplificado ao máximo|----------|--------|---------|
+
 | Nova página criada | assign-ids-final.js | `node scripts/assign-ids-final.js --page=Nome` |
 | Elementos não-editáveis | fix-all-keys.cjs | `node scripts/fix-all-keys.cjs` |
 | Grande refatoração | fix-all-keys.cjs | `node scripts/fix-all-keys.cjs` |
