@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Link } from 'react-router-dom';
 import { Heart, Sun, Users, BookOpen, Brain, Ghost, Database, Compass, HeartCrack, User, Sparkles, ArrowLeftRight, UserRound, Zap } from 'lucide-react';
 import TestimonialsCarousel from '@/components/TestimonialsCarousel';
+import VisualPageEditor from '@/components/VisualPageEditor';
 import defaultTexts from '@/locales/pt-BR/Index.json';
 import { useLocaleTexts } from '@/hooks/useLocaleTexts';
 import { usePageStyles } from '@/hooks/usePageStyles';
@@ -570,6 +571,12 @@ export default function Index() {
           </div>
         </div>
       </footer>
+
+      <VisualPageEditor 
+        pageComponent={() => <></>}
+        pageName="Home"
+        pageId="index"
+      />
     </div>
   );
 }
