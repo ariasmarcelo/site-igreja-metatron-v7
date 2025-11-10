@@ -1,50 +1,48 @@
 # 📚 Scripts de Automação do Sistema de Edição Visual
 
-Este diretório contém **9 scripts** automatizados para gerenciar os atributos `data-json-key` que conectam elementos visuais ao conteúdo editável.
+Este diretório contém scripts automatizados para gerenciar os atributos `data-json-key` que conectam elementos visuais ao conteúdo editável.
 
-> � **[DOCUMENTAÇÃO COMPLETA](./DOCUMENTACAO_SCRIPTS.md)** ← Guia detalhado com:
-> - Explicação completa de cada script
-> - Quando e por que rodar cada um
-> - Exemplos práticos e casos de uso
-> - Troubleshooting e solução de problemas
-> - Fluxos de trabalho recomendados
+> 📖 Veja também: **[README-IDS.md](./README-IDS.md)** - Documentação detalhada do script ids.js
 
 ---
 
 ## 🚀 Quick Start
 
 ```bash
-# Desenvolvimento normal (IDs verificados automaticamente a cada 24h)
+# Desenvolvimento normal (IDs verificados automaticamente)
 pnpm dev
 
-# Correção completa manual (textos + arrays)
-node scripts/fix-all-keys.cjs
+# Verificar IDs únicos
+pnpm assign-ids
 
-# Atribuir IDs em nova página
-node scripts/assign-ids-final.js --page=NovaPage --dry-run  # Preview
-node scripts/assign-ids-final.js --page=NovaPage            # Aplicar
+# Corrigir IDs automaticamente
+pnpm assign-ids:fix
 
-# Limpeza de backups antigos (mantém 5 mais recentes)
-node scripts/clean-all-backups.cjs
+# Correção completa de data-json-key
+pnpm fix-keys
+
+# Limpeza de backups antigos
+pnpm clean-backups
 ```
 
 ---
 
-## � Scripts Principais (Resumo)
+## 📋 Scripts Ativos
 
-| Script | Descrição | Uso | Frequência |
-|--------|-----------|-----|------------|
-| **init-assign-ids.js** | Verificação automática de IDs | Automático (`pnpm dev`) | Diário |
-| **assign-ids-final.js** ⭐ | Atribuição inteligente de IDs | Manual ou via init | Semanal |
-| **fix-all-keys.cjs** | Script mestre (textos + arrays) | Manual | Mensal |
-| **fix-all-texts.js** | Corrige elementos `{texts.xxx}` | Via fix-all-keys | Raro |
-| **fix-all-maps.js** | Corrige arrays `.map()` | Via fix-all-keys | Raro |
-| **clean-all-backups.cjs** | Limpa backups antigos | Manual | Mensal |
+| Script | Comando | Descrição | Frequência |
+|--------|---------|-----------|------------|
+| **ids.js** ⭐ | `pnpm assign-ids` | Verificação completa de IDs | Sob demanda |
+| **ids.js --fix** | `pnpm assign-ids:fix` | Correção automática de IDs | Sob demanda |
+| **fix-all-keys.cjs** | `pnpm fix-keys` | Correção de data-json-key | Mensal |
+| **init-assign-ids.js** | Automático (`pnpm dev`) | Verificação ao iniciar dev | Automático |
+| **clean-all-backups.cjs** | `pnpm clean-backups` | Limpa backups antigos | Mensal |
+| **deploy.ps1** | `pnpm deploy` | Deploy síncrono | Por deploy |
+| **deploy-background.ps1** | `pnpm deploy:bg` | Deploy em background | Por deploy |
 
-**Scripts Históricos** (não usar):
-- `assign-ids-smart.js` (v2 - obsoleto)
-- `assign-unique-ids.js` (v1 - obsoleto)
-- `fix-map-arrays.js` (v1 - obsoleto)
+**Scripts Auxiliares:**
+- `update-testemunhos.js` - Atualização de testemunhos
+- `inserir-artigos.js` - Inserção de artigos no blog
+- `migrate-to-supabase.js` - Migração para Supabase
 
 ---
 
@@ -69,35 +67,50 @@ node scripts/clean-all-backups.cjs
 4. Injetam `data-json-key="pageName.section.property"`
 5. Admin Panel usa esse atributo para permitir edição inline
 
-**Resultado**: **171 elementos editáveis** em 8 páginas 🎉
+**Resultado**: **141+ elementos editáveis** em 8 páginas 🎉
 
 ---
 
-## 📖 Documentação Por Script
+## 📖 Documentação Detalhada
 
-### 1. **init-assign-ids.js** (Automático)
-- ✅ Roda automaticamente via `pnpm dev`
-- 🕐 Executa a cada 24h (ou quando `.ids-assigned` não existe)
-- 🎯 Chama `assign-ids-final.js` se necessário
-- ⚡ Não bloqueia dev server
+### 1. **ids.js** ⭐ (Script Definitivo)
 
-### 2. **assign-ids-final.js** ⭐ (Principal)
-- 🧠 Busca reversa inteligente (encontra elemento pai mais próximo)
-- 🗂️ Suporta multi-linha e atributos complexos
-- 🔢 Detecta arrays com `.map()` e adiciona índices `[0]`, `[1]`
-- ✅ Valida paths contra arquivos JSON
-- 🔒 Idempotente (pode rodar múltiplas vezes)
+O script principal que substitui todos os anteriores.
 
-**Opções**:
+**Funcionalidades:**
+- 🧠 Verificação inteligente de IDs únicos
+- 🔢 Detecta contexto de arrays com `.map()`
+- 🗂️ Suporta estruturas JSX aninhadas
+- ✅ Validação contra arquivos JSON
+- 🔒 Correção automática segura
+- 💾 Backups automáticos com timestamp
+
+**Uso:**
 ```bash
---dry-run       # Preview sem modificar
---page=Name     # Processar apenas uma página
---verbose       # Modo debug detalhado
+# Verificar apenas
+pnpm assign-ids
+
+# Corrigir automaticamente
+pnpm assign-ids:fix
+
+# Página específica
+node scripts/ids.js --page=Tratamentos --fix
+
+# Preview das correções
+node scripts/ids.js --fix --dry-run
 ```
 
-### 3. **fix-all-keys.cjs** (Script Mestre)
-- 🚀 Executa `fix-all-texts.js` + `fix-all-maps.js`
+Veja documentação completa em **[README-IDS.md](./README-IDS.md)**
+
+### 2. **init-assign-ids.js** (Automático)
+- ✅ Roda automaticamente via `pnpm dev`
+- � Executa verificação inicial
+- ⚡ Não bloqueia dev server
+
+### 3. **fix-all-keys.cjs**
+- 🚀 Correção completa de data-json-key
 - 📊 Relatório consolidado
+- 🔧 Executa junto com `pnpm dev`
 - 🔧 Use quando muitos elementos não aparecem no editor
 
 ### 4. **fix-all-texts.js**
@@ -247,25 +260,25 @@ vite (dev server)
 
 ##  Troubleshooting
 
-### Problema: Elemento n�o aparece no Admin Panel
+### Problema: Elemento n�o aparece no Admin Panel
 ```bash
 # 1. Verificar console do browser (F12)
-# 2. Executar corre��o completa
+# 2. Executar corre��o completa
 node scripts/fix-all-keys.cjs
 
-# 3. Se persistir, processar p�gina espec�fica com verbose
+# 3. Se persistir, processar p�gina espec�fica com verbose
 node scripts/assign-ids-final.js --page=PageName --verbose
 ```
 
-### Problema: Edi��o n�o salva
-**Causa**: JSON path incorreto ou arquivo n�o existe
+### Problema: Edi��o n�o salva
+**Causa**: JSON path incorreto ou arquivo n�o existe
 ```bash
 # Verificar se JSON existe em src/locales/pt-BR/PageName.json
-# Reprocessar com valida��o
+# Reprocessar com valida��o
 node scripts/assign-ids-final.js --page=PageName
 ```
 
-### Problema: Muitos backups ocupando espa�o
+### Problema: Muitos backups ocupando espa�o
 ```bash
 node scripts/clean-all-backups.cjs
 ```
@@ -278,16 +291,16 @@ node scripts/clean-all-backups.cjs
 -  **Admin Panel**: http://localhost:8080/436F6E736F6C45
 -  **JSONs**: `src/locales/pt-BR/*.json`
 -  **CSS**: `src/styles/pages/*.css`
--  **Backups**: Autom�ticos (5 mais recentes)
+-  **Backups**: Autom�ticos (5 mais recentes)
 
 ---
 
 ##  Checklist de Uso
 
-**Di�rio**:
-- [x] `pnpm dev` (autom�tico)
+**Di�rio**:
+- [x] `pnpm dev` (autom�tico)
 
-**Semanal** (ap�s mudan�as):
+**Semanal** (ap�s mudan�as):
 - [ ] `node scripts/assign-ids-final.js --dry-run`
 - [ ] `node scripts/assign-ids-final.js`
 
@@ -295,7 +308,7 @@ node scripts/clean-all-backups.cjs
 - [ ] `node scripts/fix-all-keys.cjs`
 - [ ] `node scripts/clean-all-backups.cjs`
 
-**Ap�s criar p�gina**:
+**Ap�s criar p�gina**:
 - [ ] Criar `src/pages/PageName.tsx`
 - [ ] Criar `src/locales/pt-BR/PageName.json`
 - [ ] `node scripts/assign-ids-final.js --page=PageName`
@@ -303,7 +316,7 @@ node scripts/clean-all-backups.cjs
 
 ---
 
-** �ltima Atualiza��o**: 08/11/2025  
+** �ltima Atualiza��o**: 08/11/2025  
 ** Status**: Todos os scripts funcionais  
 ** Cobertura**: 171/171 elementos (100%)  
 ** Admin Panel**: /436F6E736F6C45
