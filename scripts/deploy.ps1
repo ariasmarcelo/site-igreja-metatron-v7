@@ -21,6 +21,8 @@ function Remove-AnsiCodes {
     $cleaned = $Text -replace '\x1b\[[0-9;]*m', ''
     # Remove outros caracteres especiais de controle
     $cleaned = $cleaned -replace '\x1b\[[\d;]*[A-Za-z]', ''
+    # Remove caracteres Unicode problematicos (emojis, checkmarks, etc)
+    $cleaned = $cleaned -replace '[^\x20-\x7E\r\n\t]', ''
     return $cleaned
 }
 
@@ -28,8 +30,8 @@ function Remove-AnsiCodes {
 function Write-CleanLog {
     param([string]$Content)
     $cleaned = Remove-AnsiCodes -Text $Content
-    # Usar ASCII para evitar problemas de encoding
-    [System.IO.File]::AppendAllText($logFile, $cleaned, [System.Text.Encoding]::UTF8)
+    # Escrever como texto ASCII puro
+    Add-Content -Path $logFile -Value $cleaned -Encoding ASCII
 }
 
 # Criar diretorio de logs se nao existir
