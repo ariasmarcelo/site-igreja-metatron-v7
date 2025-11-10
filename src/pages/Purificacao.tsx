@@ -109,17 +109,10 @@ export default function Purificacao() {
             <div className="bg-linear-to-br from-gray-50 via-white to-gray-50 p-8 pr-16 rounded-2xl shadow-xl border border-gray-200 relative">
               
               {/* Título da Seção */}
-              <div className="text-center mb-10 relative inline-block w-full">
-                <div className="relative inline-block px-8 py-3 rounded-lg overflow-hidden">
-                  {/* Efeitos metálicos da Fase 3 */}
-                  <div className="absolute inset-0 bg-linear-to-r from-[#CFAF5A] via-[#B38938] to-[#CFAF5A]"></div>
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_40%,rgba(255,255,255,0.35),transparent_55%)]"></div>
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_60%,rgba(255,255,255,0.25),transparent_65%)]"></div>
-                  <div className="absolute inset-0 bg-[linear-gradient(110deg,transparent_40%,rgba(255,255,255,0.15)_60%,transparent_80%)]"></div>
-                  <h2 className="text-4xl md:text-5xl font-extrabold text-white relative z-10 drop-shadow-lg">
-                    As Três Fases do Processo
-                  </h2>
-                </div>
+              <div className="text-center mb-10">
+                <h2 className="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-linear-to-r from-[#CFAF5A] via-[#B38938] to-[#CFAF5A] drop-shadow-lg">
+                  As Três Fases do Processo
+                </h2>
               </div>
               
               {/* Linha do Tempo Vertical com Conexões */}
