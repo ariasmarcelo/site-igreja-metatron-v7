@@ -25,37 +25,41 @@
 
 ## 🛠️ Ferramentas Criadas
 
-### 1. Script de Verificação
-**Arquivo**: `scripts/verify-ids.js`
+### 1. Script Unificado (Recomendado) ⭐
+**Arquivo**: `scripts/check-and-fix-ids.js`
 
 ```bash
-# Verificar todas as páginas
-node scripts/verify-ids.js
+# Verificar apenas (não modifica)
+node scripts/check-and-fix-ids.js
 
-# Verificar página específica
-node scripts/verify-ids.js --page=Tratamentos
+# Verificar e corrigir automaticamente
+node scripts/check-and-fix-ids.js --fix
+
+# Preview das correções
+node scripts/check-and-fix-ids.js --fix --dry-run
+
+# Página específica
+node scripts/check-and-fix-ids.js --page=Tratamentos --fix
 ```
 
-**Output**:
+**Output (modo check)**:
 ```
-✅ Todas as páginas estão corretamente mapeadas!
+✅ Todas as páginas estão corretas!
    Páginas verificadas: 8
    Problemas encontrados: 0
 ```
 
-### 2. Script de Correção Automática
-**Arquivo**: `scripts/assign-ids-final.js`
-
-```bash
-# Preview das mudanças
-node scripts/assign-ids-final.js --dry-run
-
-# Aplicar correções
-node scripts/assign-ids-final.js
-
-# Corrigir página específica
-node scripts/assign-ids-final.js --page=Tratamentos
+**Output (modo fix)**:
 ```
+🔧 Tratamentos.tsx
+   Total de usos: 45
+   Problemas: 3
+   ✅ Corrigidos: 3
+```
+
+### 2. Scripts Legados (mantidos para compatibilidade)
+- `scripts/verify-ids.js` - Apenas verificação
+- `scripts/assign-ids-final.js` - Correção completa com análise profunda
 
 ### 3. Script de Deploy em Background
 **Arquivo**: `scripts/deploy-background.js`
@@ -113,16 +117,32 @@ node scripts/deploy-background.js "mensagem do commit"
 
 ## 🔄 Workflow Recomendado
 
-### Antes de Fazer Deploy
+### Antes de Fazer Deploy (Simplificado)
 
 ```bash
-# 1. Verificar se há elementos sem IDs
-node scripts/verify-ids.js
+# 1. Verificar e corrigir automaticamente
+node scripts/check-and-fix-ids.js --fix
 
-# 2. Se houver problemas, corrigir automaticamente
-node scripts/assign-ids-final.js
+# 2. Build e deploy
+pnpm build
+git add .
+git commit -m "descrição das mudanças"
+git push
+```
 
-# 3. Build e deploy
+### Workflow Alternativo (mais seguro)
+
+```bash
+# 1. Verificar primeiro
+node scripts/check-and-fix-ids.js
+
+# 2. Se houver problemas, ver preview
+node scripts/check-and-fix-ids.js --fix --dry-run
+
+# 3. Aplicar correções
+node scripts/check-and-fix-ids.js --fix
+
+# 4. Build e deploy
 pnpm build
 git add .
 git commit -m "descrição das mudanças"
@@ -141,15 +161,17 @@ Isso executa build, commit e push automaticamente em background.
 
 ### "Editei o texto mas não salvou"
 
-**Solução**:
+**Solução Rápida**:
 ```bash
-# Verificar se elemento tem data-json-key
-node scripts/verify-ids.js --page=NomeDaPagina
+# Verificar e corrigir em um comando
+node scripts/check-and-fix-ids.js --page=NomeDaPagina --fix
+pnpm build && git add . && git commit -m "fix: ids" && git push
+```
 
-# Se não tiver, adicionar automaticamente
+**Solução Detalhada** (para análise profunda):
+```bash
+# Usar script completo com análise de seções
 node scripts/assign-ids-final.js --page=NomeDaPagina
-
-# Deploy
 pnpm build && git add . && git commit -m "fix: ids" && git push
 ```
 

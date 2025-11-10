@@ -1,13 +1,32 @@
-# Verificação de IDs Únicos (data-json-key)
+# Verificação e Correção de IDs Únicos (data-json-key)
 
 ## 📋 Visão Geral
 
-Sistema de verificação e manutenção de IDs únicos para o editor visual do site.
+Sistema **unificado** de verificação e correção automática de IDs únicos para o editor visual.
 
 ## 🎯 Por que é importante?
 
 **Sem `data-json-key`**: Edições no site **NÃO SÃO SALVAS** no banco de dados.
 **Com `data-json-key`**: Edições são **salvas automaticamente** no Supabase.
+
+## 🆕 Script Unificado (Recomendado)
+
+Um único script que **verifica E corrige** automaticamente:
+
+```bash
+# Verificar apenas (não modifica arquivos)
+node scripts/check-and-fix-ids.js
+
+# Verificar e corrigir automaticamente
+node scripts/check-and-fix-ids.js --fix
+
+# Preview das correções (dry-run)
+node scripts/check-and-fix-ids.js --fix --dry-run
+
+# Página específica
+node scripts/check-and-fix-ids.js --page=Tratamentos
+node scripts/check-and-fix-ids.js --page=Tratamentos --fix
+```
 
 ## ✅ Status Atual (10/11/2025)
 
@@ -26,19 +45,30 @@ Sistema de verificação e manutenção de IDs únicos para o editor visual do s
 - **8 páginas** totalmente mapeadas
 - **0 páginas** com problemas conhecidos
 
-## 🔍 Como Verificar
+## 🔍 Como Usar
 
 ### Verificação Rápida (todas as páginas)
 
 ```bash
-node scripts/verify-ids.js
+# Apenas verificar (padrão)
+node scripts/check-and-fix-ids.js
 ```
 
-### Verificação de Página Específica
+### Correção Automática
 
 ```bash
-node scripts/verify-ids.js --page=Tratamentos
-node scripts/verify-ids.js --page=Index
+# Ver o que seria corrigido (preview)
+node scripts/check-and-fix-ids.js --fix --dry-run
+
+# Aplicar correções
+node scripts/check-and-fix-ids.js --fix
+```
+
+### Página Específica
+
+```bash
+node scripts/check-and-fix-ids.js --page=Tratamentos
+node scripts/check-and-fix-ids.js --page=Tratamentos --fix
 ```
 
 ### Output Esperado (sem problemas)
@@ -76,19 +106,33 @@ node scripts/verify-ids.js --page=Index
    para corrigir automaticamente os problemas.
 ```
 
-## 🔧 Como Corrigir Problemas
+## 🔧 Exemplos de Uso
 
-### Correção Automática (Recomendado)
+### Cenário 1: Verificar antes do deploy
 
 ```bash
-# Ver preview das mudanças (dry-run)
-node scripts/assign-ids-final.js --dry-run
+# Verificar se há problemas
+node scripts/check-and-fix-ids.js
 
-# Aplicar mudanças
-node scripts/assign-ids-final.js
+# Se houver problemas, corrigir
+node scripts/check-and-fix-ids.js --fix
+```
 
-# Aplicar em página específica
-node scripts/assign-ids-final.js --page=Tratamentos
+### Cenário 2: Adicionar novo conteúdo
+
+```bash
+# Após adicionar novos textos, verificar
+node scripts/check-and-fix-ids.js --page=NovasPagina
+
+# Corrigir automaticamente
+node scripts/check-and-fix-ids.js --page=NovasPagina --fix
+```
+
+### Cenário 3: Preview antes de modificar
+
+```bash
+# Ver exatamente o que seria corrigido
+node scripts/check-and-fix-ids.js --fix --dry-run
 ```
 
 ### Correção Manual
@@ -142,13 +186,10 @@ Se preferir adicionar manualmente:
 ### Após Modificações
 
 ```bash
-# 1. Verificar se tudo está mapeado
-node scripts/verify-ids.js
+# 1. Verificar e corrigir automaticamente
+node scripts/check-and-fix-ids.js --fix
 
-# 2. Se houver problemas, corrigir
-node scripts/assign-ids-final.js
-
-# 3. Build e deploy
+# 2. Build e deploy
 pnpm build
 git add .
 git commit -m "fix: adicionar data-json-key em novos elementos"
@@ -163,8 +204,10 @@ git push
 
 **Solução**:
 ```bash
-node scripts/verify-ids.js --page=NomeDaPagina
-node scripts/assign-ids-final.js --page=NomeDaPagina
+# Verificar e corrigir em um comando
+node scripts/check-and-fix-ids.js --page=NomeDaPagina --fix
+
+# Build e deploy
 pnpm build && git add . && git commit -m "fix: ids" && git push
 ```
 
@@ -203,11 +246,19 @@ pnpm build && git add . && git commit -m "fix: ids" && git push
 
 ## 🔄 Integração com Deploy
 
-Adicione verificação automática no workflow:
+Adicione verificação e correção automática no workflow:
 
 ```bash
-# Antes do build
-node scripts/verify-ids.js || exit 1
+# Verificar e corrigir antes do build
+node scripts/check-and-fix-ids.js --fix
+pnpm build
+```
+
+Ou apenas verificar (falha se houver problemas):
+
+```bash
+# Verificação sem modificar
+node scripts/check-and-fix-ids.js || exit 1
 pnpm build
 ```
 
