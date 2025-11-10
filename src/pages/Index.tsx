@@ -8,7 +8,7 @@ import { useLocaleTexts } from '@/hooks/useLocaleTexts';
 import { usePageStyles } from '@/hooks/usePageStyles';
 
 export default function Index() {
-  const stylesLoaded = usePageStyles('index');
+  usePageStyles('index'); // Carrega estilos mas não usa para fade
   const texts = useLocaleTexts('index', defaultTexts);
   
   const benefitsIcons = [
@@ -18,7 +18,7 @@ export default function Index() {
   ];
 
   return (
-    <div className="min-h-screen" style={{ opacity: stylesLoaded ? 1 : 0, transition: 'opacity 0.2s ease-in' }}>
+    <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden bg-linear-to-br from-[#FAF9F7] via-[#F5F3F0] to-[#E8E6E3]">
         <div className="absolute inset-0 opacity-5">
