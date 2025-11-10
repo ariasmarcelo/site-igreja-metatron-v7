@@ -6,7 +6,7 @@ import { useLocaleTexts } from '@/hooks/useLocaleTexts';
 import { usePageStyles } from '@/hooks/usePageStyles';
 
 export default function Contato() {
-  const stylesLoaded = usePageStyles('contato');
+  usePageStyles('contato');
   const texts = useLocaleTexts('contato', defaultTexts);
   const handleWhatsAppClick = () => {
     const phoneNumber = '5511949555555';
@@ -15,7 +15,7 @@ export default function Contato() {
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-[#FAF9F7] to-[#F5F3F0]" style={{ opacity: stylesLoaded ? 1 : 0, transition: 'opacity 0.2s ease-in' }}>
+    <div className="min-h-screen bg-linear-to-br from-[#FAF9F7] to-[#F5F3F0]">
       {/* Header */}
       <section className="py-16 bg-linear-to-r from-[#60a5fa] via-[#2563eb] to-[#60a5fa] text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_40%,rgba(255,255,255,0.25),transparent_50%)]"></div>

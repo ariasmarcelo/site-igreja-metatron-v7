@@ -26,7 +26,7 @@ interface BlogPost {
 }
 
 export default function Artigos() {
-  const stylesLoaded = usePageStyles('artigos');
+  usePageStyles('artigos');
   const texts = useLocaleTexts('artigos', defaultTexts);
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
@@ -73,7 +73,7 @@ export default function Artigos() {
   };
 
   return (
-    <div className="artigos-page" style={{ opacity: stylesLoaded ? 1 : 0, transition: 'opacity 0.2s ease-in' }}>
+    <div className="artigos-page">
       {/* Hero Section */}
       <section className="artigos-hero">
         <div className="container mx-auto px-4">

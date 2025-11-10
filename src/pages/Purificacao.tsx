@@ -9,7 +9,7 @@ import { useLocaleTexts } from '@/hooks/useLocaleTexts';
 import { usePageStyles } from '@/hooks/usePageStyles';
 
 export default function Purificacao() {
-  const stylesLoaded = usePageStyles('purificacao');
+  usePageStyles('purificacao');
   const texts = useLocaleTexts('purificacao', defaultTexts);
   const [expandedPhase, setExpandedPhase] = useState<number | null>(null);
 
@@ -17,7 +17,7 @@ export default function Purificacao() {
     setExpandedPhase(expandedPhase === phase ? null : phase);
   };
   return (
-    <div className="min-h-screen bg-linear-to-br from-[#FAF9F7] to-[#F5F3F0]" style={{ opacity: stylesLoaded ? 1 : 0, transition: 'opacity 0.2s ease-in' }}>
+    <div className="min-h-screen bg-linear-to-br from-[#FAF9F7] to-[#F5F3F0]">
       {/* Header */}
       <section className="py-16 bg-linear-to-r from-[#B8860B] via-[#7A5608] to-[#B8860B] text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_40%,rgba(255,255,255,0.3),transparent_50%)]"></div>

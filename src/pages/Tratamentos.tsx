@@ -9,7 +9,7 @@ import { useLocaleTexts } from '@/hooks/useLocaleTexts';
 import { usePageStyles } from '@/hooks/usePageStyles';
 
 export default function Tratamentos() {
-  const stylesLoaded = usePageStyles('tratamentos');
+  usePageStyles('tratamentos');
   const texts = useLocaleTexts('tratamentos', defaultTexts);
   const icons = [
     <Users className="w-12 h-12" />,
@@ -25,7 +25,7 @@ export default function Tratamentos() {
   const treatments = texts?.treatments || [];
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-[#FAF9F7] to-[#F5F3F0]" style={{ opacity: stylesLoaded ? 1 : 0, transition: 'opacity 0.2s ease-in' }}>
+    <div className="min-h-screen bg-linear-to-br from-[#FAF9F7] to-[#F5F3F0]">
       {/* Header */}
       <section className="py-16 bg-linear-to-r from-[#1e40af] via-[#1e40af] to-[#2563eb] text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_40%,rgba(255,255,255,0.3),transparent_50%)]"></div>

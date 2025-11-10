@@ -6,7 +6,7 @@ import { useLocaleTexts } from '@/hooks/useLocaleTexts';
 import { usePageStyles } from '@/hooks/usePageStyles';
 
 export default function QuemSomos() {
-  const stylesLoaded = usePageStyles('quemsomos');
+  usePageStyles('quemsomos');
   const texts = useLocaleTexts('quemsomos', defaultTexts);
 
   const principiosIcons = [
@@ -29,7 +29,7 @@ export default function QuemSomos() {
     { gradient: 'from-[#CFAF5A] to-[#B89B4A]', border: 'border-[#CFAF5A]', badge: 'bg-[#CFAF5A]' } // 7. Causa e Efeito - Dourado (karma, lei universal)
   ];
   return (
-    <div className="min-h-screen bg-linear-to-b from-white to-gray-50" style={{ opacity: stylesLoaded ? 1 : 0, transition: 'opacity 0.2s ease-in' }}>
+    <div className="min-h-screen bg-linear-to-b from-white to-gray-50">
       {/* Header with Animated Book Icon */}
       <section className="bg-linear-to-r from-[#4A90A9] to-[#5EA98D] text-white py-16 relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
