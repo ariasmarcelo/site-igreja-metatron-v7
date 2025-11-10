@@ -112,9 +112,9 @@ export default function Purificacao() {
             </div>
 
             {/* Linha do Tempo Vertical com Conexões */}
-            <div className="relative md:pl-28">
-              {/* Linha Vertical à Esquerda */}
-              <div className="absolute left-4 top-0 bottom-0 w-1 bg-linear-to-b from-red-500 via-blue-500 to-amber-500 hidden md:block"></div>
+            <div className="relative md:pr-28">
+              {/* Linha Vertical à Direita */}
+              <div className="absolute right-4 top-0 bottom-0 w-1 bg-linear-to-b from-red-500 via-blue-500 to-amber-500 hidden md:block"></div>
 
               {/* FASE 1 - INICIAL */}
               <div className="mb-8 relative">
