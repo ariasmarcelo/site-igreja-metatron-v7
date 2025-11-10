@@ -1,5 +1,5 @@
-# Deploy Simplificado
-# Este script sempre roda em background automaticamente
+# Deploy Sincrono (mostra progresso no terminal)
+# Diferenca do deployAutomatico: este BLOQUEIA o terminal ate terminar
 
 param(
     [Parameter(Position=0)]
@@ -22,13 +22,12 @@ if (Test-Path $logDir) {
     }
 }
 
-Write-Host "`n[DEPLOY] Iniciando deploy automatico..." -ForegroundColor Cyan
+Write-Host "`n[DEPLOY SINCRONO] Iniciando deploy..." -ForegroundColor Cyan
 Write-Host "[INFO] Mensagem: $Message" -ForegroundColor Gray
-Write-Host "[INFO] Logs em: $logDir" -ForegroundColor Gray
 
 try {
     Write-Host "`n[1/4] Build..." -ForegroundColor Yellow
-    pnpm build | Out-Null
+    pnpm build
     Write-Host "[OK] Build concluido!" -ForegroundColor Green
     
     Write-Host "`n[2/4] Git add..." -ForegroundColor Yellow
