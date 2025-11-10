@@ -12,6 +12,7 @@
 .PARAMETER Background
     Executa o deploy em background, liberando o terminal imediatamente.
     Por padrão, executa de forma síncrona mostrando progresso.
+    Alias: -b
 
 .EXAMPLE
     .\deploy.ps1 "feat: nova funcionalidade"
@@ -22,12 +23,16 @@
     Deploy em background com mensagem padrão
     
 .EXAMPLE
+    .\deploy.ps1 "fix: correcao" -b
+    Deploy em background usando alias -b
+    
+.EXAMPLE
     .\deploy.ps1 "fix: correcao importante" -Background
     Deploy em background com mensagem personalizada
     
 .NOTES
     Autor: Sistema Igreja Meta
-    Versão: 2.0 (Unificado)
+    Versão: 2.1 (Alias -b adicionado)
     Mantém últimos 10 logs automaticamente
 #>
 
@@ -36,6 +41,7 @@ param(
     [string]$Message = "deploy: atualizacao $(Get-Date -Format 'dd/MM/yyyy HH:mm')",
     
     [Parameter()]
+    [Alias('b')]
     [switch]$Background
 )
 
