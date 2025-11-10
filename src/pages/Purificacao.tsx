@@ -1,7 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Sparkles, Sun, Star, Crown, Compass, Heart, Infinity as InfinityIcon, LineChart } from 'lucide-react';
+import { Sparkles, Sun, Star, Crown, Compass, Heart, Infinity as InfinityIcon, LineChart, ChevronDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
 import TestimonialsCarousel from '@/components/TestimonialsCarousel';
 import defaultTexts from '@/locales/pt-BR/Purificacao.json';
 import { useLocaleTexts } from '@/hooks/useLocaleTexts';
@@ -10,6 +11,11 @@ import { usePageStyles } from '@/hooks/usePageStyles';
 export default function Purificacao() {
   const stylesLoaded = usePageStyles('purificacao');
   const texts = useLocaleTexts('purificacao', defaultTexts);
+  const [expandedPhase, setExpandedPhase] = useState<number | null>(null);
+
+  const togglePhase = (phase: number) => {
+    setExpandedPhase(expandedPhase === phase ? null : phase);
+  };
   return (
     <div className="min-h-screen bg-linear-to-br from-[#FAF9F7] to-[#F5F3F0]" style={{ opacity: stylesLoaded ? 1 : 0, transition: 'opacity 0.2s ease-in' }}>
       {/* Header */}
@@ -94,155 +100,261 @@ export default function Purificacao() {
         </div>
       </section>
 
-      {/* Fase Inicial */}
-      <section className="py-12 bg-white">
+      {/* Fluxo das Três Fases - Design Interativo */}
+      <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <Card className="shadow-2xl border-2 border-red-400 border-opacity-30">
-              <CardHeader className="bg-linear-to-r from-red-700 to-red-800 text-white p-8 relative overflow-hidden">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_40%,rgba(255,255,255,0.2),transparent_50%)]"></div>
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_60%,rgba(255,255,255,0.15),transparent_50%)]"></div>
-                <div className="absolute inset-0 bg-[linear-gradient(155deg,transparent_10%,rgba(255,255,255,0.12)_32%,rgba(255,255,255,0.18)_50%,rgba(255,255,255,0.12)_68%,transparent_90%)]"></div>
-                <div className="absolute inset-0 bg-[linear-gradient(65deg,transparent_20%,rgba(255,255,255,0.08)_38%,rgba(255,255,255,0.12)_50%,rgba(255,255,255,0.08)_62%,transparent_80%)]"></div>
-                <div className="flex items-center gap-4 relative z-10">
-                  <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center shadow-lg">
-                    <Sparkles className="w-10 h-10 text-red-700" />
-                  </div>
-                  <div>
-                    <CardTitle className="text-3xl mb-2 drop-shadow-md" data-json-key="purificacao.faseInicial.title">{texts.faseInicial.title}</CardTitle>
-                    <p className="text-lg opacity-90 drop-shadow-sm" data-json-key="purificacao.faseInicial.subtitle">{texts.faseInicial.subtitle}</p>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent className="p-8 space-y-6">
-                <div>
-                  <h3 className="text-2xl font-bold mb-4 text-[#222222]" data-json-key="purificacao.faseInicial.objetivo.title">{texts.faseInicial.objetivo.title}</h3>
-                  <p className="text-lg text-gray-700 leading-relaxed" data-json-key="purificacao.faseInicial.objetivo.content">
-                    {texts.faseInicial.objetivo.content}
-                  </p>
-                </div>
+          <div className="max-w-6xl mx-auto">
+            
+            {/* Título da Seção */}
+            <div className="text-center mb-12">
+              <h2 className="text-4xl font-bold text-gray-800 mb-4">As Três Fases do Processo</h2>
+              <p className="text-lg text-gray-600">Clique em cada fase para ver os detalhes</p>
+            </div>
 
-                <div className="bg-red-50 border-l-4 border-red-600 p-6">
-                  <h4 className="font-bold text-xl mb-3 text-red-700" data-json-key="purificacao.faseInicial.activities.title">{texts.faseInicial.activities.title}</h4>
-                  <ul className="space-y-3 text-gray-700" data-json-key="purificacao.faseInicial.activities.items.map">
-                    {texts.faseInicial.activities.items.map((item, index) => (
-                      <li key={index} className="flex items-start gap-3">
-                        <span className="text-red-600 font-bold mt-1">•</span>
-                        <span data-json-key={`purificacao.faseInicial.activities.items[${index}]`}>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+            {/* Linha do Tempo Vertical com Conexões */}
+            <div className="relative">
+              {/* Linha Vertical Central */}
+              <div className="absolute left-1/2 top-0 bottom-0 w-1 bg-linear-to-b from-red-500 via-blue-500 to-amber-500 transform -translate-x-1/2 hidden md:block"></div>
 
-                <div>
-                  <h4 className="font-bold text-xl mb-3 text-[#222222]" data-json-key="purificacao.faseInicial.duration.title">{texts.faseInicial.duration.title}</h4>
-                  <p className="text-gray-700 leading-relaxed" data-json-key="purificacao.faseInicial.duration.content">
-                    {texts.faseInicial.duration.content}
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Fase Intermediária */}
-      <section className="py-12 bg-linear-to-br from-[#FAF9F7] to-[#F5F3F0]">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <Card className="shadow-2xl border-2 border-[#4A90A9] border-opacity-30">
-              <CardHeader className="bg-linear-to-r from-[#4A90A9] to-[#5EA98D] text-white p-8">
-                <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center">
-                    <LineChart className="w-10 h-10 text-[#4A90A9]" />
+              {/* FASE 1 - INICIAL */}
+              <div className="mb-8 relative">
+                <div className="md:flex md:items-start gap-8">
+                  {/* Círculo Numerado */}
+                  <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 z-10 w-16 h-16 rounded-full bg-red-600 text-white items-center justify-center text-2xl font-bold shadow-xl border-4 border-white">
+                    1
                   </div>
-                  <div>
-                    <CardTitle className="text-3xl mb-2" data-json-key="purificacao.faseIntermediaria.title">{texts.faseIntermediaria.title}</CardTitle>
-                    <p className="text-lg opacity-90" data-json-key="purificacao.faseIntermediaria.subtitle">{texts.faseIntermediaria.subtitle}</p>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent className="p-8 space-y-6">
-                <div>
-                  <h3 className="text-2xl font-bold mb-4 text-[#222222]" data-json-key="purificacao.faseIntermediaria.requisito.title">{texts.faseIntermediaria.requisito.title}</h3>
-                  <p className="text-lg text-gray-700 leading-relaxed mb-4" data-json-key="purificacao.faseIntermediaria.requisito.content">{texts.faseIntermediaria.requisito.content}</p>
-                </div>
+                  
+                  {/* Card da Fase */}
+                  <div className="md:w-full">
+                    <Card 
+                      className={`shadow-xl border-2 border-red-400 cursor-pointer transition-all duration-300 hover:shadow-2xl ${
+                        expandedPhase === 1 ? 'ring-4 ring-red-300' : ''
+                      }`}
+                      onClick={() => togglePhase(1)}
+                    >
+                      <CardHeader className="bg-linear-to-r from-red-700 to-red-800 text-white p-6 relative overflow-hidden">
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_40%,rgba(255,255,255,0.2),transparent_50%)]"></div>
+                        <div className="flex items-center justify-between relative z-10">
+                          <div className="flex items-center gap-4">
+                            <div className="md:hidden w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-lg">
+                              <span className="text-2xl font-bold text-red-700">1</span>
+                            </div>
+                            <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-lg">
+                              <Sparkles className="w-8 h-8 text-red-700" />
+                            </div>
+                            <div>
+                              <CardTitle className="text-2xl mb-1 drop-shadow-md" data-json-key="purificacao.faseInicial.title">{texts.faseInicial.title}</CardTitle>
+                              <p className="text-base opacity-90 drop-shadow-sm" data-json-key="purificacao.faseInicial.subtitle">{texts.faseInicial.subtitle}</p>
+                            </div>
+                          </div>
+                          <ChevronDown 
+                            className={`w-8 h-8 transition-transform duration-300 ${
+                              expandedPhase === 1 ? 'rotate-180' : ''
+                            }`}
+                          />
+                        </div>
+                      </CardHeader>
+                      
+                      {/* Conteúdo Expansível */}
+                      <div 
+                        className={`overflow-hidden transition-all duration-500 ${
+                          expandedPhase === 1 ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'
+                        }`}
+                      >
+                        <CardContent className="p-6 space-y-6 bg-red-50">
+                          <div>
+                            <h3 className="text-xl font-bold mb-3 text-gray-800" data-json-key="purificacao.faseInicial.objetivo.title">{texts.faseInicial.objetivo.title}</h3>
+                            <p className="text-base text-gray-700 leading-relaxed" data-json-key="purificacao.faseInicial.objetivo.content">
+                              {texts.faseInicial.objetivo.content}
+                            </p>
+                          </div>
 
-                <div className="bg-blue-50 border-l-4 border-[#4A90A9] p-6">
-                  <h4 className="font-bold text-xl mb-3 text-[#4A90A9]" data-json-key="purificacao.faseIntermediaria.trabalhos.title">{texts.faseIntermediaria.trabalhos.title}</h4>
-                  <div className="space-y-4" data-json-key="purificacao.faseIntermediaria.trabalhos.items.map">
-                    {texts.faseIntermediaria.trabalhos.items.map((item, index) => (
-                      <div key={index}>
-                        <h5 className="font-semibold text-lg mb-2 text-[#222222]" data-json-key={`purificacao.faseIntermediaria.trabalhos.items[${index}].title`}>{item.title}</h5>
-                        <p className="text-gray-700" data-json-key={`purificacao.faseIntermediaria.trabalhos.items[${index}].content`}>{item.content}</p>
+                          <div className="bg-white border-l-4 border-red-600 p-5 rounded-r-lg shadow-md">
+                            <h4 className="font-bold text-lg mb-3 text-red-700" data-json-key="purificacao.faseInicial.activities.title">{texts.faseInicial.activities.title}</h4>
+                            <ul className="space-y-2 text-gray-700" data-json-key="purificacao.faseInicial.activities.items.map">
+                              {texts.faseInicial.activities.items.map((item, index) => (
+                                <li key={index} className="flex items-start gap-3">
+                                  <span className="text-red-600 font-bold mt-1">•</span>
+                                  <span data-json-key={`purificacao.faseInicial.activities.items[${index}]`}>{item}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+
+                          <div>
+                            <h4 className="font-bold text-lg mb-3 text-gray-800" data-json-key="purificacao.faseInicial.duration.title">{texts.faseInicial.duration.title}</h4>
+                            <p className="text-gray-700 leading-relaxed" data-json-key="purificacao.faseInicial.duration.content">
+                              {texts.faseInicial.duration.content}
+                            </p>
+                          </div>
+                        </CardContent>
                       </div>
-                    ))}
+                    </Card>
                   </div>
                 </div>
+              </div>
 
-                <div>
-                  <h4 className="font-bold text-xl mb-3 text-[#222222]" data-json-key="purificacao.faseIntermediaria.integracao.title">{texts.faseIntermediaria.integracao.title}</h4>
-                  <p className="text-gray-700 leading-relaxed" data-json-key="purificacao.faseIntermediaria.integracao.content">{texts.faseIntermediaria.integracao.content}</p>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Fase Final */}
-      <section className="py-12 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto">
-            <Card className="shadow-2xl border-2 border-[#CFAF5A] border-opacity-30">
-              <CardHeader className="bg-linear-to-r from-[#CFAF5A] via-[#B38938] to-[#CFAF5A] text-white p-8">
-                <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center">
-                    <Crown className="w-10 h-10 text-[#CFAF5A]" />
+              {/* FASE 2 - INTERMEDIÁRIA */}
+              <div className="mb-8 relative">
+                <div className="md:flex md:items-start gap-8">
+                  {/* Círculo Numerado */}
+                  <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 z-10 w-16 h-16 rounded-full bg-blue-600 text-white items-center justify-center text-2xl font-bold shadow-xl border-4 border-white">
+                    2
                   </div>
-                    <div>
-                    <CardTitle className="text-3xl mb-2" data-json-key="purificacao.faseFinal.title">{texts.faseFinal.title}</CardTitle>
-                    <p className="text-lg opacity-90" data-json-key="purificacao.faseFinal.subtitle">{texts.faseFinal.subtitle}</p>
+                  
+                  {/* Card da Fase */}
+                  <div className="md:w-full">
+                    <Card 
+                      className={`shadow-xl border-2 border-blue-400 cursor-pointer transition-all duration-300 hover:shadow-2xl ${
+                        expandedPhase === 2 ? 'ring-4 ring-blue-300' : ''
+                      }`}
+                      onClick={() => togglePhase(2)}
+                    >
+                      <CardHeader className="bg-linear-to-r from-[#4A90A9] to-[#5EA98D] text-white p-6 relative overflow-hidden">
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_40%,rgba(255,255,255,0.2),transparent_50%)]"></div>
+                        <div className="flex items-center justify-between relative z-10">
+                          <div className="flex items-center gap-4">
+                            <div className="md:hidden w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-lg">
+                              <span className="text-2xl font-bold text-blue-700">2</span>
+                            </div>
+                            <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-lg">
+                              <LineChart className="w-8 h-8 text-[#4A90A9]" />
+                            </div>
+                            <div>
+                              <CardTitle className="text-2xl mb-1 drop-shadow-md" data-json-key="purificacao.faseIntermediaria.title">{texts.faseIntermediaria.title}</CardTitle>
+                              <p className="text-base opacity-90 drop-shadow-sm" data-json-key="purificacao.faseIntermediaria.subtitle">{texts.faseIntermediaria.subtitle}</p>
+                            </div>
+                          </div>
+                          <ChevronDown 
+                            className={`w-8 h-8 transition-transform duration-300 ${
+                              expandedPhase === 2 ? 'rotate-180' : ''
+                            }`}
+                          />
+                        </div>
+                      </CardHeader>
+                      
+                      {/* Conteúdo Expansível */}
+                      <div 
+                        className={`overflow-hidden transition-all duration-500 ${
+                          expandedPhase === 2 ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'
+                        }`}
+                      >
+                        <CardContent className="p-6 space-y-6 bg-blue-50">
+                          <div>
+                            <h3 className="text-xl font-bold mb-3 text-gray-800" data-json-key="purificacao.faseIntermediaria.requisito.title">{texts.faseIntermediaria.requisito.title}</h3>
+                            <p className="text-base text-gray-700 leading-relaxed" data-json-key="purificacao.faseIntermediaria.requisito.content">{texts.faseIntermediaria.requisito.content}</p>
+                          </div>
+
+                          <div className="bg-white border-l-4 border-[#4A90A9] p-5 rounded-r-lg shadow-md">
+                            <h4 className="font-bold text-lg mb-3 text-[#4A90A9]" data-json-key="purificacao.faseIntermediaria.trabalhos.title">{texts.faseIntermediaria.trabalhos.title}</h4>
+                            <div className="space-y-4" data-json-key="purificacao.faseIntermediaria.trabalhos.items.map">
+                              {texts.faseIntermediaria.trabalhos.items.map((item, index) => (
+                                <div key={index}>
+                                  <h5 className="font-semibold text-base mb-2 text-gray-800" data-json-key={`purificacao.faseIntermediaria.trabalhos.items[${index}].title`}>{item.title}</h5>
+                                  <p className="text-gray-700 text-sm" data-json-key={`purificacao.faseIntermediaria.trabalhos.items[${index}].content`}>{item.content}</p>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+
+                          <div>
+                            <h4 className="font-bold text-lg mb-3 text-gray-800" data-json-key="purificacao.faseIntermediaria.integracao.title">{texts.faseIntermediaria.integracao.title}</h4>
+                            <p className="text-gray-700 leading-relaxed" data-json-key="purificacao.faseIntermediaria.integracao.content">{texts.faseIntermediaria.integracao.content}</p>
+                          </div>
+                        </CardContent>
+                      </div>
+                    </Card>
                   </div>
                 </div>
-              </CardHeader>
-              <CardContent className="p-8 space-y-6">
-                <div>
-                  <h3 className="text-2xl font-bold mb-4 text-[#222222]" data-json-key="purificacao.faseFinal.iniciacao.title">{texts.faseFinal.iniciacao.title}</h3>
-                  <p className="text-lg text-gray-700 leading-relaxed mb-4" data-json-key="purificacao.faseFinal.iniciacao.content">{texts.faseFinal.iniciacao.content}</p>
-                </div>
+              </div>
 
-                <div className="bg-linear-to-r from-amber-50 to-yellow-50 border-2 border-[#CFAF5A] rounded-lg p-8">
-                  <div className="flex items-center gap-4 mb-6">
-                    <Sun className="w-12 h-12 text-[#CFAF5A]" />
-                    <h4 className="font-bold text-2xl text-[#CFAF5A]" data-json-key="purificacao.faseFinal.evento.title">{texts.faseFinal.evento.title ?? 'O Evento Iniciático'}</h4>
+              {/* FASE 3 - FINAL */}
+              <div className="relative">
+                <div className="md:flex md:items-start gap-8">
+                  {/* Círculo Numerado */}
+                  <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 z-10 w-16 h-16 rounded-full bg-amber-600 text-white items-center justify-center text-2xl font-bold shadow-xl border-4 border-white">
+                    3
                   </div>
-                  {texts.faseFinal.evento.content.map((para: string, i: number) => (
-                    <p key={i} className={`text-gray-700 leading-relaxed ${i === 0 ? 'text-lg mb-4' : ''}`}>
-                      {para}
-                    </p>
-                  ))}
-                </div>
+                  
+                  {/* Card da Fase */}
+                  <div className="md:w-full">
+                    <Card 
+                      className={`shadow-xl border-2 border-amber-400 cursor-pointer transition-all duration-300 hover:shadow-2xl ${
+                        expandedPhase === 3 ? 'ring-4 ring-amber-300' : ''
+                      }`}
+                      onClick={() => togglePhase(3)}
+                    >
+                      <CardHeader className="bg-linear-to-r from-[#CFAF5A] via-[#B38938] to-[#CFAF5A] text-white p-6 relative overflow-hidden">
+                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_40%,rgba(255,255,255,0.2),transparent_50%)]"></div>
+                        <div className="flex items-center justify-between relative z-10">
+                          <div className="flex items-center gap-4">
+                            <div className="md:hidden w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-lg">
+                              <span className="text-2xl font-bold text-amber-700">3</span>
+                            </div>
+                            <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-lg">
+                              <Crown className="w-8 h-8 text-[#CFAF5A]" />
+                            </div>
+                            <div>
+                              <CardTitle className="text-2xl mb-1 drop-shadow-md" data-json-key="purificacao.faseFinal.title">{texts.faseFinal.title}</CardTitle>
+                              <p className="text-base opacity-90 drop-shadow-sm" data-json-key="purificacao.faseFinal.subtitle">{texts.faseFinal.subtitle}</p>
+                            </div>
+                          </div>
+                          <ChevronDown 
+                            className={`w-8 h-8 transition-transform duration-300 ${
+                              expandedPhase === 3 ? 'rotate-180' : ''
+                            }`}
+                          />
+                        </div>
+                      </CardHeader>
+                      
+                      {/* Conteúdo Expansível */}
+                      <div 
+                        className={`overflow-hidden transition-all duration-500 ${
+                          expandedPhase === 3 ? 'max-h-[2500px] opacity-100' : 'max-h-0 opacity-0'
+                        }`}
+                      >
+                        <CardContent className="p-6 space-y-6 bg-amber-50">
+                          <div>
+                            <h3 className="text-xl font-bold mb-3 text-gray-800" data-json-key="purificacao.faseFinal.iniciacao.title">{texts.faseFinal.iniciacao.title}</h3>
+                            <p className="text-base text-gray-700 leading-relaxed" data-json-key="purificacao.faseFinal.iniciacao.content">{texts.faseFinal.iniciacao.content}</p>
+                          </div>
 
-                <div>
-                  <h4 className="font-bold text-xl mb-3 text-[#222222]" data-json-key="purificacao.faseFinal.posIniciacao.title">{texts.faseFinal.posIniciacao.title}</h4>
-                  <p className="text-gray-700 leading-relaxed mb-4" data-json-key="purificacao.faseFinal.posIniciacao.content">{texts.faseFinal.posIniciacao.content}</p>
-                  <ul className="space-y-3 text-gray-700" data-json-key="purificacao.faseFinal.posIniciacao.items.map">
-                    {texts.faseFinal.posIniciacao.items.map((it: string, idx: number) => (
-                      <li key={idx} className="flex items-start gap-3">
-                        <span className="text-[#CFAF5A] font-bold mt-1">✦</span>
-                        <span>{it}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                          <div className="bg-linear-to-r from-amber-100 to-yellow-100 border-2 border-[#CFAF5A] rounded-lg p-6 shadow-md">
+                            <div className="flex items-center gap-4 mb-4">
+                              <Sun className="w-10 h-10 text-[#CFAF5A]" />
+                              <h4 className="font-bold text-xl text-[#CFAF5A]" data-json-key="purificacao.faseFinal.evento.title">{texts.faseFinal.evento.title ?? 'O Evento Iniciático'}</h4>
+                            </div>
+                            {texts.faseFinal.evento.content.map((para: string, i: number) => (
+                              <p key={i} className={`text-gray-700 leading-relaxed ${i === 0 ? 'text-base mb-3' : 'text-sm'}`}>
+                                {para}
+                              </p>
+                            ))}
+                          </div>
 
-                <div className="bg-blue-50 border-l-4 border-blue-500 p-6">
-                  <h4 className="font-bold text-xl mb-3 text-blue-800" data-json-key="purificacao.faseFinal.adepto.title">{texts.faseFinal.adepto.title}</h4>
-                  <p className="text-blue-900 leading-relaxed" data-json-key="purificacao.faseFinal.adepto.content">{texts.faseFinal.adepto.content}</p>
+                          <div>
+                            <h4 className="font-bold text-lg mb-3 text-gray-800" data-json-key="purificacao.faseFinal.posIniciacao.title">{texts.faseFinal.posIniciacao.title}</h4>
+                            <p className="text-gray-700 leading-relaxed mb-4" data-json-key="purificacao.faseFinal.posIniciacao.content">{texts.faseFinal.posIniciacao.content}</p>
+                            <ul className="space-y-2 text-gray-700" data-json-key="purificacao.faseFinal.posIniciacao.items.map">
+                              {texts.faseFinal.posIniciacao.items.map((it: string, idx: number) => (
+                                <li key={idx} className="flex items-start gap-3">
+                                  <span className="text-[#CFAF5A] font-bold mt-1">✦</span>
+                                  <span className="text-sm">{it}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+
+                          <div className="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-lg shadow-md">
+                            <h4 className="font-bold text-lg mb-3 text-blue-800" data-json-key="purificacao.faseFinal.adepto.title">{texts.faseFinal.adepto.title}</h4>
+                            <p className="text-blue-900 leading-relaxed text-sm" data-json-key="purificacao.faseFinal.adepto.content">{texts.faseFinal.adepto.content}</p>
+                          </div>
+                        </CardContent>
+                      </div>
+                    </Card>
+                  </div>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           </div>
         </div>
       </section>
