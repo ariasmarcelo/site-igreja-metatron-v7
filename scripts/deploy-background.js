@@ -56,11 +56,18 @@ function runCommand(command, args, stepName) {
     log(`\n>>> ${stepName}`);
     log(`Comando: ${command} ${args.join(' ')}`);
     
-    const proc = spawn(command, args, {
-      cwd: projectRoot,
-      shell: false,  // Desabilitado para evitar problemas com argumentos
-      stdio: ['ignore', 'pipe', 'pipe']
-    });
+    let proc;
+    try {
+      proc = spawn(command, args, {
+        cwd: projectRoot,
+        shell: false,  // Desabilitado para evitar problemas com argumentos
+        stdio: ['ignore', 'pipe', 'pipe']
+      });
+    } catch (error) {
+      log(`ERRO AO INICIAR PROCESSO: ${error.message}`);
+      reject(error);
+      return;
+    }
 
     proc.stdout.on('data', (data) => {
       log(data.toString());
@@ -81,7 +88,8 @@ function runCommand(command, args, stepName) {
     });
 
     proc.on('error', (error) => {
-      log(`ERRO: ${error.message}`);
+      log(`ERRO NO PROCESSO: ${error.message}`);
+      log(`Stack: ${error.stack}`);
       reject(error);
     });
   });
@@ -90,17 +98,21 @@ function runCommand(command, args, stepName) {
 // Sequência de comandos
 async function deploy() {
   try {
-    // 1. Build
-    await runCommand('pnpm', ['build'], 'PNPM BUILD');
+    // 1. Build - No Windows, precisamos usar .cmd
+    const isWindows = process.platform === 'win32';
+    const pnpmCmd = isWindows ? 'pnpm.cmd' : 'pnpm';
+    const gitCmd = isWindows ? 'git.exe' : 'git';
+    
+    await runCommand(pnpmCmd, ['build'], 'PNPM BUILD');
     
     // 2. Git add
-    await runCommand('git', ['add', '.'], 'GIT ADD');
+    await runCommand(gitCmd, ['add', '.'], 'GIT ADD');
     
     // 3. Git commit
-    await runCommand('git', ['commit', '-m', commitMessage], 'GIT COMMIT');
+    await runCommand(gitCmd, ['commit', '-m', commitMessage], 'GIT COMMIT');
     
     // 4. Git push
-    await runCommand('git', ['push'], 'GIT PUSH');
+    await runCommand(gitCmd, ['push'], 'GIT PUSH');
     
     log('\n' + '='.repeat(80));
     log('✓ DEPLOY CONCLUÍDO COM SUCESSO');
