@@ -6,43 +6,43 @@
     Deploy do site para GitHub Pages com suporte a execução síncrona ou em background.
     Gera logs limpos (sem códigos ANSI) no formato deploy-YYYYMMDD-HHMMSS.log
     
-.PARAMETER Message
-    Mensagem do commit. Se não fornecida, usa timestamp padrão.
-    
 .PARAMETER Background
     Executa o deploy em background, liberando o terminal imediatamente.
     Por padrão, executa de forma síncrona mostrando progresso.
     Alias: -b
+    
+.PARAMETER Message
+    Mensagem do commit. Se não fornecida, usa timestamp padrão.
 
 .EXAMPLE
     .\deploy.ps1 "feat: nova funcionalidade"
     Deploy síncrono com mensagem personalizada
     
 .EXAMPLE
-    .\deploy.ps1 -Background
+    .\deploy.ps1 -b
     Deploy em background com mensagem padrão
     
 .EXAMPLE
-    .\deploy.ps1 "fix: correcao" -b
-    Deploy em background usando alias -b
+    .\deploy.ps1 -b "fix: correcao"
+    Deploy em background com mensagem personalizada
     
 .EXAMPLE
-    .\deploy.ps1 "fix: correcao importante" -Background
-    Deploy em background com mensagem personalizada
+    .\deploy.ps1 -Background "fix: correcao importante"
+    Deploy em background com mensagem personalizada (forma longa)
     
 .NOTES
     Autor: Sistema Igreja Meta
-    Versão: 2.1 (Alias -b adicionado)
+    Versão: 2.2 (Ordem de parâmetros otimizada)
     Mantém últimos 10 logs automaticamente
 #>
 
 param(
-    [Parameter(Position=0)]
-    [string]$Message = "deploy: atualizacao $(Get-Date -Format 'dd/MM/yyyy HH:mm')",
-    
     [Parameter()]
     [Alias('b')]
-    [switch]$Background
+    [switch]$Background,
+    
+    [Parameter(Position=0)]
+    [string]$Message = "deploy: atualizacao $(Get-Date -Format 'dd/MM/yyyy HH:mm')"
 )
 
 $projectRoot = Split-Path -Parent $PSScriptRoot
