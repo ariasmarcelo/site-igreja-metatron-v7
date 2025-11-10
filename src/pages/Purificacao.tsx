@@ -148,7 +148,10 @@ export default function Purificacao() {
                               <div className="absolute inset-0 bg-linear-to-r from-red-700 to-red-800"></div>
                               <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_40%,rgba(255,255,255,0.3),transparent_50%)]"></div>
                               <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_60%,rgba(255,255,255,0.25),transparent_50%)]"></div>
-                              <span className="text-2xl md:text-3xl font-bold text-white relative z-10 drop-shadow-lg">1</span>
+                                              <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,rgba(255,255,255,0.5)_0%,transparent_50%)]"></div>
+                <div className="absolute inset-0 bg-[linear-gradient(135deg,transparent_0%,rgba(255,255,255,0.2)_50%,transparent_100%)]"></div>
+                {/* Number */}
+                <span className="text-xl md:text-2xl font-bold text-white relative z-10 drop-shadow-lg">1</span>
                             </div>
                             <ChevronDown 
                               className={`w-8 h-8 transition-transform duration-300 ${
