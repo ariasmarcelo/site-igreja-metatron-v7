@@ -13,7 +13,7 @@ export default function Purificacao() {
   return (
     <div className="min-h-screen bg-linear-to-br from-[#FAF9F7] to-[#F5F3F0]" style={{ opacity: stylesLoaded ? 1 : 0, transition: 'opacity 0.2s ease-in' }}>
       {/* Header */}
-      <section className="py-20 bg-linear-to-r from-[#B8860B] via-[#7A5608] to-[#B8860B] text-white relative overflow-hidden">
+      <section className="py-16 bg-linear-to-r from-[#B8860B] via-[#7A5608] to-[#B8860B] text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_40%,rgba(255,255,255,0.3),transparent_50%)]"></div>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_60%,rgba(255,255,255,0.25),transparent_50%)]"></div>
         <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_20%,rgba(255,255,255,0.12)_40%,rgba(255,255,255,0.18)_50%,rgba(255,255,255,0.12)_60%,transparent_80%)]"></div>
@@ -48,7 +48,7 @@ export default function Purificacao() {
             <div className="flex justify-center mb-6">
               <svg
                 viewBox="0 0 100 100"
-                className="w-24 h-24 animate-spin-slow"
+                className="w-16 h-16 animate-spin-slow"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >

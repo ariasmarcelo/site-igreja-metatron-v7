@@ -14,7 +14,7 @@ export default function Testemunhos() {
   return (
     <div className="min-h-screen bg-linear-to-br from-[#FAF9F7] to-[#F5F3F0]" style={{ opacity: stylesLoaded ? 1 : 0, transition: 'opacity 0.2s ease-in' }}>
       {/* Header */}
-      <section className="py-20 bg-linear-to-r from-[#D4AF37] via-[#B8860B] to-[#D4AF37] text-white relative overflow-hidden">
+      <section className="py-16 bg-linear-to-r from-[#D4AF37] via-[#B8860B] to-[#D4AF37] text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_40%,rgba(255,255,255,0.3),transparent_50%)]"></div>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_60%,rgba(255,255,255,0.25),transparent_50%)]"></div>
         <div className="absolute inset-0 bg-[linear-gradient(135deg,transparent_30%,rgba(255,255,255,0.2)_45%,rgba(255,255,255,0.25)_50%,rgba(255,255,255,0.2)_55%,transparent_70%)]"></div>
