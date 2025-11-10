@@ -297,6 +297,6 @@ Após cada backup, você verá:
 
 ---
 
-**Última Atualização**: 10/11/2025  
-**Status**: Scripts funcionais e testados  
-**Compatibilidade**: Node.js ES Modules
+**Última Atualização:** 10/11/2025  
+**Status:** ✅ Testado e funcional (backup 264 linhas, restore 290 linhas)  
+**Cobertura:** 3 tabelas - 32 registros (155.53 KB)

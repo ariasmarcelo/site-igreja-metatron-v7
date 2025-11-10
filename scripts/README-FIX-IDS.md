@@ -251,6 +251,6 @@ cat scripts/fix-ids.js | grep -A 20 "EXECUÇÃO:"
 
 ---
 
-**Arquivo**: `scripts/fix-ids.js` (400 linhas)  
-**Última atualização**: 10/11/2025  
-**Status**: ✅ Script Definitivo Único
+**Última Atualização:** 10/11/2025  
+**Status:** ✅ Script definitivo único (433 linhas)  
+**Cobertura:** 96 elementos editáveis em 6 páginas

@@ -429,7 +429,6 @@ PS> (Get-ChildItem logs\deploy-*.log).Count
 
 ---
 
-**Status:** ✅ **COMPLETO E VALIDADO**  
-**Data:** 10/11/2025  
-**Autor:** Sistema Igreja Meta  
-**Versão:** 2.0 (Unificado)
+**Última Atualização:** 10/11/2025  
+**Status:** ✅ Script unificado (321 linhas)  
+**Site:** https://ariasmarcelo.github.io/site-igreja-v5/
