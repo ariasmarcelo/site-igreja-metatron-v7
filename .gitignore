@@ -32,3 +32,5 @@ components.json
 # Backups (local only, don't commit)
 backups/supabase/*
 !backups/supabase/.gitkeep
+
+.vercel
