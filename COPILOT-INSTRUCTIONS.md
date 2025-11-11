@@ -17,7 +17,10 @@ O que tentamos expressar e esclarecer no conteúdo do site é que compreendemos 
 > **Sempre que aprender algo novo, atualize este documento com as novas informações.**
 > **Nunca liste documentos ou instruções HARDCODED neste documento. Oriente conceitualmente sobre o que e onde procurar a informação dentro do pacote físico real. Isso inclui, mas não se limita a, nomes de arquivos, caminhos de diretórios e estruturas de pastas.**
 > **Encontre todos os scripts de automação existentes, analise suas funções e mantenha-os em mente para quando for necessário usá-los.**
-> **Com seu contexto interno restaurado, faça:** "Escreva um [resumo] para o usuário sobre o projeto, stack tecnológica, últimas mudanças importantes e estado atual do desenvolvimento."
+> **Com seu contexto interno restaurado, faça: "Escreva um [resumo] para o usuário sobre o projeto, stack tecnológica, últimas mudanças importantes e estado atual do desenvolvimento."**
+> **Sempre que possível, sugira melhorias para os scripts de automação existentes.**
+> **Sempre que iniciar uma sessão, releia todos os backps dos arquivos do projeto por completo. Isto serve para que suas novas ações possam compreender melhor o histórico e a direção em que tudo evoluiu.**
+> **Escreva sempre backups de todos os arquivos locais modificados, especialmente quando forem de conteúdo proprietário deste pacote. Mantenha cinco versões anteriores em histórico. Caso algo dê errado, possamos restaurar uma versão anterior do arquivo.**
 ## FIM Instruções Gerais ##
 # FIM DA SEÇÂO PÉTREA #
 

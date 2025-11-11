@@ -1,320 +1,291 @@
-<#
-.SYNOPSIS
-    Script unificado de deploy para GitHub Pages
-
-.DESCRIPTION
-    Deploy do site para GitHub Pages com suporte a execução síncrona ou em background.
-    Gera logs limpos (sem códigos ANSI) no formato deploy-YYYYMMDD-HHMMSS.log
-    
-.PARAMETER Background
-    Executa o deploy em background, liberando o terminal imediatamente.
-    Por padrão, executa de forma síncrona mostrando progresso.
-    Alias: -b
-    
-.PARAMETER Message
-    Mensagem do commit. Se não fornecida, usa timestamp padrão.
-
-.EXAMPLE
-    .\deploy.ps1 "feat: nova funcionalidade"
-    Deploy síncrono com mensagem personalizada
-    
-.EXAMPLE
-    .\deploy.ps1 -b
-    Deploy em background com mensagem padrão
-    
-.EXAMPLE
-    .\deploy.ps1 -b "fix: correcao"
-    Deploy em background com mensagem personalizada
-    
-.EXAMPLE
-    .\deploy.ps1 -Background "fix: correcao importante"
-    Deploy em background com mensagem personalizada (forma longa)
-    
-.NOTES
-    Autor: Sistema Igreja Meta
-    Versão: 2.2 (Ordem de parâmetros otimizada)
-    Mantém últimos 10 logs automaticamente
-#>
+# =============================================================================
+# SCRIPT DE DEPLOY AUTOMATIZADO PARA VERCEL
+# =============================================================================
+# 
+# Este script automatiza o processo de deploy no Vercel, incluindo:
+# - Verificação de login
+# - Deploy inicial (preview)
+# - Configuração de variáveis de ambiente
+# - Deploy em produção
+#
+# =============================================================================
 
 param(
-    [Parameter()]
-    [Alias('b')]
-    [switch]$Background,
-    
-    [Parameter(Position=0)]
-    [string]$Message = "deploy: atualizacao $(Get-Date -Format 'dd/MM/yyyy HH:mm')"
+    [switch]$SkipEnvConfig = $false,
+    [switch]$ProdOnly = $false
 )
 
-$projectRoot = Split-Path -Parent $PSScriptRoot
-$timestamp = Get-Date -Format "yyyyMMdd-HHmmss"
-$logDir = Join-Path $projectRoot "logs"
-$logFile = Join-Path $logDir "deploy-$timestamp.log"
+$ErrorActionPreference = "Continue"
 
-Set-Location $projectRoot
-
-# ============================================================================
-# FUNCOES AUXILIARES
-# ============================================================================
-
-function Remove-AnsiCodes {
-    <#
-    .SYNOPSIS
-        Remove códigos ANSI e caracteres Unicode problemáticos
-    #>
-    param([string]$Text)
-    
-    # Remove codigos ANSI de cores [XXm
-    $cleaned = $Text -replace '\x1b\[[0-9;]*m', ''
-    # Remove outros caracteres especiais de controle
-    $cleaned = $cleaned -replace '\x1b\[[\d;]*[A-Za-z]', ''
-    # Remove caracteres Unicode problematicos (emojis, checkmarks, etc)
-    $cleaned = $cleaned -replace '[^\x20-\x7E\r\n\t]', ''
-    
-    return $cleaned
+# Cores para output
+function Write-ColorOutput($ForegroundColor, $Message) {
+    $fc = $host.UI.RawUI.ForegroundColor
+    $host.UI.RawUI.ForegroundColor = $ForegroundColor
+    Write-Output $Message
+    $host.UI.RawUI.ForegroundColor = $fc
 }
 
-function Write-CleanLog {
-    <#
-    .SYNOPSIS
-        Escreve no log sem códigos ANSI, usando encoding ASCII
-    #>
-    param([string]$Content)
-    
-    $cleaned = Remove-AnsiCodes -Text $Content
-    Add-Content -Path $logFile -Value $cleaned -Encoding ASCII
+function Write-Step($Message) {
+    Write-ColorOutput Yellow "`n[STEP] $Message"
 }
 
-function Initialize-LogDirectory {
-    <#
-    .SYNOPSIS
-        Cria diretório de logs e limpa logs antigos
-    #>
+function Write-Success($Message) {
+    Write-ColorOutput Green "[OK] $Message"
+}
+
+function Write-Error-Custom($Message) {
+    Write-ColorOutput Red "[ERROR] $Message"
+}
+
+function Write-Info($Message) {
+    Write-ColorOutput Cyan "[INFO] $Message"
+}
+
+# =============================================================================
+# VERIFICAÇÕES INICIAIS
+# =============================================================================
+
+Write-Step "Verificando Vercel CLI..."
+
+try {
+    $vercelVersion = vercel --version 2>$null
+    if ($LASTEXITCODE -ne 0) {
+        throw "Vercel CLI não encontrado"
+    }
+    Write-Success "Vercel CLI instalado: $vercelVersion"
+} catch {
+    Write-Error-Custom "Vercel CLI não está instalado!"
+    Write-Info "Instale com: npm install -g vercel"
+    exit 1
+}
+
+# =============================================================================
+# VERIFICAR SE JÁ ESTÁ LOGADO
+# =============================================================================
+
+Write-Step "Verificando autenticação..."
+
+$whoami = vercel whoami 2>$null
+if ($LASTEXITCODE -eq 0) {
+    Write-Success "Já autenticado como: $whoami"
+} else {
+    Write-Info "Você precisa fazer login no Vercel"
+    Write-Info "Um navegador será aberto. Faça login e volte aqui."
+    Write-Info ""
+    Write-Info "Pressione ENTER para continuar..."
+    Read-Host
     
-    # Criar diretorio se nao existir
-    if (!(Test-Path $logDir)) {
-        New-Item -ItemType Directory -Path $logDir -Force | Out-Null
+    Write-Step "Executando login no Vercel..."
+    
+    # Executar login em processo separado
+    $loginProcess = Start-Process -FilePath "vercel" -ArgumentList "login" -NoNewWindow -PassThru -Wait
+    
+    if ($loginProcess.ExitCode -ne 0) {
+        Write-Error-Custom "Falha no login"
+        exit 1
     }
     
-    # Manter apenas os ultimos 10 logs
-    $oldLogs = Get-ChildItem "$logDir\deploy-*.log" -ErrorAction SilentlyContinue | 
-                Sort-Object LastWriteTime -Descending | 
-                Select-Object -Skip 10
-    
-    if ($oldLogs) {
-        $oldLogs | Remove-Item -Force
-        if (!$Background) {
-            Write-Host "[CLEANUP] Removidos $($oldLogs.Count) logs antigos" -ForegroundColor Gray
-        }
-    }
-}
-
-function Start-DeploymentSync {
-    <#
-    .SYNOPSIS
-        Executa deploy de forma síncrona (bloqueante)
-    #>
-    
-    Write-Host "`n[DEPLOY SINCRONO] Iniciando deploy..." -ForegroundColor Cyan
-    Write-Host "[INFO] Mensagem: $Message" -ForegroundColor Gray
-    Write-Host "[INFO] Log: $logFile" -ForegroundColor Gray
-    
-    # Iniciar log
-    $ts = Get-Date -Format 'HHmmss'
-    "========================================" | Out-File $logFile -Encoding ASCII
-    "[$ts] DEPLOY INICIADO" | Add-Content -Path $logFile -Encoding ASCII
-    "[$ts] Mensagem: $Message" | Add-Content -Path $logFile -Encoding ASCII
-    "========================================" | Add-Content -Path $logFile -Encoding ASCII
-    
-    try {
-        # [1/4] Build
-        Write-Host "`n[1/4] Build..." -ForegroundColor Yellow
-        $ts = Get-Date -Format 'HHmmss'
-        "[$ts]" | Add-Content -Path $logFile -Encoding ASCII
-        "[$ts] [1/4] Build..." | Add-Content -Path $logFile -Encoding ASCII
-        $buildOutput = pnpm build 2>&1 | Out-String
-        Write-CleanLog -Content $buildOutput
-        $ts = Get-Date -Format 'HHmmss'
-        "[$ts] [OK] Build concluido!" | Add-Content -Path $logFile -Encoding ASCII
-        Write-Host "[OK] Build concluido!" -ForegroundColor Green
-        
-        # [2/4] Git add
-        Write-Host "`n[2/4] Git add..." -ForegroundColor Yellow
-        $ts = Get-Date -Format 'HHmmss'
-        "[$ts]" | Add-Content -Path $logFile -Encoding ASCII
-        "[$ts] [2/4] Git add..." | Add-Content -Path $logFile -Encoding ASCII
-        $gitAddOutput = git add . 2>&1 | Out-String
-        Write-CleanLog -Content $gitAddOutput
-        $ts = Get-Date -Format 'HHmmss'
-        "[$ts] [OK] Git add concluido!" | Add-Content -Path $logFile -Encoding ASCII
-        Write-Host "[OK] Git add concluido!" -ForegroundColor Green
-        
-        # [3/4] Git commit
-        Write-Host "`n[3/4] Git commit..." -ForegroundColor Yellow
-        $ts = Get-Date -Format 'HHmmss'
-        "[$ts]" | Add-Content -Path $logFile -Encoding ASCII
-        "[$ts] [3/4] Git commit..." | Add-Content -Path $logFile -Encoding ASCII
-        $gitCommitOutput = git commit -m $Message 2>&1 | Out-String
-        Write-CleanLog -Content $gitCommitOutput
-        $ts = Get-Date -Format 'HHmmss'
-        "[$ts] [OK] Git commit concluido!" | Add-Content -Path $logFile -Encoding ASCII
-        Write-Host "[OK] Git commit concluido!" -ForegroundColor Green
-        
-        # [4/4] Git push
-        Write-Host "`n[4/4] Git push..." -ForegroundColor Yellow
-        $ts = Get-Date -Format 'HHmmss'
-        "[$ts]" | Add-Content -Path $logFile -Encoding ASCII
-        "[$ts] [4/4] Git push..." | Add-Content -Path $logFile -Encoding ASCII
-        $gitPushOutput = git push 2>&1 | Out-String
-        Write-CleanLog -Content $gitPushOutput
-        $ts = Get-Date -Format 'HHmmss'
-        "[$ts] [OK] Git push concluido!" | Add-Content -Path $logFile -Encoding ASCII
-        Write-Host "[OK] Git push concluido!" -ForegroundColor Green
-        
-        # Finalizar
-        $ts = Get-Date -Format 'HHmmss'
-        "[$ts]" | Add-Content -Path $logFile -Encoding ASCII
-        "========================================" | Add-Content -Path $logFile -Encoding ASCII
-        "[$ts] [SUCCESS] Deploy concluido com sucesso!" | Add-Content -Path $logFile -Encoding ASCII
-        "[$ts] Finalizado: $(Get-Date -Format 'yyyyMMdd HHmmss')" | Add-Content -Path $logFile -Encoding ASCII
-        "========================================" | Add-Content -Path $logFile -Encoding ASCII
-        
-        Write-Host "`n[SUCCESS] Deploy concluido com sucesso!" -ForegroundColor Green
-        Write-Host "[INFO] Site disponivel em: https://ariasmarcelo.github.io/site-igreja-v6/" -ForegroundColor Cyan
-        
-    } catch {
-        $ts = Get-Date -Format 'HHmmss'
-        "[$ts]" | Add-Content -Path $logFile -Encoding ASCII
-        "========================================" | Add-Content -Path $logFile -Encoding ASCII
-        "[$ts] [ERRO] Deploy falhou: $_" | Add-Content -Path $logFile -Encoding ASCII
-        "========================================" | Add-Content -Path $logFile -Encoding ASCII
-        
-        Write-Host "`n[ERRO] Deploy falhou: $_" -ForegroundColor Red
+    # Verificar novamente
+    Start-Sleep -Seconds 2
+    $whoami = vercel whoami 2>$null
+    if ($LASTEXITCODE -eq 0) {
+        Write-Success "Login realizado com sucesso! Usuário: $whoami"
+    } else {
+        Write-Error-Custom "Login falhou. Execute 'vercel login' manualmente."
         exit 1
     }
 }
 
-function Start-DeploymentBackground {
-    <#
-    .SYNOPSIS
-        Executa deploy em background usando script temporário
-    #>
-    
-    Write-Host "`n[DEPLOY BACKGROUND] Iniciando deploy em background..." -ForegroundColor Cyan
-    Write-Host "[INFO] Mensagem: $Message" -ForegroundColor Gray
-    Write-Host "[INFO] Log: $logFile" -ForegroundColor Gray
-    Write-Host ""
-    
-    # Criar script temporario
-    $tempScript = Join-Path $projectRoot "temp-deploy-script.ps1"
-    $scriptContent = @"
-Set-Location '$projectRoot'
-`$logFile = '$logFile'
+# =============================================================================
+# VERIFICAR .env.local
+# =============================================================================
 
-# Funcao para remover codigos ANSI
-function Remove-AnsiCodes {
-    param([string]`$Text)
-    `$cleaned = `$Text -replace '\x1b\[[0-9;]*m', ''
-    `$cleaned = `$cleaned -replace '\x1b\[[\d;]*[A-Za-z]', ''
-    `$cleaned = `$cleaned -replace '[^\x20-\x7E\r\n\t]', ''
-    return `$cleaned
+Write-Step "Verificando credenciais locais..."
+
+$envLocalPath = ".env.local"
+if (-Not (Test-Path $envLocalPath)) {
+    Write-Error-Custom "Arquivo .env.local não encontrado!"
+    Write-Info "Crie o arquivo .env.local com suas credenciais do Supabase"
+    Write-Info "Use .env.example como referência"
+    exit 1
 }
 
-function Write-Log {
-    param([string]`$msg)
-    `$timestamp = Get-Date -Format 'HHmmss'
-    "[`$timestamp] `$msg" | Add-Content -Path `$logFile -Encoding ASCII
+# Ler variáveis do .env.local
+$envVars = @{}
+Get-Content $envLocalPath | ForEach-Object {
+    if ($_ -match '^\s*([^#][^=]+)=(.+)$') {
+        $key = $matches[1].Trim()
+        $value = $matches[2].Trim()
+        $envVars[$key] = $value
+    }
 }
 
-function Write-CleanLog {
-    param([string]`$Content)
-    `$cleaned = Remove-AnsiCodes -Text `$Content
-    Add-Content -Path `$logFile -Value `$cleaned -Encoding ASCII
+# Verificar variáveis obrigatórias
+$requiredVars = @(
+    "VITE_SUPABASE_URL",
+    "VITE_SUPABASE_ANON_KEY",
+    "SUPABASE_SERVICE_KEY"
+)
+
+$missingVars = @()
+foreach ($varName in $requiredVars) {
+    if (-Not $envVars.ContainsKey($varName) -or [string]::IsNullOrWhiteSpace($envVars[$varName])) {
+        $missingVars += $varName
+    }
 }
 
-# Iniciar log
-"========================================" | Out-File `$logFile -Encoding ASCII
-Write-Log "DEPLOY INICIADO"
-Write-Log "Mensagem: $Message"
-"========================================" | Add-Content -Path `$logFile -Encoding ASCII
-
-try {
-    Write-Log ""
-    Write-Log "[1/4] Build..."
-    `$buildOutput = pnpm build 2>&1 | Out-String
-    Write-CleanLog -Content `$buildOutput
-    Write-Log "[OK] Build concluido!"
-    
-    Write-Log ""
-    Write-Log "[2/4] Git add..."
-    `$gitAddOutput = git add . 2>&1 | Out-String
-    Write-CleanLog -Content `$gitAddOutput
-    Write-Log "[OK] Git add concluido!"
-    
-    Write-Log ""
-    Write-Log "[3/4] Git commit..."
-    `$gitCommitOutput = git commit -m "$Message" 2>&1 | Out-String
-    Write-CleanLog -Content `$gitCommitOutput
-    Write-Log "[OK] Git commit concluido!"
-    
-    Write-Log ""
-    Write-Log "[4/4] Git push..."
-    `$gitPushOutput = git push 2>&1 | Out-String
-    Write-CleanLog -Content `$gitPushOutput
-    Write-Log "[OK] Git push concluido!"
-    
-    Write-Log ""
-    "========================================" | Add-Content -Path `$logFile -Encoding ASCII
-    Write-Log "[SUCCESS] Deploy concluido com sucesso!"
-    Write-Log "Finalizado: `$(Get-Date -Format 'yyyyMMdd HHmmss')"
-    "========================================" | Add-Content -Path `$logFile -Encoding ASCII
-    
-} catch {
-    Write-Log ""
-    "========================================" | Add-Content -Path `$logFile -Encoding ASCII
-    Write-Log "[ERRO] Deploy falhou: `$_"
-    "========================================" | Add-Content -Path `$logFile -Encoding ASCII
+if ($missingVars.Count -gt 0) {
+    Write-Error-Custom "Variáveis faltando no .env.local:"
+    $missingVars | ForEach-Object { Write-Info "  - $_" }
+    exit 1
 }
 
-# Limpar logs antigos
-`$logDir = '$logDir'
-`$oldLogs = Get-ChildItem "`$logDir\deploy-*.log" -ErrorAction SilentlyContinue | 
-            Sort-Object LastWriteTime -Descending | 
-            Select-Object -Skip 10
-if (`$oldLogs) {
-    `$oldLogs | Remove-Item -Force
-}
+Write-Success "Credenciais encontradas no .env.local"
 
-# Auto-deletar script temporario
-Remove-Item '$tempScript' -Force -ErrorAction SilentlyContinue
-"@
+# =============================================================================
+# DEPLOY PREVIEW (se não for prod-only)
+# =============================================================================
 
-    # Salvar script temporario
-    $scriptContent | Out-File $tempScript -Encoding UTF8
+if (-Not $ProdOnly) {
+    Write-Step "Executando deploy de preview..."
+    Write-Info "Isso pode levar alguns minutos..."
     
-    # Executar em background (hidden window)
-    Start-Process powershell -ArgumentList "-ExecutionPolicy Bypass -File `"$tempScript`"" -WindowStyle Hidden
+    # Executar deploy em modo não-interativo
+    $deployOutput = vercel --yes 2>&1
     
-    Write-Host "[OK] Deploy iniciado em background!" -ForegroundColor Green
-    Write-Host ""
-    Write-Host "Comandos uteis:" -ForegroundColor Yellow
-    Write-Host "  Ver progresso:  " -NoNewline -ForegroundColor Gray
-    Write-Host "Get-Content '$logFile' -Tail 20 -Wait" -ForegroundColor White
-    Write-Host "  Ver log:        " -NoNewline -ForegroundColor Gray
-    Write-Host "Get-Content '$logFile'" -ForegroundColor White
-    Write-Host "  Todos os logs:  " -NoNewline -ForegroundColor Gray
-    Write-Host "Get-ChildItem logs\deploy-*.log" -ForegroundColor White
-    Write-Host ""
-    Write-Host "Voce esta livre para trabalhar! O deploy continua em background..." -ForegroundColor Cyan
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error-Custom "Deploy de preview falhou"
+        Write-Info $deployOutput
+        exit 1
+    }
+    
+    # Extrair URL do preview
+    $previewUrl = $deployOutput | Select-String -Pattern "https://[^\s]+" | Select-Object -First 1
+    if ($previewUrl) {
+        Write-Success "Deploy de preview concluído!"
+        Write-Info "Preview URL: $previewUrl"
+    } else {
+        Write-Success "Deploy de preview concluído!"
+    }
+    
+    Start-Sleep -Seconds 3
 }
 
-# ============================================================================
-# EXECUCAO PRINCIPAL
-# ============================================================================
+# =============================================================================
+# CONFIGURAR VARIÁVEIS DE AMBIENTE
+# =============================================================================
 
-Initialize-LogDirectory
-
-if ($Background) {
-    Start-DeploymentBackground
-} else {
-    Start-DeploymentSync
+if (-Not $SkipEnvConfig) {
+    Write-Step "Configurando variáveis de ambiente no Vercel..."
+    
+    # Listar variáveis existentes
+    Write-Info "Verificando variáveis existentes..."
+    $existingEnv = vercel env ls 2>&1
+    
+    # Variáveis para configurar
+    $envToSet = @{
+        "VITE_SUPABASE_URL" = $envVars["VITE_SUPABASE_URL"]
+        "VITE_SUPABASE_ANON_KEY" = $envVars["VITE_SUPABASE_ANON_KEY"]
+        "SUPABASE_SERVICE_KEY" = $envVars["SUPABASE_SERVICE_KEY"]
+    }
+    
+    foreach ($key in $envToSet.Keys) {
+        $value = $envToSet[$key]
+        
+        # Verificar se já existe
+        if ($existingEnv -match $key) {
+            Write-Info "$key já existe, pulando..."
+            continue
+        }
+        
+        Write-Info "Configurando $key..."
+        
+        # Criar arquivo temporário com o valor
+        $tempFile = [System.IO.Path]::GetTempFileName()
+        $value | Out-File -FilePath $tempFile -Encoding UTF8 -NoNewline
+        
+        try {
+            # Adicionar variável (production, preview, development)
+            $result = Get-Content $tempFile | vercel env add $key production 2>&1
+            
+            if ($LASTEXITCODE -eq 0) {
+                Write-Success "$key configurado"
+            } else {
+                Write-Info "${key}: $result"
+            }
+            
+            Start-Sleep -Seconds 1
+        } finally {
+            Remove-Item $tempFile -ErrorAction SilentlyContinue
+        }
+    }
+    
+    # Configurar VITE_API_URL
+    Write-Info "Obtendo URL do projeto..."
+    $projectInfo = vercel project ls --yes 2>&1
+    
+    # Tentar extrair URL do projeto
+    $projectUrl = $projectInfo | Select-String -Pattern "https://[^\s]+\.vercel\.app" | Select-Object -First 1
+    
+    if ($projectUrl) {
+        $apiUrl = $projectUrl.ToString().Trim()
+        Write-Info "URL do projeto: $apiUrl"
+        
+        if (-Not ($existingEnv -match "VITE_API_URL")) {
+            Write-Info "Configurando VITE_API_URL..."
+            $tempFile = [System.IO.Path]::GetTempFileName()
+            $apiUrl | Out-File -FilePath $tempFile -Encoding UTF8 -NoNewline
+            
+            try {
+                Get-Content $tempFile | vercel env add VITE_API_URL production 2>&1 | Out-Null
+                Write-Success "VITE_API_URL configurado"
+                Start-Sleep -Seconds 1
+            } finally {
+                Remove-Item $tempFile -ErrorAction SilentlyContinue
+            }
+        }
+    } else {
+        Write-Info "Não foi possível detectar URL automaticamente"
+        Write-Info "Configure VITE_API_URL manualmente depois do deploy"
+    }
+    
+    Write-Success "Variáveis de ambiente configuradas!"
 }
+
+# =============================================================================
+# DEPLOY PRODUÇÃO
+# =============================================================================
+
+Write-Step "Executando deploy de PRODUÇÃO..."
+Write-Info "Isso pode levar alguns minutos..."
+Write-Info "Build e otimização em andamento..."
+
+$prodOutput = vercel --prod --yes 2>&1
+
+if ($LASTEXITCODE -ne 0) {
+    Write-Error-Custom "Deploy de produção falhou"
+    Write-Info $prodOutput
+    exit 1
+}
+
+# Extrair URL de produção
+$prodUrl = $prodOutput | Select-String -Pattern "https://[^\s]+" | Select-Object -Last 1
+
+Write-Success "`n=========================================="
+Write-Success "DEPLOY CONCLUÍDO COM SUCESSO!"
+Write-Success "=========================================="
+
+if ($prodUrl) {
+    $cleanUrl = $prodUrl.ToString().Trim()
+    Write-Info "`nURLs do seu projeto:"
+    Write-ColorOutput Green "  Site: $cleanUrl"
+    Write-ColorOutput Green "  Admin Console: $cleanUrl/436F6E736F6C45"
+    Write-Info "`nDashboard: https://vercel.com/dashboard"
+}
+
+Write-Info "`nPróximos passos:"
+Write-Info "1. Acesse o site e teste as páginas"
+Write-Info "2. Acesse o Admin Console e teste edições"
+Write-Info "3. Verifique os logs no dashboard da Vercel"
+
+Write-Success "`n[CONCLUÍDO] Deploy finalizado!"

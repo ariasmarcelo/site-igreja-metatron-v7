@@ -1,7 +1,8 @@
 # Backup: Estado Antes da Migração 100% Vercel
 **Data:** 2025-11-11
 **Branch:** main
-**Commit:** (será preenchido)
+**Commit:** 97a5e49
+**Tag:** pre-vercel-migration
 
 ## URLs Ativas
 
@@ -44,11 +45,13 @@ base: '/' // Já estava correto para Vercel
 
 ## Variáveis de Ambiente (Vercel)
 
-### Production
-1. `VITE_SUPABASE_URL` - URL do Supabase
-2. `VITE_SUPABASE_ANON_KEY` - Chave anônima do Supabase
-3. `SUPABASE_SERVICE_KEY` - Chave de serviço (service_role)
-4. `VITE_API_URL` - https://shadcn-ui-seven-olive.vercel.app
+### Production (Configuradas e Validadas)
+1. `VITE_SUPABASE_URL` - URL do Supabase (Encrypted)
+2. `VITE_SUPABASE_ANON_KEY` - Chave anônima do Supabase (Encrypted)
+3. `SUPABASE_SERVICE_KEY` - Chave de serviço service_role (Encrypted)
+4. `VITE_API_URL` - https://shadcn-ui-seven-olive.vercel.app (Encrypted)
+
+**Verificar com:** `vercel env ls`
 
 ---
 
