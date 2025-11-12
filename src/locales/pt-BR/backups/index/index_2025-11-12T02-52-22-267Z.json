@@ -5,7 +5,7 @@
     "buttonText": "Agende Avaliação Inicial"
   },
   "hero": {
-    "title": "O Trabalho de Resgate",
+    "title": "PROD TEST 18:29:08",
     "buttons": {
       "treatments": "Tratamentos Associados",
       "purification": "Purificação e Ascensão"
@@ -140,7 +140,7 @@
     "knowMoreButton": "Conheça Nossa História"
   },
   "instituto": {
-    "title": "Teste de edição via API",
+    "title": "Teste de edi��o via API",
     "benefits": [
       {
         "title": "Acolhimento e Segurança",
@@ -216,7 +216,7 @@
     "subtitle": "Nossa abordagem oferece proteção em três níveis fundamentais, garantindo segurança e eficácia em cada etapa do processo terapêutico."
   },
   "benefitsSection": {
-    "title": "Teste de edição via API",
+    "title": "Teste de edi��o via API",
     "subtitle": "Se você está pronto para a cura, nós estamos prontos para ajudar."
   },
   "testimonialsCta": "Ver Mais Testemunhos",

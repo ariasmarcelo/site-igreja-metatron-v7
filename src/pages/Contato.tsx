@@ -4,22 +4,21 @@ import { Mail, Clock, MessageCircle, ShieldCheck, Mic, PhoneCall, MessageSquare,
 import fallbackTexts from '@/locales/pt-BR/Contato.json';
 import { useLocaleTexts } from '@/hooks/useLocaleTexts';
 import { usePageStyles } from '@/hooks/usePageStyles';
-import PageLoader from '@/components/PageLoader';
 
 type ContatoTexts = typeof fallbackTexts;
 
 export default function Contato() {
   usePageStyles('contato');
-  const { texts, loading, error } = useLocaleTexts<ContatoTexts>('contato', fallbackTexts);
+  const { texts } = useLocaleTexts<ContatoTexts>('contato', fallbackTexts);
   const handleWhatsAppClick = () => {
     const phoneNumber = '5511949555555';
     const message = encodeURIComponent('Olá! Quero saber mais sobre **O Trabalho de Resgate!**');
     window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
   };
 
+  if (!texts) return null;
+
   return (
-    <PageLoader loading={loading} error={error}>
-      {!texts ? null : (
     <div className="min-h-screen bg-linear-to-br from-[#FAF9F7] to-[#F5F3F0]">
       {/* Header */}
       <section className="py-16 bg-linear-to-r from-[#60a5fa] via-[#2563eb] to-[#60a5fa] text-white relative overflow-hidden">
@@ -166,7 +165,5 @@ export default function Contato() {
         </div>
       </section>
     </div>
-      )}
-    </PageLoader>
   );
 }

@@ -15,14 +15,14 @@ export function LocalEditsProvider({ children }: { children: ReactNode }) {
     setLocalEdits(prev => {
       const next = new Map(prev);
       next.set(key, value);
-      // console.log(`💾 Local edit: ${key} = "${value}"`);
+      console.log(`💾 Local edit: ${key} = "${value}"`);
       return next;
     });
   }, []);
 
   const clearLocalEdits = useCallback(() => {
     setLocalEdits(new Map());
-    // console.log('🧹 Local edits cleared');
+    console.log('🧹 Local edits cleared');
   }, []);
 
   const getValueWithOverride = useCallback((key: string, originalValue: string): string => {

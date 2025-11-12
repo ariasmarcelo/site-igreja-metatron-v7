@@ -1,10 +1,10 @@
 # start-dev.ps1
-# Inicia ambiente de desenvolvimento com Vercel Dev
-# Vercel Dev serve TUDO na porta 8080: Frontend (Vite) + APIs (Serverless Functions)
+# Inicia ambiente de desenvolvimento com Vite
+# Vite serve Frontend na porta 8080, APIs apontam para produção
 
 $WorkDir = "c:\temp\Site_Igreja_Meta\site-igreja-v6\workspace\shadcn-ui"
 
-Write-Host "=== Iniciando Vercel Dev ===" -ForegroundColor Cyan
+Write-Host "=== Iniciando Vite Dev Server ===" -ForegroundColor Cyan
 Write-Host ""
 
 Set-Location $WorkDir
@@ -22,15 +22,15 @@ if ($port8080) {
 Start-Sleep -Seconds 1
 Write-Host ""
 
-Write-Host "[2/2] Iniciando Vercel Dev..." -ForegroundColor Yellow
+Write-Host "[2/2] Iniciando Vite..." -ForegroundColor Yellow
 Write-Host "  Frontend: Vite com hot reload" -ForegroundColor DarkGray
-Write-Host "  Backend: Serverless Functions (identico a producao)" -ForegroundColor DarkGray
-Write-Host "  Porta: 8080 (frontend + APIs)" -ForegroundColor DarkGray
+Write-Host "  Backend: APIs em producao (Vercel)" -ForegroundColor DarkGray
+Write-Host "  Porta: 8080 (frontend)" -ForegroundColor DarkGray
 Write-Host ""
 
-# Iniciar Vercel Dev COM WorkingDirectory CORRETO
-Start-Process powershell -ArgumentList "-NoExit", "-Command", "vercel dev" -WorkingDirectory $WorkDir -WindowStyle Minimized
-Start-Sleep -Seconds 25
+# Iniciar Vite em nova janela minimizada
+Start-Process powershell -ArgumentList "-NoExit", "-Command", "pnpm run dev" -WorkingDirectory $WorkDir -WindowStyle Minimized
+Start-Sleep -Seconds 5
 
 Write-Host "=== Verificando Status ===" -ForegroundColor Cyan
 Write-Host ""

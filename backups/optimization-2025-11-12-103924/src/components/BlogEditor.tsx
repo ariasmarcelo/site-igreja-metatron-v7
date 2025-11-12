@@ -425,7 +425,7 @@ export default function BlogEditor() {
     <div className="space-y-6">
       {/* Message Alert - Floating Toast */}
       {message && (
-        <div className="fixed top-4 right-4 z-10000 animate-in slide-in-from-top duration-500">
+        <div className="fixed top-4 right-4 z-[10000] animate-in slide-in-from-top duration-500">
           <Alert className={`${
             message.type === 'success' 
               ? 'bg-green-500 border-green-600 text-white shadow-2xl' 
@@ -476,7 +476,7 @@ export default function BlogEditor() {
 
       {/* Warning Badge - Unsaved Changes */}
       {hasChanges && editingPost && (
-        <div className="fixed top-4 left-4 z-9999">
+        <div className="fixed top-4 left-4 z-[9999]">
           <div className="bg-orange-500 text-white px-4 py-2 rounded-full shadow-lg font-semibold text-sm animate-pulse">
             ⚠️ Alterações não salvas
           </div>

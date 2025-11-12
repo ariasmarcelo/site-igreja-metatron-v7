@@ -5,14 +5,13 @@ import { Heart, Sun, Users, BookOpen, Brain, Ghost, Database, Compass, HeartCrac
 import TestimonialsCarousel from '@/components/TestimonialsCarousel';
 import { useLocaleTexts } from '@/hooks/useLocaleTexts';
 import { usePageStyles } from '@/hooks/usePageStyles';
-import PageLoader from '@/components/PageLoader';
 import fallbackTexts from '@/locales/pt-BR/Index.json';
 
 type IndexTexts = typeof fallbackTexts;
 
 export default function Index() {
   usePageStyles('index');
-  const { texts, loading, error } = useLocaleTexts<IndexTexts>('index', fallbackTexts);
+  const { texts } = useLocaleTexts<IndexTexts>('index', fallbackTexts);
   
   const benefitsIcons = [
     <Sun className="w-12 h-12 text-pink-600 mb-4" key="s" />,
@@ -20,9 +19,9 @@ export default function Index() {
     <BookOpen className="w-12 h-12 text-[#4A90A9] mb-4" key="b" />
   ];
 
+  if (!texts) return null;
+
   return (
-    <PageLoader loading={loading} error={error}>
-      {!texts ? null : (
     <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden bg-linear-to-br from-[#FAF9F7] via-[#F5F3F0] to-[#E8E6E3]">
@@ -718,7 +717,5 @@ export default function Index() {
         </div>
       </section>
     </div>
-      )}
-    </PageLoader>
   );
 }

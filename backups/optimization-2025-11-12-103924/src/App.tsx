@@ -1,7 +1,7 @@
 import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
-import { useState, useEffect, lazy, Suspense, memo } from 'react';
+import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import Index from './pages/Index';
 import QuemSomos from './pages/QuemSomos';
@@ -10,11 +10,9 @@ import Purificacao from './pages/Purificacao';
 import Artigos from './pages/Artigos';
 import Contato from './pages/Contato';
 import Testemunhos from './pages/Testemunhos';
+import AdminConsole from './pages/AdminConsole';
 import WhatsAppButton from './components/WhatsAppButton';
 import NotFound from './pages/NotFound';
-
-// Lazy load heavy components (Admin Console)
-const AdminConsole = lazy(() => import('./pages/AdminConsole'));
 
 // Componente para gerenciar scroll: mantém posição no refresh (editor), reseta ao navegar (site)
 const ScrollManager = () => {
@@ -50,7 +48,7 @@ const ScrollManager = () => {
   return null;
 };
 
-const Navigation = memo(() => {
+const Navigation = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
 
@@ -164,7 +162,7 @@ const Navigation = memo(() => {
       </div>
     </nav>
   );
-});
+};
 
 const App = () => {
   // Use basename apenas em produção
@@ -186,14 +184,7 @@ const App = () => {
           <Route path="/artigos" element={<Artigos />} />
           <Route path="/contato" element={<Contato />} />
           <Route path="/testemunhos" element={<Testemunhos />} />
-          <Route 
-            path="/436F6E736F6C45" 
-            element={
-              <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Carregando Admin Console...</div>}>
-                <AdminConsole />
-              </Suspense>
-            } 
-          />
+          <Route path="/436F6E736F6C45" element={<AdminConsole />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
 

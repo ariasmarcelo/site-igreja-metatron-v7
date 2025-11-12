@@ -10,10 +10,10 @@ const editLocks = new Map<string, boolean>();
 export const triggerRefresh = (pageId: string) => {
   const normalizedPageId = pageId.toLowerCase();
   const listeners = refreshEvents.get(normalizedPageId);
-  // console.log(`🔄 triggerRefresh(${pageId}) - listeners: ${listeners?.size || 0}`);
+  console.log(`🔄 triggerRefresh(${pageId}) - listeners: ${listeners?.size || 0}`);
   if (listeners) {
     listeners.forEach(callback => {
-      // console.log(`  → Calling refresh callback for ${pageId}`);
+      console.log(`  → Calling refresh callback for ${pageId}`);
       callback();
     });
   }
@@ -21,7 +21,7 @@ export const triggerRefresh = (pageId: string) => {
 
 export const setEditLock = (pageId: string, locked: boolean) => {
   editLocks.set(pageId.toLowerCase(), locked);
-  // console.log(`🔒 Edit lock for ${pageId}: ${locked}`);
+  console.log(`🔒 Edit lock for ${pageId}: ${locked}`);
 };
 
 export const isEditLocked = (pageId: string): boolean => {
@@ -82,11 +82,11 @@ export function useLocaleTexts<T = Record<string, unknown>>(
   useEffect(() => {
     const loadFromSupabase = async () => {
       const locked = isEditLocked(pageId);
-      // console.log(`🔍 useLocaleTexts.loadFromSupabase(${pageId}) - locked: ${locked}, refreshTrigger: ${refreshTrigger}`);
+      console.log(`🔍 useLocaleTexts.loadFromSupabase(${pageId}) - locked: ${locked}, refreshTrigger: ${refreshTrigger}`);
       
       // NÃO atualizar se há edições pendentes (lock ativo)
       if (locked) {
-        // console.log(`⏸️ Skipping Supabase load for ${pageId} (edit lock active)`);
+        console.log(`⏸️ Skipping Supabase load for ${pageId} (edit lock active)`);
         return;
       }
       
@@ -94,7 +94,7 @@ export function useLocaleTexts<T = Record<string, unknown>>(
       setError(null);
       
       try {
-        // console.log(`📡 Fetching from Supabase for ${pageId}...`);
+        console.log(`📡 Fetching from Supabase for ${pageId}...`);
         const { data, error: supabaseError } = await supabase
           .from('page_contents')
           .select('content')
@@ -110,7 +110,7 @@ export function useLocaleTexts<T = Record<string, unknown>>(
         }
         
         if (data && data.content) {
-          // console.log(`✅ Supabase data received for ${pageId}`);
+          console.log(`✅ Supabase data received for ${pageId}`);
           setTexts(data.content as T);
           setError(null);
           
@@ -118,7 +118,7 @@ export function useLocaleTexts<T = Record<string, unknown>>(
           try {
             const cacheKey = `page_cache_${pageId}`;
             localStorage.setItem(cacheKey, JSON.stringify(data.content));
-            // console.log(`💾 Cache updated in localStorage for ${pageId}`);
+            console.log(`💾 Cache updated in localStorage for ${pageId}`);
           } catch (err) {
             console.warn(`⚠️ Failed to update localStorage cache for ${pageId}:`, err);
           }
@@ -147,9 +147,9 @@ export function useLocaleTexts<T = Record<string, unknown>>(
               }
               
               localStorage.setItem(historyKey, JSON.stringify(history));
-              // console.log(`📝 History updated for ${pageId} (${history.length} versions)`);
+              console.log(`📝 History updated for ${pageId} (${history.length} versions)`);
             } else {
-              // console.log(`✓ Content unchanged for ${pageId} - history not updated`);
+              console.log(`✓ Content unchanged for ${pageId} - history not updated`);
             }
           } catch (err) {
             console.warn(`⚠️ Failed to update history for ${pageId}:`, err);

@@ -4,13 +4,13 @@ Neste documento, criado pelo usuário, existem seções chamadas PÉTREAS, as qu
 
 Neste documento, criado pelo usuário, existem seções chamadas PÉTREAS, as quais não podem ser removidas ou modificadas. Elas devem ser respeitadas até o ponto em que você pergunte ao usuário se aquilo pode ser quebrado em algum contexto atual ou futuro.
 
-Este documento deve ser lido, compreendido e atualizado durante o trabalho com informações de ordem estrutural sobre o projeto e o estado atual do desenvolvimento, como: Em que ponto se está na moificação ou implemntação em curso. Desta forma, até que se estabiize uma versão, estes textos de status deve estar na seçao: "# STATUS INTERNO #", mais ao final deste documento.
+Este documento deve ser lido, compreendido e atualizado durante o trabalho com informações de ordem estrutural sobre o projeto e o estado atual do desenvolvimento, como: Em que ponto se está na modificação ou implementação em curso. Desta forma, até que se estabilize uma versão, estes textos de status devem estar na seção: "# STATUS INTERNO #", mais ao final deste documento.
 
 Este documento deve ser lido, compreendido e atualizado durante o trabalho com informações de ordem estrutural sobre o projeto e o estado atual do desenvolvimento, como: Em que ponto se está na modificação ou implementação em curso. Desta forma, até que se estabilize uma versão, estes textos de status devem estar na seção "STATUS INTERNO", mais ao final deste documento.
 
 ## Propósito ##
 
-## PropósitoDesenvolver site institucional para a Igreja de Metatron, que se descreve em seu conteúdo, junto de um sistema de edição dinâmica de todos os textos e formados CSS. Para isso, esses dados ficam em banco de dados e são acessíveis por um sistema de edição destes dados que precisa ser encontrado e compreendido. Este sistema, da forma como hoje foi implementado, é uma interface gráfica react que abre em si a página a editar e permite acessar e atualziar os dados editáveis (JSONs e CSSs). Eu queria um editár que me permitisse modificar blocos gráfiucos e dimensões e propriedades de TODOS os elentos de conteúdo. Mas isso daria muito trabalho e custaria MUITO do pouco tempo que temos.
+Desenvolver site institucional para a Igreja de Metatron, que se descreve em seu conteúdo, junto de um sistema de edição dinâmica de todos os textos e formados CSS. Para isso, esses dados ficam em banco de dados e são acessíveis por um sistema de edição destes dados que precisa ser encontrado e compreendido. Este sistema, da forma como hoje foi implementado, é uma interface gráfica react que abre em si a página a editar e permite acessar e atualziar os dados editáveis (JSONs e CSSs). Eu queria um editár que me permitisse modificar blocos gráfiucos e dimensões e propriedades de TODOS os elentos de conteúdo. Mas isso daria muito trabalho e custaria MUITO do pouco tempo que temos.
 
 O que tentamos expressar e esclarecer no conteúdo do site é que compreendemos que não pode haver cura e realização espiritual final enquanto, em primeiro lugar, não houver regulação completa homeostática e equilíbrio dinâmico e harmônico do sistema nervoso autônomo. Isso ocorre porq, tendo o indivíduo passado por experiências muito traumatizantes, o sistema de defesa do corpo se ativa de forma excessivamente intensa e crônica; assim, fechando canais de informação entre as partes internas de si e fixando formas socialmente e espiritualmente disfuncionais, de ser e estar a cada momento. Reverter essa situação, para que então possa haver avanço espiritual real, é o foco e objetivo principal do trabalho da Igreja de Metatron. A partir disso, o site deve expressar os conceitos e práticas que levem a esta regulação, que é a base para qualquer avanço espiritual verdadeiro e duradouro.
 
@@ -18,7 +18,7 @@ Desenvolver site institucional para a Igreja de Metatron, que se descreve em seu
 
 ## FIM Propósito ##
 
-O que tentamos expressar e esclarecer no conteúdo do site é que compreendemos que não pode haver cura e realização espiritual final enquanto, em primeiro lugar, não houver regulação completa homeostática e equilíbrio dinâmico e harmônico do sistema nervoso autônomo. Isso ocorre porque, tendo o indivíduo passado por experiências muito traumatizantes, o sistema de defesa do corpo se ativa de forma excessivamente intensa e crônica; assim, fechando canais de informação entre as partes internas de si e fixando formas socialmente e espiritualmente disfuncionais, de ser e estar a cada momento. Reverter essa situação, para que então possa haver avanço espiritual real, é o foco e objetivo principal do trabalho da Igreja de Metatron. A partir disso, o site deve expressar os conceitos e práticas que levem a esta regulação, que é a base para qualquer avanço espiritual verdadeiro e duradouro.
+O que buscamos expressar e esclarecer no conteúdo do site é que compreendemos que não pode haver cura e realização espiritual final e completa enquanto, em primeiro lugar, não houver regulação completa homeostática e equilíbrio dinâmico e harmônico do sistema nervoso autônomo. Isso ocorre porque, tendo o indivíduo passado por experiências muito traumatizantes, o sistema de defesa do corpo se ativa de forma excessivamente intensa e crônica; assim, fechando canais de informação entre as partes internas de si e fixando formas socialmente e espiritualmente disfuncionais, de ser e estar a cada momento. Reverter essa situação, para que então possa haver avanço espiritual real, é o foco e objetivo principal do trabalho da Igreja de Metatron. A partir disso, o site deve expressar os conceitos e práticas que levem a esta regulação, que é a base para qualquer avanço espiritual verdadeiro e duradouro.
 
 ## Instruções Gerais ##
 
@@ -72,17 +72,44 @@ O que tentamos expressar e esclarecer no conteúdo do site é que compreendemos 
 
 > **Escreva sempre backups de todos os arquivos locais modificados, especialmente quando forem de conteúdo proprietário deste pacote. Mantenha cinco versões anteriores em histórico. Caso algo dê errado, possamos restaurar uma versão anterior do arquivo.**> **Devemos SEMPRE buscar soluções definitivas e duradouras para os problemas, evitando "gambiarras" ou soluções temporárias que possam comprometer a qualidade e a manutenção do código a longo prazo.**
 
-
-
 > **Nunca remova ou modifique as seções PÉTREAS deste documento. Sempre pergunte ao usuário se pode quebrar alguma delas, em algum contexto atual ou futuro.**
+
+> **SEMPRE verifique o caminho do comando que deseja executar e USE esse caminho para a execução.**
+
+> **Para que possamos iniciar e matar o servidor web local de desenvolvimento corretamente, SEMPRE use os scripts de automação existentes. Nunca inicie ou pare o servidor manualmente. faça com que esses script lancem o servidor em background.**
 
 ## FIM Instruções Gerais ##
 
-> **Ao escrever código, sempre siga as boas práticas de desenvolvimento, incluindo: código limpo, modularidade, comentários claros e consistentes, tratamento de erros adequado e completo e testes quando aplicável.**# FIM DA SEÇÂO PÉTREA #
+> **Ao escrever código, sempre siga as boas práticas de desenvolvimento, incluindo: código limpo, modularidade, comentários claros e consistentes, tratamento de erros adequado e completo e testes quando aplicável.**
 
+# FIM DA SEÇÂO PÉTREA #
 
+## 🔑 SCRIPTS CRÍTICOS: Fix de IDs Únicos (NÃO REMOVER)
 
-> **Quando for atualizar um documento deste projeto, seja qual for, releia integralmente o documento a ser modificado e o reescreva todo do zero para evitar incoerências e duplicidades. Sempre mantenha o melhor estilo de escrita.**# DADOS BÁSICOS GERAIS #
+**⚠️ IMPORTANTE - Scripts essenciais para manutenção do sistema de edição:**
+
+### `scripts/fix-ids.js`
+- **Função:** Revisar e corrigir atribuição de IDs únicos em TODAS as páginas editáveis
+- **Uso:** Garantir que cada elemento tenha um identificador único para o sistema de edição
+- **Quando usar:** Após adicionar novos elementos editáveis ou modificar estrutura de páginas
+
+### `scripts/fix-all-json-keys.cjs`
+- **Função:** Revisar e padronizar keys JSON em TODAS as páginas
+- **Uso:** Garantir convenção de nomenclatura consistente nos dados
+- **Importante:** Mantém integridade da estrutura de dados do Supabase
+
+### `scripts/fix-index-json-keys.cjs`
+- **Função:** Revisar e corrigir keys JSON especificamente da página index
+- **Uso:** Validação e correção focada na página principal
+- **Importante:** Página index é a mais complexa e requer verificação dedicada
+
+**📝 NOTA:** Estes scripts são ferramentas de manutenção essenciais. Sem IDs únicos e consistentes, o Admin Console não consegue mapear edições corretamente para o banco de dados. **NUNCA remover estes arquivos.**
+
+---
+
+> **Quando for atualizar um documento deste projeto, seja qual for, releia integralmente o documento a ser modificado e o reescreva todo do zero para evitar incoerências e duplicidades. Sempre mantenha o melhor estilo de escrita.**
+
+# DADOS BÁSICOS GERAIS #
 
 > **Última atualização:** 11 de novembro de 2025  
 
@@ -231,3 +258,34 @@ pnpm deploy    # Deploy para Vercel produção
 - Todas as páginas, conteúdos e estilos estão no Supabase
 - Admin Console faz CRUD direto no Supabase via APIs serverless
 - Frontend consome dados do Supabase via APIs serverless
+
+## 🔧 SESSÃO ATUAL: Correção API save-visual-edits (11/11/2025 18:26)
+
+**PROBLEMA RESOLVIDO:**
+- API `save-visual-edits.js` tinha lógica incorreta de mapeamento de dados
+- Incompatibilidade entre formato do frontend vs API
+- Erro de constraint no banco (usava `upsert` errado)
+
+**CORREÇÕES APLICADAS:**
+1. ✅ Formato aceito: `{ pageId, edits: { elementId: { newText } } }`
+2. ✅ Mapeamento: "hero-title" → content.hero.title
+3. ✅ Substituído `upsert()` por `update().eq('page_id', pageId)`
+4. ✅ Cópia profunda: `JSON.parse(JSON.stringify(content))`
+5. ✅ Logs detalhados para debug
+6. ✅ Validação de linhas afetadas
+
+**TESTES CONFIRMADOS (via PowerShell):**
+- ✅ Edição única: Timestamp 18:26:01 salvo e recuperado
+- ✅ Múltiplas edições: 2 campos simultâneos OK
+- ✅ Persistência: GET API retorna dados atualizados
+- ✅ Tempo real: Timestamps provam salvamento instantâneo
+
+**AMBIENTE ATUAL:**
+- Local: http://localhost:8080 (Vite + APIs produção)
+- Admin Console: /436F6E736F6C45
+- APIs: https://shadcn-ui-seven-olive.vercel.app/api/*
+- Config: `src/config/api.ts` → produção (temporário)
+
+**AGUARDANDO:**
+- Teste do usuário no Admin Console
+- Se falhar: Verificar console navegador (F12)

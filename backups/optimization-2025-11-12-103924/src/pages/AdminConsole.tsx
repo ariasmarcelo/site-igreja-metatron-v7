@@ -147,8 +147,8 @@ export default function AdminConsole() {
               <TabsContent value="visual">
                 <Tabs value={activeTab} onValueChange={setActiveTab}>
                   <TabsList>
-                    <TabsTrigger value="pages" className="min-w-40 px-6 py-2.5">Pages</TabsTrigger>
-                    <TabsTrigger value="blog" className="min-w-40 px-6 py-2.5">Blog</TabsTrigger>
+                    <TabsTrigger value="pages" className="min-w-[160px] px-6 py-2.5">Pages</TabsTrigger>
+                    <TabsTrigger value="blog" className="min-w-[160px] px-6 py-2.5">Blog</TabsTrigger>
                   </TabsList>
 
                   <TabsContent value="pages">

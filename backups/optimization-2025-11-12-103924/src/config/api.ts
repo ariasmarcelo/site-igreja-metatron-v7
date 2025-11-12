@@ -5,10 +5,8 @@ const isDevelopment = import.meta.env.DEV;
 const isProduction = import.meta.env.PROD;
 
 // URL da API baseada no ambiente
-// Em dev: use VITE_API_URL do .env.local, ou fallback para produção
-// Em prod: use VITE_API_URL ou fallback para Vercel
 export const API_BASE_URL = isDevelopment
-  ? import.meta.env.VITE_API_URL || 'https://shadcn-ui-seven-olive.vercel.app'
+  ? 'https://shadcn-ui-seven-olive.vercel.app' // Temporário: usar produção até implementar APIs locais
   : import.meta.env.VITE_API_URL || 'https://shadcn-ui-seven-olive.vercel.app';
 
 // Endpoints da API
