@@ -5,13 +5,18 @@ import { Brain, Heart, Wind, Route, Flower2, Sparkles, AlertTriangle, Users, Inf
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { useLocaleTexts } from '@/hooks/useLocaleTexts';
+import { SharedFooter } from '@/components/SharedFooter';
 import { usePageStyles } from '@/hooks/usePageStyles';
+import '@/styles/tratamentos-page.css';
+
 
 interface TratamentosTexts {
   header: { title: string; subtitle: string };
   intro: { p1: string; p2: string };
   legal: { title: string; notice: string };
-  treatments: any[];
+  treatments: Array<Record<string, string>>;
+  footer?: { copyright: string; trademark: string };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 }
 
@@ -79,10 +84,7 @@ export default function Tratamentos() {
           </div>
           
           {/* Padrão de linhas sutis */}
-          <div className="absolute inset-0 opacity-[0.03]" style={{
-            backgroundImage: `repeating-linear-gradient(0deg, #0891b2 0px, transparent 1px, transparent 20px),
-                             repeating-linear-gradient(90deg, #0891b2 0px, transparent 1px, transparent 20px)`
-          }}></div>
+          <div className="absolute inset-0 opacity-[0.03] tratamentos-pattern"></div>
           
           {/* Título */}
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-6 text-slate-800 relative z-10 drop-shadow-sm">
@@ -362,15 +364,11 @@ export default function Tratamentos() {
           </div>
         </div>
 
-        {/* Footer Content - Copyright */}
-        <div className="relative z-10 pt-8 pb-4 text-white">
-          <div className="container mx-auto px-4">
-            <div className="border-t border-emerald-700/50 mt-32 pt-4 pb-1 text-center text-emerald-100/70 text-sm max-w-4xl mx-auto">
-              <p>© 2025 Igreja de Metatron. Todos os direitos reservados.</p>
-              <p className="mt-2">Marcas registradas protegidas por lei.</p>
-            </div>
-          </div>
-        </div>
+        {/* Footer Content - Copyright (do DB: compartilhado) */}
+        <SharedFooter 
+          copyright={texts?.footer?.copyright}
+          trademark={texts?.footer?.trademark}
+        />
       </section>
     </div>
   );

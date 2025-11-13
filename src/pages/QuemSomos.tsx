@@ -5,10 +5,14 @@ import { Link } from "react-router-dom";
 import { Sparkles, Microscope, Heart, HandHelping, ShieldCheck, BookOpen, FileText, Target, Waves, Shield } from "lucide-react";
 import { useLocaleTexts } from '@/hooks/useLocaleTexts';
 import { usePageStyles } from '@/hooks/usePageStyles';
+import { SharedFooter } from '@/components/SharedFooter';
 
 interface QuemSomosTexts {
   header: { title: string; subtitle: string };
-  [key: string]: unknown;
+  mission: { title: string; text: string };
+  footer?: { copyright: string; trademark: string };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [key: string]: any;
 }
 
 export default function QuemSomos() {
@@ -48,7 +52,7 @@ export default function QuemSomos() {
   return (
     <div className="min-h-screen bg-white">
       {/* Header Moderno */}
-      <section className="bg-linear-to-r from-[#4A90A9] to-[#5EA98D] text-white py-12 relative overflow-hidden">
+      <section className="bg-linear-to-r from-violet-600 via-purple-600 to-violet-600 text-white py-12 relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.15),transparent_70%)]"></div>
         <div className="absolute inset-0 bg-[linear-gradient(110deg,transparent_40%,rgba(255,255,255,0.1)_50%,transparent_60%)]"></div>
         <div className="container mx-auto px-4 relative z-10">
@@ -79,17 +83,17 @@ export default function QuemSomos() {
         </section>
 
         {/* Princípios da Instituição - Fundo Suave com Elevação */}
-        <section className="bg-linear-to-br from-teal-50 via-emerald-50 to-cyan-50 rounded-2xl shadow-xl p-8 md:p-12 border border-teal-100">
+        <section className="bg-linear-to-br from-violet-50 via-purple-50 to-violet-100 rounded-2xl shadow-xl p-8 md:p-12 border border-violet-200">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-gray-800 mb-4" data-json-key="quemsomos.principios.title">{texts.principios.title}</h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto" data-json-key="quemsomos.principios.subtitle">{texts.principios.subtitle}</p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {texts.principios.items.map((item: { title: string; content: string }, index: number) => (
-              <Card key={index} className="border-t-4 border-t-[#5EA98D] hover:shadow-xl transition-all duration-300">
+              <Card key={index} className="border-t-4 border-t-violet-600 hover:shadow-xl transition-all duration-300">
                 <CardHeader>
                   <div className="flex items-center gap-3 mb-2">
-                    <div className="w-11 h-11 rounded-full bg-linear-to-br from-[#4A90A9] via-[#5EA98D] to-[#5EA98D] flex items-center justify-center shadow-md text-white relative overflow-hidden">
+                    <div className="w-11 h-11 rounded-full bg-linear-to-br from-violet-600 via-purple-600 to-violet-600 flex items-center justify-center shadow-md text-white relative overflow-hidden">
                       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.4),transparent_60%)]"></div>
                       <div className="absolute inset-0 bg-[linear-gradient(135deg,transparent_30%,rgba(255,255,255,0.2)_50%,transparent_70%)]"></div>
                       {principiosIcons[index]}
@@ -149,7 +153,7 @@ export default function QuemSomos() {
             </div>
           </div>
           
-          <Accordion type="multiple" className="max-w-4xl mx-auto space-y-4">
+          <Accordion type="single" collapsible className="max-w-4xl mx-auto space-y-4">
             {texts.hermeticos.items.map((item: { number: string; title: string; quote?: string; description: string }, index: number) => (
               <AccordionItem 
                 key={index} 
@@ -241,9 +245,9 @@ export default function QuemSomos() {
         </section>
       </div>
 
-      {/* Footer CTA Section com fundo c├®u, ├ígua, sol e lua */}
+      {/* Footer CTA Section com fundo céu, água, sol e lua */}
       <section className="relative overflow-hidden mt-16">
-        {/* Fundo com transi├º├úo c├®u-├ígua */}
+        {/* Fundo com transição céu-água */}
         <div className="absolute inset-0 z-0">
           <svg
             className="w-full h-full"
@@ -251,7 +255,7 @@ export default function QuemSomos() {
             preserveAspectRatio="none"
             xmlns="http://www.w3.org/2000/svg"
           >
-            {/* GRADIENTE C├ëU: azul-escuro (noite) -> azul-claro (horizonte) */}
+            {/* GRADIENTE CÉU: azul-escuro (noite) -> azul-claro (horizonte) */}
             <defs>
               <linearGradient id="skyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
                 <stop offset="0%" stopColor="#1e3a5f" />
@@ -261,7 +265,7 @@ export default function QuemSomos() {
             </defs>
             <rect width="1200" height="400" fill="url(#skyGradient)" />
             
-            {/* ├üGUA - camadas animadas verde-├ígua com curvatura acentuada */}
+            {/* ÁGUA - camadas animadas verde-água com curvatura acentuada */}
             <path 
               className="animate-[wave_3s_ease-in-out_infinite]" 
               d="M0,340 Q600,280 1200,340 L1200,400 L0,400 Z" 
@@ -284,7 +288,7 @@ export default function QuemSomos() {
         </div>
 
         {/* Sol Dourado - posicionado absolutamente, independente do fundo */}
-        <div className="absolute top-8 left-8 w-32 h-32 z-10">
+        <div className="absolute top-4 left-8 w-20 h-20 z-10">
           <svg
             viewBox="0 0 100 100"
             className="w-full h-full"
@@ -315,7 +319,7 @@ export default function QuemSomos() {
         </div>
 
         {/* Lua Crescente - posicionada no canto superior direito */}
-        <div className="absolute top-8 right-8 w-32 h-32 z-20">
+        <div className="absolute top-4 right-8 w-20 h-20 z-20">
           <svg
             viewBox="0 0 100 100"
             className="w-full h-full"
@@ -332,32 +336,28 @@ export default function QuemSomos() {
           </svg>
         </div>
 
-        {/* CTA Content - posicionado no c├®u */}
-        <div className="container mx-auto px-4 relative z-10 pt-12 pb-8">
+        {/* CTA Content - posicionado no céu */}
+        <div className="container mx-auto px-4 relative z-10 pt-6 pb-4">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white drop-shadow-lg">
-              Venha Conhecer Nossa Comunidade
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white drop-shadow-lg" data-json-key="quemsomos.cta.title">
+              {texts.cta.title}
             </h2>
-            <p className="text-xl mb-8 text-white drop-shadow-md">
-              Descubra mais sobre nossa miss├úo e participe de nossas atividades
+            <p className="text-lg mb-5 text-white drop-shadow-md" data-json-key="quemsomos.cta.subtitle">
+              {texts.cta.subtitle}
             </p>
             <Link to="/contato">
-              <Button className="bg-[#CFAF5A] text-white font-semibold px-8 py-6 text-lg rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                Entre em Contato
+              <Button className="bg-[#CFAF5A] text-white font-semibold px-6 py-4 text-base rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105" data-json-key="quemsomos.cta.buttonText">
+                {texts.cta.buttonText}
               </Button>
             </Link>
           </div>
         </div>
 
-        {/* Footer Content - Copyright */}
-        <div className="relative z-10 pt-8 pb-4 text-white">
-          <div className="container mx-auto px-4">
-            <div className="border-t border-emerald-700/50 mt-32 pt-4 pb-1 text-center text-emerald-100/70 text-sm max-w-4xl mx-auto">
-              <p>┬® 2025 Igreja de Metatron. Todos os direitos reservados.</p>
-              <p className="mt-2">Marcas registradas protegidas por lei.</p>
-            </div>
-          </div>
-        </div>
+        {/* Footer Content - Copyright (do DB: compartilhado) */}
+        <SharedFooter 
+          copyright={texts?.footer?.copyright}
+          trademark={texts?.footer?.trademark}
+        />
       </section>
     </div>
   );

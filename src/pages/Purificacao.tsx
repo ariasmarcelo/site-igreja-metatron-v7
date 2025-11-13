@@ -5,17 +5,19 @@ import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import TestimonialsCarousel from '@/components/TestimonialsCarousel';
 import { useLocaleTexts } from '@/hooks/useLocaleTexts';
-import { usePageStyles } from '@/hooks/usePageStyles';
+import { SharedFooter } from '@/components/SharedFooter';
+import '@/styles/purificacao-page.css';
 
 interface PurificacaoTexts {
   header: { title: string; subtitle: string };
   intro: { mainText: string; description: string };
-  valores: { title: string; intro?: string; cards: any[] };
+  valores: { title: string; intro?: string; cards: { title: string; content: string }[] };
+  footer?: { copyright: string; trademark: string };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 }
 
 export default function Purificacao() {
-  usePageStyles('purificacao');
   const { texts, loading } = useLocaleTexts<PurificacaoTexts>('purificacao');
   const [expandedPhase, setExpandedPhase] = useState<number | null>(null);
 
@@ -63,8 +65,7 @@ export default function Purificacao() {
             <div className="flex justify-center mb-6">
               <svg
                 viewBox="0 0 100 100"
-                className="w-24 h-24 animate-spin-slow"
-                style={{ filter: 'drop-shadow(0 4px 8px rgba(139, 90, 0, 0.7))' }}
+                className="w-24 h-24 animate-spin-slow purificacao-icon"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
@@ -807,15 +808,12 @@ export default function Purificacao() {
           </div>
         </div>
 
-        {/* Footer Content - Copyright */}
-        <div className="relative z-10 pt-8 pb-4 text-white">
-          <div className="container mx-auto px-4">
-            <div className="border-t border-emerald-700/50 mt-32 pt-4 pb-1 text-center text-emerald-100/70 text-sm max-w-4xl mx-auto">
-              <p>┬® 2025 Igreja de Metatron. Todos os direitos reservados.</p>
-              <p className="mt-2">Marcas registradas protegidas por lei.</p>
-            </div>
-          </div>
-        </div>
+        {/* Footer Content - Copyright (do DB: compartilhado) */}
+        <SharedFooter 
+          copyright={texts?.footer?.copyright}
+          trademark={texts?.footer?.trademark}
+          className="pt-8 pb-4"
+        />
       </section>
     </div>
   );
