@@ -34,48 +34,67 @@ module.exports = async (req, res) => {
       return res.status(400).json({ success: false, message: 'pageId é obrigatório' });
     }
 
-    console.log(`📦 Buscando conteúdo para página: ${pageId} (+ compartilhado)`);
+    console.log(`📦 Buscando conteúdo para página: ${pageId}`);
 
     try {
-      // Buscar conteúdo da página específica + conteúdo compartilhado (NULL)
-      // Query: WHERE page_id = 'purificacao' OR page_id IS NULL
-      const { data, error } = await supabase
-        .from('page_contents')
-        .select('page_id, content')
-        .or(`page_id.eq.${pageId},page_id.is.null`);
+      // STEP 1: Buscar entradas granulares da página (text_entries - onde os dados REALMENTE estão)
+      const { data: entries, error: entriesError } = await supabase
+        .from('text_entries')
+        .select('json_key, content')
+        .eq('page_id', pageId);
 
-      if (error) throw error;
+      if (entriesError) throw entriesError;
 
-      if (!data || data.length === 0) {
+      if (!entries || entries.length === 0) {
         return res.status(404).json({ 
           success: false, 
           message: `Nenhum conteúdo encontrado para: ${pageId}` 
         });
       }
 
-      console.log(`✅ DB: Encontrados ${data.length} registros (página + compartilhado)`);
+      console.log(`✅ DB: Encontradas ${entries.length} entradas granulares`);
 
-      // Separar conteúdo compartilhado (NULL) e específico da página
-      const sharedRecord = data.find(row => row.page_id === null);
-      const pageRecord = data.find(row => row.page_id === pageId);
+      // STEP 2: Reconstruir objeto da página a partir das entradas granulares
+      const pageContent = {};
+      
+      entries.forEach(entry => {
+        const keys = entry.json_key.split('.');
+        let current = pageContent;
+        
+        // Navegar/criar estrutura aninhada
+        for (let i = 0; i < keys.length - 1; i++) {
+          if (!current[keys[i]]) {
+            current[keys[i]] = {};
+          }
+          current = current[keys[i]];
+        }
+        
+        // Atribuir valor final (content é JSONB com locale)
+        const lastKey = keys[keys.length - 1];
+        current[lastKey] = entry.content['pt-BR'] || entry.content;
+      });
 
-      // Merge: conteúdo compartilhado (base) + conteúdo da página (sobrescreve)
-      const mergedContent = {
-        ...(sharedRecord?.content || {}),
-        ...(pageRecord?.content || {})
-      };
+      // STEP 3: Buscar footer compartilhado (page_contents com page_id NULL)
+      const { data: sharedData, error: sharedError } = await supabase
+        .from('page_contents')
+        .select('content')
+        .is('page_id', null)
+        .single();
 
-      console.log(`🔀 Merge concluído:`);
-      console.log(`   • Compartilhado: ${Object.keys(sharedRecord?.content || {}).join(', ')}`);
-      console.log(`   • Página: ${Object.keys(pageRecord?.content || {}).join(', ')}`);
-      console.log(`   • Final: ${Object.keys(mergedContent).join(', ')}`);
+      // STEP 4: Merge footer compartilhado (se existir)
+      const mergedContent = { ...pageContent };
+      
+      if (!sharedError && sharedData?.content?.footer) {
+        mergedContent.footer = sharedData.content.footer;
+        console.log(`✅ Footer compartilhado adicionado`);
+      }
+
+      console.log(`🔀 Conteúdo final: ${Object.keys(mergedContent).length} keys`);
 
       return res.status(200).json({ 
         success: true, 
         content: mergedContent,
-        source: 'database',
-        hasShared: !!sharedRecord,
-        hasPageSpecific: !!pageRecord
+        source: 'text_entries + shared_footer'
       });
 
     } catch (dbError) {
