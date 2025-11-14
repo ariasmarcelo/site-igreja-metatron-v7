@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Mail, Clock, MessageCircle, ShieldCheck, Phone } from 'lucide-react';
-import { useLocaleTexts } from '@/hooks/useLocaleTexts';
+import { usePageContent } from '@/hooks/useContent';
 import { usePageStyles } from '@/hooks/usePageStyles';
 
 interface ContatoTexts {
@@ -12,7 +12,7 @@ interface ContatoTexts {
 
 export default function Contato() {
   usePageStyles('contato');
-  const { texts } = useLocaleTexts<ContatoTexts>('contato');
+  const { data: texts } = usePageContent<ContatoTexts>('contato');
   const handleWhatsAppClick = () => {
     const phoneNumber = '5511949555555';
     const message = encodeURIComponent('Olá! Quero saber mais sobre *O Trabalho de Resgate*!');

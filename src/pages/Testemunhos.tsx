@@ -1,4 +1,4 @@
-import { useLocaleTexts } from '@/hooks/useLocaleTexts';
+import { usePageContent } from '@/hooks/useContent';
 import { SharedFooter } from '@/components/SharedFooter';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
@@ -28,7 +28,7 @@ interface TestemunhosTexts {
 }
 
 const Testemunhos = () => {
-  const { texts, loading, error } = useLocaleTexts<TestemunhosTexts>('Testemunhos');
+  const { data: texts, loading, error } = usePageContent<TestemunhosTexts>('testemunhos');
 
   if (loading) return (
     <div className="min-h-screen bg-rose-50 flex items-center justify-center">

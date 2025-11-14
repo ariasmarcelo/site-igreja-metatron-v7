@@ -1,0 +1,19 @@
+/* Local Font Declarations - Self-hosted for performance and privacy */
+
+/* Inter Variable Font - covers weights 400-700 */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/fonts/Inter-Regular.woff2') format('woff2');
+}
+
+/* Playfair Display Variable Font - covers weights 400-800 */
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url('/fonts/PlayfairDisplay-latin-400.woff2') format('woff2');
+}

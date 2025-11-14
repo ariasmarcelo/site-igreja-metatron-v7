@@ -47,4 +47,13 @@ export default defineConfig({
   optimizeDeps: {
     include: ['react', 'react-dom', 'react-router-dom'],
   },
+  server: {
+    watch: {
+      // Ignorar arquivos de fonte para evitar HMR desnecessário
+      ignored: ['**/public/fonts/**', '**/.cache/**'],
+    },
+  },
+  css: {
+    devSourcemap: false,
+  },
 });

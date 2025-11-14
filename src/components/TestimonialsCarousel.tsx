@@ -1,10 +1,11 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { Quote, Star } from 'lucide-react';
-import { useLocaleTexts } from '@/hooks/useLocaleTexts';
+import { usePageContent } from '@/hooks/useContent';
 import '@/styles/testimonials-carousel.css';
 
 interface TestemunhosTexts {
+  header?: { title: string };
   testimonials: Array<{
     name: string;
     role: string;
@@ -14,12 +15,29 @@ interface TestemunhosTexts {
 }
 
 export default function TestimonialsCarousel() {
-  const { texts } = useLocaleTexts<TestemunhosTexts>('testemunhos');
+  const { data: texts, loading } = usePageContent<TestemunhosTexts>('testemunhos');
 
-  if (!texts?.testimonials) return null;
+  if (loading) {
+    return (
+      <section className="py-20 bg-stone-50">
+        <div className="container mx-auto px-4">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#CFAF5A] mx-auto mb-4"></div>
+            <p className="text-stone-600">Carregando testemunhos...</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (!texts?.testimonials) {
+    console.warn('[TestimonialsCarousel] No testimonials data loaded');
+    return null;
+  }
 
   // Pegar apenas os primeiros 5 testemunhos para o carrossel
   const testimonials = texts.testimonials.slice(0, 5);
+  const headerTitle = texts.header?.title || 'Testemunhos de Transformação';
 
   return (
     <section className="py-20 bg-linear-to-br from-amber-900/90 via-yellow-800/85 to-amber-950/90 relative overflow-visible">

@@ -3,7 +3,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Sparkles, Microscope, Heart, HandHelping, ShieldCheck, BookOpen, FileText, Target, Waves, Shield } from "lucide-react";
-import { useLocaleTexts } from '@/hooks/useLocaleTexts';
+import { usePageContent } from '@/hooks/useContent';
 import { usePageStyles } from '@/hooks/usePageStyles';
 import { SharedFooter } from '@/components/SharedFooter';
 import '@/styles/quemsomos-page.css';
@@ -16,39 +16,40 @@ interface QuemSomosTexts {
   [key: string]: any;
 }
 
+// Constantes movidas para FORA do componente para evitar re-criação a cada render
+const PRINCIPIOS_ICONS = [
+  <Sparkles className="h-6 w-6" key="sparkles" />,
+  <Microscope className="h-6 w-6" key="microscope" />,
+  <Heart className="h-6 w-6" key="heart" />,
+  <HandHelping className="h-6 w-6" key="handhelping" />,
+  <ShieldCheck className="h-6 w-6" key="shieldcheck" />,
+  <FileText className="h-6 w-6" key="filetext" />
+];
+
+const HERMETICOS_CORES = [
+  // Mentalismo - Prata violeta (mente, consciência)
+  { from: 'from-violet-200', via: 'via-purple-300', to: 'to-slate-300', border: 'border-violet-300', shine: 'shadow-[0_0_20px_rgba(167,139,250,0.4)]' },
+  // Correspondência - Ouro rosa (reflexão, espelhamento)
+  { from: 'from-pink-200', via: 'via-rose-300', to: 'to-amber-200', border: 'border-rose-300', shine: 'shadow-[0_0_20px_rgba(251,207,232,0.4)]' },
+  // Vibração - Cobre laranja (energia, movimento)
+  { from: 'from-orange-200', via: 'via-amber-300', to: 'to-yellow-200', border: 'border-orange-300', shine: 'shadow-[0_0_20px_rgba(253,186,116,0.4)]' },
+  // Polaridade - Platina azul-prata (opostos, dualidade)
+  { from: 'from-slate-200', via: 'via-blue-300', to: 'to-cyan-200', border: 'border-slate-300', shine: 'shadow-[0_0_20px_rgba(148,163,184,0.4)]' },
+  // Ritmo - Turquesa metálico (ciclos, fluxos)
+  { from: 'from-teal-200', via: 'via-cyan-300', to: 'to-emerald-200', border: 'border-teal-300', shine: 'shadow-[0_0_20px_rgba(153,246,228,0.4)]' },
+  // Gênero - Rosa-ouro (masculino/feminino)
+  { from: 'from-pink-300', via: 'via-fuchsia-300', to: 'to-rose-300', border: 'border-pink-400', shine: 'shadow-[0_0_20px_rgba(244,114,182,0.4)]' },
+  // Causa e Efeito - Bronze dourado (transformação)
+  { from: 'from-amber-300', via: 'via-yellow-300', to: 'to-orange-300', border: 'border-amber-400', shine: 'shadow-[0_0_20px_rgba(252,211,77,0.4)]' }
+];
+
 export default function QuemSomos() {
   usePageStyles('quemsomos');
-  const { texts, loading } = useLocaleTexts<QuemSomosTexts>('quemsomos');
+  const { data: texts, loading, error } = usePageContent<QuemSomosTexts>('quemsomos');
 
-  if (loading || !texts) return <div className="flex items-center justify-center min-h-screen">Carregando...</div>;
-
-  const principiosIcons = [
-    <Sparkles className="h-6 w-6" />,
-    <Microscope className="h-6 w-6" />,
-    <Heart className="h-6 w-6" />,
-    <HandHelping className="h-6 w-6" />,
-    <ShieldCheck className="h-6 w-6" />,
-    <FileText className="h-6 w-6" />
-  ];
-
-  const hermeticosCores = [
-    // Mentalismo - Prata violeta (mente, consciência)
-    { from: 'from-violet-200', via: 'via-purple-300', to: 'to-slate-300', border: 'border-violet-300', shine: 'shadow-[0_0_20px_rgba(167,139,250,0.4)]' },
-    // Correspondência - Ouro rosa (reflexão, espelhamento)
-    { from: 'from-pink-200', via: 'via-rose-300', to: 'to-amber-200', border: 'border-rose-300', shine: 'shadow-[0_0_20px_rgba(251,207,232,0.4)]' },
-    // Vibração - Cobre laranja (energia, movimento)
-    { from: 'from-orange-200', via: 'via-amber-300', to: 'to-yellow-200', border: 'border-orange-300', shine: 'shadow-[0_0_20px_rgba(253,186,116,0.4)]' },
-    // Polaridade - Platina azul-prata (opostos, dualidade)
-    { from: 'from-slate-200', via: 'via-blue-300', to: 'to-cyan-200', border: 'border-slate-300', shine: 'shadow-[0_0_20px_rgba(148,163,184,0.4)]' },
-    // Ritmo - Turquesa metálico (ciclos, fluxos)
-    { from: 'from-teal-200', via: 'via-cyan-300', to: 'to-emerald-200', border: 'border-teal-300', shine: 'shadow-[0_0_20px_rgba(153,246,228,0.4)]' },
-    // Gênero - Rosa-ouro (masculino/feminino)
-    { from: 'from-pink-300', via: 'via-fuchsia-300', to: 'to-rose-300', border: 'border-pink-400', shine: 'shadow-[0_0_20px_rgba(244,114,182,0.4)]' },
-    // Causa e Efeito - Bronze dourado (transformação)
-    { from: 'from-amber-300', via: 'via-yellow-300', to: 'to-orange-300', border: 'border-amber-400', shine: 'shadow-[0_0_20px_rgba(252,211,77,0.4)]' }
-  ];
-  
-  if (!texts) return null;
+  if (loading) return <div className="flex items-center justify-center min-h-screen">Carregando...</div>;
+  if (error) return <div className="flex items-center justify-center min-h-screen text-red-500">Erro: {error}</div>;
+  if (!texts) return <div className="flex items-center justify-center min-h-screen">Sem dados</div>;
   
   return (
     <div className="min-h-screen bg-white">
@@ -97,7 +98,7 @@ export default function QuemSomos() {
                     <div className="w-11 h-11 rounded-full bg-linear-to-br from-violet-600 via-purple-600 to-violet-600 flex items-center justify-center shadow-md text-white relative overflow-hidden">
                       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.4),transparent_60%)]"></div>
                       <div className="absolute inset-0 bg-[linear-gradient(135deg,transparent_30%,rgba(255,255,255,0.2)_50%,transparent_70%)]"></div>
-                      {principiosIcons[index]}
+                      {PRINCIPIOS_ICONS[index]}
                     </div>
                     <CardTitle className="text-lg text-gray-800" data-json-key={`quemsomos.principios.items[${index}].title`}>{item.title}</CardTitle>
                   </div>
@@ -151,19 +152,21 @@ export default function QuemSomos() {
           </div>
           
           <Accordion type="single" collapsible className="max-w-4xl mx-auto space-y-4">
-            {texts.hermeticos.items.map((item: { number: string; title: string; quote?: string; description: string }, index: number) => (
+            {texts.hermeticos.items.map((item: { number: string; title: string; quote?: string; description: string }, index: number) => {
+              const cores = HERMETICOS_CORES[index];
+              return (
               <AccordionItem 
                 key={index} 
                 value={`item-${index}`}
-                className={`border-l-4 ${hermeticosCores[index].border} rounded-lg shadow-lg hover:shadow-2xl transition-all duration-300 bg-white overflow-hidden border-b-0 ${hermeticosCores[index].shine}`}
+                className={`border-l-4 ${cores.border} rounded-lg shadow-lg hover:shadow-2xl transition-all duration-300 bg-white overflow-hidden border-b-0 ${cores.shine}`}
               >
-                <AccordionTrigger className={`px-6 py-4 hover:no-underline bg-linear-to-r ${hermeticosCores[index].from} ${hermeticosCores[index].via} ${hermeticosCores[index].to} relative`}>
+                <AccordionTrigger className={`px-6 py-4 hover:no-underline bg-linear-to-r ${cores.from} ${cores.via} ${cores.to} relative`}>
                   {/* Efeito metálico brilhante */}
                   <div className="absolute inset-0 bg-[linear-gradient(135deg,transparent_0%,rgba(255,255,255,0.6)_45%,rgba(255,255,255,0.9)_50%,rgba(255,255,255,0.6)_55%,transparent_100%)] opacity-40"></div>
                   <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(255,255,255,0.5),transparent_50%)]"></div>
                   
                   <div className="flex items-center gap-4 w-full relative z-10">
-                    <div className={`w-12 h-12 rounded-full bg-linear-to-br ${hermeticosCores[index].from} ${hermeticosCores[index].via} ${hermeticosCores[index].to} flex items-center justify-center shadow-xl text-gray-700 text-xl font-bold relative overflow-hidden shrink-0 border-2 border-white/50`}>
+                    <div className={`w-12 h-12 rounded-full bg-linear-to-br ${cores.from} ${cores.via} ${cores.to} flex items-center justify-center shadow-xl text-gray-700 text-xl font-bold relative overflow-hidden shrink-0 border-2 border-white/50`}>
                       {/* Reflexo metálico no número */}
                       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.8),transparent_60%)]"></div>
                       <div className="absolute inset-0 bg-[linear-gradient(135deg,transparent_30%,rgba(255,255,255,0.4)_50%,transparent_70%)]"></div>
@@ -182,7 +185,8 @@ export default function QuemSomos() {
                   <p className="text-gray-700 leading-relaxed" data-json-key={`quemsomos.hermeticos.items[${index}].description`}>{item.description}</p>
                 </AccordionContent>
               </AccordionItem>
-            ))}
+            );
+            })}
           </Accordion>
         </section>
 

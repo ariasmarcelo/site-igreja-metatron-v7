@@ -2,30 +2,54 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Sparkles, Sun, Star, Crown, Compass, Heart, Infinity as InfinityIcon, LineChart, ChevronDown, Shield } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
-import TestimonialsCarousel from '@/components/TestimonialsCarousel';
-import { useLocaleTexts } from '@/hooks/useLocaleTexts';
+import { useState, lazy, Suspense } from 'react';
+import { usePageContent } from '@/hooks/useContent';
+
+const TestimonialsCarousel = lazy(() => import('@/components/TestimonialsCarousel'));
 import { SharedFooter } from '@/components/SharedFooter';
 import '@/styles/purificacao-page.css';
 
-interface PurificacaoTexts {
-  header: { title: string; subtitle: string };
-  intro: { mainText: string; description: string };
-  valores: { title: string; intro?: string; cards: { title: string; content: string }[] };
-  footer?: { copyright: string; trademark: string };
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [key: string]: any;
-}
-
 export default function Purificacao() {
-  const { texts, loading } = useLocaleTexts<PurificacaoTexts>('purificacao');
+  console.log(`[${new Date().toISOString()}] [PURIFICACAO] Component rendering started`);
+  
   const [expandedPhase, setExpandedPhase] = useState<number | null>(null);
+  
+  // usePageContent carrega apenas a página purificacao
+  const { data: texts, loading } = usePageContent('purificacao');
 
   const togglePhase = (phase: number) => {
     setExpandedPhase(expandedPhase === phase ? null : phase);
   };
 
-  if (loading || !texts) return <div className="flex items-center justify-center min-h-screen">Carregando...</div>;
+  if (loading || !texts) {
+    console.log(`[${new Date().toISOString()}] [PURIFICACAO] Waiting for data: loading=${loading}`);
+    return <div className="flex items-center justify-center min-h-screen">Carregando...</div>;
+  }
+  
+  // Extract data from page object (with type assertions for nested access)
+  const textsTyped = texts as Record<string, Record<string, unknown>>;
+  const header = textsTyped.header as { title: string; subtitle: string };
+  const intro = textsTyped.intro as { mainText: string; description: string };
+  const valores = textsTyped.valores as { title: string; intro?: string; cards: { title: string; content: string }[] };
+  const fases = textsTyped.fases as { title: string; items: { phase: string; title: string; description: string }[] };
+  const beneficios = textsTyped.beneficios as { title: string; items: { title: string; description: string }[] };
+  const testimonials = textsTyped.testimonials as { title: string };
+  const cta = textsTyped.cta as { title?: string; subtitle?: string; buttonText: string };
+  
+  // Footer vem do __shared__ que é carregado automaticamente pela API
+  const footer = textsTyped.footer as { copyright?: string; trademark?: string } | undefined;
+  
+  // Fases detalhadas (type assertion para evitar erros de unknown)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const faseInicial = textsTyped.faseInicial as any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const faseIntermediaria = textsTyped.faseIntermediaria as any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const faseFinal = textsTyped.faseFinal as any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const psicodelicos = textsTyped.psicodelicos as any;
+  
+  console.log(`[${new Date().toISOString()}] [PURIFICACAO] Data loaded, rendering page`);
   
   return (
     <div className="min-h-screen bg-linear-to-br from-[#FAF9F7] to-[#F5F3F0]">
@@ -91,8 +115,8 @@ export default function Purificacao() {
                 })}
               </svg>
             </div>
-            <h1 className="text-5xl md:text-6xl font-bold mb-6 drop-shadow-[0_4px_12px_rgba(139,90,0,0.8)]" data-json-key="purificacao.header.title">{texts.header.title}</h1>
-            <p className="text-xl opacity-90 drop-shadow-[0_2px_8px_rgba(139,90,0,0.7)]" data-json-key="purificacao.header.subtitle">{texts.header.subtitle}</p>
+            <h1 className="text-5xl md:text-6xl font-bold mb-6 drop-shadow-[0_4px_12px_rgba(139,90,0,0.8)]" data-json-key="purificacao.header.title">{header.title}</h1>
+            <p className="text-xl opacity-90 drop-shadow-[0_2px_8px_rgba(139,90,0,0.7)]" data-json-key="purificacao.header.subtitle">{header.subtitle}</p>
           </div>
         </div>
       </section>
@@ -102,10 +126,10 @@ export default function Purificacao() {
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto text-center">
             <p className="text-xl text-gray-700 leading-relaxed mb-6" data-json-key="purificacao.intro.mainText">
-              {texts.intro.mainText}
+              {intro.mainText}
             </p>
             <p className="text-lg text-gray-600 leading-relaxed" data-json-key="purificacao.intro.description">
-              {texts.intro.description}
+              {intro.description}
             </p>
           </div>
         </div>
@@ -150,8 +174,8 @@ export default function Purificacao() {
                         <div className="flex items-center gap-2 mb-0.5">
                           <span className="text-xs font-semibold text-red-600 bg-red-100 px-2 py-0.5 rounded-full">FASE 1</span>
                         </div>
-                        <CardTitle className="text-xl md:text-2xl text-gray-800" data-json-key="purificacao.faseInicial.title">{texts.faseInicial.title}</CardTitle>
-                        <p className="text-sm text-gray-600" data-json-key="purificacao.faseInicial.subtitle">{texts.faseInicial.subtitle}</p>
+                        <CardTitle className="text-xl md:text-2xl text-gray-800" data-json-key="purificacao.faseInicial.title">{faseInicial.title}</CardTitle>
+                        <p className="text-sm text-gray-600" data-json-key="purificacao.faseInicial.subtitle">{faseInicial.subtitle}</p>
                       </div>
                     </div>
                     <ChevronDown 
@@ -169,16 +193,16 @@ export default function Purificacao() {
                 >
                   <CardContent className="p-8 space-y-6">
                     <div>
-                      <h3 className="text-xl font-semibold mb-3 text-gray-800" data-json-key="purificacao.faseInicial.objetivo.title">{texts.faseInicial.objetivo.title}</h3>
+                      <h3 className="text-xl font-semibold mb-3 text-gray-800" data-json-key="purificacao.faseInicial.objetivo.title">{faseInicial.objetivo.title}</h3>
                       <p className="text-gray-700 leading-relaxed" data-json-key="purificacao.faseInicial.objetivo.content">
-                        {texts.faseInicial.objetivo.content}
+                        {faseInicial.objetivo.content}
                       </p>
                     </div>
 
                     <div className="bg-red-50 border border-red-200 p-6 rounded-lg">
-                      <h4 className="font-semibold text-lg mb-4 text-red-700" data-json-key="purificacao.faseInicial.activities.title">{texts.faseInicial.activities.title}</h4>
+                      <h4 className="font-semibold text-lg mb-4 text-red-700" data-json-key="purificacao.faseInicial.activities.title">{faseInicial.activities.title}</h4>
                       <ul className="space-y-3 text-gray-700">
-                        {texts.faseInicial.activities.items.map((item, index) => (
+                        {faseInicial.activities.items.map((item, index) => (
                           <li key={index} className="flex items-start gap-3">
                             <span className="text-red-500 font-bold mt-1">•</span>
                             <span data-json-key={`purificacao.faseInicial.activities.items[${index}]`}>{item}</span>
@@ -188,9 +212,9 @@ export default function Purificacao() {
                     </div>
 
                     <div>
-                      <h4 className="font-semibold text-lg mb-3 text-gray-800" data-json-key="purificacao.faseInicial.duration.title">{texts.faseInicial.duration.title}</h4>
+                      <h4 className="font-semibold text-lg mb-3 text-gray-800" data-json-key="purificacao.faseInicial.duration.title">{faseInicial.duration.title}</h4>
                       <p className="text-gray-700 leading-relaxed" data-json-key="purificacao.faseInicial.duration.content">
-                        {texts.faseInicial.duration.content}
+                        {faseInicial.duration.content}
                       </p>
                     </div>
                   </CardContent>
@@ -220,8 +244,8 @@ export default function Purificacao() {
                         <div className="flex items-center gap-2 mb-0.5">
                           <span className="text-xs font-semibold text-cyan-600 bg-cyan-100 px-2 py-0.5 rounded-full">FASE 2</span>
                         </div>
-                        <CardTitle className="text-xl md:text-2xl text-gray-800" data-json-key="purificacao.faseIntermediaria.title">{texts.faseIntermediaria.title}</CardTitle>
-                        <p className="text-sm text-gray-600" data-json-key="purificacao.faseIntermediaria.subtitle">{texts.faseIntermediaria.subtitle}</p>
+                        <CardTitle className="text-xl md:text-2xl text-gray-800" data-json-key="purificacao.faseIntermediaria.title">{faseIntermediaria.title}</CardTitle>
+                        <p className="text-sm text-gray-600" data-json-key="purificacao.faseIntermediaria.subtitle">{faseIntermediaria.subtitle}</p>
                       </div>
                     </div>
                     <ChevronDown 
@@ -239,14 +263,14 @@ export default function Purificacao() {
                 >
                   <CardContent className="p-8 space-y-6">
                     <div>
-                      <h3 className="text-xl font-semibold mb-3 text-gray-800" data-json-key="purificacao.faseIntermediaria.requisito.title">{texts.faseIntermediaria.requisito.title}</h3>
-                      <p className="text-gray-700 leading-relaxed" data-json-key="purificacao.faseIntermediaria.requisito.content">{texts.faseIntermediaria.requisito.content}</p>
+                      <h3 className="text-xl font-semibold mb-3 text-gray-800" data-json-key="purificacao.faseIntermediaria.requisito.title">{faseIntermediaria.requisito.title}</h3>
+                      <p className="text-gray-700 leading-relaxed" data-json-key="purificacao.faseIntermediaria.requisito.content">{faseIntermediaria.requisito.content}</p>
                     </div>
 
                     <div className="bg-cyan-50 border border-cyan-200 p-6 rounded-lg">
-                      <h4 className="font-semibold text-lg mb-4 text-cyan-700" data-json-key="purificacao.faseIntermediaria.trabalhos.title">{texts.faseIntermediaria.trabalhos.title}</h4>
+                      <h4 className="font-semibold text-lg mb-4 text-cyan-700" data-json-key="purificacao.faseIntermediaria.trabalhos.title">{faseIntermediaria.trabalhos.title}</h4>
                       <div className="space-y-4">
-                        {texts.faseIntermediaria.trabalhos.items.map((item, index) => (
+                        {faseIntermediaria.trabalhos.items.map((item, index) => (
                           <div key={index}>
                             <h5 className="font-semibold text-base mb-2 text-gray-800" data-json-key={`purificacao.faseIntermediaria.trabalhos.items[${index}].title`}>{item.title}</h5>
                             <p className="text-gray-700" data-json-key={`purificacao.faseIntermediaria.trabalhos.items[${index}].content`}>{item.content}</p>
@@ -256,8 +280,8 @@ export default function Purificacao() {
                     </div>
 
                     <div>
-                      <h4 className="font-semibold text-lg mb-3 text-gray-800" data-json-key="purificacao.faseIntermediaria.integracao.title">{texts.faseIntermediaria.integracao.title}</h4>
-                      <p className="text-gray-700 leading-relaxed" data-json-key="purificacao.faseIntermediaria.integracao.content">{texts.faseIntermediaria.integracao.content}</p>
+                      <h4 className="font-semibold text-lg mb-3 text-gray-800" data-json-key="purificacao.faseIntermediaria.integracao.title">{faseIntermediaria.integracao.title}</h4>
+                      <p className="text-gray-700 leading-relaxed" data-json-key="purificacao.faseIntermediaria.integracao.content">{faseIntermediaria.integracao.content}</p>
                     </div>
                   </CardContent>
                 </div>
@@ -286,8 +310,8 @@ export default function Purificacao() {
                         <div className="flex items-center gap-2 mb-0.5">
                           <span className="text-xs font-semibold text-amber-600 bg-amber-100 px-2 py-0.5 rounded-full">FASE 3</span>
                         </div>
-                        <CardTitle className="text-xl md:text-2xl text-gray-800" data-json-key="purificacao.faseFinal.title">{texts.faseFinal.title}</CardTitle>
-                        <p className="text-sm text-gray-600" data-json-key="purificacao.faseFinal.subtitle">{texts.faseFinal.subtitle}</p>
+                        <CardTitle className="text-xl md:text-2xl text-gray-800" data-json-key="purificacao.faseFinal.title">{faseFinal.title}</CardTitle>
+                        <p className="text-sm text-gray-600" data-json-key="purificacao.faseFinal.subtitle">{faseFinal.subtitle}</p>
                       </div>
                     </div>
                     <ChevronDown 
@@ -305,16 +329,16 @@ export default function Purificacao() {
                 >
                   <CardContent className="p-8 space-y-6">
                     <div>
-                      <h3 className="text-xl font-semibold mb-3 text-gray-800" data-json-key="purificacao.faseFinal.iniciacao.title">{texts.faseFinal.iniciacao.title}</h3>
-                      <p className="text-gray-700 leading-relaxed" data-json-key="purificacao.faseFinal.iniciacao.content">{texts.faseFinal.iniciacao.content}</p>
+                      <h3 className="text-xl font-semibold mb-3 text-gray-800" data-json-key="purificacao.faseFinal.iniciacao.title">{faseFinal.iniciacao.title}</h3>
+                      <p className="text-gray-700 leading-relaxed" data-json-key="purificacao.faseFinal.iniciacao.content">{faseFinal.iniciacao.content}</p>
                     </div>
 
                     <div className="bg-linear-to-r from-amber-100 to-yellow-100 border-2 border-amber-400 rounded-lg p-6">
                       <div className="flex items-center gap-4 mb-4">
                         <Sun className="w-10 h-10 text-amber-600" />
-                        <h4 className="font-semibold text-xl text-amber-700" data-json-key="purificacao.faseFinal.evento.title">{texts.faseFinal.evento.title ?? 'O Evento Iniciático'}</h4>
+                        <h4 className="font-semibold text-xl text-amber-700" data-json-key="purificacao.faseFinal.evento.title">{faseFinal.evento.title ?? 'O Evento Iniciático'}</h4>
                       </div>
-                      {texts.faseFinal.evento.content.map((para: string, i: number) => (
+                      {faseFinal.evento.content.map((para: string, i: number) => (
                         <p key={i} className={`text-gray-700 leading-relaxed ${i > 0 ? 'mt-3' : ''}`}>
                           {para}
                         </p>
@@ -322,10 +346,10 @@ export default function Purificacao() {
                     </div>
 
                     <div>
-                      <h4 className="font-semibold text-lg mb-3 text-gray-800" data-json-key="purificacao.faseFinal.posIniciacao.title">{texts.faseFinal.posIniciacao.title}</h4>
-                      <p className="text-gray-700 leading-relaxed mb-4" data-json-key="purificacao.faseFinal.posIniciacao.content">{texts.faseFinal.posIniciacao.content}</p>
+                      <h4 className="font-semibold text-lg mb-3 text-gray-800" data-json-key="purificacao.faseFinal.posIniciacao.title">{faseFinal.posIniciacao.title}</h4>
+                      <p className="text-gray-700 leading-relaxed mb-4" data-json-key="purificacao.faseFinal.posIniciacao.content">{faseFinal.posIniciacao.content}</p>
                       <ul className="space-y-3 text-gray-700">
-                        {texts.faseFinal.posIniciacao.items.map((it: string, idx: number) => (
+                        {faseFinal.posIniciacao.items.map((it: string, idx: number) => (
                           <li key={idx} className="flex items-start gap-3">
                             <span className="text-amber-500 font-bold mt-1">✦</span>
                             <span>{it}</span>
@@ -335,8 +359,8 @@ export default function Purificacao() {
                     </div>
 
                     <div className="bg-blue-50 border border-blue-200 p-6 rounded-lg">
-                      <h4 className="font-semibold text-lg mb-3 text-blue-800" data-json-key="purificacao.faseFinal.adepto.title">{texts.faseFinal.adepto.title}</h4>
-                      <p className="text-blue-900 leading-relaxed" data-json-key="purificacao.faseFinal.adepto.content">{texts.faseFinal.adepto.content}</p>
+                      <h4 className="font-semibold text-lg mb-3 text-blue-800" data-json-key="purificacao.faseFinal.adepto.title">{faseFinal.adepto.title}</h4>
+                      <p className="text-blue-900 leading-relaxed" data-json-key="purificacao.faseFinal.adepto.content">{faseFinal.adepto.content}</p>
                     </div>
                   </CardContent>
                 </div>
@@ -378,11 +402,11 @@ export default function Purificacao() {
                   </div>
                   <CardTitle className="text-4xl md:text-5xl font-semibold mb-3 drop-shadow-lg font-['Poppins',sans-serif] tracking-[0.02em] [text-shadow:0_0_30px_rgba(255,255,255,0.5),0_0_60px_rgba(167,139,250,0.4)]" 
                     data-json-key="purificacao.psicodelicos.title">
-                    {texts.psicodelicos.title}
+                    {psicodelicos.title}
                   </CardTitle>
                   <p className="text-xl font-light italic opacity-95 drop-shadow-md pb-2 tracking-[0.05em]" 
                     data-json-key="purificacao.psicodelicos.subtitle">
-                    {texts.psicodelicos.subtitle}
+                    {psicodelicos.subtitle}
                   </p>
                 </div>
               </CardHeader>
@@ -412,7 +436,7 @@ export default function Purificacao() {
                     <div className="relative z-10 text-center space-y-6">
                       <p className="text-xl md:text-2xl text-amber-950 leading-relaxed font-serif italic papiro-text" 
                          data-json-key="purificacao.psicodelicos.intro"
-                         dangerouslySetInnerHTML={{ __html: texts.psicodelicos.intro }} 
+                         dangerouslySetInnerHTML={{ __html: psicodelicos.intro }} 
                       />
                     </div>
                   </div>
@@ -439,34 +463,34 @@ export default function Purificacao() {
                     </div>
                   </div>
                   
-                  <h3 className="font-semibold text-2xl text-purple-900 mb-8 text-center relative z-10 tracking-[0.03em]" data-json-key="purificacao.psicodelicos.tripleProtection.title">{texts.psicodelicos.tripleProtection.title}</h3>
+                  <h3 className="font-semibold text-2xl text-purple-900 mb-8 text-center relative z-10 tracking-[0.03em]" data-json-key="purificacao.psicodelicos.tripleProtection.title">{psicodelicos.tripleProtection.title}</h3>
                   
                   <div className="grid md:grid-cols-3 gap-8 relative z-10">
                     <div className="text-center bg-white/60 backdrop-blur-sm p-6 rounded-xl border border-blue-200 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                       <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 shadow-md">
                         <Compass className="w-10 h-10 text-blue-600" />
                       </div>
-                      <h4 className="font-semibold text-lg mb-3 text-blue-900" data-json-key="purificacao.psicodelicos.tripleProtection.cards[0].title">{texts.psicodelicos.tripleProtection.cards[0].title}</h4>
+                      <h4 className="font-semibold text-lg mb-3 text-blue-900" data-json-key="purificacao.psicodelicos.tripleProtection.cards[0].title">{psicodelicos.tripleProtection.cards[0].title}</h4>
                       <p className="text-sm text-gray-700 leading-relaxed" data-json-key="purificacao.psicodelicos.tripleProtection.cards[0].description">
-                        {texts.psicodelicos.tripleProtection.cards[0].description}
+                        {psicodelicos.tripleProtection.cards[0].description}
                       </p>
                     </div>
                     <div className="text-center bg-white/60 backdrop-blur-sm p-6 rounded-xl border border-green-200 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                       <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 shadow-md">
                         <Heart className="w-10 h-10 text-green-600" />
                       </div>
-                      <h4 className="font-semibold text-lg mb-3 text-green-900" data-json-key="purificacao.psicodelicos.tripleProtection.cards[1].title">{texts.psicodelicos.tripleProtection.cards[1].title}</h4>
+                      <h4 className="font-semibold text-lg mb-3 text-green-900" data-json-key="purificacao.psicodelicos.tripleProtection.cards[1].title">{psicodelicos.tripleProtection.cards[1].title}</h4>
                       <p className="text-sm text-gray-700 leading-relaxed" data-json-key="purificacao.psicodelicos.tripleProtection.cards[1].description">
-                        {texts.psicodelicos.tripleProtection.cards[1].description}
+                        {psicodelicos.tripleProtection.cards[1].description}
                       </p>
                     </div>
                     <div className="text-center bg-white/60 backdrop-blur-sm p-6 rounded-xl border border-amber-200 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                       <div className="bg-amber-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 shadow-md">
                         <Sun className="w-10 h-10 text-amber-600" />
                       </div>
-                      <h4 className="font-semibold text-lg mb-3 text-amber-900" data-json-key="purificacao.psicodelicos.tripleProtection.cards[2].title">{texts.psicodelicos.tripleProtection.cards[2].title}</h4>
+                      <h4 className="font-semibold text-lg mb-3 text-amber-900" data-json-key="purificacao.psicodelicos.tripleProtection.cards[2].title">{psicodelicos.tripleProtection.cards[2].title}</h4>
                       <p className="text-sm text-gray-700 leading-relaxed" data-json-key="purificacao.psicodelicos.tripleProtection.cards[2].description">
-                        {texts.psicodelicos.tripleProtection.cards[2].description}
+                        {psicodelicos.tripleProtection.cards[2].description}
                       </p>
                     </div>
                   </div>
@@ -476,10 +500,10 @@ export default function Purificacao() {
                 <div className="mt-16 mb-16">
                   <h3 className="font-semibold text-3xl text-purple-900 text-center mb-10 tracking-wide" 
                       data-json-key="purificacao.psicodelicos.applications.title">
-                    {texts.psicodelicos.applications.title}
+                    {psicodelicos.applications.title}
                   </h3>
                   <ul className="space-y-5 max-w-4xl mx-auto">
-                    {texts.psicodelicos.applications.items.map((item: string, idx: number) => (
+                    {psicodelicos.applications.items.map((item: string, idx: number) => (
                       <li key={idx} className="flex items-start gap-4 bg-white/70 backdrop-blur-sm p-5 rounded-xl border border-purple-200/60 hover:border-purple-400 transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5">
                         <span className="text-purple-600 mt-0.5 text-2xl font-bold shrink-0">✦</span>
                         <span className="text-gray-800 leading-relaxed text-base" 
@@ -515,11 +539,11 @@ export default function Purificacao() {
                     <div className="relative z-10 text-center space-y-6">
                       <h4 className="font-bold text-2xl md:text-3xl text-amber-950 tracking-wide font-serif papiro-title" 
                           data-json-key="purificacao.psicodelicos.conclusion.title">
-                        {texts.psicodelicos.conclusion.title}
+                        {psicodelicos.conclusion.title}
                       </h4>
                       <p className="text-lg md:text-xl text-amber-950 leading-relaxed font-serif italic papiro-text" 
                          data-json-key="purificacao.psicodelicos.conclusion.content">
-                        {texts.psicodelicos.conclusion.content}
+                        {psicodelicos.conclusion.content}
                       </p>
                     </div>
                   </div>
@@ -530,7 +554,7 @@ export default function Purificacao() {
                   <Link to="/contato">
                     <Button size="lg" className="bg-linear-to-r from-purple-600 via-fuchsia-500 to-indigo-600 hover:from-purple-700 hover:via-fuchsia-600 hover:to-indigo-700 text-white shadow-2xl text-lg px-10 py-7 rounded-xl font-semibold transform hover:scale-105 transition-all duration-300 cta-button-spacing" data-json-key="purificacao.psicodelicos.ctaButton">
                       <Sparkles className="w-6 h-6 mr-3 animate-pulse" />
-                      {texts.psicodelicos.ctaButton}
+                      {psicodelicos.ctaButton}
                     </Button>
                   </Link>
                 </div>
@@ -565,29 +589,31 @@ export default function Purificacao() {
               
               {/* Conteúdo interno */}
               <div className="relative z-10">
-                <h2 className="text-4xl font-bold text-center mb-8 text-amber-950 font-serif" data-json-key="purificacao.valores.title">{texts.valores.title}</h2>
+                <h2 className="text-4xl font-bold text-center mb-8 text-amber-950 font-serif" data-json-key="purificacao.valores.title">{valores.title}</h2>
                 
                 {/* Parágrafo introdutório */}
-                {texts.valores.intro && (
+                {valores.intro && (
                   <div className="mb-12 max-w-4xl mx-auto">
                     <p className="text-lg text-amber-900 leading-relaxed text-center font-serif italic" data-json-key="purificacao.valores.intro">
-                      {texts.valores.intro}
+                      {valores.intro}
                     </p>
                   </div>
                 )}
                 
-                <div className="grid md:grid-cols-2 gap-8">
-                  {texts.valores.cards.map((card: { title: string; content: string }, idx: number) => (
-                    <Card key={idx} className="shadow-lg card-hover bg-white/80 backdrop-blur-sm border border-amber-200/40">
-                      <CardHeader>
-                        <CardTitle className="text-xl text-[#CFAF5A]">{card.title}</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <p className="text-gray-700">{card.content}</p>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
+                {valores.cards && Array.isArray(valores.cards) && (
+                  <div className="grid md:grid-cols-2 gap-8">
+                    {valores.cards.map((card: { title: string; content: string }, idx: number) => (
+                      <Card key={idx} className="shadow-lg card-hover bg-white/80 backdrop-blur-sm border border-amber-200/40">
+                        <CardHeader>
+                          <CardTitle className="text-xl text-[#CFAF5A]">{card.title}</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <p className="text-gray-700">{card.content}</p>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -595,7 +621,18 @@ export default function Purificacao() {
       </section>
 
       {/* Testimonials Carousel */}
-      <TestimonialsCarousel />
+      <Suspense fallback={
+        <section className="py-20 bg-stone-50">
+          <div className="container mx-auto px-4">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#CFAF5A] mx-auto mb-4"></div>
+              <p className="text-stone-600">Carregando testemunhos...</p>
+            </div>
+          </div>
+        </section>
+      }>
+        <TestimonialsCarousel />
+      </Suspense>
 
       {/* Footer com horizonte terrestre */}
       <section className="relative overflow-hidden bg-slate-900">
@@ -752,18 +789,18 @@ export default function Purificacao() {
           </svg>
         </div>
 
-        {/* CTA Content - posicionado no c├®u */}
+        {/* CTA Content - posicionado no céu */}
         <div className="container mx-auto px-4 relative z-10 pt-12 pb-8">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white drop-shadow-lg" data-json-key="purificacao.cta.title">
-              {texts.cta.title}
+              {cta.title}
             </h2>
             <p className="text-xl mb-8 text-white drop-shadow-md" data-json-key="purificacao.cta.subtitle">
-              {texts.cta.subtitle}
+              {cta.subtitle}
             </p>
             <Link to="/contato">
               <Button className="bg-[#CFAF5A] text-white font-semibold px-8 py-6 text-lg rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105" data-json-key="purificacao.cta.buttonText">
-                {texts.cta.buttonText}
+                {cta.buttonText}
               </Button>
             </Link>
           </div>
@@ -771,8 +808,8 @@ export default function Purificacao() {
 
         {/* Footer Content - Copyright (do DB: compartilhado) */}
         <SharedFooter 
-          copyright={texts?.footer?.copyright}
-          trademark={texts?.footer?.trademark}
+          copyright={footer?.copyright}
+          trademark={footer?.trademark}
           className="pt-8 pb-4"
         />
       </section>

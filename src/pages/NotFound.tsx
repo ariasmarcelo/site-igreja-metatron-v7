@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { useLocaleTexts } from '@/hooks/useLocaleTexts';
+import { usePageContent } from '@/hooks/useContent';
 import PageLoader from '@/components/PageLoader';
 
 interface NotFoundTexts {
@@ -8,7 +8,7 @@ interface NotFoundTexts {
 }
 
 export default function NotFoundPage() {
-  const { texts, loading, error } = useLocaleTexts<NotFoundTexts>('notfound');
+  const { data: texts, loading, error } = usePageContent<NotFoundTexts>('notfound');
   
   if (!texts) return null;
   

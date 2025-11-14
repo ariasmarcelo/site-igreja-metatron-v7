@@ -64,7 +64,7 @@ const NavigationMenu = memo(() => {
 
   const navigation = [
     { name: 'Home', href: '/' },
-    { name: 'Quem Somos', href: '/quem-somos' },
+    { name: 'Quem Somos', href: '/quemsomos' },
     { name: 'Purificação e Ascensão', href: '/purificacao' },
     { name: 'Tratamentos Associados', href: '/tratamentos' },
     { name: 'Artigos', href: '/artigos' },
@@ -183,7 +183,7 @@ const Navigation = () => {
         {/* Routes */}
         <Routes>
           <Route path="/" element={<Index />} />
-          <Route path="/quem-somos" element={<QuemSomos />} />
+          <Route path="/quemsomos" element={<QuemSomos />} />
           <Route path="/tratamentos" element={<Tratamentos />} />
           <Route path="/purificacao" element={<Purificacao />} />
           <Route path="/artigos" element={<Artigos />} />

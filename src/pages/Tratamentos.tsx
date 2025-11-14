@@ -4,7 +4,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Brain, Heart, Wind, Route, Flower2, Sparkles, AlertTriangle, Users, Infinity as InfinityIcon, Activity, Stethoscope, Waves } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import { useLocaleTexts } from '@/hooks/useLocaleTexts';
+import { usePageContent } from '@/hooks/useContent';
 import { SharedFooter } from '@/components/SharedFooter';
 import { usePageStyles } from '@/hooks/usePageStyles';
 import '@/styles/tratamentos-page.css';
@@ -22,7 +22,7 @@ interface TratamentosTexts {
 
 export default function Tratamentos() {
   usePageStyles('tratamentos');
-  const { texts, loading, error } = useLocaleTexts<TratamentosTexts>('tratamentos');
+  const { data: texts, loading, error } = usePageContent<TratamentosTexts>('tratamentos');
   
   if (loading || !texts) return <div className="flex items-center justify-center min-h-screen">Carregando...</div>;
 

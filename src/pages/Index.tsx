@@ -2,9 +2,11 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Link } from 'react-router-dom';
 import { Heart, Sun, Users, Brain, Ghost, Database, Compass, ArrowLeftRight, ArrowUpDown, Sparkles } from 'lucide-react';
-import TestimonialsCarousel from '@/components/TestimonialsCarousel';
-import { useLocaleTexts } from '@/hooks/useLocaleTexts';
+import { lazy, Suspense } from 'react';
+import { usePageContent } from '@/hooks/useContent';
 import { usePageStyles } from '@/hooks/usePageStyles';
+
+const TestimonialsCarousel = lazy(() => import('@/components/TestimonialsCarousel'));
 
 
 interface IndexTexts {
@@ -14,7 +16,7 @@ interface IndexTexts {
 
 export default function Index() {
   const stylesLoaded = usePageStyles('index');
-  const { texts, loading } = useLocaleTexts<IndexTexts>('index');
+  const { data: texts, loading } = usePageContent<IndexTexts>('index');
 
   // Aguardar carregamento
   if (!texts || !stylesLoaded || loading) {
@@ -109,7 +111,7 @@ export default function Index() {
                       ))}
                     </div>
 
-                    <Link to="/quem-somos">
+                    <Link to="/quemsomos">
                       <Button className="bg-linear-to-r from-[#CFAF5A] to-[#B38938] text-white px-8 py-5 text-base rounded-full shadow-md hover:shadow-lg transition-all hover:scale-105" data-json-key="index.igreja.knowMoreButton">
                         {texts.igreja.knowMoreButton}
                       </Button>
@@ -415,7 +417,18 @@ export default function Index() {
       </section>
 
       {/* Testimonials */}
-      <TestimonialsCarousel />
+      <Suspense fallback={
+        <section className="py-20 bg-stone-50">
+          <div className="container mx-auto px-4">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#CFAF5A] mx-auto mb-4"></div>
+              <p className="text-stone-600">Carregando testemunhos...</p>
+            </div>
+          </div>
+        </section>
+      }>
+        <TestimonialsCarousel />
+      </Suspense>
 
       {/* CTA Final */}
       <section className="relative overflow-hidden bg-stone-800">
