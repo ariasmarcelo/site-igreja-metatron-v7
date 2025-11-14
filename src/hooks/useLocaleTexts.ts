@@ -23,63 +23,13 @@ export const isEditLocked = (pageId: string): boolean => {
 };
 
 /**
- * Converte pageId para PascalCase (ex: "quem-somos" → "QuemSomos")
- */
-function toPascalCase(pageId: string): string {
-  return pageId
-    .split('-')
-    .map(part => part.charAt(0).toUpperCase() + part.slice(1))
-    .join('');
-}
-
-/**
- * Carrega JSONs granulares locais e reconstrói objeto completo
- * Exemplo: Index.hero.title.json + Index.hero.subtitle.json → { hero: { title: "...", subtitle: "..." } }
- */
-async function loadGranularFallback<T>(pageId: string): Promise<T | null> {
-  try {
-    const pageName = toPascalCase(pageId);
-    const basePath = `/src/locales/pt-BR`;
-    
-    // Lista todos os arquivos .json que começam com o nome da página
-    // Nota: Em produção, precisaríamos de um manifest ou glob pattern
-    // Por enquanto, vamos tentar carregar dinamicamente baseado em paths conhecidos
-    
-    const reconstructed: any = {};
-    
-    // Tentar carregar arquivo consolidado primeiro (compatibilidade)
-    try {
-      const module = await import(`../../locales/pt-BR/${pageName}.json`);
-      console.log(`📦 Loaded consolidated fallback: ${pageName}.json`);
-      return module.default as T;
-    } catch {
-      // Arquivo consolidado não existe, continuar com granular
-    }
-    
-    // TODO: Implementar carregamento granular quando necessário
-    // Por enquanto, retornar null para forçar busca no DB
-    console.log(`⚠️  No fallback files found for ${pageName}`);
-    return null;
-    
-  } catch (error) {
-    console.error(`❌ Error loading granular fallback for ${pageId}:`, error);
-    return null;
-  }
-}
-
-/**
- * Hook para carregar textos com fallback em cascata:
- * 1. Tenta buscar do Supabase via API
- * 2. Se falhar, carrega JSONs granulares locais
- * 3. Se falhar, usa fallbackData (opcional)
+ * Hook para carregar textos do Supabase via API content-v2
  * 
  * @param pageId - ID da página (index, quem-somos, contato, etc)
- * @param fallbackData - Fallback estático opcional (usado apenas se tudo falhar)
  * @returns { texts, loading, error } - Dados da página, estado de loading e erro
  */
 export function useLocaleTexts<T = Record<string, unknown>>(
-  pageId: string,
-  fallbackData?: T
+  pageId: string
 ): {
   texts: T | null;
   loading: boolean;
@@ -119,9 +69,8 @@ export function useLocaleTexts<T = Record<string, unknown>>(
       setError(null);
       
       try {
-        console.log(`📥 [1/3] Tentando carregar ${pageId} do Supabase...`);
+        console.log(`📥 Carregando ${pageId} do Supabase...`);
         
-        // STEP 1: Buscar do Supabase via API content-v2 (conteúdo da página + compartilhado)
         const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
         const response = await fetch(`${apiUrl}/api/content-v2/${pageId.toLowerCase()}`);
         
@@ -132,45 +81,16 @@ export function useLocaleTexts<T = Record<string, unknown>>(
         const data = await response.json();
         
         if (data && data.content) {
-          // O backend já faz merge do conteúdo compartilhado (NULL) + página específica
           setTexts(data.content as T);
           setError(null);
-          console.log(`✅ [1/3] Carregado do Supabase: ${pageId} (${Object.keys(data.content).length} keys)`);
-          return; // Sucesso - não precisa de fallback
+          console.log(`✅ Carregado do Supabase: ${pageId} (${Object.keys(data.content).length} keys)`);
         } else {
           throw new Error(`No content found in API response`);
         }
       } catch (apiError) {
         const errorMsg = apiError instanceof Error ? apiError.message : 'Unknown error';
-        console.warn(`⚠️  [1/3] Falha ao carregar do Supabase: ${errorMsg}`);
-        
-        try {
-          console.log(`📦 [2/3] Tentando carregar JSONs granulares locais...`);
-          
-          // STEP 2: Tentar carregar JSONs granulares locais
-          const granularData = await loadGranularFallback<T>(pageId);
-          
-          if (granularData) {
-            setTexts(granularData);
-            setError(null);
-            console.log(`✅ [2/3] Carregado de fallback granular: ${pageId}`);
-            return; // Sucesso com fallback granular
-          } else {
-            throw new Error('No granular fallback files found');
-          }
-        } catch (fallbackError) {
-          console.warn(`⚠️  [2/3] Falha ao carregar fallback granular:`, fallbackError);
-          
-          // STEP 3: Usar fallbackData estático (se fornecido)
-          if (fallbackData) {
-            setTexts(fallbackData);
-            setError(null);
-            console.log(`✅ [3/3] Usando fallback estático para ${pageId}`);
-          } else {
-            setError(`Failed to load ${pageId} from all sources`);
-            console.error(`❌ [3/3] Todas as fontes falharam para ${pageId}`);
-          }
-        }
+        setError(`Failed to load ${pageId}: ${errorMsg}`);
+        console.error(`❌ Erro ao carregar ${pageId}:`, errorMsg);
       } finally {
         setLoading(false);
       }
