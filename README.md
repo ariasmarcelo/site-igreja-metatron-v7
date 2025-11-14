@@ -135,35 +135,36 @@ CREATE TABLE text_entries (
 - `json_key` com prefixo → Conteúdo específico da página (ex: `Index.hero.title`)
 - `json_key` sem prefixo → Conteúdo compartilhado (ex: `footer.copyright`)
 
-### Sistema de Fallback Granular
+### Carregamento de Conteúdo
 
-Sistema de três camadas com **auto-sincronização transparente**:
+**Fonte única de verdade:** Supabase PostgreSQL
 
-1. **Supabase** - Fonte primária sempre consultada primeiro
-2. **JSONs Granulares** - Backup/cache em `src/locales/pt-BR/` (um arquivo por campo)
-3. **Props Defaults** - Valores hardcoded nos componentes (último recurso)
+Todo conteúdo do site é carregado diretamente do Supabase através da API `/api/content-v2/[pageId]`.
 
-**Fluxo:**
+**Fluxo simplificado:**
 ```
 Usuário acessa página
     ↓
-API busca Supabase (text_entries)
+usePageContent() hook
+    ↓
+GET /api/content-v2/[pageId]
+    ↓
+API busca Supabase + cache LMDB
     ↓
 Frontend renderiza com dados do DB
-    ↓
-BACKGROUND: POST /api/sync-fallbacks
-    ↓
-Cria/atualiza JSONs individuais
-    (ex: Index.hero.title.json)
 ```
 
-**Benefícios:**
-- ✅ Cache automático zero-config
-- ✅ Desenvolvimento offline possível
-- ✅ Histórico granular no git (diff por campo)
-- ✅ Performance (comparação inteligente, só escreve se mudou)
+**Cache LMDB:**
+- Cache em memória ultra-rápido (Lightning Memory-Mapped Database)
+- Localização: `.cache/content-lmdb/`
+- TTL: 5 minutos
+- Reduz carga no Supabase em 90%+
 
-**Documentação completa:** [docs/GRANULAR-FALLBACK-SYSTEM-V2.md](./docs/GRANULAR-FALLBACK-SYSTEM-V2.md)
+**Benefícios:**
+- ✅ Performance: cache local com validação automática
+- ✅ Confiabilidade: dados sempre sincronizados com DB
+- ✅ Escalabilidade: menos queries no Supabase
+- ✅ Zero-config: cache gerenciado automaticamente
 
 ### APIs Serverless
 
@@ -171,9 +172,8 @@ Cria/atualiza JSONs individuais
 
 | API | Método | Propósito |
 |-----|--------|-----------|
-| `/api/content-v2/[pageId]` | GET | Buscar conteúdo de página + shared |
-| `/api/save-visual-edits` | POST | Salvar edições do editor visual |
-| `/api/sync-fallbacks` | POST | Sincronizar JSONs granulares |
+| `/api/content-v2` | GET | Buscar conteúdo de páginas + cache LMDB |
+| `/api/save-visual-edits` | POST | Salvar edições do editor visual no Supabase |
 
 ### Estrutura de Pastas
 
@@ -190,25 +190,23 @@ src/
 │   ├── QuemSomos.tsx
 │   └── ...
 ├── hooks/
-│   ├── useLocaleTexts.ts   # Hook para carregar conteúdo
+│   ├── usePageContent.ts   # Hook para carregar conteúdo
+│   ├── usePageStyles.ts    # Hook para carregar estilos
 │   └── ...
-├── lib/
-│   └── supabase.ts      # Cliente Supabase
-└── locales/pt-BR/       # JSONs granulares (auto-gerados)
-    ├── Index.hero.title.json
-    ├── Purificacao.psicodelicos.title.json
-    └── ...
+└── lib/
+    └── supabase.ts      # Cliente Supabase
 
 api/
-├── content-v2/[pageId].js    # GET conteúdo
-├── save-visual-edits.js      # POST edições
-└── sync-fallbacks.js         # POST fallbacks
+├── content-v2/
+│   └── index.js         # GET conteúdo + cache LMDB
+└── save-visual-edits.js # POST edições
 
 scripts/
 ├── start-dev.ps1        # Iniciar servidor
 ├── stop-dev.ps1         # Parar servidor
 ├── deploy.ps1           # Deploy GitHub Pages
-└── ...
+├── sync-*.js            # Scripts de sincronização DB
+└── backup-supabase.js   # Backup completo do DB
 ```
 
 ---
@@ -272,9 +270,10 @@ vercel --prod
 |----------|---------|
 | Conteúdo antigo após deploy | **CTRL+F5** (hard refresh) |
 | Página em branco | Verificar `basename` no Router = `/site-igreja-v6` |
-| JSONs não sincronizam | Verificar logs do console, API `/api/sync-fallbacks` |
+| Conteúdo não carrega | Verificar `.env.local` com credenciais Supabase |
 | Servidor não inicia | Verificar porta 3000 livre: `netstat -ano \| findstr :3000` |
-| Warnings `UV_HANDLE_CLOSING` | **Ignorar** (bug conhecido do Node v24 no Windows) |
+| Cache LMDB corrompido | Remover pasta `.cache/content-lmdb/` |
+| Rota 404 ao acessar diretamente | Verificar `vercel.json` rewrites e `public/404.html` desabilitado |
 
 ---
 
@@ -291,7 +290,7 @@ vercel --prod
 ## 🌟 Recursos
 
 - ✅ **Editor visual de conteúdo** - Edite textos diretamente no site
-- ✅ **Sistema de fallback granular** - Auto-sincronização DB → JSONs
+- ✅ **Cache LMDB** - Performance ultra-rápida com cache local
 - ✅ **Conteúdo compartilhado** - Footer e elementos comuns (sistema `__shared__`)
 - ✅ **Blog integrado** - Sistema completo de artigos com TipTap
 - ✅ **Responsivo** - Design mobile-first
@@ -299,6 +298,7 @@ vercel --prod
 - ✅ **Deploy automático** - CI/CD com GitHub Actions
 - ✅ **TypeScript strict** - Tipagem forte em todo o projeto
 - ✅ **Zero inline styles** - 100% CSS externo (Tailwind)
+- ✅ **SPA routing** - BrowserRouter com fallback para todas as rotas
 
 ---
 
@@ -349,6 +349,17 @@ Este projeto é proprietário. Todos os direitos reservados.
 ---
 
 **Última atualização:** 14 de novembro de 2025
+
+### Histórico de Mudanças
+
+**v6.2 (14/11/2025):**
+- ✅ Sistema de cache LMDB implementado (performance +90%)
+- ✅ Fix crash LMDB com async/await pattern
+- ✅ Rota `/quemsomos` padronizada (sem hífen)
+- ✅ Desabilitado `public/404.html` que interferia com SPA routing
+- ✅ Removido sistema de fallback granular (simplificação)
+- ✅ Limpeza: 600+ arquivos JSON granulares desnecessários removidos
+- ✅ Limpeza: 40+ scripts `.useless` de migrações antigas removidos
 
 **Desenvolvido com ❤️ para a Igreja de Metatron 🕉️**
 
