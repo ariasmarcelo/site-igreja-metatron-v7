@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Limpar Cache Completo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        button {
+            background: #f44336;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            width: 100%;
+            margin: 10px 0;
+        }
+        button:hover {
+            background: #d32f2f;
+        }
+        .success {
+            background: #4caf50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            display: none;
+        }
+        .info {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .log {
+            background: #263238;
+            color: #aed581;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            margin: 15px 0;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧹 Limpar Cache Completo</h1>
+        
+        <div class="info">
+            <strong>⚠️ Atenção:</strong> Esta ação vai limpar todo o cache, cookies, localStorage, sessionStorage e Service Workers do site atual.
+        </div>
+
+        <button id="btnClear">🗑️ Limpar Tudo e Recarregar</button>
+        
+        <div id="success" class="success">
+            ✅ Cache limpo com sucesso! Recarregando...
+        </div>
+        
+        <div id="log" class="log"></div>
+    </div>
+
+    <script>
+        const btnClear = document.getElementById('btnClear');
+        const successDiv = document.getElementById('success');
+        const logDiv = document.getElementById('log');
+        
+        function log(message) {
+            console.log(message);
+            logDiv.style.display = 'block';
+            logDiv.textContent += message + '\n';
+        }
+
+        btnClear.addEventListener('click', async () => {
+            logDiv.textContent = '';
+            log('🧹 Iniciando limpeza completa...\n');
+            
+            try {
+                // 1. Limpar localStorage
+                log('📦 Limpando localStorage...');
+                localStorage.clear();
+                log('✅ localStorage limpo');
+                
+                // 2. Limpar sessionStorage
+                log('\n📦 Limpando sessionStorage...');
+                sessionStorage.clear();
+                log('✅ sessionStorage limpo');
+                
+                // 3. Limpar cookies
+                log('\n🍪 Limpando cookies...');
+                const cookies = document.cookie.split(";");
+                for (let cookie of cookies) {
+                    const eqPos = cookie.indexOf("=");
+                    const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+                    document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+                }
+                log('✅ Cookies limpos');
+                
+                // 4. Limpar Cache API
+                log('\n💾 Limpando Cache API...');
+                if ('caches' in window) {
+                    const cacheNames = await caches.keys();
+                    log(`   Encontrados ${cacheNames.length} caches`);
+                    for (let cacheName of cacheNames) {
+                        await caches.delete(cacheName);
+                        log(`   ✓ Cache "${cacheName}" deletado`);
+                    }
+                    log('✅ Cache API limpo');
+                } else {
+                    log('⚠️ Cache API não disponível');
+                }
+                
+                // 5. Unregister Service Workers
+                log('\n🔧 Removendo Service Workers...');
+                if ('serviceWorker' in navigator) {
+                    const registrations = await navigator.serviceWorker.getRegistrations();
+                    log(`   Encontrados ${registrations.length} service workers`);
+                    for (let registration of registrations) {
+                        await registration.unregister();
+                        log(`   ✓ Service Worker removido`);
+                    }
+                    log('✅ Service Workers removidos');
+                } else {
+                    log('⚠️ Service Workers não disponíveis');
+                }
+                
+                // 6. Limpar IndexedDB
+                log('\n🗄️ Limpando IndexedDB...');
+                if ('indexedDB' in window) {
+                    const databases = await indexedDB.databases();
+                    log(`   Encontrados ${databases.length} bancos de dados`);
+                    for (let db of databases) {
+                        if (db.name) {
+                            indexedDB.deleteDatabase(db.name);
+                            log(`   ✓ Database "${db.name}" deletado`);
+                        }
+                    }
+                    log('✅ IndexedDB limpo');
+                } else {
+                    log('⚠️ IndexedDB não disponível');
+                }
+                
+                log('\n==========================================');
+                log('✅ LIMPEZA COMPLETA CONCLUÍDA!');
+                log('==========================================');
+                log('\nRecarregando página em 2 segundos...');
+                
+                successDiv.style.display = 'block';
+                
+                // Recarregar página (hard refresh)
+                setTimeout(() => {
+                    window.location.reload(true);
+                }, 2000);
+                
+            } catch (error) {
+                log('\n❌ ERRO: ' + error.message);
+                alert('Erro ao limpar cache. Veja o log para detalhes.');
+            }
+        });
+    </script>
+</body>
+</html>

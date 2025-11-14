@@ -39,6 +39,21 @@ export default function Tratamentos() {
 
   const treatments = texts.treatments;
 
+  // Mapear cores dos treatments para classes CSS
+  const getGradientClass = (index: number) => {
+    const classMap = [
+      'accordion-trigger-gradient-psychotherapy',
+      'accordion-trigger-gradient-neurofeedback',
+      'accordion-trigger-gradient-breathwork',
+      'accordion-trigger-gradient-emdr',
+      'accordion-trigger-gradient-biodynamic-massage',
+      'accordion-trigger-gradient-body-therapy',
+      'accordion-trigger-gradient-spiritual',
+      'accordion-trigger-gradient-pap'
+    ];
+    return classMap[index] || classMap[0];
+  };
+
   return (
     <div className="min-h-screen bg-linear-to-b from-slate-50 to-blue-50">
       {/* Header - Altura padrão */}
@@ -135,10 +150,7 @@ export default function Tratamentos() {
                 className="border-2 border-slate-200 rounded-lg shadow-lg hover:shadow-2xl transition-all duration-300 bg-white overflow-hidden"
               >
                 <AccordionTrigger 
-                  className="px-6 py-5 hover:no-underline relative [&>svg]:h-10 [&>svg]:w-10 [&>svg]:text-slate-700 [&>svg]:relative [&>svg]:z-20"
-                  style={{
-                    background: `linear-gradient(to right, ${treatment.color.split(' ')[0].replace('from-[', '').replace(']', '')}, ${treatment.color.split(' ')[1].replace('to-[', '').replace(']', '')})`
-                  }}
+                  className={`px-6 py-5 hover:no-underline relative [&>svg]:h-10 [&>svg]:w-10 [&>svg]:text-slate-700 [&>svg]:relative [&>svg]:z-20 ${getGradientClass(index)}`}
                 >
                   <div className="absolute inset-0 bg-white/75"></div>
                   <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_50%,rgba(255,255,255,0.4),transparent_60%)]"></div>

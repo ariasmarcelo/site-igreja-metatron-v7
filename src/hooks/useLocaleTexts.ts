@@ -71,8 +71,12 @@ export function useLocaleTexts<T = Record<string, unknown>>(
       try {
         console.log(`📥 Carregando ${pageId} do Supabase...`);
         
-        const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001';
-        const response = await fetch(`${apiUrl}/api/content-v2/${pageId.toLowerCase()}`);
+        // Usar configuração centralizada de API (api.ts)
+        const apiBaseUrl = import.meta.env.VITE_API_URL || '';
+        const url = `${apiBaseUrl}/api/content-v2/${pageId.toLowerCase()}`;
+        
+        console.log(`🌐 API URL: ${url}`);
+        const response = await fetch(url);
         
         if (!response.ok) {
           throw new Error(`API returned status ${response.status}`);

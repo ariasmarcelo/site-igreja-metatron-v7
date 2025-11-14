@@ -750,7 +750,7 @@ node scripts/check-purificacao-db.js
 
 - **Cores do tema:** Definidas inline nos componentes (padrão dourado/esmeralda)├── fix-all-keys.cjs       # Correção de data-json-key
 
-- **Roteamento:** `src/App.tsx` (basename: `/site-igreja-v6`)
+- **Roteamento:** `src/Navigation.tsx` (basename: `/site-igreja-v6`)
 
 └── ...├── components/      # Componentes React
 

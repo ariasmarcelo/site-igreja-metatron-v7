@@ -390,18 +390,10 @@ export default function Purificacao() {
 
                 {/* Caixa Estilo Papiro Antigo - Texto Introdutório */}
                 <div className="max-w-4xl mx-auto mb-12">
-                  <div className="relative bg-linear-to-br from-amber-50 via-yellow-50/95 to-amber-100/90 p-8 rounded-lg border-4 border-amber-900/20 shadow-2xl" 
-                       style={{ 
-                         backgroundImage: `linear-gradient(to bottom right, rgba(254, 243, 199, 0.95), rgba(254, 249, 195, 0.98), rgba(251, 191, 36, 0.15))`,
-                         boxShadow: 'inset 0 2px 4px rgba(217, 119, 6, 0.1), 0 8px 24px rgba(0, 0, 0, 0.15)'
-                       }}>
+                  <div className="relative papiro-box p-8 rounded-lg border-4 border-amber-900/20 shadow-2xl">
                     
                     {/* Textura de papiro */}
-                    <div className="absolute inset-0 opacity-[0.03] pointer-events-none" 
-                         style={{ 
-                           backgroundImage: `repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(120, 53, 15, 0.4) 2px, rgba(120, 53, 15, 0.4) 3px)`,
-                           mixBlendMode: 'multiply'
-                         }}>
+                    <div className="absolute inset-0 opacity-[0.03] pointer-events-none papiro-texture">
                     </div>
                     
                     {/* Bordas decorativas do papiro */}
@@ -418,12 +410,8 @@ export default function Purificacao() {
                     
                     {/* Texto em estilo manuscrito antigo */}
                     <div className="relative z-10 text-center space-y-6">
-                      <p className="text-xl md:text-2xl text-amber-950 leading-relaxed font-serif italic" 
+                      <p className="text-xl md:text-2xl text-amber-950 leading-relaxed font-serif italic papiro-text" 
                          data-json-key="purificacao.psicodelicos.intro"
-                         style={{ 
-                           textShadow: '0 1px 2px rgba(217, 119, 6, 0.1)',
-                           letterSpacing: '0.02em'
-                         }}
                          dangerouslySetInnerHTML={{ __html: texts.psicodelicos.intro }} 
                       />
                     </div>
@@ -438,10 +426,7 @@ export default function Purificacao() {
                   {/* Ícone de Escudo Dourado Metálico */}
                   <div className="flex justify-center mb-2">
                     <div className="relative w-16 h-16">
-                      <Shield className="w-16 h-16 text-amber-500 relative z-10" style={{ 
-                        filter: 'drop-shadow(0 4px 12px rgba(217, 119, 6, 0.5))',
-                        fill: 'url(#goldGradient)'
-                      }} />
+                      <Shield className="w-16 h-16 text-amber-500 relative z-10 shield-gold-icon" />
                       <svg width="0" height="0">
                         <defs>
                           <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -508,18 +493,10 @@ export default function Purificacao() {
 
                 {/* Caixa Estilo Papiro - Conclusão */}
                 <div className="max-w-4xl mx-auto mb-16">
-                  <div className="relative bg-linear-to-br from-amber-50 via-yellow-50/95 to-amber-100/90 p-10 rounded-lg border-4 border-amber-900/20 shadow-2xl" 
-                       style={{ 
-                         backgroundImage: `linear-gradient(to bottom right, rgba(254, 243, 199, 0.95), rgba(254, 249, 195, 0.98), rgba(251, 191, 36, 0.15))`,
-                         boxShadow: 'inset 0 2px 4px rgba(217, 119, 6, 0.1), 0 8px 24px rgba(0, 0, 0, 0.15)'
-                       }}>
+                  <div className="relative papiro-box p-10 rounded-lg border-4 border-amber-900/20 shadow-2xl">
                     
                     {/* Textura de papiro */}
-                    <div className="absolute inset-0 opacity-[0.03] pointer-events-none" 
-                         style={{ 
-                           backgroundImage: `repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(120, 53, 15, 0.4) 2px, rgba(120, 53, 15, 0.4) 3px)`,
-                           mixBlendMode: 'multiply'
-                         }}>
+                    <div className="absolute inset-0 opacity-[0.03] pointer-events-none papiro-texture">
                     </div>
                     
                     {/* Bordas decorativas do papiro */}
@@ -536,20 +513,12 @@ export default function Purificacao() {
                     
                     {/* Conteúdo */}
                     <div className="relative z-10 text-center space-y-6">
-                      <h4 className="font-bold text-2xl md:text-3xl text-amber-950 tracking-wide font-serif" 
-                          data-json-key="purificacao.psicodelicos.conclusion.title"
-                          style={{ 
-                            textShadow: '0 1px 2px rgba(217, 119, 6, 0.1)',
-                            letterSpacing: '0.03em'
-                          }}>
+                      <h4 className="font-bold text-2xl md:text-3xl text-amber-950 tracking-wide font-serif papiro-title" 
+                          data-json-key="purificacao.psicodelicos.conclusion.title">
                         {texts.psicodelicos.conclusion.title}
                       </h4>
-                      <p className="text-lg md:text-xl text-amber-950 leading-relaxed font-serif italic" 
-                         data-json-key="purificacao.psicodelicos.conclusion.content"
-                         style={{ 
-                           textShadow: '0 1px 2px rgba(217, 119, 6, 0.1)',
-                           letterSpacing: '0.02em'
-                         }}>
+                      <p className="text-lg md:text-xl text-amber-950 leading-relaxed font-serif italic papiro-text" 
+                         data-json-key="purificacao.psicodelicos.conclusion.content">
                         {texts.psicodelicos.conclusion.content}
                       </p>
                     </div>
@@ -559,7 +528,7 @@ export default function Purificacao() {
                 {/* Botão CTA */}
                 <div className="text-center mt-12">
                   <Link to="/contato">
-                    <Button size="lg" className="bg-linear-to-r from-purple-600 via-fuchsia-500 to-indigo-600 hover:from-purple-700 hover:via-fuchsia-600 hover:to-indigo-700 text-white shadow-2xl text-lg px-10 py-7 rounded-xl font-semibold transform hover:scale-105 transition-all duration-300" style={{ letterSpacing: '0.03em' }} data-json-key="purificacao.psicodelicos.ctaButton">
+                    <Button size="lg" className="bg-linear-to-r from-purple-600 via-fuchsia-500 to-indigo-600 hover:from-purple-700 hover:via-fuchsia-600 hover:to-indigo-700 text-white shadow-2xl text-lg px-10 py-7 rounded-xl font-semibold transform hover:scale-105 transition-all duration-300 cta-button-spacing" data-json-key="purificacao.psicodelicos.ctaButton">
                       <Sparkles className="w-6 h-6 mr-3 animate-pulse" />
                       {texts.psicodelicos.ctaButton}
                     </Button>
@@ -576,18 +545,10 @@ export default function Purificacao() {
         <div className="container mx-auto px-4">
           {/* Caixa Estilo Papiro - Valores e Princípios */}
           <div className="max-w-4xl mx-auto">
-            <div className="relative bg-linear-to-br from-amber-50 via-yellow-50/95 to-amber-100/90 p-12 rounded-lg border-4 border-amber-900/20 shadow-2xl" 
-                 style={{ 
-                   backgroundImage: `linear-gradient(to bottom right, rgba(254, 243, 199, 0.95), rgba(254, 249, 195, 0.98), rgba(251, 191, 36, 0.15))`,
-                   boxShadow: 'inset 0 2px 4px rgba(217, 119, 6, 0.1), 0 8px 24px rgba(0, 0, 0, 0.15)'
-                 }}>
+            <div className="relative papiro-box p-12 rounded-lg border-4 border-amber-900/20 shadow-2xl">
               
               {/* Textura de papiro */}
-              <div className="absolute inset-0 opacity-[0.03] pointer-events-none" 
-                   style={{ 
-                     backgroundImage: `repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(120, 53, 15, 0.4) 2px, rgba(120, 53, 15, 0.4) 3px)`,
-                     mixBlendMode: 'multiply'
-                   }}>
+              <div className="absolute inset-0 opacity-[0.03] pointer-events-none papiro-texture">
               </div>
               
               {/* Bordas decorativas do papiro */}

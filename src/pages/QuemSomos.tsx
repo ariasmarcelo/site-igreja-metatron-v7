@@ -6,6 +6,7 @@ import { Sparkles, Microscope, Heart, HandHelping, ShieldCheck, BookOpen, FileTe
 import { useLocaleTexts } from '@/hooks/useLocaleTexts';
 import { usePageStyles } from '@/hooks/usePageStyles';
 import { SharedFooter } from '@/components/SharedFooter';
+import '@/styles/quemsomos-page.css';
 
 interface QuemSomosTexts {
   header: { title: string; subtitle: string };
@@ -114,15 +115,11 @@ export default function QuemSomos() {
           <div className="text-center mb-12">
             <div className="flex items-center justify-center gap-4 mb-4">
               <div className="relative w-14 h-14">
-                <Shield className="w-14 h-14 text-blue-600" style={{ 
-                  filter: 'drop-shadow(0 4px 8px rgba(37, 99, 235, 0.3))'
-                }} />
+                <Shield className="w-14 h-14 text-blue-600 shield-blue-icon" />
               </div>
               <h2 className="text-4xl font-bold text-gray-800" data-json-key="quemsomos.hermeticos.title">{texts.hermeticos.title}</h2>
               <div className="relative w-14 h-14">
-                <Shield className="w-14 h-14 text-red-600" style={{ 
-                  filter: 'drop-shadow(0 4px 8px rgba(220, 38, 38, 0.3))'
-                }} />
+                <Shield className="w-14 h-14 text-red-600 shield-red-icon" />
               </div>
             </div>
             {/* Pergaminho com texto introdutório */}
@@ -197,15 +194,11 @@ export default function QuemSomos() {
             <CardHeader className="relative z-10">
               <div className="flex items-center justify-center gap-4 mb-4">
                 <div className="relative w-16 h-16">
-                  <Waves className="w-16 h-16 text-amber-600" style={{ 
-                    filter: 'drop-shadow(0 4px 12px rgba(217, 119, 6, 0.4))'
-                  }} />
+                  <Waves className="w-16 h-16 text-amber-600 waves-amber-icon" />
                 </div>
                 <CardTitle className="text-3xl text-amber-800" data-json-key="quemsomos.magia.title">{texts.magia.title}</CardTitle>
                 <div className="relative w-16 h-16">
-                  <Target className="w-16 h-16 text-amber-600" style={{ 
-                    filter: 'drop-shadow(0 4px 12px rgba(217, 119, 6, 0.4))'
-                  }} />
+                  <Target className="w-16 h-16 text-amber-600 target-amber-icon" />
                 </div>
               </div>
             </CardHeader>

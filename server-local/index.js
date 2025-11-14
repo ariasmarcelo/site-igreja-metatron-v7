@@ -156,31 +156,59 @@ function cssPropertiesToString(entries) {
 }
 
 // GET /api/content/:pageId
-app.get('/api/content/:pageId', async (req, res) => {
+// GET /api/content-v2/:pageId (com shared footer)
+app.get('/api/content-v2/:pageId', async (req, res) => {
   try {
     const { pageId } = req.params;
     
-    console.log(`📥 GET /api/content/${pageId}`);
+    console.log(`📥 GET /api/content-v2/${pageId} (+ shared)`);
     
-    // Buscar todas as entries desta página
-    const { data, error } = await supabase
+    // STEP 1: Buscar entries granulares da página
+    const { data: entries, error: entriesError } = await supabase
       .from('text_entries')
       .select('json_key, content')
       .eq('page_id', pageId);
     
-    if (error) throw error;
+    if (entriesError) throw entriesError;
     
-    // Reconstruir objeto aninhado
-    const content = reconstructObject(data, pageId);
+    if (!entries || entries.length === 0) {
+      return res.status(404).json({ 
+        success: false, 
+        message: `Nenhum conteúdo encontrado para: ${pageId}` 
+      });
+    }
     
-    console.log(`✅ ${data.length} entries carregadas`);
+    // STEP 2: Reconstruir objeto da página
+    const pageContent = reconstructObject(entries, pageId);
     
-    res.json({ content });
+    // STEP 3: Buscar footer compartilhado
+    const { data: sharedData, error: sharedError } = await supabase
+      .from('page_contents')
+      .select('content')
+      .is('page_id', null)
+      .single();
+    
+    // STEP 4: Merge footer compartilhado
+    const mergedContent = { ...pageContent };
+    
+    if (!sharedError && sharedData?.content?.footer) {
+      mergedContent.footer = sharedData.content.footer;
+      console.log(`✅ ${entries.length} entries + footer compartilhado`);
+    } else {
+      console.log(`✅ ${entries.length} entries carregadas`);
+    }
+    
+    res.json({ 
+      success: true,
+      content: mergedContent,
+      source: 'text_entries + shared_footer'
+    });
   } catch (error) {
-    console.error('❌ Error fetching content:', error);
+    console.error('❌ Error fetching content-v2:', error);
     res.status(500).json({ 
-      error: 'Erro ao buscar conteúdo do banco de dados', 
-      details: error.message,
+      success: false,
+      message: 'Erro ao buscar conteúdo do banco de dados', 
+      error: error.message,
       pageId: req.params.pageId
     });
   }

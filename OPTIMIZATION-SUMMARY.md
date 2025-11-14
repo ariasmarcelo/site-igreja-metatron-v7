@@ -8,7 +8,7 @@
 - **Impacto:** Redução de overhead no console, performance melhorada em produção
 
 ### 2. **Code Splitting & Lazy Loading**
-- `src/App.tsx` - AdminConsole agora carrega com lazy() + Suspense
+- `src/Navigation.tsx` - AdminConsole agora carrega com lazy() + Suspense
 - **Resultado do Build:**
   - `react-vendor` (44KB) - React core separado
   - `AdminConsole` (73KB) - Lazy loaded
@@ -18,7 +18,7 @@
 - **Impacto:** Bundle inicial menor, carregamento mais rápido para usuários que não acessam admin
 
 ### 3. **Navigation Memoizado**
-- `src/App.tsx` - Componente Navigation envolvido com React.memo()
+- `src/Navigation.tsx` - Componente Navigation envolvido com React.memo()
 - **Impacto:** Evita re-renders desnecessários do menu a cada mudança de estado no App
 
 ### 4. **API Config Flexível**

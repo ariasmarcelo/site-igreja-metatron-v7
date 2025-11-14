@@ -1,0 +1,18 @@
+/* Quem Somos Page Specific Styles */
+
+/* Ícones de escudo com drop-shadow personalizados */
+.shield-blue-icon {
+  filter: drop-shadow(0 4px 8px rgba(37, 99, 235, 0.3));
+}
+
+.shield-red-icon {
+  filter: drop-shadow(0 4px 8px rgba(220, 38, 38, 0.3));
+}
+
+.waves-amber-icon {
+  filter: drop-shadow(0 4px 12px rgba(217, 119, 6, 0.4));
+}
+
+.target-amber-icon {
+  filter: drop-shadow(0 4px 12px rgba(217, 119, 6, 0.4));
+}

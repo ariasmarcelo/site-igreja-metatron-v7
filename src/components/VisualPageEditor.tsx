@@ -1656,7 +1656,7 @@ export default function VisualPageEditor({
           let errorMessage = '✗ Erro ao salvar textos. ';
           
           if (apiError instanceof TypeError && apiError.message.includes('fetch')) {
-            errorMessage += `API não acessível em ${API_ENDPOINTS.saveVisualEdits}. Verifique se o servidor local está rodando (porta 3001).`;
+            errorMessage += `API não acessível em ${API_ENDPOINTS.saveVisualEdits}. Verifique se o servidor Vercel Dev está rodando.`;
           } else if (apiError instanceof Error) {
             errorMessage += apiError.message;
           } else {
@@ -1816,7 +1816,7 @@ export default function VisualPageEditor({
       let errorMessage = '✗ Erro ao salvar: ';
       
       if (error instanceof TypeError && error.message.includes('fetch')) {
-        errorMessage += 'Não foi possível conectar à API. Verifique se o servidor local está rodando na porta 3001.';
+        errorMessage += 'Não foi possível conectar à API. Verifique se o servidor Vercel Dev está rodando.';
       } else if (error instanceof Error) {
         errorMessage += error.message;
       } else {

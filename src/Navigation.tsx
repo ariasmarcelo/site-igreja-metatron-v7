@@ -1,18 +1,23 @@
 import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense, memo } from 'react';
 import { Menu, X } from 'lucide-react';
 import Index from './pages/Index';
 import QuemSomos from './pages/QuemSomos';
 import Tratamentos from './pages/Tratamentos';
 import Purificacao from './pages/Purificacao';
 import Artigos from './pages/Artigos';
+import ArtigoDetalhes from './pages/ArtigoDetalhes';
+import ArtigosCategoria from './pages/ArtigosCategoria';
 import Contato from './pages/Contato';
 import Testemunhos from './pages/Testemunhos';
-import AdminConsole from './pages/AdminConsole';
+import IconGallery from './pages/IconGallery';
 import WhatsAppButton from './components/WhatsAppButton';
 import NotFound from './pages/NotFound';
+
+// Lazy load heavy components (Admin Console)
+const AdminConsole = lazy(() => import('./pages/AdminConsole'));
 
 // Componente para gerenciar scroll: mantém posição no refresh (editor), reseta ao navegar (site)
 const ScrollManager = () => {
@@ -48,7 +53,7 @@ const ScrollManager = () => {
   return null;
 };
 
-const Navigation = () => {
+const NavigationMenu = memo(() => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
 
@@ -162,18 +167,18 @@ const Navigation = () => {
       </div>
     </nav>
   );
-};
+});
 
-const App = () => {
-  // Use basename apenas em produção
-  const basename = import.meta.env.MODE === 'production' ? '/site-igreja-v6' : '/';
+const Navigation = () => {
+  // Vercel serve na raiz
+  const basename = '/';
   
   return (
     <TooltipProvider>
       <Toaster />
       <BrowserRouter basename={basename}>
         <ScrollManager />
-        <Navigation />
+        <NavigationMenu />
 
         {/* Routes */}
         <Routes>
@@ -182,9 +187,19 @@ const App = () => {
           <Route path="/tratamentos" element={<Tratamentos />} />
           <Route path="/purificacao" element={<Purificacao />} />
           <Route path="/artigos" element={<Artigos />} />
+          <Route path="/artigos/categoria/:categoria" element={<ArtigosCategoria />} />
+          <Route path="/artigos/:slug" element={<ArtigoDetalhes />} />
           <Route path="/contato" element={<Contato />} />
           <Route path="/testemunhos" element={<Testemunhos />} />
-          <Route path="/436F6E736F6C45" element={<AdminConsole />} />
+          <Route path="/icones" element={<IconGallery />} />
+          <Route 
+            path="/436F6E736F6C45" 
+            element={
+              <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Carregando Admin Console...</div>}>
+                <AdminConsole />
+              </Suspense>
+            } 
+          />
           <Route path="*" element={<NotFound />} />
         </Routes>
 
@@ -195,4 +210,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default Navigation;
