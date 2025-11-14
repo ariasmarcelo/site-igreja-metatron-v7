@@ -11,62 +11,20 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 // Lock para evitar criação simultânea de cache para mesma página
 const cacheLocks = new Map();
 
-// Helper: Carregar conteúdo do cache local (fallback JSONs)
+// Helper: Carregar conteúdo do cache (1 arquivo JSON por página)
 async function loadFromCache(pageId) {
-  const fallbacksDir = path.join(process.cwd(), 'src', 'locales', 'pt-BR');
+  const fallbacksDir = path.join(process.cwd(), '.cache', 'fallbacks');
+  const cacheFile = path.join(fallbacksDir, `${pageId}.json`);
   
   try {
-    const files = await fs.readdir(fallbacksDir);
-    const pageFiles = files.filter(f => f.startsWith(`${pageId}.`) && f.endsWith('.json'));
-    
-    if (pageFiles.length === 0) {
-      return null; // Cache vazio para esta página
-    }
-    
-    const pageContent = {};
-    
-    for (const file of pageFiles) {
-      const filePath = path.join(fallbacksDir, file);
-      const content = await fs.readFile(filePath, 'utf-8');
-      const value = JSON.parse(content);
-      
-      // Extrair caminho do nome do arquivo: "Index.hero.title.json" → ["hero", "title"]
-      const jsonKey = file.replace(`${pageId}.`, '').replace('.json', '');
-      const keys = jsonKey.split('.');
-      
-      let current = pageContent;
-      for (let i = 0; i < keys.length - 1; i++) {
-        const key = keys[i];
-        const arrayMatch = key.match(/^(.+)\[(\d+)\]$/);
-        
-        if (arrayMatch) {
-          const arrayName = arrayMatch[1];
-          const arrayIndex = parseInt(arrayMatch[2]);
-          if (!current[arrayName]) current[arrayName] = [];
-          if (!current[arrayName][arrayIndex]) current[arrayName][arrayIndex] = {};
-          current = current[arrayName][arrayIndex];
-        } else {
-          if (!current[key]) current[key] = {};
-          current = current[key];
-        }
-      }
-      
-      const lastKey = keys[keys.length - 1];
-      const arrayMatch = lastKey.match(/^(.+)\[(\d+)\]$/);
-      
-      if (arrayMatch) {
-        const arrayName = arrayMatch[1];
-        const arrayIndex = parseInt(arrayMatch[2]);
-        if (!current[arrayName]) current[arrayName] = [];
-        current[arrayName][arrayIndex] = value;
-      } else {
-        current[lastKey] = value;
-      }
-    }
-    
+    const content = await fs.readFile(cacheFile, 'utf-8');
+    const pageContent = JSON.parse(content);
+    console.log(`   ✓ Cache: ${pageId}.json`);
     return pageContent;
   } catch (error) {
-    console.warn(`⚠️  Erro ao carregar cache: ${error.message}`);
+    if (error.code !== 'ENOENT') {
+      console.warn(`   ⚠️  Erro lendo cache: ${error.message}`);
+    }
     return null;
   }
 }
@@ -80,8 +38,13 @@ async function loadFromDBAndCache(pageId) {
     .in('page_id', [pageId, '__shared__']);
 
   if (entriesError) throw entriesError;
-  if (!entries || entries.length === 0) return null;
+  if (!entries || entries.length === 0) {
+    console.log(`   ⚠️  Nenhum registro no DB para ${pageId}`);
+    return null;
+  }
 
+  console.log(`   ✓ Encontrados ${entries.length} registros no DB para ${pageId}`);
+  
   // Reconstruir objeto
   const pageContent = {};
   
@@ -123,12 +86,27 @@ async function loadFromDBAndCache(pageId) {
     }
   });
 
-  // Criar cache em background (não bloquear resposta)
+  // Criar cache APÓS retornar resposta (não bloquear HTTP response)
   // LOCK: evitar múltiplas escritas simultâneas para mesma página
   if (!cacheLocks.has(pageId)) {
-    const lockPromise = createCacheFiles(pageId, pageContent)
-      .catch(err => console.warn(`⚠️  Erro ao criar cache: ${err.message}`))
-      .finally(() => cacheLocks.delete(pageId));
+    console.log(`   📝 Cache será criado após resposta HTTP`);
+    
+    // setImmediate: executa DEPOIS da resposta ser enviada ao cliente
+    const lockPromise = new Promise((resolve) => {
+      setImmediate(async () => {
+        try {
+          console.log(`   🔨 Iniciando criação de cache para ${pageId}...`);
+          await createCacheFiles(pageId, pageContent);
+          console.log(`   ✅ Cache finalizado para ${pageId}`);
+          resolve();
+        } catch (err) {
+          console.error(`   ❌ Erro ao criar cache: ${err.message}`);
+          resolve(); // Resolve mesmo com erro para limpar lock
+        } finally {
+          cacheLocks.delete(pageId);
+        }
+      });
+    });
     
     cacheLocks.set(pageId, lockPromise);
   }
@@ -136,53 +114,20 @@ async function loadFromDBAndCache(pageId) {
   return pageContent;
 }
 
-// Helper: Criar arquivos de cache com controle de concorrência
+// Helper: Criar arquivo de cache (1 arquivo JSON por página)
 async function createCacheFiles(pageId, content) {
-  const fallbacksDir = path.join(process.cwd(), 'src', 'locales', 'pt-BR');
+  const fallbacksDir = path.join(process.cwd(), '.cache', 'fallbacks');
   await fs.mkdir(fallbacksDir, { recursive: true });
-
-  const flatten = (obj, prefix = '') => {
-    let result = {};
-    for (const [key, value] of Object.entries(obj)) {
-      const newKey = prefix ? `${prefix}.${key}` : key;
-      if (value && typeof value === 'object' && !Array.isArray(value)) {
-        Object.assign(result, flatten(value, newKey));
-      } else if (Array.isArray(value)) {
-        value.forEach((item, index) => {
-          if (item && typeof item === 'object') {
-            Object.assign(result, flatten(item, `${newKey}[${index}]`));
-          } else {
-            result[`${newKey}[${index}]`] = item;
-          }
-        });
-      } else {
-        result[newKey] = value;
-      }
-    }
-    return result;
-  };
-
-  const flat = flatten(content);
-  const entries = Object.entries(flat);
   
-  // CORREÇÃO: Escrever em batches de 50 para evitar UV_HANDLE_CLOSING
-  const BATCH_SIZE = 50;
-  for (let i = 0; i < entries.length; i += BATCH_SIZE) {
-    const batch = entries.slice(i, i + BATCH_SIZE);
-    await Promise.all(
-      batch.map(async ([key, value]) => {
-        const fileName = `${pageId}.${key}.json`;
-        const filePath = path.join(fallbacksDir, fileName);
-        try {
-          await fs.writeFile(filePath, JSON.stringify(value, null, 2), 'utf-8');
-        } catch (err) {
-          console.warn(`⚠️  Falha ao escrever ${fileName}: ${err.message}`);
-        }
-      })
-    );
+  const cacheFile = path.join(fallbacksDir, `${pageId}.json`);
+  
+  try {
+    await fs.writeFile(cacheFile, JSON.stringify(content, null, 2), 'utf-8');
+    console.log(`   ✅ Cache salvo: ${pageId}.json`);
+  } catch (err) {
+    console.error(`   ❌ Erro: ${err.message}`);
+    throw err;
   }
-  
-  console.log(`📝 Cache criado: ${entries.length} arquivos para ${pageId}`);
 }
 
 module.exports = async (req, res) => {
@@ -222,7 +167,7 @@ module.exports = async (req, res) => {
       let pageContent = await loadFromCache(pageId);
       
       if (pageContent) {
-        console.log(`✅ Cache hit! Retornando do cache local`);
+        console.log(`✅ [CACHE HIT] Retornando conteúdo do cache local`);
         return res.status(200).json({ 
           success: true, 
           content: pageContent,
@@ -231,7 +176,7 @@ module.exports = async (req, res) => {
       }
 
       // 2. Cache miss → Buscar do DB e criar cache
-      console.log(`⚠️  Cache miss! Buscando do DB...`);
+      console.log(`⚠️  [CACHE MISS] Buscando do DB...`);
       pageContent = await loadFromDBAndCache(pageId);
 
       if (!pageContent) {
@@ -241,7 +186,7 @@ module.exports = async (req, res) => {
         });
       }
 
-      console.log(`✅ DB hit! Cache criado em background`);
+      console.log(`✅ [DB HIT] Retornando conteúdo do DB (cache sendo criado em background)`);
       return res.status(200).json({ 
         success: true, 
         content: pageContent,
