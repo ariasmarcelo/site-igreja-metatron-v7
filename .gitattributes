@@ -1,0 +1,13 @@
+# Força LF para todos os arquivos de texto (evita problemas de encoding UTF-8)
+* text=auto eol=lf
+
+# Arquivos binários
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
