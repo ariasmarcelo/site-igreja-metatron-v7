@@ -2,7 +2,7 @@
 const { createClient } = require('@supabase/supabase-js');
 const { open } = require('lmdb');
 const path = require('path');
-const { refreshCache } = require('./cache-refresh');
+const { refreshAllCache } = require('./cache-refresh');
 
 const supabaseUrl = process.env.VITE_SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_SERVICE_KEY;
@@ -132,7 +132,7 @@ module.exports = async (req, res) => {
     // Operação encapsulada - editor não precisa saber disso
     log(`[SAVE-EDITS] 🔄 Triggering full cache refresh...`);
     const refreshStartTime = Date.now();
-    const cacheRefreshResult = await refreshCache();
+    const cacheRefreshResult = await refreshAllCache();
     log(`[SAVE-EDITS] ✨ Cache refresh complete: cleared=${cacheRefreshResult.cleared}, cached=${cacheRefreshResult.cached}/${cacheRefreshResult.total} (${Date.now() - refreshStartTime}ms)`);
     
     const totalTime = Date.now() - startTime;

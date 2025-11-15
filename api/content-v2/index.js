@@ -40,14 +40,14 @@ function loadPathsFromCache(paths) {
 
 // Load all paths for a page from cache
 // Input: "purificacao"
-// Save to cache
+// PRIVATE: Save flat object to cache
 // Input: {"purificacao.header": "text", "purificacao.intro.title": "text", ...}
-async function saveToCache(entries) {
+async function _saveFlatObjectToCache(entries) {
   const startTime = Date.now();
   let connection = null;
   
   try {
-    log(`[CACHE-WRITE] 💾 START saving ${Object.keys(entries).length} entries to cache`);
+    log(`[CACHE-WRITE] 💾 START saving ${Object.keys(entries).length} flat entries to cache`);
     
     connection = await acquire();
     const db = connection.db;
@@ -113,9 +113,9 @@ async function loadPageFromCache(pageId) {
   }
 }
 
-// Save DB entries to cache (from Supabase format)
+// PRIVATE: Save Supabase entries to cache (converts format)
 // Input: [{ json_key: "purificacao.header", content: { "pt-BR": "text" } }, ...]
-async function saveDBEntriesToCache(entries) {
+async function _saveSupabaseEntriesToCache(entries) {
   const startTime = Date.now();
   let connection = null;
   
@@ -177,7 +177,7 @@ async function loadPathsFromDB(paths) {
     log(`[DB] Found ${entries.length} entries`);
     
     // Save to cache
-    await saveDBEntriesToCache(entries);
+    await _saveSupabaseEntriesToCache(entries);
     
     // Build results
     const results = {};
@@ -214,7 +214,7 @@ async function loadPageFromDB(pageId) {
     
     // Save to cache
     log(`[DB-READ] 💾 Saving to cache...`);
-    await saveDBEntriesToCache(entries);
+    await _saveSupabaseEntriesToCache(entries);
     
     // Build results
     const results = {};

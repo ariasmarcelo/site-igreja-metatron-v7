@@ -10,12 +10,13 @@ function log(msg) {
   console.log(`[${new Date().toISOString()}] [CACHE-UPDATE] ${msg}`);
 }
 
-async function updateCacheFromDB(pageId) {
+// Update cache for a single page from database
+async function updateSinglePageCache(pageId) {
   const startTime = Date.now();
   let connection = null;
   
   try {
-    log(`\n[BACKGROUND-UPDATE] ━━━ START for ${pageId} ━━━`);
+    log(`\n[BACKGROUND-UPDATE] ━━━ START updating cache for: ${pageId} ━━━`);
     log(`[BACKGROUND-UPDATE] 🗄️  Fetching from DB...`);
     
     const { data: entries, error } = await supabase
@@ -84,7 +85,8 @@ module.exports = async (req, res) => {
     
     // Continua trabalhando em background
     log(`[UPDATE-CACHE-API] 🔄 Starting background update...`);
-    updateCacheFromDB(pageId).then(result => {
+    // Background update
+    updateSinglePageCache(pageId).then(result => {
       log(`[UPDATE-CACHE-API] 🎉 Background update completed: ${JSON.stringify(result)}`);
     }).catch(err => {
       log(`[UPDATE-CACHE-API] ❌ Background update failed: ${err.message}`);

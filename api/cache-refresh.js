@@ -110,24 +110,28 @@ async function loadPageDataFromDB(pageId) {
   }
 }
 
-// Salvar no cache LMDB
-async function saveToCache(pageId, content) {
+// PRIVATE: Save Supabase entries to cache (granular)
+async function _saveSupabaseEntriesToCache(entries) {
   let connection = null;
   
   try {
     connection = await acquire();
     const db = connection.db;
-    const cacheEntry = {
-      data: content,
-      invalidatedAt: null
-    };
     
-    log(`Caching pageId: ${pageId}, size: ${JSON.stringify(content).length}b`);
-    db.put(pageId, cacheEntry);
+    for (const entry of entries) {
+      const cacheKey = entry.json_key;
+      const cacheEntry = {
+        data: entry.content['pt-BR'],
+        invalidatedAt: null
+      };
+      db.put(cacheKey, cacheEntry);
+    }
     
+    await db.flushed;
+    log(`✅ Cached ${entries.length} granular entries`);
     return true;
   } catch (error) {
-    log(`Error saving to cache: ${error.message}`);
+    log(`❌ Error saving to cache: ${error.message}`);
     return false;
   } finally {
     if (connection) {
@@ -177,16 +181,23 @@ async function warmupAllCache() {
     
     for (const pageId of pageIds) {
       try {
-        const pageData = await loadPageDataFromDB(pageId);
-        const saved = await saveToCache(pageId, pageData);
+        // Fetch entries directly from DB (don't reconstruct object)
+        const { data: entries, error } = await supabase
+          .from('text_entries')
+          .select('json_key, content')
+          .eq('page_id', pageId);
+        
+        if (error) throw error;
+        
+        const saved = await _saveSupabaseEntriesToCache(entries);
         
         results.push({
           pageId,
           success: saved,
-          keysCount: Object.keys(pageData).length
+          entriesCount: entries.length
         });
         
-        log(`✅ Cached ${pageId}: ${Object.keys(pageData).length} keys`);
+        log(`✅ Cached ${pageId}: ${entries.length} entries`);
       } catch (error) {
         log(`❌ Failed to cache ${pageId}: ${error.message}`);
         results.push({
@@ -206,8 +217,8 @@ async function warmupAllCache() {
   }
 }
 
-// FUNÇÃO PRINCIPAL: Limpar e pré-aquecer cache (operação completa)
-async function refreshCache() {
+// PUBLIC: Clear and refresh entire cache (full operation)
+async function refreshAllCache() {
   try {
     log(`🔄 Starting full cache refresh...`);
     
@@ -260,7 +271,7 @@ module.exports = async (req, res) => {
     log(`Cache refresh requested (Method: ${req.method})`);
     
     // Executar operação completa: limpar + pré-aquecer
-    const result = await refreshCache();
+    const result = await refreshAllCache();
     
     res.status(200).json({
       success: true,
@@ -285,4 +296,4 @@ module.exports = async (req, res) => {
 };
 
 // Exportar também a função para uso interno (chamada por outras APIs)
-module.exports.refreshCache = refreshCache;
+module.exports.refreshAllCache = refreshAllCache;
