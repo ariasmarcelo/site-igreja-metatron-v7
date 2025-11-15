@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Mail, Clock, MessageCircle, ShieldCheck, Phone } from 'lucide-react';
 import { usePageContent } from '@/hooks/useContent';
 import { usePageStyles } from '@/hooks/usePageStyles';
+import { PageLoading } from '@/components/PageLoading';
 
 interface ContatoTexts {
   header: { title: string; subtitle: string };
@@ -12,7 +13,7 @@ interface ContatoTexts {
 
 export default function Contato() {
   usePageStyles('contato');
-  const { data: texts } = usePageContent<ContatoTexts>('contato');
+  const { data: texts, loading } = usePageContent<ContatoTexts>('contato');
   const handleWhatsAppClick = () => {
     const phoneNumber = '5511949555555';
     const message = encodeURIComponent('Olá! Quero saber mais sobre *O Trabalho de Resgate*!');
