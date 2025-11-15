@@ -319,15 +319,38 @@ module.exports = async (req, res) => {
       const results = {};
       const sources = {};
       
-      // Add __shared__ to the list of pages to load
-      const allPageIds = ['__shared__', ...pageIds];
+      // Load __shared__ ONCE for all requests
+      log(`\n[REQUEST] ━━━ Processing __shared__ (footer) ━━━`);
+      let sharedEntries = loadPageFromCache('__shared__');
       
-      for (const pageId of allPageIds) {
+      if (sharedEntries) {
+        log(`[STRATEGY] ✅ Cache HIT for __shared__`);
+        results['__shared__'] = reconstructObject(sharedEntries, '__shared__');
+        sources['__shared__'] = 'cache';
+        
+        // Trigger background revalidation ONCE
+        log(`[BACKGROUND] 🔄 Triggering revalidation for __shared__`);
+        fetch(`${process.env.VERCEL_URL || 'http://localhost:3000'}/api/update-cache`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ pageId: '__shared__' })
+        }).catch(err => log(`[BACKGROUND] ❌ Revalidation failed for __shared__: ${err.message}`));
+      } else {
+        log(`[STRATEGY] ❌ Cache MISS for __shared__ - loading from DB`);
+        sharedEntries = await loadPageFromDB('__shared__');
+        
+        if (sharedEntries && Object.keys(sharedEntries).length > 0) {
+          results['__shared__'] = reconstructObject(sharedEntries, '__shared__');
+          sources['__shared__'] = 'db';
+        }
+      }
+      
+      // Process requested pages
+      for (const pageId of pageIds) {
         log(`\n[REQUEST] ━━━ Processing page: ${pageId} ━━━`);
         
         // Try cache first
         let flatEntries = loadPageFromCache(pageId);
-        let source = 'cache';
         
         if (flatEntries) {
           // Cache HIT: return immediately and revalidate in background
@@ -347,12 +370,11 @@ module.exports = async (req, res) => {
           // Cache MISS: load from DB and save to cache
           log(`[STRATEGY] ❌ Cache MISS for ${pageId} - loading from DB`);
           flatEntries = await loadPageFromDB(pageId);
-          source = 'db';
           
           if (flatEntries && Object.keys(flatEntries).length > 0) {
             log(`[STRATEGY] ✅ Successfully loaded ${pageId} from DB`);
             results[pageId] = reconstructObject(flatEntries, pageId);
-            sources[pageId] = source;
+            sources[pageId] = 'db';
           } else {
             log(`[STRATEGY] ⚠️  No data found for ${pageId}`);
             results[pageId] = null;
