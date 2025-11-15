@@ -314,35 +314,10 @@ module.exports = async (req, res) => {
       const results = {};
       const sources = {};
       
-      // Load shared content first (footer, etc.)
-      let sharedEntries = loadPageFromCache('__shared__');
+      // Add __shared__ to the list of pages to load
+      const allPageIds = ['__shared__', ...pageIds];
       
-      if (sharedEntries) {
-        // Cache HIT: return and revalidate in background
-        log(`[CACHE-HIT] __shared__ - returning cached data and revalidating in background`);
-        results['__shared__'] = reconstructObject(sharedEntries, '__shared__');
-        sources['__shared__'] = 'cache';
-        
-        // Trigger background revalidation
-        fetch(`${process.env.VERCEL_URL || 'http://localhost:3000'}/api/update-cache`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ pageId: '__shared__' })
-        }).catch(err => log(`[BACKGROUND] Revalidation failed for __shared__: ${err.message}`));
-        
-      } else {
-        // Cache MISS: load from DB
-        log(`[CACHE-MISS] __shared__ - loading from DB`);
-        sharedEntries = await loadPageFromDB('__shared__');
-        
-        if (sharedEntries && Object.keys(sharedEntries).length > 0) {
-          results['__shared__'] = reconstructObject(sharedEntries, '__shared__');
-          sources['__shared__'] = 'db';
-          log(`[SHARED] Loaded ${Object.keys(sharedEntries).length} shared entries from DB`);
-        }
-      }
-      
-      for (const pageId of pageIds) {
+      for (const pageId of allPageIds) {
         // Try cache first
         let flatEntries = loadPageFromCache(pageId);
         let source = 'cache';
