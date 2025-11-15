@@ -71,33 +71,53 @@ export function useContent<T = Record<string, unknown>>(
 
       const apiBaseUrl = import.meta.env.VITE_API_URL || '';
       const normalizedPages = pages.map(p => p.toLowerCase());
-      const url = `${apiBaseUrl}/api/content-v2?pages=${normalizedPages.join(',')}`;
 
       try {
         const loadStart = performance.now();
-        const response = await fetch(url);
+        
+        // Carregar todas as páginas em paralelo
+        const responses = await Promise.all(
+          normalizedPages.map(pageId => 
+            fetch(`${apiBaseUrl}/api/content/${pageId}`)
+          )
+        );
 
-        if (!response.ok) {
-          throw new Error(`API returned status ${response.status}`);
+        // Consolidar resultados no formato esperado { pageId: content, ... }
+        const pagesData: Record<string, unknown> = {};
+        const sources: Record<string, string> = {};
+
+        for (let i = 0; i < normalizedPages.length; i++) {
+          const response = responses[i];
+          const pageId = normalizedPages[i];
+
+          if (!response.ok) {
+            throw new Error(`API returned status ${response.status} for page ${pageId}`);
+          }
+
+          const result = await response.json();
+          
+          if (result.success && result.content) {
+            pagesData[pageId] = result.content;
+            sources[pageId] = result.source || 'db';
+          }
         }
 
-        const result = await response.json();
         const loadEnd = performance.now();
         const duration = Math.round(loadEnd - loadStart);
 
         if (debug) {
           console.log(`[${new Date().toISOString()}] [useContent] Loaded pages=${normalizedPages.join(',')}, duration=${duration}ms`);
-          console.log(`[${new Date().toISOString()}] [useContent] Sources:`, result.sources);
+          console.log(`[${new Date().toISOString()}] [useContent] Sources:`, sources);
         }
 
-        if (result.success && result.pages) {
-          setData(result.pages as T);
+        if (Object.keys(pagesData).length > 0) {
+          setData(pagesData as T);
 
           // Calcular debug info
           if (debug) {
-            const sources = Object.values(result.sources || {});
-            const cacheHits = sources.filter(s => s === 'cache').length;
-            const dbHits = sources.filter(s => s === 'db').length;
+            const sourcesArray = Object.values(sources);
+            const cacheHits = sourcesArray.filter(s => s === 'cache').length;
+            const dbHits = sourcesArray.filter(s => s === 'supabase-db' || s === 'db').length;
             
             setDebugInfo({
               cacheHit: cacheHits > 0,
@@ -106,7 +126,7 @@ export function useContent<T = Record<string, unknown>>(
             });
           }
         } else {
-          throw new Error(result.message || 'Failed to load content');
+          throw new Error('Failed to load content');
         }
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : 'Unknown error';

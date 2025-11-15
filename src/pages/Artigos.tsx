@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { BookOpen, Calendar, Clock, Tag, User, Sparkles, Book, Heart, Infinity as InfinityIcon, Lightbulb, Scroll, Microscope, Atom } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { useLocaleTexts } from '@/hooks/useLocaleTexts';
+import { usePageContent } from '@/hooks/useContent';
 import { usePageStyles } from '@/hooks/usePageStyles';
 
 import { supabase } from '@/lib/supabase';
@@ -36,7 +36,7 @@ interface BlogPost {
 
 export default function Artigos() {
   usePageStyles('artigos');
-  const { texts, loading: textsLoading, error: textsError } = useLocaleTexts<ArtigosTexts>('artigos');
+  const { data: texts, loading: textsLoading, error: textsError } = usePageContent<ArtigosTexts>('artigos');
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('esoterica');

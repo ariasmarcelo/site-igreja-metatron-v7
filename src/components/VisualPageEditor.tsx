@@ -41,7 +41,7 @@ const VisualPageEditor = ({ pageId, pageComponent: PageComponent }: VisualPageEd
     console.log(`🔄 Refreshing ${items.length} elements from database...`);
     
     try {
-      const response = await fetch(`/api/content-v2?pages=${pageId}`);
+      const response = await fetch(`/api/content/${pageId}`);
       
       if (!response.ok) {
         throw new Error(`Failed to fetch: ${response.status}`);
@@ -49,11 +49,11 @@ const VisualPageEditor = ({ pageId, pageComponent: PageComponent }: VisualPageEd
       
       const data = await response.json();
       
-      if (!data.success || !data.pages?.[pageId]) {
+      if (!data.success || !data.content) {
         throw new Error('Invalid response format');
       }
       
-      const pageData = data.pages[pageId];
+      const pageData = data.content;
       
       console.log('📦 Page data received:', pageData);
       
@@ -673,10 +673,10 @@ const VisualPageEditor = ({ pageId, pageComponent: PageComponent }: VisualPageEd
       console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
       console.log('📤 Sending payload:', { pageId, edits });
 
-      const response = await fetch('/api/save-visual-edits', {
-        method: 'POST',
+      const response = await fetch(`/api/content/${pageId}`, {
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ pageId, edits })
+        body: JSON.stringify({ edits })
       });
 
       if (!response.ok) {

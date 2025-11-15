@@ -20,11 +20,41 @@ const apiPlugin = () => ({
 
       console.log('[API-DEV] 🔍 Intercepted:', req.url);
       const urlParts = req.url.split('?');
+      const urlPath = urlParts[0];
       
-      // Check for index.js first, then .js directly
-      let apiPath = path.join(__dirname, urlParts[0], 'index.js');
+      // Parse query string first
+      const query: Record<string, string> = {};
+      if (urlParts[1]) {
+        const params = new URLSearchParams(urlParts[1]);
+        params.forEach((value, key) => {
+          query[key] = value;
+        });
+      }
+      
+      // Try to find API file: check index.js, then .js, then dynamic routes like [pageId].js
+      let apiPath = path.join(__dirname, urlPath, 'index.js');
+      
       if (!fs.existsSync(apiPath)) {
-        apiPath = path.join(__dirname, urlParts[0] + '.js');
+        apiPath = path.join(__dirname, urlPath + '.js');
+      }
+      
+      // If still not found, check for dynamic routes (e.g., /api/content/quemsomos -> /api/content/[pageId].js)
+      if (!fs.existsSync(apiPath)) {
+        const pathSegments = urlPath.split('/').filter(Boolean);
+        
+        // For /api/content/quemsomos, try /api/content/[pageId].js
+        if (pathSegments.length >= 2) {
+          const basePath = pathSegments.slice(0, -1).join('/');
+          const paramValue = pathSegments[pathSegments.length - 1];
+          const dynamicPath = path.join(__dirname, basePath, '[pageId].js');
+          
+          if (fs.existsSync(dynamicPath)) {
+            apiPath = dynamicPath;
+            // Add dynamic param to query
+            query.pageId = paramValue;
+            console.log('[API-DEV] 📌 Found dynamic route:', apiPath, '(pageId=' + paramValue + ')');
+          }
+        }
       }
       
       console.log('[API-DEV] 📂 Looking for:', apiPath);
@@ -32,15 +62,6 @@ const apiPlugin = () => ({
       if (!fs.existsSync(apiPath)) {
         console.log('[API-DEV] ⚠️ File not found');
         return next();
-      }
-
-      // Parse query string
-      const query: Record<string, string> = {};
-      if (urlParts[1]) {
-        const params = new URLSearchParams(urlParts[1]);
-        params.forEach((value, key) => {
-          query[key] = value;
-        });
       }
 
       // Parse POST body if present

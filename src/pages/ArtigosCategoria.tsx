@@ -1,7 +1,7 @@
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { ArrowLeft, Calendar, Clock } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { useLocaleTexts } from '@/hooks/useLocaleTexts';
+import { usePageContent } from '@/hooks/useContent';
 import PageLoader from '@/components/PageLoader';
 
 interface ArtigosTexts {
@@ -12,7 +12,7 @@ interface ArtigosTexts {
 
 export default function ArtigosCategoria() {
   const { categoria } = useParams<{ categoria: string }>();
-  const { texts, loading: textsLoading } = useLocaleTexts<ArtigosTexts>('artigos');
+  const { data: texts, loading: textsLoading } = usePageContent<ArtigosTexts>('artigos');
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);

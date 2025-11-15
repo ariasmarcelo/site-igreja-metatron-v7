@@ -10,7 +10,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 config({ path: join(__dirname, '../.env.local') });
 
-const PROD_URL = 'https://shadcn-4tfk8v1ph-marcelo-arias-projects-172831c7.vercel.app';
+const PROD_URL = 'https://shadcn-ergl2gkcx-marcelo-arias-projects-172831c7.vercel.app';
 const BYPASS_SECRET = process.env.VERCEL_AUTOMATION_BYPASS_SECRET;
 
 const ALL_PAGES = [
@@ -32,7 +32,7 @@ async function fetchPageWithTiming(pageId) {
     // Build URL with bypass token if available
     let url = `${PROD_URL}/api/content-v2?pages=${pageId}`;
     if (BYPASS_SECRET) {
-      url += `&x-vercel-protection-bypass=${BYPASS_SECRET}&x-vercel-set-bypass-cookie=true`;
+      url += `&x-vercel-protection-bypass=${BYPASS_SECRET}`;
     }
     
     const response = await fetch(url);
