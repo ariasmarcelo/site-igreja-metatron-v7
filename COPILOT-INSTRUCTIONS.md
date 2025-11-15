@@ -156,7 +156,7 @@ docs/                   # Documentação técnica
 ```
 
 ### Scripts de Automação ###
-**Uso:** `.\start-dev.ps1` (inicia Vercel Dev) | `.\stop-dev.ps1` (para servidor)
+**Uso:** `(caminhoRelativo)\start-dev.ps1` (inicia Vercel Dev) | `(caminhoRelativo)\stop-dev.ps1` (para servidor)
 
 ### Convenções de Código ###
 **JSON Keys:** `pagina.secao.campo` ou `secao.campo` (compartilhado)  
