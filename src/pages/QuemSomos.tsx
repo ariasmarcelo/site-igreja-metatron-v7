@@ -6,6 +6,7 @@ import { Sparkles, Microscope, Heart, HandHelping, ShieldCheck, BookOpen, FileTe
 import { usePageContent } from '@/hooks/useContent';
 import { usePageStyles } from '@/hooks/usePageStyles';
 import { SharedFooter } from '@/components/SharedFooter';
+import { PageLoading, PageError } from '@/components/PageLoading';
 import '@/styles/layouts/pages/quemsomos.css';
 
 interface QuemSomosTexts {
@@ -47,8 +48,28 @@ export default function QuemSomos() {
   usePageStyles('quemsomos');
   const { data: texts, loading, error } = usePageContent<QuemSomosTexts>('quemsomos');
 
-  if (loading) return <div className="flex items-center justify-center min-h-screen">Carregando...</div>;
-  if (error) return <div className="flex items-center justify-center min-h-screen text-red-500">Erro: {error}</div>;
+  if (loading) {
+    return (
+      <PageLoading
+        icon={BookOpen}
+        text="Carregando sobre nós..."
+        bgColor="bg-gradient-to-b from-violet-50 to-purple-50"
+        iconColor="text-violet-600"
+        textColor="text-violet-900"
+      />
+    );
+  }
+  
+  if (error) {
+    return (
+      <PageError
+        message={error}
+        bgColor="bg-gradient-to-b from-red-50 to-rose-50"
+        textColor="text-red-700"
+      />
+    );
+  }
+  
   if (!texts) return <div className="flex items-center justify-center min-h-screen">Sem dados</div>;
   
   return (

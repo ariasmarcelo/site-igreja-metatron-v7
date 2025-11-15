@@ -19,7 +19,17 @@ export default function Contato() {
     window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
   };
 
-  if (!texts) return null;
+    if (loading || !texts) {
+    return (
+      <PageLoading
+        icon={Mail}
+        text="Carregando contato..."
+        bgColor="bg-gradient-to-b from-teal-50 to-cyan-50"
+        iconColor="text-teal-600"
+        textColor="text-teal-900"
+      />
+    );
+  }
 
   return (
     <div className="min-h-screen bg-linear-to-b from-teal-50 via-emerald-50 to-cyan-50">

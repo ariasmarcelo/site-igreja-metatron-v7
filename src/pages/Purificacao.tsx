@@ -4,6 +4,7 @@ import { Sparkles, Sun, Star, Crown, Compass, Heart, Infinity as InfinityIcon, L
 import { Link } from 'react-router-dom';
 import { useState, lazy, Suspense } from 'react';
 import { usePageContent } from '@/hooks/useContent';
+import { PageLoading } from '@/components/PageLoading';
 
 const TestimonialsCarousel = lazy(() => import('@/components/TestimonialsCarousel'));
 import { SharedFooter } from '@/components/SharedFooter';
@@ -23,7 +24,15 @@ export default function Purificacao() {
 
   if (loading || !texts) {
     console.log(`[${new Date().toISOString()}] [PURIFICACAO] Waiting for data: loading=${loading}`);
-    return <div className="flex items-center justify-center min-h-screen">Carregando...</div>;
+    return (
+      <PageLoading
+        icon={Sparkles}
+        text="Carregando purificação..."
+        bgColor="bg-gradient-to-b from-amber-50 to-yellow-50"
+        iconColor="text-amber-600"
+        textColor="text-amber-900"
+      />
+    );
   }
   
   // Extract data from page object (with type assertions for nested access)

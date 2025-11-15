@@ -24,7 +24,18 @@ export default function Tratamentos() {
   usePageStyles('tratamentos');
   const { data: texts, loading, error } = usePageContent<TratamentosTexts>('tratamentos');
   
-  if (loading || !texts) return <div className="flex items-center justify-center min-h-screen">Carregando...</div>;
+  if (loading || !texts) {
+    console.log(`[${new Date().toISOString()}] [TRATAMENTOS] Waiting for data: loading=${loading}`);
+    return (
+      <PageLoading
+        icon={Stethoscope}
+        text="Carregando tratamentos..."
+        bgColor="bg-gradient-to-b from-cyan-50 to-blue-50"
+        iconColor="text-cyan-600"
+        textColor="text-cyan-900"
+      />
+    );
+  }
 
   const icons = [
     <Users className="w-12 h-12" />,

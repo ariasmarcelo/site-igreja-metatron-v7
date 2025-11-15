@@ -3,6 +3,7 @@ import { SharedFooter } from '@/components/SharedFooter';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { Heart, Star, Sun } from 'lucide-react';
+import { PageLoading, PageError } from '@/components/PageLoading';
 
 // Adicionar keyframe para batimento cardíaco
 const heartbeatStyle = `
@@ -30,20 +31,27 @@ interface TestemunhosTexts {
 const Testemunhos = () => {
   const { data: texts, loading, error } = usePageContent<TestemunhosTexts>('testemunhos');
 
-  if (loading) return (
-    <div className="min-h-screen bg-rose-50 flex items-center justify-center">
-      <div className="flex items-center gap-3">
-        <Heart className="w-6 h-6 text-rose-600 animate-pulse" />
-        <span className="text-rose-900 text-xl">Carregando testemunhos...</span>
-      </div>
-    </div>
-  );
+  if (loading) {
+    return (
+      <PageLoading
+        icon={Heart}
+        text="Carregando testemunhos..."
+        bgColor="bg-gradient-to-b from-rose-50 to-pink-100"
+        iconColor="text-rose-600"
+        textColor="text-rose-900"
+      />
+    );
+  }
   
-  if (error) return (
-    <div className="min-h-screen bg-rose-50 flex items-center justify-center">
-      <div className="text-rose-900 font-semibold">{error}</div>
-    </div>
-  );
+  if (error) {
+    return (
+      <PageError
+        message={error}
+        bgColor="bg-gradient-to-b from-red-50 to-rose-50"
+        textColor="text-red-700"
+      />
+    );
+  }
   
   if (!texts) return null;
 

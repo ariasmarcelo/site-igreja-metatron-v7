@@ -5,6 +5,7 @@ import { Heart, Sun, Users, Brain, Ghost, Database, Compass, ArrowLeftRight, Arr
 import { lazy, Suspense } from 'react';
 import { usePageContent } from '@/hooks/useContent';
 import { usePageStyles } from '@/hooks/usePageStyles';
+import { PageLoading } from '@/components/PageLoading';
 
 const TestimonialsCarousel = lazy(() => import('@/components/TestimonialsCarousel'));
 
@@ -21,12 +22,13 @@ export default function Index() {
   // Aguardar carregamento
   if (!texts || !stylesLoaded || loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-stone-50">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#CFAF5A] mx-auto mb-4"></div>
-          <p className="text-stone-700">Carregando...</p>
-        </div>
-      </div>
+      <PageLoading
+        icon={Sun}
+        text="Carregando página inicial..."
+        bgColor="bg-gradient-to-b from-stone-50 to-stone-100"
+        iconColor="text-amber-500"
+        textColor="text-stone-800"
+      />
     );
   }
 
