@@ -34,6 +34,9 @@ template_config.json
 todo.md
 package-lock.json
 components.json
+.cache/
+.ids-assigned
+tailwindcss-*
 
 # Backups (local only, don't commit)
 backups/supabase/*
