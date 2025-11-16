@@ -1,0 +1,68 @@
+name: Backup Diário do Supabase
+
+on:
+  schedule:
+    # Executa diariamente às 3:00 AM UTC (00:00 AM Brasília)
+    - cron: '0 3 * * *'
+  
+  # Permite execução manual via GitHub Actions UI
+  workflow_dispatch:
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout do repositório
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Buscar todo o histórico para branches
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: 🔧 Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: 📦 Instalar pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      
+      - name: 📚 Instalar dependências
+        run: |
+          cd workspace/shadcn-ui
+          pnpm install --frozen-lockfile
+      
+      - name: ⚙️ Configurar variáveis de ambiente
+        run: |
+          cd workspace/shadcn-ui
+          echo "VITE_SUPABASE_URL=${{ secrets.VITE_SUPABASE_URL }}" >> .env.local
+          echo "SUPABASE_SERVICE_KEY=${{ secrets.SUPABASE_SERVICE_KEY }}" >> .env.local
+      
+      - name: 🗄️ Executar backup
+        run: |
+          cd workspace/shadcn-ui
+          node scripts/backup-and-commit.js --verbose
+        continue-on-error: false
+      
+      - name: 📊 Verificar tamanho do backup
+        run: |
+          cd workspace/shadcn-ui
+          echo "📦 Tamanho total dos backups:"
+          du -sh backups/ || echo "Nenhum backup encontrado"
+      
+      - name: 🎉 Resumo
+        if: success()
+        run: |
+          echo "✅ Backup concluído com sucesso!"
+          echo "📅 Data: $(date)"
+          echo "🌿 Branch: backups/database"
+          echo "📍 Para visualizar: git checkout backups/database"
+      
+      - name: ⚠️ Notificar falha
+        if: failure()
+        run: |
+          echo "❌ Backup falhou!"
+          echo "📅 Data: $(date)"
+          echo "🔍 Verifique os logs acima para detalhes"
