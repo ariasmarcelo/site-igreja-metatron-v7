@@ -36,6 +36,14 @@
 | **docs/ARTIGOS.md** | Sistema de blog e artigos | `./docs/` |
 | **docs/API-SERVERLESS-CONFIG.md** | Configuração das APIs serverless | `./docs/` |
 
+### 🗄️ Sistema de Backup (CRÍTICO)
+
+| Documento | Descrição | Localização |
+|-----------|-----------|-------------|
+| **docs/BACKUP-SYSTEM.md** | ⚠️ **DOCUMENTAÇÃO COMPLETA DO SISTEMA DE BACKUP** | `./docs/` |
+| **docs/BACKUP-QUICK-GUIDE.md** | Guia rápido de comandos | `./docs/` |
+| **docs/BACKUP-HOW-IT-WORKS.md** | Como funciona e como configurar | `./docs/` |
+
 ---
 
 ## 🗄️ Documentação Arquivada
