@@ -1,0 +1,94 @@
+/* Admin Utilities - CSS for administrative HTML pages */
+
+/* Terminal-style admin pages */
+.admin-terminal-body {
+  font-family: monospace;
+  padding: 20px;
+  background: #1a1a1a;
+  color: #0f0;
+}
+
+.admin-terminal-title {
+  color: #0f0;
+}
+
+.admin-terminal-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  background: #333;
+  color: #0f0;
+  border: 1px solid #0f0;
+  border-radius: 4px;
+  font-family: monospace;
+}
+
+.admin-terminal-button:hover {
+  background: #0f0;
+  color: #000;
+}
+
+.admin-terminal-output {
+  margin-top: 20px;
+  background: #000;
+  padding: 10px;
+  border: 1px solid #0f0;
+  border-radius: 4px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.admin-terminal-link {
+  color: #0ff;
+  text-decoration: underline;
+}
+
+.admin-terminal-link:hover {
+  color: #fff;
+}
+
+/* Cache cleaner specific */
+.cache-cleaner-body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+}
+
+.cache-cleaner-container {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.cache-cleaner-title {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.cache-cleaner-button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.cache-cleaner-button:hover {
+  transform: scale(1.05);
+}
+
+.cache-cleaner-result {
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 5px;
+  background: #f0f0f0;
+  color: #333;
+}

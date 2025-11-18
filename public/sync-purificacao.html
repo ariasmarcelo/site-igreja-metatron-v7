@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sync Purificação → Supabase</title>
+    <link rel="stylesheet" href="/admin-utils.css">
 </head>
-<body style="font-family: monospace; padding: 20px; background: #1a1a1a; color: #0f0;">
-    <h1>🔄 Sincronizar Purificacao.json → Supabase (via API Produção)</h1>
-    <button id="syncBtn" style="padding: 10px 20px; font-size: 16px; cursor: pointer;">
+<body class="admin-terminal-body">
+    <h1 class="admin-terminal-title">🔄 Sincronizar Purificacao.json → Supabase (via API Produção)</h1>
+    <button id="syncBtn" class="admin-terminal-button">
         ▶️ SINCRONIZAR AGORA
     </button>
-    <pre id="output" style="margin-top: 20px; background: #000; padding: 10px; border: 1px solid #0f0;"></pre>
+    <pre id="output" class="admin-terminal-output"></pre>
 
     <script type="module">
         const API_URL = 'https://shadcn-ui-seven-olive.vercel.app';

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Atualizar Supabase - Purificação</title>
+    <link rel="stylesheet" href="/admin-utils.css">
     <script type="module">
         import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
         
@@ -46,11 +47,11 @@
         }
     </script>
 </head>
-<body style="font-family: monospace; padding: 20px; background: #1a1a1a; color: #0f0;">
-    <h1>🔧 Atualizar Supabase com intro1/intro2</h1>
-    <button onclick="updateSupabase()" style="padding: 10px 20px; font-size: 16px; cursor: pointer;">
+<body class="admin-terminal-body">
+    <h1 class="admin-terminal-title">🔧 Atualizar Supabase com intro1/intro2</h1>
+    <button onclick="updateSupabase()" class="admin-terminal-button">
         ▶️ EXECUTAR ATUALIZAÇÃO
     </button>
-    <pre id="output" style="margin-top: 20px; background: #000; padding: 10px; border: 1px solid #0f0;"></pre>
+    <pre id="output" class="admin-terminal-output"></pre>
 </body>
 </html>
