@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { useState, useEffect, lazy, Suspense, memo } from 'react';
 import { Menu, X } from 'lucide-react';
+import { navigationItems } from './config/navigation';
 import Index from './pages/Index';
 import QuemSomos from './pages/QuemSomos';
 import Tratamentos from './pages/Tratamentos';
@@ -94,15 +95,7 @@ const NavigationMenu = memo(() => {
     return null;
   }
 
-  const navigation = [
-    { name: 'Home', href: '/' },
-    { name: 'Quem Somos', href: '/quemsomos' },
-    { name: 'Purificação e Ascensão', href: '/purificacao' },
-    { name: 'Tratamentos Associados', href: '/tratamentos' },
-    { name: 'Testemunhos', href: '/testemunhos' },
-    { name: 'Artigos', href: '/artigos' },
-    { name: 'Contato', href: '/contato' },
-  ];
+  const navigation = navigationItems;
 
   const isActive = (path: string) => {
     return location.pathname === path;

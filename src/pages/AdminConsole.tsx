@@ -13,17 +13,26 @@ import Purificacao from './Purificacao';
 import Artigos from './Artigos';
 import Testemunhos from './Testemunhos';
 import Tratamentos from './Tratamentos';
+import { navigationItems } from '@/config/navigation';
 
 export default function AdminConsole() {
-  const pages = [
-    { id: 'index', name: 'Homepage', component: Index },
-    { id: 'quemsomos', name: 'Quem Somos', component: QuemSomos },
-    { id: 'contato', name: 'Contato', component: Contato },
-    { id: 'purificacao', name: 'Purificação', component: Purificacao },
-    { id: 'artigos', name: 'Artigos', component: Artigos },
-    { id: 'testemunhos', name: 'Testemunhos', component: Testemunhos },
-    { id: 'tratamentos', name: 'Tratamentos', component: Tratamentos },
-  ];
+  // Mapeamento de componentes por ID
+  const componentMap: Record<string, React.ComponentType> = {
+    index: Index,
+    quemsomos: QuemSomos,
+    purificacao: Purificacao,
+    tratamentos: Tratamentos,
+    testemunhos: Testemunhos,
+    artigos: Artigos,
+    contato: Contato,
+  };
+
+  // Construir páginas a partir da configuração centralizada do menu
+  const pages = navigationItems.map(item => ({
+    id: item.id,
+    name: item.name,
+    component: componentMap[item.id],
+  }));
 
   const [activeTab, setActiveTab] = useState(() => {
     return localStorage.getItem('adminConsole_activeTab') || 'pages';
@@ -80,21 +89,23 @@ export default function AdminConsole() {
 
               <TabsContent value="pages">
                 <div className="admin-console-page-selector">
-                  <h2 className="admin-console-page-selector-title">
-                    📄 Selecione uma Página para Editar
-                  </h2>
                   <Tabs value={pageTab} onValueChange={setPageTab}>
-                    <TabsList className="admin-console-page-tabs-list">
+                    <div className="bg-white border-2 border-[#d4af37] shadow-md p-4 rounded-lg">
+                      <h2 className="admin-console-page-selector-title mb-3">
+                        📄 Selecione uma Página para Editar
+                      </h2>
+                      <TabsList className="admin-console-page-tabs-list flex flex-wrap gap-3 bg-transparent border-0 shadow-none p-0 w-full h-auto">
                       {pages.map(page => (
                         <TabsTrigger 
                           key={page.id} 
                           value={page.id} 
-                          className="admin-console-page-tab"
+                          className="admin-console-page-tab min-w-40 px-6 py-3 font-semibold text-base whitespace-nowrap inline-flex items-center justify-center h-auto rounded-md border-2 border-stone-200 transition-all hover:border-[#d4af37] data-[state=active]:bg-[#d4af37] data-[state=active]:text-white data-[state=active]:border-[#d4af37] data-[state=active]:shadow-lg"
                         >
                           {page.name}
                         </TabsTrigger>
                       ))}
                     </TabsList>
+                    </div>
 
                     {pages.map(page => (
                       <TabsContent key={page.id} value={page.id} className="admin-console-page-content">
