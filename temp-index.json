@@ -4,16 +4,19 @@
                     "hero":  {
                                  "title":  "O Trabalho de Resgate",
                                  "subtitle":  "PurificaÃ§Ã£o, AscensÃ£o e Tratamentos Integrados",
-                                 "description":  {
-                                                     "part1":  "Igreja de Metatron",
-                                                     "part2":  " (prÃ¡ticas religiosas e iniciÃ¡ticas)  ",
-                                                     "part3":  "Instituto Metatron",
-                                                     "part4":  " (tratamentos tÃ©cnico-terapÃªuticos supervisionados)"
-                                                 },
-                                 "buttons":  {
-                                                 "purification":  "PurificaÃ§Ã£o e AscensÃ£o",
-                                                 "treatments":  "Tratamentos Integrados"
-                                             }
+                                      "heroExtraTitle": "Redescubra seu equilíbrio interno emocional, mental e espiritual",
+                                      "heroExtra": [
+                                                        "\u201cSe voc\u00ea est\u00e1 passando por desafios emocionais ou espirituais, n\u00e3o precisa enfrentar isso sozinho. Estamos aqui para caminhar com voc\u00ea em dire\u00e7\u00e3o \u00e0 cura e ao equil\u00edbrio.\u201d",
+                                                        "Voc\u00ea sente que est\u00e1 sobrecarregado, ansioso ou bloqueado para avançar na vida? As dificuldades nas rela\u00e7\u00f5es, a hipersensibilidade \u00e0s cr\u00edticas e as emo\u00e7\u00f5es intensas podem ser reflexo de experi\u00eancias traum\u00e1ticas antigas â\u2014 mesmo aquelas de que voc\u00ea n\u00e3o se lembra.",
+                                                        "Todo nosso trabalho \u00e9 baseado na Neurofisiologia do Trauma, ajudando voc\u00ea a:"
+                                                      ],
+                                      "heroExtraList": [
+                                                          "Compreender suas emoções em profundidade",
+                                                          "Regular seu sistema nervoso",
+                                                          "Liberar padrões que aprisionam seu potencial",
+                                                          "Reconectar-se com os seus e com quem você realmente é"
+                                                      ],
+                                      "heroExtraFooter": "Com técnica precisa e um olhar de compaixão genuína, oferecemos caminhos para uma cura real e duradoura. Se você está pronto para transformar sua vida, nós estamos prontos para ajudar.",
                              },
                     "igreja":  {
                                    "title":  "Igreja de Metatron",

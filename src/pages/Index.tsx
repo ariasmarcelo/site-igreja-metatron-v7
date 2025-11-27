@@ -85,6 +85,37 @@ export default function Index() {
         </div>
       </section>
 
+      {/* New editable section (Admin-editable) - placed below the hero) */}
+      <section className="py-10 bg-white border-b-2 border-stone-200">
+        <div className="container mx-auto px-4">
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-stone-800" data-json-key="index.instituto.heroExtraTitle">
+              {texts.instituto.heroExtraTitle}
+            </h2>
+
+            {texts.instituto.heroExtra && texts.instituto.heroExtra.map((p: string, i: number) => (
+              <p key={i} className="text-lg text-stone-600 mb-4 whitespace-pre-line" data-json-key={`index.instituto.heroExtra[${i}]`}>
+                {p}
+              </p>
+            ))}
+
+            {texts.instituto.heroExtraList && (
+              <ul className="list-disc list-inside text-left mx-auto max-w-xl text-stone-700 mb-4" data-json-key="index.instituto.heroExtraList">
+                {texts.instituto.heroExtraList.map((li: string, i: number) => (
+                  <li key={i} className="mb-1">{li}</li>
+                ))}
+              </ul>
+            )}
+
+            {texts.instituto.heroExtraFooter && (
+              <p className="text-base text-stone-600 mt-4" data-json-key="index.instituto.heroExtraFooter">
+                {texts.instituto.heroExtraFooter}
+              </p>
+            )}
+          </div>
+        </div>
+      </section>
+
       {/* Igreja & Instituto */}
       <section className="py-12 bg-linear-to-b from-white via-stone-50 to-white border-b-2 border-stone-200">
         <div className="container mx-auto px-4">
