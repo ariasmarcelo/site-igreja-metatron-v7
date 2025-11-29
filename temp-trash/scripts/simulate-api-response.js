@@ -8,9 +8,9 @@ const supabase = createClient(
   process.env.VITE_SUPABASE_ANON_KEY
 );
 
-// Simular o que a API /api/content-v2/quemsomos faz
+// Simular o que a API /api/content/quemsomos faz
 async function simulateAPI() {
-  console.log('\n=== SIMULANDO GET /api/content-v2/quemsomos ===\n');
+  console.log('\n=== SIMULANDO GET /api/content/quemsomos ===\n');
   
   // 1. Buscar entries da página
   const { data: entries, error } = await supabase

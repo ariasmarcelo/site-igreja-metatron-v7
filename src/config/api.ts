@@ -12,7 +12,8 @@ export const API_BASE_URL = import.meta.env.VITE_API_URL || '';
 // Endpoints da API
 export const API_ENDPOINTS = {
   // Conteúdo (sistema granular)
-  getContent: (pageId: string) => `${API_BASE_URL}/api/content-v2?pages=${pageId}`,
+  // Unified endpoint: /api/content?pages=...
+  getContent: (pageId: string) => `${API_BASE_URL}/api/content?pages=${pageId}`,
   
   // Salvamento (sistema granular)
   saveVisualEdits: `${API_BASE_URL}/api/save-visual-edits`, // Edições campo-a-campo

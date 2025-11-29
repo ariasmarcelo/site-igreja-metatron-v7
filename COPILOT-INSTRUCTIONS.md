@@ -65,6 +65,49 @@ Desenvolver site institucional para a Igreja de Metatron com sistema de edição
 - Sugerir melhorias aos scripts
 - Nunca inserir emojis ou caracteres especiais em scripts
 
+## 6. Configuração Crítica do Servidor (IMUTÁVEL) ##
+
+**⚠️ NUNCA REMOVER OU MODIFICAR SEM AUTORIZAÇÃO EXPLÍCITA**
+
+O projeto usa **Vite com plugin customizado `apiPlugin()`** para servir APIs serverless localmente.
+
+**Arquivos críticos:**
+1. `vite.config.ts` - DEVE conter `apiPlugin()` completo
+2. `vercel.json` - DEVE ter `"devCommand": "vite"`
+
+**Plugin apiPlugin() obrigatório em vite.config.ts:**
+```typescript
+import fs from "fs";
+import { pathToFileURL } from "url";
+
+const apiPlugin = () => ({
+  name: 'api-dev-server',
+  configureServer(server: any) {
+    server.middlewares.use((req: any, res: any, next: any) => {
+      if (!req.url?.startsWith('/api/')) return next();
+      // ... [código completo do plugin - ver commit 4d7ddea]
+    });
+  }
+});
+
+export default defineConfig({
+  plugins: [react(), apiPlugin()],
+  // ...
+});
+```
+
+**O que este plugin faz:**
+- Intercepta requisições `/api/*` no Vite dev server
+- Mapeia rotas dinâmicas (ex: `/api/content/index` → `api/content/[pageId].js`)
+- Executa serverless functions localmente sem Vercel Dev
+- Permite acesso via localhost E IP (host: '0.0.0.0')
+
+**Se removido:** APIs retornam 404/HTML, site não carrega conteúdo do banco.
+
+**Comando para iniciar:** `pnpm dev` (porta 3000)
+
+## 7. Arquitetura CSS - ITCSS (IMUTÁVEL) ##
+
 ## 6. Arquitetura CSS - ITCSS (IMUTÁVEL) ##
 
 **Proibições absolutas:**
@@ -162,5 +205,22 @@ docs/                   # Documentação técnica
 
 ---
 
-**Última Atualização:** 18/11/2025  
-**Status:** Sistema simplificado (Supabase direto), ITCSS CSS arquitetura ativa, menu centralizado
+**Última Atualização:** 29/11/2025  
+**Status:** Sistema com Vite + apiPlugin() customizado, ITCSS CSS, acesso via localhost e IP (0.0.0.0:3000)
+
+### Configuração de Desenvolvimento Local ###
+
+**Servidor:** Vite Dev Server com plugin `apiPlugin()` customizado  
+**Porta:** 3000  
+**Acesso:** `http://localhost:3000/` ou `http://192.168.x.x:3000/`  
+**APIs:** Servidas pelo plugin customizado em `/api/*`  
+
+**Arquivo crítico: vite.config.ts**
+- Plugin `apiPlugin()` intercepta rotas `/api/*`
+- Executa serverless functions do diretório `api/` localmente
+- Suporta rotas dinâmicas: `[pageId].js`
+- Configuração: `host: '0.0.0.0'` para acesso via IP
+
+**Arquivo crítico: vercel.json**
+- `"devCommand": "vite"` - usa Vite direto (não Vercel Dev)
+- Em produção: Vercel serve as functions normalmente

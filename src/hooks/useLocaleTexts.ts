@@ -25,7 +25,7 @@ export const isEditLocked = (pageId: string): boolean => {
 /**
  * @deprecated Use useContent from '@/hooks/useContent' instead
  * 
- * Hook ANTIGO para carregar paths granulares do Supabase via API content-v2
+ * Hook ANTIGO para carregar paths granulares do Supabase via API `content`
  * Este hook será removido em versões futuras.
  * 
  * @param paths - Array de paths no formato "pageId.path.to.data"
@@ -63,7 +63,7 @@ export function useLazyContent<T = Record<string, unknown>>(
       
       const apiBaseUrl = import.meta.env.VITE_API_URL || '';
       const normalizedPaths = paths.map(p => p.toLowerCase());
-      const url = `${apiBaseUrl}/api/content-v2?paths=${normalizedPaths.join(',')}`;
+      const url = `${apiBaseUrl}/api/content?paths=${normalizedPaths.join(',')}`;
       
       try {
         const loadStart = performance.now();
@@ -157,7 +157,7 @@ export function useLocaleTexts<T = Record<string, unknown>>(
       
       const apiBaseUrl = import.meta.env.VITE_API_URL || '';
       const normalizedPageId = pageId.toLowerCase();
-      const url = `${apiBaseUrl}/api/content-v2?pages=${normalizedPageId}`;
+      const url = `${apiBaseUrl}/api/content?pages=${normalizedPageId}`;
       
       try {
         const loadStart = performance.now();
@@ -237,7 +237,7 @@ export function useMultiplePages<T = Record<string, unknown>>(
       
       const normalizedPageIds = pageIds.map(id => id.toLowerCase());
       const apiBaseUrl = import.meta.env.VITE_API_URL || '';
-      const url = `${apiBaseUrl}/api/content-v2?pages=${normalizedPageIds.join(',')}`;
+      const url = `${apiBaseUrl}/api/content?pages=${normalizedPageIds.join(',')}`;
       
       try {
         const loadStart = performance.now();

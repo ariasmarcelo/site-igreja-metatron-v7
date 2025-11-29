@@ -24,8 +24,8 @@ Write-Host ""
 # Criar diretorio de logs se nao existir
 if (!(Test-Path "logs")) { New-Item -ItemType Directory -Path "logs" | Out-Null }
 
-# Iniciar Vercel Dev em nova janela
-Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd '$WorkDir'; `$OutputEncoding = [System.Text.Encoding]::UTF8; [Console]::OutputEncoding = [System.Text.Encoding]::UTF8; vercel dev" -WorkingDirectory $WorkDir
+# Iniciar Vercel Dev em nova janela (não interativo)
+Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd '$WorkDir'; `$OutputEncoding = [System.Text.Encoding]::UTF8; [Console]::OutputEncoding = [System.Text.Encoding]::UTF8; echo y | vercel dev --yes" -WorkingDirectory $WorkDir
 Start-Sleep -Seconds 8
 
 Write-Host "=== Verificando Status ===" -ForegroundColor Cyan
