@@ -1,55 +1,28 @@
-# start-dev.ps1
-# Inicia ambiente de desenvolvimento local com Vercel Dev
-# Vercel Dev roda Vite + APIs Serverless (porta automática ou 8081)
+# Start Development Server
+# Uso: .\start-dev.ps1
 
-$WorkDir = "c:\temp\Site_Igreja_Meta\site-igreja-v6\workspace\shadcn-ui"
+Write-Host "=== Iniciando Servidor de Desenvolvimento ===" -ForegroundColor Cyan
+Write-Host ""
 
-Write-Host "=== Iniciando Ambiente Local (Vercel Dev) ===" -ForegroundColor Cyan
+$WorkDir = $PSScriptRoot
+
+# Matar processos node existentes (limpar portas)
+Write-Host "Limpando portas..." -ForegroundColor Yellow
+Get-Process | Where-Object { $_.ProcessName -eq "node" } | Stop-Process -Force -ErrorAction SilentlyContinue
+Start-Sleep -Seconds 2
+
+# Verificar se node_modules existe
+if (!(Test-Path "$WorkDir\node_modules")) {
+    Write-Host "node_modules nao encontrado. Instalando dependencias..." -ForegroundColor Yellow
+    Set-Location $WorkDir
+    npm install
+    Write-Host ""
+}
+
+# Iniciar Vite
+Write-Host "Iniciando Vite Dev Server..." -ForegroundColor Green
+Write-Host "Acesse: http://localhost:3000" -ForegroundColor Cyan
 Write-Host ""
 
 Set-Location $WorkDir
-
-Write-Host "[1/2] Limpando processos Node..." -ForegroundColor Yellow
-taskkill /F /IM node.exe /T 2>$null | Out-Null
-Start-Sleep -Seconds 2
-Write-Host "  Processos encerrados" -ForegroundColor Green
-
-Write-Host ""
-Write-Host "[2/2] Iniciando Vercel Dev..." -ForegroundColor Yellow
-Write-Host "  Frontend + APIs Serverless" -ForegroundColor DarkGray
-Write-Host "  Aguardando inicializacao..." -ForegroundColor DarkGray
-Write-Host "  Logs sendo salvos em: logs\vercel-dev.log" -ForegroundColor DarkGray
-Write-Host ""
-
-# Criar diretorio de logs se nao existir
-if (!(Test-Path "logs")) { New-Item -ItemType Directory -Path "logs" | Out-Null }
-
-# Iniciar Vercel Dev em nova janela (não interativo)
-Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd '$WorkDir'; `$OutputEncoding = [System.Text.Encoding]::UTF8; [Console]::OutputEncoding = [System.Text.Encoding]::UTF8; echo y | vercel dev --yes" -WorkingDirectory $WorkDir
-Start-Sleep -Seconds 8
-
-Write-Host "=== Verificando Status ===" -ForegroundColor Cyan
-Write-Host ""
-
-# Verificar em qual porta o Vercel Dev iniciou
-$port = $null
-foreach ($p in @(8081, 8080, 8082, 3000)) {
-    $check = netstat -ano | findstr ":$p" | Select-Object -First 1
-    if ($check) {
-        $port = $p
-        break
-    }
-}
-
-if ($port) {
-    Write-Host "OK Vercel Dev: http://localhost:$port" -ForegroundColor Green
-    Write-Host "OK APIs Serverless: http://localhost:$port/api/*" -ForegroundColor Green
-    Write-Host "OK Admin Console: http://localhost:$port/436F6E736F6C45" -ForegroundColor Green
-    Write-Host ""
-    Write-Host "Ambiente LOCAL funcionando na porta $port!" -ForegroundColor Cyan
-} else {
-    Write-Host "ERRO Vercel Dev nao iniciou" -ForegroundColor Red
-}
-
-Write-Host ""
-Write-Host ""
+npm run dev
