@@ -24,7 +24,7 @@ export default function Index() {
   if (!texts || !stylesLoaded || loading) {
     return (
       <PageLoading
-        icon={Sun}
+        icon={Sun12Rays}
         text="Carregando página inicial..."
         bgColor="bg-gradient-to-b from-stone-50 to-stone-100"
         iconColor="text-amber-500"
