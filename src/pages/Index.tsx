@@ -41,7 +41,7 @@ export default function Index() {
       <section className="relative bg-linear-to-b from-amber-50 via-white to-stone-50 py-20 border-b border-stone-200">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto text-center">
-            <div className="inline-flex items-center justify-center mb-8 bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-2xl shadow-amber-900/30">
+            <div className="inline-flex items-center justify-center mb-8" style={{ filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.15)) drop-shadow(0 4px 8px rgba(0,0,0,0.1))' }}>
               <LogoGold className="w-[700px] h-auto" />
             </div>
             
