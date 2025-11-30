@@ -3,6 +3,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Link } from 'react-router-dom';
 import { Heart, Brain, Ghost, Sparkles, ChevronRight } from 'lucide-react';
 import { Sun12Rays } from '../components/icons/Sun12Rays';
+import { LogoGold } from '../components/icons/LogoGold';
 import { lazy, Suspense } from 'react';
 import { usePageContent } from '@/hooks/useContent';
 import { usePageStyles } from '@/hooks/usePageStyles';
@@ -40,8 +41,8 @@ export default function Index() {
       <section className="relative bg-linear-to-b from-amber-50 via-white to-stone-50 py-20 border-b border-stone-200">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto text-center">
-            <div className="inline-flex items-center justify-center w-24 h-24 bg-amber-100 rounded-full mb-8">
-              <Sun12Rays className="w-14 h-14 text-[#CFAF5A]" />
+            <div className="inline-flex items-center justify-center mb-8">
+              <LogoGold className="w-32 h-auto" />
             </div>
             
             <h1 className="text-5xl md:text-7xl font-bold mb-6 text-stone-900" data-json-key="index.hero.title">
