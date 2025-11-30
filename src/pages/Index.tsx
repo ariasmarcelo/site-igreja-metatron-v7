@@ -42,8 +42,8 @@ export default function Index() {
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto text-center">
             <div className="relative inline-flex items-center justify-center mb-8">
-              <div className="absolute inset-0 bg-gradient-to-br from-amber-900/20 to-stone-900/20 blur-3xl scale-95 -z-10"></div>
-              <LogoGold className="w-[700px] h-auto relative z-10" />
+              <div className="absolute inset-0 bg-black/30 blur-2xl scale-110"></div>
+              <LogoGold className="w-[700px] h-auto relative" />
             </div>
             
             <h1 className="text-5xl md:text-7xl font-bold mb-6 text-stone-900" data-json-key="index.hero.title">
