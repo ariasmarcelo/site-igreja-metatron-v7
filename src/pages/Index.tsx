@@ -41,9 +41,8 @@ export default function Index() {
       <section className="relative bg-linear-to-b from-amber-50 via-white to-stone-50 py-20 border-b border-stone-200">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto text-center">
-            <div className="relative inline-flex items-center justify-center mb-8">
-              <div className="absolute inset-0 bg-black/30 blur-2xl scale-110"></div>
-              <LogoGold className="w-[700px] h-auto relative" />
+            <div className="inline-flex items-center justify-center mb-8" style={{ filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.25)) drop-shadow(0 10px 20px rgba(0,0,0,0.15))' }}>
+              <LogoGold className="w-[700px] h-auto" />
             </div>
             
             <h1 className="text-5xl md:text-7xl font-bold mb-6 text-stone-900" data-json-key="index.hero.title">
