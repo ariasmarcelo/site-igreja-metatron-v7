@@ -42,7 +42,7 @@ export default function Index() {
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto text-center">
             <div className="inline-flex items-center justify-center mb-8">
-              <LogoGold className="w-[512px] h-auto" />
+              <LogoGold className="w-[700px] h-auto" />
             </div>
             
             <h1 className="text-5xl md:text-7xl font-bold mb-6 text-stone-900" data-json-key="index.hero.title">
