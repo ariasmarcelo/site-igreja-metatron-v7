@@ -1,7 +1,8 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Link } from 'react-router-dom';
-import { Heart, Sun, Brain, Ghost, Sparkles, ChevronRight } from 'lucide-react';
+import { Heart, Brain, Ghost, Sparkles, ChevronRight } from 'lucide-react';
+import { Sun12Rays } from '../components/icons/Sun12Rays';
 import { lazy, Suspense } from 'react';
 import { usePageContent } from '@/hooks/useContent';
 import { usePageStyles } from '@/hooks/usePageStyles';
@@ -40,7 +41,7 @@ export default function Index() {
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto text-center">
             <div className="inline-flex items-center justify-center w-24 h-24 bg-amber-100 rounded-full mb-8">
-              <Sun className="w-14 h-14 text-[#CFAF5A]" />
+              <Sun12Rays className="w-14 h-14 text-[#CFAF5A]" />
             </div>
             
             <h1 className="text-5xl md:text-7xl font-bold mb-6 text-stone-900" data-json-key="index.hero.title">
@@ -255,7 +256,7 @@ export default function Index() {
                 <div className="lg:col-span-3 p-12">
                   <div className="flex items-center gap-4 mb-8">
                     <div className="w-20 h-20 bg-amber-100 rounded-2xl flex items-center justify-center">
-                      <Sun className="w-12 h-12 text-amber-600" />
+                      <Sun12Rays className="w-12 h-12 text-amber-600" />
                     </div>
                     <h2 className="text-4xl font-bold text-stone-900" data-json-key="index.igreja.title">
                       {texts.igreja.title}
@@ -382,7 +383,7 @@ export default function Index() {
                 <Card key={i} className="border-0 shadow-lg hover:shadow-2xl transition-all bg-stone-50">
                   <CardContent className="p-8 text-center">
                     <div className="w-16 h-16 mx-auto mb-6 bg-white rounded-2xl flex items-center justify-center shadow-md">
-                      {i === 0 && <Sun className="w-10 h-10 text-amber-600" />}
+                      {i === 0 && <Sun12Rays className="w-10 h-10 text-amber-600" />}
                       {i === 1 && <Brain className="w-10 h-10 text-teal-600" />}
                       {i === 2 && <Sparkles className="w-10 h-10 text-stone-600" />}
                     </div>

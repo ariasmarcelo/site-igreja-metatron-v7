@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Sparkles, Sun, Star, Crown, Compass, Heart, Infinity as InfinityIcon, LineChart, ChevronDown, Shield, Waves, Target } from 'lucide-react';
+import { Sparkles, Star, Crown, Compass, Heart, Infinity as InfinityIcon, LineChart, ChevronDown, Shield, Waves, Target } from 'lucide-react';
+import { Sun12Rays } from '../components/icons/Sun12Rays';
 import { Link } from 'react-router-dom';
 import { useState, lazy, Suspense } from 'react';
 import { usePageContent } from '@/hooks/useContent';
@@ -357,7 +358,7 @@ export default function Purificacao() {
 
                     <div className="bg-linear-to-r from-amber-100 to-yellow-100 border-2 border-amber-400 rounded-lg p-6">
                       <div className="flex items-center gap-4 mb-4">
-                        <Sun className="w-10 h-10 text-amber-600" />
+                        <Sun12Rays className="w-10 h-10 text-amber-600" />
                         <h4 className="font-semibold text-xl text-amber-700" data-json-key="purificacao.faseFinal.evento.title">{faseFinal.evento.title ?? 'O Evento Iniciático'}</h4>
                       </div>
                       {faseFinal.evento.content.map((para: string, i: number) => (
@@ -559,7 +560,7 @@ export default function Purificacao() {
                     </div>
                     <div className="text-center bg-white/60 backdrop-blur-sm p-6 rounded-xl border border-amber-200 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                       <div className="bg-amber-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 shadow-md">
-                        <Sun className="w-10 h-10 text-amber-600" />
+                        <Sun12Rays className="w-10 h-10 text-amber-600" />
                       </div>
                       <h4 className="font-semibold text-lg mb-3 text-amber-900" data-json-key="purificacao.psicodelicos.tripleProtection.cards[2].title">{psicodelicos.tripleProtection.cards[2].title}</h4>
                       <p className="text-sm text-gray-700 leading-relaxed" data-json-key="purificacao.psicodelicos.tripleProtection.cards[2].description">
