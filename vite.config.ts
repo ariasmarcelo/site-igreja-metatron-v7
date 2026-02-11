@@ -86,9 +86,10 @@ const apiPlugin = () => ({
           const apiHandler = module.default || module;
           return apiHandler(vercelReq, vercelRes);
         }).catch((error: any) => {
+          console.error('[API Error]', error);
           res.statusCode = 500;
           res.setHeader('Content-Type', 'application/json');
-          res.end(JSON.stringify({ error: error.message }));
+          res.end(JSON.stringify({ error: error.message, details: error.stack }));
         });
       };
 
