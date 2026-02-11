@@ -1,7 +1,8 @@
 import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { useState, useEffect, lazy, Suspense, memo } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Globe } from 'lucide-react';
 import { navigationItems } from './config/navigation';
+import { useLanguage, type Language } from './contexts/LanguageContext';
 import Index from './pages/Index';
 import QuemSomos from './pages/QuemSomos';
 import Tratamentos from './pages/Tratamentos';
@@ -88,6 +89,7 @@ const ScrollManager = () => {
 
 const NavigationMenu = memo(() => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { language, setLanguage } = useLanguage();
   const location = useLocation();
 
   // Esconder Navigation no painel de administração
@@ -171,6 +173,31 @@ const NavigationMenu = memo(() => {
             ))}
           </div>
 
+          {/* Language Selector */}
+          <div className="hidden md:flex items-center gap-2">
+            <button
+              onClick={() => setLanguage('pt-BR')}
+              className={`px-3 py-1.5 text-sm font-medium rounded-lg transition-all ${
+                language === 'pt-BR'
+                  ? 'bg-[#CFAF5A] text-white shadow-md'
+                  : 'text-gray-600 hover:text-[#CFAF5A] hover:bg-gray-100'
+              }`}
+            >
+              PT
+            </button>
+            <span className="text-gray-300">|</span>
+            <button
+              onClick={() => setLanguage('en-US')}
+              className={`px-3 py-1.5 text-sm font-medium rounded-lg transition-all ${
+                language === 'en-US'
+                  ? 'bg-[#CFAF5A] text-white shadow-md'
+                  : 'text-gray-600 hover:text-[#CFAF5A] hover:bg-gray-100'
+              }`}
+            >
+              EN
+            </button>
+          </div>
+
           {/* Mobile menu button */}
           <button
             className="md:hidden p-2 rounded-lg hover:bg-gray-100 absolute right-4"
@@ -201,6 +228,30 @@ const NavigationMenu = memo(() => {
                 {item.name}
               </Link>
             ))}
+            
+            {/* Mobile Language Selector */}
+            <div className="flex items-center gap-2 px-4 py-3 border-t border-gray-200 mt-2">
+              <button
+                onClick={() => setLanguage('pt-BR')}
+                className={`flex-1 px-3 py-2 text-sm font-medium rounded-lg transition-all ${
+                  language === 'pt-BR'
+                    ? 'bg-[#CFAF5A] text-white shadow-md'
+                    : 'text-gray-600 hover:text-[#CFAF5A] hover:bg-gray-100'
+                }`}
+              >
+                Português
+              </button>
+              <button
+                onClick={() => setLanguage('en-US')}
+                className={`flex-1 px-3 py-2 text-sm font-medium rounded-lg transition-all ${
+                  language === 'en-US'
+                    ? 'bg-[#CFAF5A] text-white shadow-md'
+                    : 'text-gray-600 hover:text-[#CFAF5A] hover:bg-gray-100'
+                }`}
+              >
+                English
+              </button>
+            </div>
           </div>
         )}
       </div>

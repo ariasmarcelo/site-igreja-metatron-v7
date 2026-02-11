@@ -1,29 +1,30 @@
 import { useEffect, useState } from 'react';
+import { useLanguage, type Language } from '../contexts/LanguageContext';
 
 /**
- * HOOK UNIVERSAL para carregar conteúdo do Supabase
+ * HOOK UNIVERSAL para carregar conteúdo do Supabase com suporte a múltiplos idiomas
  * 
  * Unifica todos os métodos de carregamento em uma interface simples.
  * SEMPRE retorna dados nested (objetos reconstruídos) independente da fonte.
  * 
  * Uso:
  * 
- * 1. Carregar uma página inteira:
+ * 1. Carregar uma página inteira (usa idioma atual):
  *    const { data, loading } = useContent({ pages: ['purificacao'] });
  *    // Acessa: data.purificacao.header.title
  * 
- * 2. Carregar múltiplas páginas:
- *    const { data, loading } = useContent({ pages: ['purificacao', 'testemunhos'] });
- *    // Acessa: data.purificacao.header.title, data.testemunhos.items[0]
+ * 2. Com idioma específico:
+ *    const { data, loading } = useContent({ pages: ['purificacao'], language: 'en-US' });
  * 
- * 3. Modo debug (ver o que está acontecendo):
+ * 3. Modo debug:
  *    const { data, loading, debug } = useContent({ pages: ['index'], debug: true });
- *    console.log(debug); // { cacheHit: true, duration: 15, source: 'cache' }
  */
 
 interface UseContentOptions {
   /** IDs das páginas a carregar (ex: ['purificacao', 'testemunhos']) */
   pages: string[];
+  /** Idioma (usa contexto se não fornecido) */
+  language?: Language;
   /** Ativar logs detalhados */
   debug?: boolean;
 }
@@ -40,12 +41,44 @@ interface UseContentReturn<T = Record<string, unknown>> {
     cacheHit: boolean;
     duration: number;
     source: 'cache' | 'database' | 'mixed';
+    language: Language;
   };
 }
 
 /**
- * Hook universal para carregar conteúdo
- * Substitui: useLocaleTexts, useMultiplePages, useLazyContent
+ * Função auxiliar para extrair apenas um idioma específico do conteúdo
+ * Se o idioma solicitado não existir, faz fallback para pt-BR
+ */
+function extractLanguageFromContent(content: any, language: Language): any {
+  if (!content || typeof content !== 'object') {
+    return content;
+  }
+
+  // Se é um array, processar cada elemento
+  if (Array.isArray(content)) {
+    return content.map(item => extractLanguageFromContent(item, language));
+  }
+
+  // Se é um objeto com idiomas (formato { 'pt-BR': '...', 'en-US': '...' })
+  if (content[language] !== undefined) {
+    return content[language];
+  }
+  
+  // Fallback para pt-BR se idioma solicitado não existir
+  if (content['pt-BR'] !== undefined) {
+    return content['pt-BR'];
+  }
+
+  // Se é um objeto comum, processar recursivamente
+  const result: any = {};
+  for (const key in content) {
+    result[key] = extractLanguageFromContent(content[key], language);
+  }
+  return result;
+}
+
+/**
+ * Hook universal para carregar conteúdo com suporte a múltiplos idiomas
  */
 export function useContent<T = Record<string, unknown>>(
   options: UseContentOptions
@@ -54,6 +87,10 @@ export function useContent<T = Record<string, unknown>>(
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [debugInfo, setDebugInfo] = useState<UseContentReturn['debug']>();
+  
+  // Obter idioma do contexto se não fornecido
+  const contextLanguage = useLanguage().language;
+  const language = options.language || contextLanguage;
 
   const { pages, debug = false } = options;
   const pagesKey = pages.join(',');
@@ -97,7 +134,9 @@ export function useContent<T = Record<string, unknown>>(
           const result = await response.json();
           
           if (result.success && result.content) {
-            pagesData[pageId] = result.content;
+            // Extrair apenas o idioma solicitado do conteúdo
+            const processedContent = extractLanguageFromContent(result.content, language);
+            pagesData[pageId] = processedContent;
             sources[pageId] = result.source || 'db';
           }
         }
@@ -106,7 +145,7 @@ export function useContent<T = Record<string, unknown>>(
         const duration = Math.round(loadEnd - loadStart);
 
         if (debug) {
-          console.log(`[${new Date().toISOString()}] [useContent] Loaded pages=${normalizedPages.join(',')}, duration=${duration}ms`);
+          console.log(`[${new Date().toISOString()}] [useContent] Loaded pages=${normalizedPages.join(',')} lang=${language} duration=${duration}ms`);
           console.log(`[${new Date().toISOString()}] [useContent] Sources:`, sources);
         }
 
@@ -122,7 +161,8 @@ export function useContent<T = Record<string, unknown>>(
             setDebugInfo({
               cacheHit: cacheHits > 0,
               duration,
-              source: cacheHits > 0 && dbHits > 0 ? 'mixed' : cacheHits > 0 ? 'cache' : 'database'
+              source: cacheHits > 0 && dbHits > 0 ? 'mixed' : cacheHits > 0 ? 'cache' : 'database',
+              language
             });
           }
         } else {
@@ -139,7 +179,7 @@ export function useContent<T = Record<string, unknown>>(
 
     loadContent();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pagesKey, debug]);
+  }, [pagesKey, language, debug]);
 
   return { data, loading, error, debug: debugInfo };
 }
