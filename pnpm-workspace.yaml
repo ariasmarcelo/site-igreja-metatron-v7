@@ -1,3 +1,0 @@
-ignoredBuiltDependencies:
-  - lmdb
-  - msgpackr-extract

@@ -1,5 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useLanguage, type Language } from '../contexts/LanguageContext';
+import { useContentCache } from '../contexts/ContentCacheContext';
+import { usePendingEdits } from '../contexts/PendingEditsContext';
 
 /**
  * HOOK UNIVERSAL para carregar conteúdo do Supabase com suporte a múltiplos idiomas
@@ -47,7 +49,7 @@ interface UseContentReturn<T = Record<string, unknown>> {
 
 /**
  * Função auxiliar para extrair apenas um idioma específico do conteúdo
- * Se o idioma solicitado não existir, faz fallback para pt-BR
+ * Se o idioma solicitado não existir, retorna "<EMPTY>" para indicar tradução faltante
  */
 function extractLanguageFromContent(content: any, language: Language): any {
   if (!content || typeof content !== 'object') {
@@ -64,12 +66,12 @@ function extractLanguageFromContent(content: any, language: Language): any {
     return content[language];
   }
   
-  // Fallback para pt-BR se idioma solicitado não existir
-  if (content['pt-BR'] !== undefined) {
-    return content['pt-BR'];
+  // Se tem outras chaves de idioma, é um objeto multilíngue mas está faltando o idioma solicitado
+  if (content['pt-BR'] !== undefined || content['en-US'] !== undefined) {
+    return '<EMPTY>';  // Sem fallbacks - deixar claro que falta tradução
   }
 
-  // Se é um objeto comum, processar recursivamente
+  // Se é um objeto comum (não multilíngue), processar recursivamente
   const result: any = {};
   for (const key in content) {
     result[key] = extractLanguageFromContent(content[key], language);
@@ -92,8 +94,29 @@ export function useContent<T = Record<string, unknown>>(
   const contextLanguage = useLanguage().language;
   const language = options.language || contextLanguage;
 
+  // Integração com cache invalidation context
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let cacheInvalidationTime: number | null = null;
+  try {
+    const cacheContext = useContentCache();
+    const { pages } = options;
+    // Verificar invalidação de qualquer página que estamos carregando
+    if (pages && pages.length > 0) {
+      cacheInvalidationTime = pages
+        .map(p => cacheContext.getInvalidationTime(p.toLowerCase()))
+        .filter((t): t is number => t !== null)
+        .sort()
+        .pop() || null;
+    }
+  } catch {
+    // Context não disponível (é OK, apenas funciona sem invalidação)
+  }
+
   const { pages, debug = false } = options;
   const pagesKey = pages.join(',');
+
+  // Rastrear se é a primeira carga (mostrar loading) ou re-fetch silencioso
+  const isFirstLoadRef = useRef(true);
 
   useEffect(() => {
     if (!pages || pages.length === 0) {
@@ -103,7 +126,11 @@ export function useContent<T = Record<string, unknown>>(
     }
 
     const loadContent = async () => {
-      setLoading(true);
+      // Só mostrar loading na PRIMEIRA carga. Re-fetches (cache invalidation,
+      // troca de idioma) são silenciosos — mantêm dados atuais enquanto carregam.
+      if (isFirstLoadRef.current) {
+        setLoading(true);
+      }
       setError(null);
 
       const apiBaseUrl = import.meta.env.VITE_API_URL || '';
@@ -112,10 +139,10 @@ export function useContent<T = Record<string, unknown>>(
       try {
         const loadStart = performance.now();
         
-        // Carregar todas as páginas em paralelo
+        // Carregar todas as páginas em paralelo com language parameter
         const responses = await Promise.all(
           normalizedPages.map(pageId => 
-            fetch(`${apiBaseUrl}/api/content/${pageId}`)
+            fetch(`${apiBaseUrl}/api/content/${pageId}?language=${language}`)
           )
         );
 
@@ -170,40 +197,137 @@ export function useContent<T = Record<string, unknown>>(
         }
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-        console.error(`[${new Date().toISOString()}] [useContent] Error loading content:`, errorMessage);
+        console.error(`[useContent] Error loading content:`, errorMessage);
         setError(errorMessage);
       } finally {
         setLoading(false);
+        isFirstLoadRef.current = false;
       }
     };
 
     loadContent();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pagesKey, language, debug]);
+  }, [pagesKey, language, debug, cacheInvalidationTime]);
 
   return { data, loading, error, debug: debugInfo };
 }
 
 /**
+ * Setar valor aninhado em um objeto usando notação de caminho com suporte a arrays.
+ * Ex: setNestedValue(obj, 'hero.title', 'X') → obj.hero.title = 'X'
+ * Ex: setNestedValue(obj, 'cards[0].title', 'X') → obj.cards[0].title = 'X'
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function setNestedValue(obj: any, path: string, value: any): void {
+  const parts = path.split('.');
+  let current = obj;
+  
+  for (let i = 0; i < parts.length - 1; i++) {
+    const part = parts[i];
+    const arrayMatch = part.match(/^(.+?)\[(\d+)\]$/);
+    
+    if (arrayMatch) {
+      const [, name, idx] = arrayMatch;
+      if (!current[name]) current[name] = [];
+      if (!current[name][parseInt(idx)]) current[name][parseInt(idx)] = {};
+      current = current[name][parseInt(idx)];
+    } else {
+      if (!current[part]) current[part] = {};
+      current = current[part];
+    }
+  }
+  
+  const lastPart = parts[parts.length - 1];
+  const lastArrayMatch = lastPart.match(/^(.+?)\[(\d+)\]$/);
+  if (lastArrayMatch) {
+    const [, name, idx] = lastArrayMatch;
+    if (!current[name]) current[name] = [];
+    current[name][parseInt(idx)] = value;
+  } else {
+    current[lastPart] = value;
+  }
+}
+
+/**
  * Atalho para carregar uma única página
  * 
- * IMPORTANTE: Automaticamente mescla dados compartilhados (__shared__) com a página,
- * permitindo acesso direto a data.footer.* em qualquer página
+ * IMPORTANTE: Automaticamente mescla edições pendentes (não salvas) do PendingEditsContext.
+ * 
+ * Para páginas que precisam de dados compartilhados (__shared__), passe { includePages: ['__shared__'] }.
+ * Dados de páginas extras ficam disponíveis no resultado com sua chave original.
+ * 
+ * Isso permite que o editor visual funcione com React de forma natural:
+ * - Edições pendentes são renderizadas corretamente em qualquer idioma
+ * - Sem manipulação direta de DOM ou timers
  * 
  * @example
  * const { data, loading } = usePageContent('purificacao');
  * // Acessa: data.header.title, data.intro.mainText
- * // Acessa: data.footer.copyright (vem de __shared__)
+ * 
+ * @example
+ * const { data, loading } = usePageContent('testemunhos', { includePages: ['__shared__'] });
+ * // Acessa: data.header.title (da página)
+ * // Acessa: data.__shared__.testimonials (dados compartilhados solicitados explicitamente)
  */
-export function usePageContent<T = Record<string, unknown>>(pageId: string) {
-  const { data, loading, error, debug } = useContent({ pages: [pageId] });
+export function usePageContent<T = Record<string, unknown>>(pageId: string, options?: { includePages?: string[] }) {
+  const allPages = [pageId, ...(options?.includePages || [])];
+  const { data, loading, error, debug } = useContent({ pages: allPages });
+  const { language } = useLanguage();
   
-  // Extrair a página e mesclar com dados compartilhados
+  // Edições pendentes (não salvas no DB)
+  let pendingVersion = 0;
+  let getPendingEditsForPage: ((pid: string) => Map<string, { 'pt-BR': string; 'en-US': string }>) | null = null;
+  try {
+    const ctx = usePendingEdits();
+    pendingVersion = ctx.version;
+    getPendingEditsForPage = ctx.getPendingEditsForPage;
+  } catch {
+    // Context não disponível (ok em páginas fora do admin)
+  }
+  
+  // Extrair a página principal
   const pageData = data?.[pageId.toLowerCase()] as Record<string, unknown> | undefined;
-  const sharedData = data?.['__shared__'] as Record<string, unknown> | undefined;
   
-  // Merge: página + compartilhado (compartilhado tem precedência)
-  const mergedData = pageData ? { ...pageData, ...sharedData } : null;
+  // STAGE 1: Computar overrides do idioma ATUAL a partir das edições pendentes.
+  // Este memo recalcula SEMPRE que `language` ou `pendingVersion` mudam,
+  // garantindo que edit[language] retorne o valor correto para o idioma selecionado.
+  const pendingOverrides = useMemo((): Record<string, string> | null => {
+    if (!getPendingEditsForPage) return null;
+    const edits = getPendingEditsForPage(pageId);
+    if (edits.size === 0) return null;
+    const overrides: Record<string, string> = {};
+    for (const [key, edit] of edits) {
+      const val = edit[language];
+      if (val) overrides[key] = val;
+    }
+    return Object.keys(overrides).length > 0 ? overrides : null;
+  }, [getPendingEditsForPage, pageId, language, pendingVersion]);
+  
+  // STAGE 2: Mesclar base data + overrides + extra pages.
+  // Recalcula quando pageData ou overrides mudam.
+  const mergedData = useMemo(() => {
+    if (!pageData) return null;
+    
+    // Incluir dados de páginas extras (ex: __shared__)
+    const extraData: Record<string, unknown> = {};
+    if (options?.includePages) {
+      for (const p of options.includePages) {
+        const extra = data?.[p.toLowerCase()];
+        if (extra) extraData[p] = extra;
+      }
+    }
+    
+    const base = { ...pageData, ...extraData };
+    
+    if (pendingOverrides) {
+      const result = structuredClone(base);
+      for (const [key, val] of Object.entries(pendingOverrides)) {
+        setNestedValue(result, key, val);
+      }
+      return result;
+    }
+    
+    return base;
+  }, [pageData, pendingOverrides, data, options?.includePages]);
   
   return { data: mergedData as T | null, loading, error, debug };
 }

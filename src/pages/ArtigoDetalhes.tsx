@@ -1,6 +1,7 @@
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { ArrowLeft, Calendar, Clock, User } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import EditableField from '@/components/ui/EditableField';
 import { usePageContent } from '@/hooks/useContent';
 import PageLoader from '@/components/PageLoader';
 
@@ -18,7 +19,7 @@ interface ArtigosTexts {
 }
 
 export default function ArtigoDetalhes() {
-  const { data: pageLabels } = usePageContent<ArtigoLabels>('artigo-template');
+  const { data: pageLabels } = usePageContent<Record<string, any>>('artigo-template');
   const { slug } = useParams<{ slug: string }>();
   const { data: texts, loading: textsLoading } = usePageContent<ArtigosTexts>('artigos');
 
@@ -29,16 +30,23 @@ export default function ArtigoDetalhes() {
 
   // Buscar artigo em todas as categorias
   const allArticles = [
-    ...(texts?.articles?.esoterica || []),
-    ...(texts?.articles?.cientifica || []),
-    ...(texts?.articles?.unificada || [])
+    ...(texts?.articles?.esoterica ?? []),
+    ...(texts?.articles?.cientifica ?? []),
+    ...(texts?.articles?.unificada ?? [])
   ];
 
   const article = allArticles.find(a => a.slug === slug);
 
   // Mostrar loading enquanto carrega
   if (textsLoading) {
-    return <PageLoader />;
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-slate-50">
+        <div className="flex items-center gap-3">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-slate-600"></div>
+          <span className="text-slate-900 text-xl font-medium">Carregando artigo...</span>
+        </div>
+      </div>
+    );
   }
 
   // Se terminou de carregar e não encontrou, redireciona
@@ -101,7 +109,12 @@ export default function ArtigoDetalhes() {
 
                 {/* Conteúdo do artigo - Aqui você pode expandir com campos adicionais no JSON */}
                 <div className="mt-8 space-y-6">
-                  <h2 className="text-3xl font-bold text-slate-800 mt-12 mb-4" data-json-key="artigo-template.sections.intro_title">{pageLabels?.sections?.intro_title || 'Introdução'}</h2>
+                  <EditableField
+                    value={pageLabels?.sections?.intro_title}
+                    jsonKey="artigo-template.sections.intro_title"
+                    type="h2"
+                    className="text-3xl font-bold text-slate-800 mt-12 mb-4"
+                  />
                   <p>
                     Este artigo explora {article.title.toLowerCase()}, apresentando uma perspectiva 
                     {article.type === 'esoterica' ? ' espiritual e tradicional' : 
@@ -109,7 +122,12 @@ export default function ArtigoDetalhes() {
                      ' integrativa que une ciência e espiritualidade'} sobre o tema.
                   </p>
 
-                  <h2 className="text-3xl font-bold text-slate-800 mt-12 mb-4" data-json-key="artigo-template.sections.development_title">{pageLabels?.sections?.development_title || 'Desenvolvimento'}</h2>
+                  <EditableField
+                    value={pageLabels?.sections?.development_title}
+                    jsonKey="artigo-template.sections.development_title"
+                    type="h2"
+                    className="text-3xl font-bold text-slate-800 mt-12 mb-4"
+                  />
                   <p>
                     {article.type === 'esoterica' && 
                       'A sabedoria ancestral nos ensina que o conhecimento verdadeiro transcende a mera compreensão intelectual. Através das práticas espirituais milenares, podemos acessar dimensões mais profundas da consciência e da realidade.'
@@ -122,14 +140,24 @@ export default function ArtigoDetalhes() {
                     }
                   </p>
 
-                  <h2 className="text-3xl font-bold text-slate-800 mt-12 mb-4" data-json-key="artigo-template.sections.applications_title">{pageLabels?.sections?.applications_title || 'Aplicações Práticas'}</h2>
+                  <EditableField
+                    value={pageLabels?.sections?.applications_title}
+                    jsonKey="artigo-template.sections.applications_title"
+                    type="h2"
+                    className="text-3xl font-bold text-slate-800 mt-12 mb-4"
+                  />
                   <p>
                     O conhecimento apresentado neste artigo pode ser aplicado de diversas formas no dia a dia, 
                     contribuindo para o desenvolvimento pessoal, a cura e a transformação interior. 
                     É importante abordar estas práticas com respeito, disciplina e orientação adequada.
                   </p>
 
-                  <h2 className="text-3xl font-bold text-slate-800 mt-12 mb-4" data-json-key="artigo-template.sections.conclusion_title">{pageLabels?.sections?.conclusion_title || 'Conclusão'}</h2>
+                  <EditableField
+                    value={pageLabels?.sections?.conclusion_title}
+                    jsonKey="artigo-template.sections.conclusion_title"
+                    type="h2"
+                    className="text-3xl font-bold text-slate-800 mt-12 mb-4"
+                  />
                   <p>
                     Ao explorar {article.title.toLowerCase()}, abrimos portas para uma compreensão mais 
                     profunda de nós mesmos e do universo. Este conhecimento, quando integrado adequadamente, 
@@ -167,7 +195,12 @@ export default function ArtigoDetalhes() {
 
           {/* Related Articles */}
           <div className="mt-16">
-            <h2 className="text-3xl font-bold text-slate-800 mb-8" data-json-key="artigo-template.sections.related_title">{pageLabels?.sections?.related_title || 'Artigos Relacionados'}</h2>
+            <EditableField
+              value={pageLabels?.sections?.related_title}
+              jsonKey="artigo-template.sections.related_title"
+              type="h2"
+              className="text-3xl font-bold text-slate-800 mb-8"
+            />
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {allArticles
                 .filter(a => a.type === article.type && a.id !== article.id)

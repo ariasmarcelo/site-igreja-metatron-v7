@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Mail, Clock, MessageCircle, ShieldCheck, Phone, ChevronDown } from 'lucide-react';
+import EditableField from '@/components/ui/EditableField';
 import { usePageContent } from '@/hooks/useContent';
 import { usePageStyles } from '@/hooks/usePageStyles';
 import { PageLoading } from '@/components/PageLoading';
@@ -65,12 +66,18 @@ export default function Contato() {
               <Mail className="w-12 h-12 text-white" />
             </div>
 
-            <h1 className="text-5xl md:text-6xl font-bold mb-6 text-white drop-shadow-lg" data-json-key="contato.header.title">
-              {texts.header.title}
-            </h1>
-            <p className="text-xl text-white/90 drop-shadow-md" data-json-key="contato.header.subtitle">
-              {texts.header.subtitle}
-            </p>
+            <EditableField
+              value={texts.header.title}
+              jsonKey="contato.header.title"
+              type="h1"
+              className="text-5xl md:text-6xl font-bold mb-6 text-white drop-shadow-lg"
+            />
+            <EditableField
+              value={texts.header.subtitle}
+              jsonKey="contato.header.subtitle"
+              type="p"
+              className="text-xl text-white/90 drop-shadow-md"
+            />
           </div>
         </div>
       </section>
@@ -90,12 +97,18 @@ export default function Contato() {
                   <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-linear-to-br from-green-400 to-emerald-500 mb-4 shadow-lg shadow-green-400/50">
                     <MessageCircle className="w-10 h-10 text-white" />
                   </div>
-                  <h2 className="text-4xl md:text-5xl font-bold mb-3 bg-linear-to-r from-green-700 via-emerald-600 to-green-700 bg-clip-text text-transparent" data-json-key="contato.contactCard.title">
-                    {texts.contactCard.title}
-                  </h2>
-                  <p className="text-lg text-gray-700 max-w-2xl mx-auto" data-json-key="contato.contactCard.description">
-                    {texts.contactCard?.description || 'Entre em contato agora mesmo e dê o primeiro passo'}
-                  </p>
+                  <EditableField
+                    value={texts.contactCard.title}
+                    jsonKey="contato.contactCard.title"
+                    type="h2"
+                    className="text-4xl md:text-5xl font-bold mb-3 bg-linear-to-r from-green-700 via-emerald-600 to-green-700 bg-clip-text text-transparent"
+                  />
+                  <EditableField
+                    value={texts.contactCard?.description}
+                    jsonKey="contato.contactCard.description"
+                    type="p"
+                    className="text-lg text-gray-700 max-w-2xl mx-auto"
+                  />
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
@@ -106,9 +119,12 @@ export default function Contato() {
                       className="w-full bg-[#25D366] hover:bg-[#128C7E] text-white py-6 text-lg rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 flex items-center justify-center gap-3 mb-6"
                     >
                       <MessageCircle className="w-6 h-6" />
-                      <span data-json-key="contato.contactCard.whatsappButton.text">
-                        {texts.contactCard.whatsappButton.text}
-                      </span>
+                      <EditableField
+                        value={texts.contactCard.whatsappButton.text}
+                        jsonKey="contato.contactCard.whatsappButton.text"
+                        type="span"
+                        className="inline"
+                      />
                     </Button>
 
                     <div className="flex items-center gap-4 mb-4">
@@ -116,18 +132,27 @@ export default function Contato() {
                         <MessageCircle className="w-6 h-6 text-[#25D366]" />
                       </div>
                       <div>
-                        <p className="text-sm text-gray-600" data-json-key="contato.contactCard.whatsapp.label">
-                          {texts.contactCard.whatsapp.label}
-                        </p>
-                        <p className="text-lg font-semibold text-gray-900" data-json-key="contato.contactCard.whatsapp.number">
-                          {texts.contactCard.whatsapp.number}
-                        </p>
+                        <EditableField
+                          value={texts.contactCard.whatsapp.label}
+                          jsonKey="contato.contactCard.whatsapp.label"
+                          type="p"
+                          className="text-sm text-gray-600"
+                        />
+                        <EditableField
+                          value={texts.contactCard.whatsapp.number}
+                          jsonKey="contato.contactCard.whatsapp.number"
+                          type="p"
+                          className="text-lg font-semibold text-gray-900"
+                        />
                       </div>
                     </div>
 
-                    <p className="text-sm text-center text-gray-600" data-json-key="contato.contactCard.whatsappButton.description">
-                      {texts.contactCard.whatsappButton.description}
-                    </p>
+                    <EditableField
+                      value={texts.contactCard.whatsappButton.description}
+                      jsonKey="contato.contactCard.whatsappButton.description"
+                      type="p"
+                      className="text-sm text-center text-gray-600"
+                    />
                   </div>
 
                   {/* Email & Hours */}
@@ -140,9 +165,12 @@ export default function Contato() {
                         </div>
                         <div>
                           <p className="text-sm text-gray-600">Email</p>
-                          <p className="text-base font-semibold text-gray-900" data-json-key="contato.contactCard.email.address">
-                            {texts.contactCard.email.address}
-                          </p>
+                          <EditableField
+                            value={texts.contactCard.email.address}
+                            jsonKey="contato.contactCard.email.address"
+                            type="p"
+                            className="text-base font-semibold text-gray-900"
+                          />
                         </div>
                       </div>
                     </div>
@@ -154,15 +182,24 @@ export default function Contato() {
                           <Clock className="w-6 h-6 text-slate-600" />
                         </div>
                         <div>
-                          <p className="text-sm text-gray-600 mb-2" data-json-key="contato.businessHours.title">
-                            {texts.businessHours.title}
-                          </p>
-                          <p className="text-sm text-gray-700" data-json-key="contato.businessHours.hours.weekdays">
-                            {texts.businessHours.hours.weekdays}
-                          </p>
-                          <p className="text-sm text-gray-700" data-json-key="contato.businessHours.hours.saturday">
-                            {texts.businessHours.hours.saturday}
-                          </p>
+                          <EditableField
+                            value={texts.businessHours.title}
+                            jsonKey="contato.businessHours.title"
+                            type="p"
+                            className="text-sm text-gray-600 mb-2"
+                          />
+                          <EditableField
+                            value={texts.businessHours.hours.weekdays}
+                            jsonKey="contato.businessHours.hours.weekdays"
+                            type="p"
+                            className="text-sm text-gray-700"
+                          />
+                          <EditableField
+                            value={texts.businessHours.hours.saturday}
+                            jsonKey="contato.businessHours.hours.saturday"
+                            type="p"
+                            className="text-sm text-gray-700"
+                          />
                         </div>
                       </div>
                     </div>
@@ -177,23 +214,33 @@ export default function Contato() {
                 <div className="shrink-0 flex items-center justify-center w-14 h-14 rounded-full bg-linear-to-br from-amber-400/30 to-yellow-400/30 border border-amber-300/50">
                   <Clock className="w-7 h-7 text-amber-700" />
                 </div>
-                <h2 className="text-2xl md:text-3xl font-bold text-amber-900" data-json-key="contato.initialAssessment.title">
-                  {texts.initialAssessment.title}
-                </h2>
+              <EditableField
+                value={texts.initialAssessment.title}
+                jsonKey="contato.initialAssessment.title"
+                type="h2"
+                className="text-2xl md:text-3xl font-bold text-amber-900"
+              />
               </div>
                 
               <div className="grid md:grid-cols-2 gap-6">
                 {/* O Que Esperar */}
                 <div className="bg-white/60 rounded-2xl p-5 border border-amber-200/40">
-                  <h3 className="text-lg font-semibold text-amber-800 mb-3 flex items-center gap-3" data-json-key="contato.initialAssessment.whatToExpect.title">
-                    <div className="w-2 h-2 rounded-full bg-amber-500"></div>
-                    {texts.initialAssessment.whatToExpect.title}
-                  </h3>
+                  <EditableField
+                    value={texts.initialAssessment.whatToExpect.title}
+                    jsonKey="contato.initialAssessment.whatToExpect.title"
+                    type="h4"
+                    className="text-lg font-semibold text-amber-800 mb-3 inline-flex items-center gap-3"
+                  />
                   <ul className="space-y-3">
                     {texts.initialAssessment.whatToExpect.items.map((item: string, idx: number) => (
                       <li key={idx} className="flex items-start gap-3 text-gray-700">
                         <span className="text-amber-600 mt-1 font-bold">✦</span>
-                        <span data-json-key={`contato.initialAssessment.whatToExpect.items[${idx}]`}>{item}</span>
+                      <EditableField
+                        value={item}
+                        jsonKey={`contato.initialAssessment.whatToExpect.items[${idx}]`}
+                        type="span"
+                        className="text-gray-700"
+                      />
                       </li>
                     ))}
                   </ul>
@@ -201,15 +248,20 @@ export default function Contato() {
 
                 {/* Nosso Compromisso */}
                 <div className="bg-white/60 rounded-2xl p-5 border border-amber-200/40">
-                  <h3 className="text-lg font-semibold text-amber-800 mb-3 flex items-center gap-3" data-json-key="contato.initialAssessment.commitment.title">
-                    <div className="w-2 h-2 rounded-full bg-amber-500"></div>
-                    {texts.initialAssessment.commitment.title}
-                  </h3>
+                  <EditableField
+                    value={texts.initialAssessment.commitment.title}
+                    jsonKey="contato.initialAssessment.commitment.title"
+                    type="h4"
+                    className="text-lg font-semibold text-amber-800 mb-3 inline-flex items-center gap-3"
+                  />
                   <div className="flex items-start gap-3">
                     <ShieldCheck className="w-7 h-7 text-amber-600 shrink-0 mt-1" />
-                    <p className="text-gray-700 leading-relaxed text-sm" data-json-key="contato.initialAssessment.commitment.description">
-                      {texts.initialAssessment.commitment.description}
-                    </p>
+                    <EditableField
+                      value={texts.initialAssessment.commitment.description}
+                      jsonKey="contato.initialAssessment.commitment.description"
+                      type="p"
+                      className="text-gray-700 leading-relaxed text-sm"
+                    />
                   </div>
                 </div>
               </div>
@@ -217,9 +269,12 @@ export default function Contato() {
 
             {/* Perguntas Frequentes */}
             <div className="bg-linear-to-br from-white via-slate-50/30 to-gray-50/20 rounded-3xl p-8 md:p-12 border border-slate-200/60 shadow-xl">
-              <h2 className="text-3xl md:text-4xl font-bold text-center mb-10 text-slate-900" data-json-key="contato.faq.title">
-                {texts.faq.title}
-              </h2>
+              <EditableField
+                value={texts.faq.title}
+                jsonKey="contato.faq.title"
+                type="h2"
+                className="text-3xl md:text-4xl font-bold text-center mb-10 text-slate-900"
+              />
               <div className="space-y-4 max-w-3xl mx-auto">
                 {texts.faq.items.map((qa: { question: string; answer: string }, idx: number) => {
                   const isOpen = openFaqItems.has(idx);
@@ -227,18 +282,25 @@ export default function Contato() {
                     <div key={idx} className="bg-white rounded-2xl border border-slate-200/40 shadow-md hover:shadow-lg transition-all overflow-hidden">
                       <button
                         onClick={() => toggleFaqItem(idx)}
+                        title={isOpen ? 'Fechar pergunta' : 'Abrir pergunta'}
                         className="w-full text-left px-6 py-4 flex items-center justify-between gap-4 bg-linear-to-r from-slate-50 to-slate-100/50 hover:from-slate-100 hover:to-slate-50 transition-all"
                       >
-                        <h3 className="text-lg font-bold text-slate-900 drop-shadow-sm" data-json-key={`contato.faq.items[${idx}].question`}>
-                          {qa.question}
-                        </h3>
+                        <EditableField
+                          value={qa.question}
+                          jsonKey={`contato.faq.items[${idx}].question`}
+                          type="h4"
+                          className="text-lg font-bold text-slate-900 drop-shadow-sm"
+                        />
                         <ChevronDown className={`w-5 h-5 text-slate-700 shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
                       </button>
                       {isOpen && (
                         <div className="px-6 pb-4 pt-3 bg-white border-t border-slate-100">
-                          <p className="text-gray-600 leading-relaxed" data-json-key={`contato.faq.items[${idx}].answer`}>
-                            {qa.answer}
-                          </p>
+                          <EditableField
+                            value={qa.answer}
+                            jsonKey={`contato.faq.items[${idx}].answer`}
+                            type="p"
+                            className="text-gray-600 leading-relaxed"
+                          />
                         </div>
                       )}
                     </div>

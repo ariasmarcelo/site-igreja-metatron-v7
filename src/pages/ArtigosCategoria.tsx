@@ -40,9 +40,9 @@ export default function ArtigosCategoria() {
 
   // Buscar artigos da categoria em todas as tabs
   const allArticles = [
-    ...(texts?.articles?.esoterica || []),
-    ...(texts?.articles?.cientifica || []),
-    ...(texts?.articles?.unificada || [])
+    ...(texts?.articles?.esoterica ?? []),
+    ...(texts?.articles?.cientifica ?? []),
+    ...(texts?.articles?.unificada ?? [])
   ];
 
   const filteredArticles = allArticles.filter(a => a.category === categoryName);

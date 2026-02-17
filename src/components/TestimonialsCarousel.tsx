@@ -15,7 +15,10 @@ interface TestemunhosTexts {
 }
 
 export default function TestimonialsCarousel() {
-  const { data: texts, loading } = usePageContent<any>('index');
+  // Busca dados de testemunhos — fonte única de verdade para todos os depoimentos.
+  // Usa usePageContent (não useContent) para integrar com PendingEditsContext:
+  // edições pendentes no Admin são mescladas automaticamente e respeitam troca de idioma.
+  const { data: texts, loading } = usePageContent('testemunhos');
 
   if (loading) {
     return (
@@ -30,22 +33,22 @@ export default function TestimonialsCarousel() {
     );
   }
 
-  if (!texts?.__shared__?.testimonials) {
+  if (!texts?.testimonials) {
     console.warn('[TestimonialsCarousel] No testimonials data loaded');
     return null;
   }
 
   // Pegar apenas os primeiros 5 testemunhos para o carrossel
-  const testimonials = texts.__shared__.testimonials.slice(0, 5);
-  const headerTitle = texts.__shared__?.testimonialsSection?.title || 'Testemunhos de Transformação';
+  const testimonials = texts.testimonials.slice(0, 5);
+  const headerTitle = texts?.testimonialsSection?.title || 'Testemunhos de Transformação';
 
   return (
     <section className="py-12 bg-pink-400 relative overflow-visible">
       {/* Efeitos de luz dourado metálico */}
       <div className="absolute inset-0 opacity-40">
         <div className="absolute top-20 left-[10%] w-96 h-96 bg-yellow-300/60 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute top-40 right-[15%] w-[500px] h-[500px] bg-amber-400/50 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-20 left-[20%] w-[400px] h-[400px] bg-yellow-400/55 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute top-40 right-[15%] w-125 h-125 bg-amber-400/50 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-20 left-[20%] w-100 h-100 bg-yellow-400/55 rounded-full blur-3xl animate-pulse" />
       </div>
       
       <div className="container mx-auto px-4 relative z-10">
@@ -57,11 +60,11 @@ export default function TestimonialsCarousel() {
                 <Heart className="h-10 w-10 text-yellow-400/60 fill-red-500 stroke-[2.5]" />
               </div>
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-white drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)]" data-json-key="__shared__.testimonialsCarousel.title">
-              {texts.__shared__?.testimonialsCarousel?.title || 'Testemunhos de Transformação'}
+            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-white drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)]" data-json-key="testemunhos.testimonialsCarousel.title">
+              {texts?.testimonialsCarousel?.title || 'Testemunhos de Transformação'}
             </h2>
-            <p className="text-xl text-white/95 opacity-90 drop-shadow-[0_2px_6px_rgba(0,0,0,0.4)] max-w-2xl mx-auto mb-4" data-json-key="__shared__.testimonialsCarousel.subtitle">
-              {texts.__shared__?.testimonialsCarousel?.subtitle || 'Histórias reais de cura, crescimento e despertar espiritual'}
+            <p className="text-xl text-white/95 opacity-90 drop-shadow-[0_2px_6px_rgba(0,0,0,0.4)] max-w-2xl mx-auto mb-4" data-json-key="testemunhos.testimonialsCarousel.subtitle">
+              {texts?.testimonialsCarousel?.subtitle || 'Histórias reais de cura, crescimento e despertar espiritual'}
             </p>
             <div className="flex justify-center gap-1">
               {[...Array(5)].map((_, i) => (
@@ -92,7 +95,7 @@ export default function TestimonialsCarousel() {
                         <CardContent className="p-6 flex flex-col h-full">
                           {/* Conteúdo do testemunho */}
                           <div className="mb-4 grow">
-                            <p className="text-rose-950/80 leading-relaxed text-base" data-json-key={`__shared__.testimonials[${index}].content`}>
+                            <p className="text-rose-950/80 leading-relaxed text-base" data-json-key={`testemunhos.testimonials[${index}].content`}>
                               {testimonial.content.substring(0, 200)}...
                             </p>
                           </div>
@@ -106,8 +109,8 @@ export default function TestimonialsCarousel() {
                           
                           {/* Informações do autor */}
                           <div className="mt-auto">
-                            <p className="font-semibold text-rose-900 text-lg mb-1" data-json-key={`__shared__.testimonials[${index}].name`}>{testimonial.name}</p>
-                            <p className="text-sm text-rose-700/70" data-json-key={`__shared__.testimonials[${index}].date`}>{testimonial.date}</p>
+                            <p className="font-semibold text-rose-900 text-lg mb-1" data-json-key={`testemunhos.testimonials[${index}].name`}>{testimonial.name}</p>
+                            <p className="text-sm text-rose-700/70" data-json-key={`testemunhos.testimonials[${index}].date`}>{testimonial.date}</p>
                             {testimonial.verified && (
                               <div className="inline-flex items-center gap-1 bg-green-100 px-3 py-1.5 rounded-full border border-green-200">
                                 <Star className="w-3 h-3 fill-green-600 text-green-600" />

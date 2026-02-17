@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Sparkles, Star, Crown, Compass, Heart, Infinity as InfinityIcon, LineChart, ChevronDown, Shield, Waves, Target } from 'lucide-react';
+import EditableField from '@/components/ui/EditableField';
 import { Sun12Rays } from '../components/icons/Sun12Rays';
 import { Link } from 'react-router-dom';
 import { useState, lazy, Suspense } from 'react';
@@ -58,9 +59,6 @@ export default function Purificacao() {
   const beneficios = textsTyped.beneficios as { title: string; items: { title: string; description: string }[] };
   const testimonials = textsTyped.testimonials as { title: string };
   const cta = textsTyped.cta as { title?: string; subtitle?: string; buttonText: string };
-  
-  // Footer vem do __shared__ que é carregado automaticamente pela API
-  const footer = textsTyped.footer as { copyright?: string; trademark?: string } | undefined;
   
   // Fases detalhadas (type assertion para evitar erros de unknown)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -138,8 +136,18 @@ export default function Purificacao() {
                 })}
               </svg>
             </div>
-            <h1 className="text-5xl md:text-6xl font-bold mb-6 drop-shadow-[0_4px_12px_rgba(139,90,0,0.8)]" data-json-key="purificacao.header.title">{header.title}</h1>
-            <p className="text-xl opacity-90 drop-shadow-[0_2px_8px_rgba(139,90,0,0.7)]" data-json-key="purificacao.header.subtitle">{header.subtitle}</p>
+            <EditableField
+              value={header.title}
+              jsonKey="purificacao.header.title"
+              type="h1"
+              className="text-5xl md:text-6xl font-bold mb-6 drop-shadow-[0_4px_12px_rgba(139,90,0,0.8)]"
+            />
+            <EditableField
+              value={header.subtitle}
+              jsonKey="purificacao.header.subtitle"
+              type="p"
+              className="text-xl opacity-90 drop-shadow-[0_2px_8px_rgba(139,90,0,0.7)]"
+            />
           </div>
         </div>
       </section>
@@ -148,12 +156,18 @@ export default function Purificacao() {
       <section className="py-8">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto text-center">
-            <p className="text-xl text-gray-700 leading-relaxed mb-6" data-json-key="purificacao.intro.mainText">
-              {intro.mainText}
-            </p>
-            <p className="text-lg text-gray-600 leading-relaxed" data-json-key="purificacao.intro.description">
-              {intro.description}
-            </p>
+            <EditableField
+              value={intro.mainText}
+              jsonKey="purificacao.intro.mainText"
+              type="p"
+              className="text-xl text-gray-700 leading-relaxed mb-6"
+            />
+            <EditableField
+              value={intro.description}
+              jsonKey="purificacao.intro.description"
+              type="p"
+              className="text-lg text-gray-600 leading-relaxed"
+            />
           </div>
         </div>
       </section>
@@ -165,9 +179,12 @@ export default function Purificacao() {
             
             {/* Título da Seção */}
             <div className="text-center mb-8">
-              <h2 className="text-4xl md:text-5xl font-light text-gray-800 mb-2 tracking-wide" data-json-key="purificacao.sections.process_title">
-                {texts.sections?.process_title || 'AS TRÊS FASES DO PROCESSO'}
-              </h2>
+              <EditableField
+                value={texts.sections?.process_title}
+                jsonKey="purificacao.sections.process_title"
+                type="h2"
+                className="text-4xl md:text-5xl font-light text-gray-800 mb-2 tracking-wide"
+              />
               <div className="flex items-center justify-center gap-3 mt-2">
                 <div className="h-px w-20 bg-linear-to-r from-transparent via-amber-400 to-amber-500"></div>
                 <div className="w-2 h-2 rounded-full bg-amber-500"></div>
@@ -197,8 +214,18 @@ export default function Purificacao() {
                         <div className="flex items-center gap-2 mb-0.5">
                           <span className="text-xs font-semibold text-red-600 bg-red-100 px-2 py-0.5 rounded-full">FASE 1</span>
                         </div>
-                        <CardTitle className="text-xl md:text-2xl text-gray-800" data-json-key="purificacao.faseInicial.title">{faseInicial.title}</CardTitle>
-                        <p className="text-sm text-gray-600" data-json-key="purificacao.faseInicial.subtitle">{faseInicial.subtitle}</p>
+                        <EditableField
+                          value={faseInicial.title}
+                          jsonKey="purificacao.faseInicial.title"
+                          type="h3"
+                          className="text-xl md:text-2xl text-gray-800"
+                        />
+                        <EditableField
+                          value={faseInicial.subtitle}
+                          jsonKey="purificacao.faseInicial.subtitle"
+                          type="p"
+                          className="text-sm text-gray-600"
+                        />
                       </div>
                     </div>
                     <ChevronDown 
@@ -211,34 +238,60 @@ export default function Purificacao() {
                 
                 <div 
                   className={`overflow-hidden transition-all duration-500 ${
-                    expandedPhase === 1 ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'
+                    expandedPhase === 1 ? 'max-h-500 opacity-100' : 'max-h-0 opacity-0'
                   }`}
                 >
                   <CardContent className="p-8 space-y-6">
                     <div>
-                      <h3 className="text-xl font-semibold mb-3 text-gray-800" data-json-key="purificacao.faseInicial.objetivo.title">{faseInicial.objetivo.title}</h3>
-                      <p className="text-gray-700 leading-relaxed" data-json-key="purificacao.faseInicial.objetivo.content">
-                        {faseInicial.objetivo.content}
-                      </p>
+                      <EditableField
+                        value={faseInicial.objetivo.title}
+                        jsonKey="purificacao.faseInicial.objetivo.title"
+                        type="h4"
+                        className="text-xl font-semibold mb-3 text-gray-800"
+                      />
+                      <EditableField
+                        value={faseInicial.objetivo.content}
+                        jsonKey="purificacao.faseInicial.objetivo.content"
+                        type="p"
+                        className="text-gray-700 leading-relaxed"
+                      />
                     </div>
 
                     <div className="bg-red-50 border border-red-200 p-6 rounded-lg">
-                      <h4 className="font-semibold text-lg mb-4 text-red-700" data-json-key="purificacao.faseInicial.activities.title">{faseInicial.activities.title}</h4>
+                      <EditableField
+                        value={faseInicial.activities.title}
+                        jsonKey="purificacao.faseInicial.activities.title"
+                        type="h5"
+                        className="font-semibold text-lg mb-4 text-red-700"
+                      />
                       <ul className="space-y-3 text-gray-700">
                         {faseInicial.activities.items.map((item, index) => (
                           <li key={index} className="flex items-start gap-3">
                             <span className="text-red-500 font-bold mt-1">•</span>
-                            <span data-json-key={`purificacao.faseInicial.activities.items[${index}]`}>{item}</span>
+                            <EditableField
+                              value={item}
+                              jsonKey={`purificacao.faseInicial.activities.items[${index}]`}
+                              type="span"
+                              className="text-gray-700"
+                            />
                           </li>
                         ))}
                       </ul>
                     </div>
 
                     <div>
-                      <h4 className="font-semibold text-lg mb-3 text-gray-800" data-json-key="purificacao.faseInicial.duration.title">{faseInicial.duration.title}</h4>
-                      <p className="text-gray-700 leading-relaxed" data-json-key="purificacao.faseInicial.duration.content">
-                        {faseInicial.duration.content}
-                      </p>
+                      <EditableField
+                        value={faseInicial.duration.title}
+                        jsonKey="purificacao.faseInicial.duration.title"
+                        type="h5"
+                        className="font-semibold text-lg mb-3 text-gray-800"
+                      />
+                      <EditableField
+                        value={faseInicial.duration.content}
+                        jsonKey="purificacao.faseInicial.duration.content"
+                        type="p"
+                        className="text-gray-700 leading-relaxed"
+                      />
                     </div>
                   </CardContent>
                 </div>
@@ -267,8 +320,18 @@ export default function Purificacao() {
                         <div className="flex items-center gap-2 mb-0.5">
                           <span className="text-xs font-semibold text-cyan-600 bg-cyan-100 px-2 py-0.5 rounded-full">FASE 2</span>
                         </div>
-                        <CardTitle className="text-xl md:text-2xl text-gray-800" data-json-key="purificacao.faseIntermediaria.title">{faseIntermediaria.title}</CardTitle>
-                        <p className="text-sm text-gray-600" data-json-key="purificacao.faseIntermediaria.subtitle">{faseIntermediaria.subtitle}</p>
+                        <EditableField
+                          value={faseIntermediaria.title}
+                          jsonKey="purificacao.faseIntermediaria.title"
+                          type="h3"
+                          className="text-xl md:text-2xl text-gray-800"
+                        />
+                        <EditableField
+                          value={faseIntermediaria.subtitle}
+                          jsonKey="purificacao.faseIntermediaria.subtitle"
+                          type="p"
+                          className="text-sm text-gray-600"
+                        />
                       </div>
                     </div>
                     <ChevronDown 
@@ -281,30 +344,65 @@ export default function Purificacao() {
                 
                 <div 
                   className={`overflow-hidden transition-all duration-500 ${
-                    expandedPhase === 2 ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'
+                    expandedPhase === 2 ? 'max-h-500 opacity-100' : 'max-h-0 opacity-0'
                   }`}
                 >
                   <CardContent className="p-8 space-y-6">
                     <div>
-                      <h3 className="text-xl font-semibold mb-3 text-gray-800" data-json-key="purificacao.faseIntermediaria.requisito.title">{faseIntermediaria.requisito.title}</h3>
-                      <p className="text-gray-700 leading-relaxed" data-json-key="purificacao.faseIntermediaria.requisito.content">{faseIntermediaria.requisito.content}</p>
+                      <EditableField
+                        value={faseIntermediaria.requisito.title}
+                        jsonKey="purificacao.faseIntermediaria.requisito.title"
+                        type="h4"
+                        className="text-xl font-semibold mb-3 text-gray-800"
+                      />
+                      <EditableField
+                        value={faseIntermediaria.requisito.content}
+                        jsonKey="purificacao.faseIntermediaria.requisito.content"
+                        type="p"
+                        className="text-gray-700 leading-relaxed"
+                      />
                     </div>
 
                     <div className="bg-cyan-50 border border-cyan-200 p-6 rounded-lg">
-                      <h4 className="font-semibold text-lg mb-4 text-cyan-700" data-json-key="purificacao.faseIntermediaria.trabalhos.title">{faseIntermediaria.trabalhos.title}</h4>
+                      <EditableField
+                        value={faseIntermediaria.trabalhos.title}
+                        jsonKey="purificacao.faseIntermediaria.trabalhos.title"
+                        type="h5"
+                        className="font-semibold text-lg mb-4 text-cyan-700"
+                      />
                       <div className="space-y-4">
                         {faseIntermediaria.trabalhos.items.map((item, index) => (
                           <div key={index}>
-                            <h5 className="font-semibold text-base mb-2 text-gray-800" data-json-key={`purificacao.faseIntermediaria.trabalhos.items[${index}].title`}>{item.title}</h5>
-                            <p className="text-gray-700" data-json-key={`purificacao.faseIntermediaria.trabalhos.items[${index}].content`}>{item.content}</p>
+                            <EditableField
+                              value={item.title}
+                              jsonKey={`purificacao.faseIntermediaria.trabalhos.items[${index}].title`}
+                              type="h6"
+                              className="font-semibold text-base mb-2 text-gray-800"
+                            />
+                            <EditableField
+                              value={item.content}
+                              jsonKey={`purificacao.faseIntermediaria.trabalhos.items[${index}].content`}
+                              type="p"
+                              className="text-gray-700"
+                            />
                           </div>
                         ))}
                       </div>
                     </div>
 
                     <div>
-                      <h4 className="font-semibold text-lg mb-3 text-gray-800" data-json-key="purificacao.faseIntermediaria.integracao.title">{faseIntermediaria.integracao.title}</h4>
-                      <p className="text-gray-700 leading-relaxed" data-json-key="purificacao.faseIntermediaria.integracao.content">{faseIntermediaria.integracao.content}</p>
+                      <EditableField
+                        value={faseIntermediaria.integracao.title}
+                        jsonKey="purificacao.faseIntermediaria.integracao.title"
+                        type="h5"
+                        className="font-semibold text-lg mb-3 text-gray-800"
+                      />
+                      <EditableField
+                        value={faseIntermediaria.integracao.content}
+                        jsonKey="purificacao.faseIntermediaria.integracao.content"
+                        type="p"
+                        className="text-gray-700 leading-relaxed"
+                      />
                     </div>
                   </CardContent>
                 </div>
@@ -333,8 +431,18 @@ export default function Purificacao() {
                         <div className="flex items-center gap-2 mb-0.5">
                           <span className="text-xs font-semibold text-amber-600 bg-amber-100 px-2 py-0.5 rounded-full">FASE 3</span>
                         </div>
-                        <CardTitle className="text-xl md:text-2xl text-gray-800" data-json-key="purificacao.faseFinal.title">{faseFinal.title}</CardTitle>
-                        <p className="text-sm text-gray-600" data-json-key="purificacao.faseFinal.subtitle">{faseFinal.subtitle}</p>
+                        <EditableField
+                          value={faseFinal.title}
+                          jsonKey="purificacao.faseFinal.title"
+                          type="h3"
+                          className="text-xl md:text-2xl text-gray-800"
+                        />
+                        <EditableField
+                          value={faseFinal.subtitle}
+                          jsonKey="purificacao.faseFinal.subtitle"
+                          type="p"
+                          className="text-sm text-gray-600"
+                        />
                       </div>
                     </div>
                     <ChevronDown 
@@ -347,19 +455,34 @@ export default function Purificacao() {
                 
                 <div 
                   className={`overflow-hidden transition-all duration-500 ${
-                    expandedPhase === 3 ? 'max-h-[2500px] opacity-100' : 'max-h-0 opacity-0'
+                    expandedPhase === 3 ? 'max-h-625 opacity-100' : 'max-h-0 opacity-0'
                   }`}
                 >
                   <CardContent className="p-8 space-y-6">
                     <div>
-                      <h3 className="text-xl font-semibold mb-3 text-gray-800" data-json-key="purificacao.faseFinal.iniciacao.title">{faseFinal.iniciacao.title}</h3>
-                      <p className="text-gray-700 leading-relaxed" data-json-key="purificacao.faseFinal.iniciacao.content">{faseFinal.iniciacao.content}</p>
+                      <EditableField
+                        value={faseFinal.iniciacao.title}
+                        jsonKey="purificacao.faseFinal.iniciacao.title"
+                        type="h4"
+                        className="text-xl font-semibold mb-3 text-gray-800"
+                      />
+                      <EditableField
+                        value={faseFinal.iniciacao.content}
+                        jsonKey="purificacao.faseFinal.iniciacao.content"
+                        type="p"
+                        className="text-gray-700 leading-relaxed"
+                      />
                     </div>
 
                     <div className="bg-linear-to-r from-amber-100 to-yellow-100 border-2 border-amber-400 rounded-lg p-6">
                       <div className="flex items-center gap-4 mb-4">
                         <Sun12Rays className="w-10 h-10 text-amber-600" />
-                        <h4 className="font-semibold text-xl text-amber-700" data-json-key="purificacao.faseFinal.evento.title">{faseFinal.evento.title ?? 'O Evento Iniciático'}</h4>
+                        <EditableField
+                          value={faseFinal.evento.title ?? 'O Evento Iniciático'}
+                          jsonKey="purificacao.faseFinal.evento.title"
+                          type="h5"
+                          className="font-semibold text-xl text-amber-700"
+                        />
                       </div>
                       {faseFinal.evento.content.map((para: string, i: number) => (
                         <p key={i} className={`text-gray-700 leading-relaxed ${i > 0 ? 'mt-3' : ''}`}>
@@ -369,8 +492,18 @@ export default function Purificacao() {
                     </div>
 
                     <div>
-                      <h4 className="font-semibold text-lg mb-3 text-gray-800" data-json-key="purificacao.faseFinal.posIniciacao.title">{faseFinal.posIniciacao.title}</h4>
-                      <p className="text-gray-700 leading-relaxed mb-4" data-json-key="purificacao.faseFinal.posIniciacao.content">{faseFinal.posIniciacao.content}</p>
+                      <EditableField
+                        value={faseFinal.posIniciacao.title}
+                        jsonKey="purificacao.faseFinal.posIniciacao.title"
+                        type="h5"
+                        className="font-semibold text-lg mb-3 text-gray-800"
+                      />
+                      <EditableField
+                        value={faseFinal.posIniciacao.content}
+                        jsonKey="purificacao.faseFinal.posIniciacao.content"
+                        type="p"
+                        className="text-gray-700 leading-relaxed mb-4"
+                      />
                       <ul className="space-y-3 text-gray-700">
                         {faseFinal.posIniciacao.items.map((it: string, idx: number) => (
                           <li key={idx} className="flex items-start gap-3">
@@ -382,8 +515,18 @@ export default function Purificacao() {
                     </div>
 
                     <div className="bg-blue-50 border border-blue-200 p-6 rounded-lg">
-                      <h4 className="font-semibold text-lg mb-3 text-blue-800" data-json-key="purificacao.faseFinal.adepto.title">{faseFinal.adepto.title}</h4>
-                      <p className="text-blue-900 leading-relaxed" data-json-key="purificacao.faseFinal.adepto.content">{faseFinal.adepto.content}</p>
+                      <EditableField
+                        value={faseFinal.adepto.title}
+                        jsonKey="purificacao.faseFinal.adepto.title"
+                        type="h5"
+                        className="font-semibold text-lg mb-3 text-blue-800"
+                      />
+                      <EditableField
+                        value={faseFinal.adepto.content}
+                        jsonKey="purificacao.faseFinal.adepto.content"
+                        type="p"
+                        className="text-blue-900 leading-relaxed"
+                      />
                     </div>
                   </CardContent>
                 </div>
@@ -404,7 +547,12 @@ export default function Purificacao() {
                 <div className="relative w-16 h-16">
                   <Waves className="w-16 h-16 text-amber-600 waves-amber-icon" />
                 </div>
-                <CardTitle className="text-3xl text-amber-800" data-json-key="purificacao.magia.title">{quemSomosData.magia.title}</CardTitle>
+                <EditableField
+                  value={quemSomosData.magia.title}
+                  jsonKey="purificacao.magia.title"
+                  type="h3"
+                  className="text-3xl text-amber-800"
+                />
                 <div className="relative w-16 h-16">
                   <Target className="w-16 h-16 text-amber-600 target-amber-icon" />
                 </div>
@@ -415,7 +563,12 @@ export default function Purificacao() {
               <div className="space-y-4">
                 {quemSomosData.magia.introducao && quemSomosData.magia.introducao.map((paragraph: string, index: number) => (
                   <div key={index} className="bg-white/60 border-l-4 border-amber-500 p-4 rounded-r-lg">
-                    <p className="text-gray-800 leading-relaxed" data-json-key={`quemsomos.magia.introducao[${index}]`}>{paragraph}</p>
+                    <EditableField
+                      value={paragraph}
+                      jsonKey={`quemsomos.magia.introducao[${index}]`}
+                      type="p"
+                      className="text-gray-800 leading-relaxed"
+                    />
                   </div>
                 ))}
               </div>
@@ -423,18 +576,27 @@ export default function Purificacao() {
               {/* Características e Funções */}
               {quemSomosData.magia.caracteristicas && (
                 <div className="mt-8">
-                  <h3 className="text-2xl font-bold text-amber-800 mb-6 text-center" data-json-key="purificacao.magia.caracteristicas.title">
-                    {quemSomosData.magia.caracteristicas.title}
-                  </h3>
+                  <EditableField
+                    value={quemSomosData.magia.caracteristicas.title}
+                    jsonKey="quemsomos.magia.caracteristicas.title"
+                    type="h4"
+                    className="text-2xl font-bold text-amber-800 mb-6 text-center"
+                  />
                   <div className="grid gap-4">
                     {quemSomosData.magia.caracteristicas.items && quemSomosData.magia.caracteristicas.items.map((item: { title: string; content: string }, index: number) => (
                       <div key={index} className="bg-white/80 border-l-4 border-amber-600 p-5 rounded-r-lg hover:bg-white transition-colors">
-                        <h4 className="font-bold text-lg text-amber-900 mb-2" data-json-key={`quemsomos.magia.caracteristicas.items[${index}].title`}>
-                          {item.title}
-                        </h4>
-                        <p className="text-gray-700 leading-relaxed" data-json-key={`quemsomos.magia.caracteristicas.items[${index}].content`}>
-                          {item.content}
-                        </p>
+                        <EditableField
+                          value={item.title}
+                          jsonKey={`quemsomos.magia.caracteristicas.items[${index}].title`}
+                          type="h5"
+                          className="font-bold text-lg text-amber-900 mb-2"
+                        />
+                        <EditableField
+                          value={item.content}
+                          jsonKey={`quemsomos.magia.caracteristicas.items[${index}].content`}
+                          type="p"
+                          className="text-gray-700 leading-relaxed"
+                        />
                       </div>
                     ))}
                   </div>
@@ -451,7 +613,7 @@ export default function Purificacao() {
         <div className="absolute inset-0 opacity-20">
           <div className="absolute top-10 left-10 w-96 h-96 bg-purple-500 rounded-full blur-3xl"></div>
           <div className="absolute bottom-10 right-10 w-96 h-96 bg-indigo-500 rounded-full blur-3xl"></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-fuchsia-500 rounded-full blur-3xl"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-125 h-125 bg-fuchsia-500 rounded-full blur-3xl"></div>
         </div>
         
         <div className="container mx-auto px-4 relative z-10">
@@ -474,14 +636,18 @@ export default function Purificacao() {
                   <div className="inline-block mb-2 animate-[pulse_4s_cubic-bezier(0.4,0,0.6,1)_infinite]">
                     <InfinityIcon className="w-24 h-24 mx-auto drop-shadow-2xl filter brightness-125" />
                   </div>
-                  <CardTitle className="text-4xl md:text-5xl font-semibold mb-3 drop-shadow-lg font-['Poppins',sans-serif] tracking-[0.02em] [text-shadow:0_0_30px_rgba(255,255,255,0.5),0_0_60px_rgba(167,139,250,0.4)]" 
-                    data-json-key="purificacao.psicodelicos.title">
-                    {psicodelicos.title}
-                  </CardTitle>
-                  <p className="text-xl font-light italic opacity-95 drop-shadow-md pb-2 tracking-[0.05em]" 
-                    data-json-key="purificacao.psicodelicos.subtitle">
-                    {psicodelicos.subtitle}
-                  </p>
+                  <EditableField
+                    value={psicodelicos.title}
+                    jsonKey="purificacao.psicodelicos.title"
+                    type="h3"
+                    className="text-4xl md:text-5xl font-semibold mb-3 drop-shadow-lg font-['Poppins',sans-serif] tracking-[0.02em] [text-shadow:0_0_30px_rgba(255,255,255,0.5),0_0_60px_rgba(167,139,250,0.4)]"
+                  />
+                  <EditableField
+                    value={psicodelicos.subtitle}
+                    jsonKey="purificacao.psicodelicos.subtitle"
+                    type="p"
+                    className="text-xl font-light italic opacity-95 drop-shadow-md pb-2 tracking-[0.05em]"
+                  />
                 </div>
               </CardHeader>
               <CardContent className="p-8 pt-8 bg-linear-to-br from-white/95 via-purple-50/90 to-white/95 backdrop-blur-sm">
@@ -508,8 +674,7 @@ export default function Purificacao() {
                     
                     {/* Texto em estilo manuscrito antigo */}
                     <div className="relative z-10 text-center space-y-6">
-                      <p className="text-xl md:text-2xl text-amber-950 leading-relaxed font-serif italic papiro-text" 
-                         data-json-key="purificacao.psicodelicos.intro"
+                      <div className="text-xl md:text-2xl text-amber-950 leading-relaxed font-serif italic papiro-text" 
                          dangerouslySetInnerHTML={{ __html: psicodelicos.intro }} 
                       />
                     </div>
@@ -537,45 +702,76 @@ export default function Purificacao() {
                     </div>
                   </div>
                   
-                  <h3 className="font-semibold text-2xl text-purple-900 mb-8 text-center relative z-10 tracking-[0.03em]" data-json-key="purificacao.psicodelicos.tripleProtection.title">{psicodelicos.tripleProtection.title}</h3>
+                  <EditableField
+                    value={psicodelicos.tripleProtection.title}
+                    jsonKey="purificacao.psicodelicos.tripleProtection.title"
+                    type="h4"
+                    className="font-semibold text-2xl text-purple-900 mb-8 text-center relative z-10 tracking-[0.03em]"
+                  />
                   
                   <div className="grid md:grid-cols-3 gap-8 relative z-10">
                     <div className="text-center bg-white/60 backdrop-blur-sm p-6 rounded-xl border border-blue-200 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                       <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 shadow-md">
                         <Compass className="w-10 h-10 text-blue-600" />
                       </div>
-                      <h4 className="font-semibold text-lg mb-3 text-blue-900" data-json-key="purificacao.psicodelicos.tripleProtection.cards[0].title">{psicodelicos.tripleProtection.cards[0].title}</h4>
-                      <p className="text-sm text-gray-700 leading-relaxed" data-json-key="purificacao.psicodelicos.tripleProtection.cards[0].description">
-                        {psicodelicos.tripleProtection.cards[0].description}
-                      </p>
+                      <EditableField
+                        value={psicodelicos.tripleProtection.cards[0].title}
+                        jsonKey="purificacao.psicodelicos.tripleProtection.cards[0].title"
+                        type="h5"
+                        className="font-semibold text-lg mb-3 text-blue-900"
+                      />
+                      <EditableField
+                        value={psicodelicos.tripleProtection.cards[0].description}
+                        jsonKey="purificacao.psicodelicos.tripleProtection.cards[0].description"
+                        type="p"
+                        className="text-sm text-gray-700 leading-relaxed"
+                      />
                     </div>
                     <div className="text-center bg-white/60 backdrop-blur-sm p-6 rounded-xl border border-green-200 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                       <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 shadow-md">
                         <Heart className="w-10 h-10 text-green-600" />
                       </div>
-                      <h4 className="font-semibold text-lg mb-3 text-green-900" data-json-key="purificacao.psicodelicos.tripleProtection.cards[1].title">{psicodelicos.tripleProtection.cards[1].title}</h4>
-                      <p className="text-sm text-gray-700 leading-relaxed" data-json-key="purificacao.psicodelicos.tripleProtection.cards[1].description">
-                        {psicodelicos.tripleProtection.cards[1].description}
-                      </p>
+                      <EditableField
+                        value={psicodelicos.tripleProtection.cards[1].title}
+                        jsonKey="purificacao.psicodelicos.tripleProtection.cards[1].title"
+                        type="h5"
+                        className="font-semibold text-lg mb-3 text-green-900"
+                      />
+                      <EditableField
+                        value={psicodelicos.tripleProtection.cards[1].description}
+                        jsonKey="purificacao.psicodelicos.tripleProtection.cards[1].description"
+                        type="p"
+                        className="text-sm text-gray-700 leading-relaxed"
+                      />
                     </div>
                     <div className="text-center bg-white/60 backdrop-blur-sm p-6 rounded-xl border border-amber-200 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                       <div className="bg-amber-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 shadow-md">
                         <Sun12Rays className="w-10 h-10 text-amber-600" />
                       </div>
-                      <h4 className="font-semibold text-lg mb-3 text-amber-900" data-json-key="purificacao.psicodelicos.tripleProtection.cards[2].title">{psicodelicos.tripleProtection.cards[2].title}</h4>
-                      <p className="text-sm text-gray-700 leading-relaxed" data-json-key="purificacao.psicodelicos.tripleProtection.cards[2].description">
-                        {psicodelicos.tripleProtection.cards[2].description}
-                      </p>
+                      <EditableField
+                        value={psicodelicos.tripleProtection.cards[2].title}
+                        jsonKey="purificacao.psicodelicos.tripleProtection.cards[2].title"
+                        type="h5"
+                        className="font-semibold text-lg mb-3 text-amber-900"
+                      />
+                      <EditableField
+                        value={psicodelicos.tripleProtection.cards[2].description}
+                        jsonKey="purificacao.psicodelicos.tripleProtection.cards[2].description"
+                        type="p"
+                        className="text-sm text-gray-700 leading-relaxed"
+                      />
                     </div>
                   </div>
                 </div>
 
                 {/* Aplicações Espirituais e Terapêuticas */}
                 <div className="mt-16 mb-16">
-                  <h3 className="font-semibold text-3xl text-purple-900 text-center mb-10 tracking-wide" 
-                      data-json-key="purificacao.psicodelicos.applications.title">
-                    {psicodelicos.applications.title}
-                  </h3>
+                  <EditableField 
+                    value={psicodelicos.applications.title}
+                    jsonKey="purificacao.psicodelicos.applications.title"
+                    type="h3"
+                    className="font-semibold text-3xl text-purple-900 text-center mb-10 tracking-wide"
+                  />
                   <ul className="space-y-5 max-w-4xl mx-auto">
                     {psicodelicos.applications.items.map((item: string, idx: number) => (
                       <li key={idx} className="flex items-start gap-4 bg-white/70 backdrop-blur-sm p-5 rounded-xl border border-purple-200/60 hover:border-purple-400 transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5">
@@ -611,13 +807,21 @@ export default function Purificacao() {
                     
                     {/* Conteúdo */}
                     <div className="relative z-10 text-center space-y-6">
-                      <h4 className="font-bold text-2xl md:text-3xl text-amber-950 tracking-wide font-serif papiro-title" 
-                          data-json-key="purificacao.psicodelicos.conclusion.title">
-                        {psicodelicos.conclusion.title}
+                      <h4 className="font-bold text-2xl md:text-3xl text-amber-950 tracking-wide font-serif papiro-title" >
+                        <EditableField 
+                          value={psicodelicos.conclusion.title}
+                          jsonKey="purificacao.psicodelicos.conclusion.title"
+                          type="span"
+                          className="inline"
+                        />
                       </h4>
-                      <p className="text-lg md:text-xl text-amber-950 leading-relaxed font-serif italic papiro-text" 
-                         data-json-key="purificacao.psicodelicos.conclusion.content">
-                        {psicodelicos.conclusion.content}
+                      <p className="text-lg md:text-xl text-amber-950 leading-relaxed font-serif italic papiro-text">
+                        <EditableField 
+                          value={psicodelicos.conclusion.content}
+                          jsonKey="purificacao.psicodelicos.conclusion.content"
+                          type="span"
+                          className="inline"
+                        />
                       </p>
                     </div>
                   </div>
@@ -626,9 +830,14 @@ export default function Purificacao() {
                 {/* Botão CTA */}
                 <div className="text-center mt-12">
                   <Link to="/contato">
-                    <Button size="lg" className="bg-linear-to-r from-purple-600 via-fuchsia-500 to-indigo-600 hover:from-purple-700 hover:via-fuchsia-600 hover:to-indigo-700 text-white shadow-2xl text-lg px-10 py-7 rounded-xl font-semibold transform hover:scale-105 transition-all duration-300 cta-button-spacing" data-json-key="purificacao.psicodelicos.ctaButton">
+                    <Button size="lg" className="bg-linear-to-r from-purple-600 via-fuchsia-500 to-indigo-600 hover:from-purple-700 hover:via-fuchsia-600 hover:to-indigo-700 text-white shadow-2xl text-lg px-10 py-7 rounded-xl font-semibold transform hover:scale-105 transition-all duration-300 cta-button-spacing">
                       <Sparkles className="w-6 h-6 mr-3 animate-pulse" />
-                      {psicodelicos.ctaButton}
+                      <EditableField 
+                        value={psicodelicos.ctaButton}
+                        jsonKey="purificacao.psicodelicos.ctaButton"
+                        type="span"
+                        className="inline"
+                      />
                     </Button>
                   </Link>
                 </div>
@@ -655,7 +864,12 @@ export default function Purificacao() {
       {/* Footer com horizonte terrestre */}
       <section className="relative overflow-hidden bg-slate-900">
         {/* Horizonte terrestre: céu acima, terra abaixo */}
-        <FooterBackground gradientId="skyGradientPurificacao" />
+        <FooterBackground
+          gradientId="skyGradientPurificacao"
+          skyColors={['#1e3a5f', '#4b6cb7', '#d4a843']}
+          earthColor="#5c4a30"
+          waterColors={['#0ea5e9', '#0284c7', '#0369a1']}
+        />
 
         {/* Sol Dourado - posicionado absolutamente, independente do fundo */}
         <div className="absolute top-4 left-8 w-20 h-20 z-10 drop-shadow-lg">
@@ -709,15 +923,26 @@ export default function Purificacao() {
         {/* CTA Content - posicionado no céu */}
         <div className="container mx-auto px-4 relative z-50 pt-6 pb-4">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white text-shadow-strong" data-json-key="purificacao.cta.title">
-              {cta.title}
-            </h2>
-            <p className="text-lg mb-5 text-white text-shadow-medium" data-json-key="purificacao.cta.subtitle">
-              {cta.subtitle}
-            </p>
+            <EditableField 
+              value={cta.title}
+              jsonKey="purificacao.cta.title"
+              type="h2"
+              className="text-3xl md:text-4xl font-bold mb-4 text-white text-shadow-strong"
+            />
+            <EditableField 
+              value={cta.subtitle}
+              jsonKey="purificacao.cta.subtitle"
+              type="p"
+              className="text-lg mb-5 text-white text-shadow-medium"
+            />
             <Link to="/contato">
-              <Button className="bg-[#CFAF5A] text-white font-semibold px-6 py-4 text-base rounded-lg shadow-[0_6px_20px_rgba(0,0,0,0.5)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.6)] transition-all duration-300 hover:scale-105" data-json-key="purificacao.cta.buttonText">
-                {cta.buttonText}
+              <Button className="bg-[#CFAF5A] text-white font-semibold px-6 py-4 text-base rounded-lg shadow-[0_6px_20px_rgba(0,0,0,0.5)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.6)] transition-all duration-300 hover:scale-105">
+                <EditableField 
+                  value={cta.buttonText}
+                  jsonKey="purificacao.cta.buttonText"
+                  type="span"
+                  className="inline"
+                />
               </Button>
             </Link>
           </div>
@@ -725,8 +950,6 @@ export default function Purificacao() {
 
         {/* Footer Content - Copyright (do DB: compartilhado) */}
         <SharedFooter 
-          copyright={footer?.copyright}
-          trademark={footer?.trademark}
           className="pt-8 pb-4"
         />
       </section>

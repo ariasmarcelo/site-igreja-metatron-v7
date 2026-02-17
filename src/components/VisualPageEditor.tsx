@@ -8,11 +8,14 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
+import { useContentCache } from '@/contexts/ContentCacheContext';
+import { usePendingEdits } from '@/contexts/PendingEditsContext';
 
 interface VisualPageEditorProps {
   pageId: string;
   pageName: string;
   pageComponent: React.ComponentType;
+  selectedLanguage: 'pt-BR' | 'en-US';
 }
 
 interface EditField {
@@ -21,6 +24,9 @@ interface EditField {
   originalValue: string;
   currentValue: string;
   isModified: boolean;
+  ptValue?: string;     // Para campos multilíngues: português
+  enValue?: string;     // Para campos multilíngues: inglês
+  languages?: string[]; // Idiomas suportados
 }
 
 interface HTMLElementWithHandlers extends HTMLElement {
@@ -34,7 +40,24 @@ interface WindowWithObserver extends Window {
   __editorObserver?: MutationObserver;
 }
 
-const VisualPageEditor = ({ pageId, pageComponent: PageComponent }: VisualPageEditorProps) => {
+/**
+ * Extrai o page_id real e a chave limpa a partir de um data-json-key.
+ * 
+ * Formato: "{pageId}.{rest}"  ex: "testemunhos.testimonials[0].content"
+ *   → { sourcePageId: "testemunhos", cleanKey: "testimonials[0].content" }
+ * ex: "__shared__.footer.copyright"
+ *   → { sourcePageId: "__shared__", cleanKey: "footer.copyright" }
+ */
+function extractSourcePageId(jsonKey: string): { sourcePageId: string; cleanKey: string } {
+  const dotIndex = jsonKey.indexOf('.');
+  if (dotIndex === -1) return { sourcePageId: jsonKey, cleanKey: jsonKey };
+  return {
+    sourcePageId: jsonKey.substring(0, dotIndex),
+    cleanKey: jsonKey.substring(dotIndex + 1),
+  };
+}
+
+const VisualPageEditor = ({ pageId, pageComponent: PageComponent, selectedLanguage }: VisualPageEditorProps) => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [fields, setFields] = useState<EditField[]>([]);
   const [isSaving, setIsSaving] = useState(false);
@@ -44,6 +67,10 @@ const VisualPageEditor = ({ pageId, pageComponent: PageComponent }: VisualPageEd
     message: string;
     onConfirm?: () => void;
   }>({ open: false, type: null, message: '', onConfirm: undefined });
+  
+  // Integração com cache invalidation e edições pendentes
+  const { invalidateCache } = useContentCache();
+  const { setPendingEdit, clearPendingEdits } = usePendingEdits();
   const activeEditorRef = useRef<HTMLDivElement | null>(null);
   const isEditModeRef = useRef(false);
   const idCounterRef = useRef(0);
@@ -51,91 +78,33 @@ const VisualPageEditor = ({ pageId, pageComponent: PageComponent }: VisualPageEd
   // Mapeamento ID -> Elemento DOM
   const elementMapRef = useRef<Map<string, { element: HTMLElement; jsonKey: string }>>(new Map());
 
-  // 🔄 Função para recarregar elementos salvos do banco
-  const refreshSavedElements = async (items: Array<{id: string; jsonKey: string}>) => {
-    console.log(`🔄 Refreshing ${items.length} elements from database...`);
-    
-    try {
-      const response = await fetch(`/api/content/${pageId}`);
-      
-      if (!response.ok) {
-        throw new Error(`Failed to fetch: ${response.status}`);
-      }
-      
-      const data = await response.json();
-      
-      if (!data.success || !data.content) {
-        throw new Error('Invalid response format');
-      }
-      
-      const pageData = data.content;
-      
-      console.log('📦 Page data received:', pageData);
-      
-      // Atualizar DOM com dados frescos do banco
-      items.forEach(({id, jsonKey}) => {
-        const element = document.querySelector(`[data-edit-id="${id}"]`);
-        
-        if (!element) {
-          console.warn(`⚠️ Element not found for ID: ${id}, JSON Key: ${jsonKey}`);
-          return;
-        }
-        
-        // Remover prefixo pageId da jsonKey se presente
-        let cleanKey = jsonKey;
-        if (jsonKey.startsWith(`${pageId}.`)) {
-          cleanKey = jsonKey.substring(pageId.length + 1);
-          console.log(`🔧 Cleaned key: ${jsonKey} → ${cleanKey}`);
-        }
-        
-        // Navegar pela estrutura do objeto para chaves aninhadas como "treatments[0].details"
-        let value = pageData;
-        const parts = cleanKey.split('.');
-        
-        for (const part of parts) {
-          // Lidar com arrays: "treatments[0]" -> ["treatments", "0"]
-          const arrayMatch = part.match(/^(.+?)\[(\d+)\]$/);
-          if (arrayMatch) {
-            const [, arrayName, index] = arrayMatch;
-            value = value?.[arrayName]?.[parseInt(index)];
-          } else {
-            value = value?.[part];
-          }
-          
-          if (value === undefined) {
-            console.warn(`⚠️ Value not found for JSON Key: ${jsonKey} (cleaned: ${cleanKey})`);
-            return;
-          }
-        }
-        
-        if (typeof value === 'string') {
-          element.textContent = value;
-          
-          // 🎨 REMOVER estilos de "modificado" e restaurar visual de edição normal
-          const htmlElement = element as HTMLElement;
-          htmlElement.style.background = '';
-          htmlElement.style.outline = '3px dashed #CFAF5A';
-          htmlElement.style.outlineOffset = '4px';
-          
-          console.log(`✅ Refreshed ID ${id} (${jsonKey}): "${value.substring(0, 100)}..."`);
-        } else {
-          console.warn(`⚠️ Value for ${jsonKey} is not a string:`, value);
+  // 🌐 Quando o idioma muda durante edição, React re-renderiza o PageComponent
+  // automaticamente com dados corretos (incluindo edições pendentes via PendingEditsContext).
+  // Só precisamos re-aplicar a seleção visual nos novos elementos DOM.
+  useEffect(() => {
+    if (!isEditModeRef.current) return;
+    // Aguardar React terminar o re-render com double-rAF (sem timer hardcoded)
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        if (isEditModeRef.current) {
+          addVisualSelection();
         }
       });
-      
-      console.log('✅ All elements refreshed from database');
-    } catch (error) {
-      console.error('❌ Error refreshing elements:', error);
-    }
-  };
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedLanguage]);
 
   // 🎨 Adicionar seleção visual a um elemento específico
   const addSelectionToElement = (htmlEl: HTMLElement) => {
     const jsonKey = htmlEl.getAttribute('data-json-key');
     if (!jsonKey) return;
     
-    // Verificar se já tem ID (evitar duplicação)
-    if (htmlEl.hasAttribute('data-edit-id')) return;
+    // Se o elemento já tem ID (React preservou o nó DOM), re-registrar no map
+    const existingId = htmlEl.getAttribute('data-edit-id');
+    if (existingId) {
+      elementMapRef.current.set(existingId, { element: htmlEl, jsonKey });
+      return;
+    }
     
     // Atribuir ID único simples
     const uniqueId = `edit-${++idCounterRef.current}`;
@@ -176,6 +145,12 @@ const VisualPageEditor = ({ pageId, pageComponent: PageComponent }: VisualPageEd
     // Limpar mapeamento anterior
     elementMapRef.current.clear();
     idCounterRef.current = 0;
+    
+    // Desconectar observer anterior (evitar acumulação)
+    const windowWithObserver = window as unknown as WindowWithObserver;
+    if (windowWithObserver.__editorObserver) {
+      windowWithObserver.__editorObserver.disconnect();
+    }
     
     editables.forEach(el => addSelectionToElement(el as HTMLElement));
 
@@ -252,8 +227,7 @@ const VisualPageEditor = ({ pageId, pageComponent: PageComponent }: VisualPageEd
     console.log('🧹 Visual selection removed');
   };
 
-  // 📝 Abrir editor para um elemento
-  const openEditor = (editId: string) => {
+  const openEditor = useCallback((editId: string) => {
     const mapped = elementMapRef.current.get(editId);
     if (!mapped) {
       console.error('❌ Element not found for ID:', editId);
@@ -273,16 +247,106 @@ const VisualPageEditor = ({ pageId, pageComponent: PageComponent }: VisualPageEd
     
     // 🔍 LOG DETALHADO para debugging
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-    console.log('🎯 EDITOR OPENED');
+    console.log('🎯 EDITOR OPENED (MULTILINGUAL)');
     console.log('Edit ID:', editId);
     console.log('JSON Key:', jsonKey);
     console.log('Element tag:', element.tagName);
-    console.log('Element classes:', element.className);
-    console.log('Current text preview:', currentText.substring(0, 100) + '...');
-    console.log('Text length:', currentText.length);
-    console.log('Has text:', hasText);
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
 
+    // Extrair o pageId real a partir da chave — pode diferir do pageId da aba.
+    // Ex: na purificação, o carrossel de testemunhos tem chaves "testemunhos.…"
+    const { sourcePageId, cleanKey } = extractSourcePageId(jsonKey);
+    const fetchPageId = sourcePageId; // página real do conteúdo
+    console.log(`📌 Source page: ${fetchPageId} (editor page: ${pageId}, jsonKey: ${jsonKey})`);
+
+    // Buscar dados multilíngues do pageId REAL do conteúdo
+    fetch(`/api/content/${fetchPageId}`).then(r => r.json()).then((response) => {
+      console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+      console.log(`📡 RESPOSTA DO GET - Dados de "${fetchPageId}" (1 GET para todas as linguas)`);
+      console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+      
+      const content = response?.content || {};
+      const languageMetadata = response?.languageMetadata || {};
+      
+      console.log('Response structure:', { 
+        success: response?.success, 
+        contentKeys: Object.keys(content || {}),
+        metadataKeys: Object.keys(languageMetadata || {})
+      });
+      console.log('Full response:', JSON.stringify(response, null, 2).substring(0, 500));
+      
+      const getParts = (obj: Record<string, unknown> | null | undefined, key: string): unknown => {
+        let value: unknown = obj;
+        const parts = key.split('.');
+        for (const part of parts) {
+          const arrayMatch = part.match(/^(.+?)\[(\d+)\]$/);
+          if (arrayMatch) {
+            const [, arrayName, index] = arrayMatch;
+            const arrayValue = (value as Record<string, unknown>)?.[arrayName];
+            if (Array.isArray(arrayValue)) {
+              value = arrayValue[parseInt(index)];
+            } else {
+              value = undefined;
+            }
+          } else {
+            value = (value as Record<string, unknown>)?.[part];
+          }
+          if (value === undefined) return null;
+        }
+        return value;
+      };
+      
+      // Extrair o objeto completo (pode ser string ou { "pt-BR": ..., "en-US": ... })
+      const fieldValue = getParts(content, cleanKey);
+      let ptText = '';
+      let enText = '';
+      
+      if (typeof fieldValue === 'object' && fieldValue !== null && ('pt-BR' in fieldValue || 'en-US' in fieldValue)) {
+        // Estrutura multilíngue: { "pt-BR": "...", "en-US": "..." }
+        ptText = fieldValue['pt-BR'] || '';
+        enText = fieldValue['en-US'] || '';
+      } else if (typeof fieldValue === 'string') {
+        // Valor simples (não-multilíngue sharedpode ser __shared__)
+        ptText = fieldValue;
+        enText = fieldValue;
+      } else {
+        ptText = '';
+        enText = '';
+      }
+      
+      console.log(`✓ Valores extraídos para chave "${cleanKey}":`);
+      console.log(`  PT-BR: "${ptText.substring(0, 80)}..." (length: ${ptText.length})`);
+      console.log(`  EN-US: "${enText.substring(0, 80)}..." (length: ${enText.length})`);
+      
+      // Verificar status de integridade - agora ambos vêm na mesma resposta
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const ptWarning = languageMetadata?.pt_BR?.integrityWarnings?.find((w: any) => w.key === jsonKey);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const enWarning = languageMetadata?.en_US?.integrityWarnings?.find((w: any) => w.key === jsonKey);
+      
+      console.log('🔍 Integridade:');
+      console.log(`  PT-BR warning:`, ptWarning);
+      console.log(`  EN-US warning:`, enWarning);
+      
+      // Sistema melhorado de detecção: fallbackUsed ou FALTANDO
+      const ptMissing = ptWarning?.fallbackUsed === true || ptWarning?.issues?.some?.((i: string) => i.includes('FALTANDO')) || !ptText;
+      const enMissing = enWarning?.fallbackUsed === true || enWarning?.issues?.some?.((i: string) => i.includes('FALTANDO')) || !enText;
+      
+      console.log('🚨 Detecção de Missing:');
+      console.log(`  PT-BR missing: ${ptMissing} (fallbackUsed: ${ptWarning?.fallbackUsed}, FALTANDO: ${ptWarning?.issues?.some?.((i: string) => i.includes('FALTANDO'))}, vazio: ${!ptText})`);
+      console.log(`  EN-US missing: ${enMissing} (fallbackUsed: ${enWarning?.fallbackUsed}, FALTANDO: ${enWarning?.issues?.some?.((i: string) => i.includes('FALTANDO'))}, vazio: ${!enText})`);
+      console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+      
+      renderMultilingualEditor(editId, jsonKey, ptText, enText, ptMissing, enMissing);
+    }).catch(error => {
+      console.error('Erro ao buscar dados multilíngues:', error);
+      // Fallback para editor simples
+      renderSimpleEditor(editId, jsonKey, currentText, hasText);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageId]);
+  
+  const renderMultilingualEditor = (editId: string, jsonKey: string, ptText: string, enText: string, ptMissing: boolean, enMissing: boolean) => {
     // Criar overlay
     const overlay = document.createElement('div');
     overlay.id = 'editor-overlay';
@@ -310,33 +374,386 @@ const VisualPageEditor = ({ pageId, pageComponent: PageComponent }: VisualPageEd
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
       z-index: 9999;
       padding: 32px;
-      min-width: 600px;
-      max-width: 800px;
+      min-width: 900px;
+      max-width: 1200px;
+      max-height: 85vh;
+      overflow-y: auto;
       animation: slideIn 0.3s;
+      display: flex;
+      flex-direction: column;
     `;
 
-    // Adicionar animações
-    const style = document.createElement('style');
-    style.textContent = `
-      @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-      }
-      @keyframes slideIn {
-        from { transform: translate(-50%, -45%); opacity: 0; }
-        to { transform: translate(-50%, -50%); opacity: 1; }
-      }
-      @keyframes shake {
-        0%, 100% { transform: translateX(0); }
-        25% { transform: translateX(-8px); }
-        75% { transform: translateX(8px); }
-      }
+    // Título principal
+    const title = document.createElement('div');
+    title.textContent = '✏️ Editor Multilíngue';
+    title.style.cssText = `
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #333;
     `;
-    document.head.appendChild(style);
+
+    // Subtítulo com a chave
+    const subtitle = document.createElement('div');
+    subtitle.textContent = jsonKey;
+    subtitle.style.cssText = `
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 24px;
+      font-family: 'Courier New', monospace;
+      background: #f5f5f5;
+      padding: 8px 12px;
+      border-radius: 6px;
+      border-left: 4px solid #CFAF5A;
+    `;
+
+    // Container de idiomas lado a lado
+    const languagesContainer = document.createElement('div');
+    languagesContainer.style.cssText = `
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 24px;
+      flex-grow: 1;
+    `;
+
+    // ========== PORTUGUÊS ==========
+    const ptSection = document.createElement('div');
+    ptSection.style.cssText = `
+      display: flex;
+      flex-direction: column;
+      border: 2px solid ${ptMissing ? '#fca5a5' : '#86efac'};
+      border-radius: 8px;
+      padding: 16px;
+      background: ${ptMissing ? '#fef2f2' : '#f0fdf4'};
+    `;
+
+    const ptLabel = document.createElement('div');
+    ptLabel.style.cssText = `
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: ${ptMissing ? '#991b1b' : '#166534'};
+    `;
+    ptLabel.innerHTML = `${ptMissing ? '⚠️' : '✅'} Português (pt-BR)`;
+
+    const ptStatus = document.createElement('div');
+    ptStatus.style.cssText = `
+      font-size: 12px;
+      margin-bottom: 12px;
+      padding: 8px 12px;
+      border-radius: 4px;
+      background: ${ptMissing ? '#fecaca' : '#d1fae5'};
+      color: ${ptMissing ? '#7f1d1d' : '#065f46'};
+      font-weight: 600;
+    `;
+    ptStatus.textContent = ptMissing ? '🔴 FALTANDO - Adicione conteúdo em português' : '🟢 OK - Conteúdo presente';
+
+    const ptTextarea = document.createElement('textarea');
+    ptTextarea.value = ptText;
+    ptTextarea.placeholder = ptMissing ? 'Digite o conteúdo em português...' : '';
+    ptTextarea.style.cssText = `
+      flex-grow: 1;
+      padding: 12px;
+      border: 2px solid ${ptMissing ? '#fca5a5' : '#86efac'};
+      border-radius: 6px;
+      font-size: 14px;
+      font-family: inherit;
+      resize: none;
+      min-height: 300px;
+      line-height: 1.5;
+      transition: all 0.2s;
+      ${ptMissing ? 'background: #fefce8; color: #7f1d1d;' : ''}
+    `;
+    ptTextarea.onmouseover = () => {
+      ptTextarea.style.borderColor = ptMissing ? '#f87171' : '#4ade80';
+    };
+    ptTextarea.onmouseout = () => {
+      ptTextarea.style.borderColor = ptMissing ? '#fca5a5' : '#86efac';
+    };
+
+    ptSection.appendChild(ptLabel);
+    ptSection.appendChild(ptStatus);
+    ptSection.appendChild(ptTextarea);
+
+    // ========== INGLÊS ==========
+    const enSection = document.createElement('div');
+    enSection.style.cssText = `
+      display: flex;
+      flex-direction: column;
+      border: 2px solid ${enMissing ? '#fca5a5' : '#86efac'};
+      border-radius: 8px;
+      padding: 16px;
+      background: ${enMissing ? '#fef2f2' : '#f0fdf4'};
+    `;
+
+    const enLabel = document.createElement('div');
+    enLabel.style.cssText = `
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: ${enMissing ? '#991b1b' : '#166534'};
+    `;
+    enLabel.innerHTML = `${enMissing ? '⚠️' : '✅'} English (en-US)`;
+
+    const enStatus = document.createElement('div');
+    enStatus.style.cssText = `
+      font-size: 12px;
+      margin-bottom: 12px;
+      padding: 8px 12px;
+      border-radius: 4px;
+      background: ${enMissing ? '#fecaca' : '#d1fae5'};
+      color: ${enMissing ? '#7f1d1d' : '#065f46'};
+      font-weight: 600;
+    `;
+    enStatus.textContent = enMissing ? '🔴 FALTANDO - Adicione conteúdo em inglês' : '🟢 OK - Conteúdo presente';
+
+    const enTextarea = document.createElement('textarea');
+    enTextarea.value = enText;
+    enTextarea.placeholder = enMissing ? 'Type content in English...' : '';
+    enTextarea.style.cssText = `
+      flex-grow: 1;
+      padding: 12px;
+      border: 2px solid ${enMissing ? '#fca5a5' : '#86efac'};
+      border-radius: 6px;
+      font-size: 14px;
+      font-family: inherit;
+      resize: none;
+      min-height: 300px;
+      line-height: 1.5;
+      transition: all 0.2s;
+      ${enMissing ? 'background: #fefce8; color: #7f1d1d;' : ''}
+    `;
+    enTextarea.onmouseover = () => {
+      enTextarea.style.borderColor = enMissing ? '#f87171' : '#4ade80';
+    };
+    enTextarea.onmouseout = () => {
+      enTextarea.style.borderColor = enMissing ? '#fca5a5' : '#86efac';
+    };
+
+    enSection.appendChild(enLabel);
+    enSection.appendChild(enStatus);
+    enSection.appendChild(enTextarea);
+
+    languagesContainer.appendChild(ptSection);
+    languagesContainer.appendChild(enSection);
+
+    // Container de botões
+    const buttonContainer = document.createElement('div');
+    buttonContainer.style.cssText = `
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      margin-top: auto;
+      padding-top: 16px;
+      border-top: 1px solid #e5e7eb;
+    `;
+
+    // Botão OK (Aplicar = preview no layout, NÃO salva no DB ainda)
+    const okButton = document.createElement('button');
+    okButton.textContent = '✓ Aplicar';
+    okButton.style.cssText = `
+      padding: 12px 28px;
+      background: #10b981;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 16px;
+      transition: all 0.2s;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    `;
+    okButton.onmouseover = () => {
+      okButton.style.background = '#059669';
+      okButton.style.transform = 'translateY(-2px)';
+    };
+    okButton.onmouseout = () => {
+      okButton.style.background = '#10b981';
+      okButton.style.transform = 'translateY(0)';
+    };
+
+    // Botão Cancelar
+    const cancelButton = document.createElement('button');
+    cancelButton.textContent = '✕ Cancelar';
+    cancelButton.style.cssText = `
+      padding: 12px 28px;
+      background: #6b7280;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 16px;
+      transition: all 0.2s;
+    `;
+    cancelButton.onmouseover = () => {
+      cancelButton.style.background = '#4b5563';
+      cancelButton.style.transform = 'translateY(-2px)';
+    };
+    cancelButton.onmouseout = () => {
+      cancelButton.style.background = '#6b7280';
+      cancelButton.style.transform = 'translateY(0)';
+    };
+
+    // Função de salvamento MULTILINGUAL
+    const saveEdit = () => {
+      const newPTText = ptTextarea.value.trim();
+      const newENText = enTextarea.value.trim();
+      
+      // Validacao: pelo menos um idioma deve ter conteudo
+      if (!newPTText && !newENText) {
+        const errorMsg = document.createElement('div');
+        errorMsg.textContent = '⚠️ Pelo menos um idioma deve ter conteúdo!';
+        errorMsg.style.cssText = `
+          color: #ef4444;
+          font-size: 14px;
+          font-weight: 700;
+          padding: 12px;
+          background: #fef2f2;
+          border-radius: 6px;
+          border-left: 4px solid #ef4444;
+          margin-bottom: 16px;
+        `;
+        editor.insertBefore(errorMsg, buttonContainer);
+        
+        setTimeout(() => {
+          errorMsg.remove();
+        }, 3000);
+        return;
+      }
+
+      console.log(`💾 Acumulando mudanca na chave: ${jsonKey}`);
+      console.log(`   pt-BR: "${newPTText.substring(0, 60)}..."`);
+      console.log(`   en-US: "${newENText.substring(0, 60)}..."`);
+      
+      // 🔄 Registrar edição pendente no Context — usePageContent vai mesclar
+      // automaticamente nos dados retornados, em qualquer idioma.
+      // Usar o pageId REAL extraído da chave (pode ser diferente da aba atual).
+      const { sourcePageId: pendingPageId, cleanKey: pendingCleanKey } = extractSourcePageId(jsonKey);
+      setPendingEdit(pendingPageId, pendingCleanKey, newPTText, newENText);
+      
+      // Atualizar estado local (para tracking de modificações e save)
+      setFields(prev => {
+        const updated = [...prev];
+        const fieldIndex = updated.findIndex(f => f.id === editId);
+        
+        if (fieldIndex >= 0) {
+          // Atualizar campo existente com marcas de multilingual
+          updated[fieldIndex] = {
+            ...updated[fieldIndex],
+            currentValue: newPTText || newENText,  // Preview com PT principal
+            isModified: true,
+            ptValue: newPTText,
+            enValue: newENText,
+            languages: ['pt-BR', 'en-US']
+          };
+        } else {
+          updated.push({
+            id: editId,
+            jsonKey,
+            originalValue: ptText || enText,
+            currentValue: newPTText || newENText,
+            isModified: true,
+            ptValue: newPTText,
+            enValue: newENText,
+            languages: ['pt-BR', 'en-US']
+          });
+        }
+        
+        return updated;
+      });
+      
+      // 🖼️ LIVE PREVIEW via React: setPendingEdit() acima já disparou
+      // recalculação no usePageContent → React re-renderiza o componente
+      // com o valor correto para o idioma atual. NÃO manipular o DOM diretamente
+      // aqui — isso quebraria a reconciliação do React (o elemento ficaria "morto"
+      // e não responderia mais a trocas de idioma, além de perder formatações
+      // como substring/truncation que o componente aplica no render).
+      //
+      // O indicador visual (outline amber) é re-aplicado pelo MutationObserver
+      // quando React re-renderiza e o addVisualSelection detecta o novo nó DOM.
+      console.log(`🖼️ Pending edit registered for ${jsonKey} — React will re-render`);
+      
+      console.log('✓ Campo acumulado. Usuario vera botao "Salvar X mudancas"');
+      cleanup();
+    };
+
+    okButton.onclick = saveEdit;
+    cancelButton.onclick = cleanup;
+    
+    buttonContainer.appendChild(okButton);
+    buttonContainer.appendChild(cancelButton);
+    
+    editor.appendChild(title);
+    editor.appendChild(subtitle);
+    editor.appendChild(languagesContainer);
+    editor.appendChild(buttonContainer);
+
+    function cleanup() {
+      overlay.remove();
+      editor.remove();
+      activeEditorRef.current = null;
+    }
+
+    overlay.onclick = cleanup;
+    editor.onclick = (e) => e.stopPropagation();
+
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        cleanup();
+        document.removeEventListener('keydown', handleEscape);
+      }
+    };
+    document.addEventListener('keydown', handleEscape);
+
+    document.body.appendChild(overlay);
+    document.body.appendChild(editor);
+    
+    activeEditorRef.current = editor;
+  };
+
+  // Função helper para renderizar editor simples como fallback
+  const renderSimpleEditor = (editId: string, jsonKey: string, currentText: string, hasText: boolean) => {
+    // Criar overlay
+    const overlay = document.createElement('div');
+    overlay.id = 'editor-overlay';
+    overlay.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 9998;
+      backdrop-filter: blur(2px);
+    `;
+
+    // Criar container do editor
+    const editor = document.createElement('div');
+    editor.style.cssText = `
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      z-index: 9999;
+      padding: 32px;
+      min-width: 600px;
+      max-width: 800px;
+    `;
 
     // Título
     const title = document.createElement('div');
-    title.textContent = hasText ? '✏️ Editor de Texto' : '⚠️ Elemento Não Editável';
+    title.textContent = hasText ? '✏️ Editor de Texto (Fallback)' : '⚠️ Elemento Não Editável';
     title.style.cssText = `
       font-size: 24px;
       font-weight: 700;
@@ -344,7 +761,7 @@ const VisualPageEditor = ({ pageId, pageComponent: PageComponent }: VisualPageEd
       color: ${hasText ? '#333' : '#ef4444'};
     `;
 
-    // Subtítulo com a key
+    // Subtítulo
     const subtitle = document.createElement('div');
     subtitle.textContent = jsonKey;
     subtitle.style.cssText = `
@@ -385,10 +802,7 @@ const VisualPageEditor = ({ pageId, pageComponent: PageComponent }: VisualPageEd
         cursor: pointer;
         font-weight: 600;
         font-size: 16px;
-        transition: background 0.2s;
       `;
-      closeButton.onmouseover = () => closeButton.style.background = '#4b5563';
-      closeButton.onmouseout = () => closeButton.style.background = '#6b7280';
       closeButton.onclick = cleanup;
 
       editor.appendChild(title);
@@ -396,7 +810,7 @@ const VisualPageEditor = ({ pageId, pageComponent: PageComponent }: VisualPageEd
       editor.appendChild(message);
       editor.appendChild(closeButton);
     } else {
-      // Editor com textarea
+      // Textarea simples como fallback
       const textarea = document.createElement('textarea');
       textarea.value = currentText;
       textarea.style.cssText = `
@@ -409,13 +823,10 @@ const VisualPageEditor = ({ pageId, pageComponent: PageComponent }: VisualPageEd
         font-family: inherit;
         resize: vertical;
         margin-bottom: 24px;
-        line-height: 1.6;
-        transition: border-color 0.2s;
       `;
       textarea.focus();
       textarea.select();
 
-      // Container de botões
       const buttonContainer = document.createElement('div');
       buttonContainer.style.cssText = `
         display: flex;
@@ -423,180 +834,58 @@ const VisualPageEditor = ({ pageId, pageComponent: PageComponent }: VisualPageEd
         justify-content: flex-end;
       `;
 
-      // Botão OK
       const okButton = document.createElement('button');
       okButton.textContent = '✓ OK';
       okButton.style.cssText = `
-        padding: 14px 32px;
+        padding: 12px 28px;
         background: #10b981;
         color: white;
         border: none;
         border-radius: 8px;
         cursor: pointer;
         font-weight: 700;
-        font-size: 18px;
-        transition: all 0.2s;
-        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
       `;
-      okButton.onmouseover = () => {
-        okButton.style.background = '#059669';
-        okButton.style.transform = 'translateY(-2px)';
-        okButton.style.boxShadow = '0 6px 16px rgba(16, 185, 129, 0.4)';
-      };
-      okButton.onmouseout = () => {
-        okButton.style.background = '#10b981';
-        okButton.style.transform = 'translateY(0)';
-        okButton.style.boxShadow = '0 4px 12px rgba(16, 185, 129, 0.3)';
+      okButton.onclick = () => {
+        const newText = textarea.value.trim();
+        if (!newText) {
+          alert('⚠️ Campo não pode estar vazio');
+          return;
+        }
+        // Salvar usando a função padrão
+        saveChanges();
+        cleanup();
       };
 
-      // Botão Cancelar
       const cancelButton = document.createElement('button');
-      cancelButton.textContent = '✕ Cancelar (ESC)';
+      cancelButton.textContent = '✕ Cancelar';
       cancelButton.style.cssText = `
-        padding: 14px 32px;
+        padding: 12px 28px;
         background: #6b7280;
         color: white;
         border: none;
         border-radius: 8px;
         cursor: pointer;
-        font-weight: 600;
-        font-size: 18px;
-        transition: all 0.2s;
       `;
-      cancelButton.onmouseover = () => {
-        cancelButton.style.background = '#4b5563';
-        cancelButton.style.transform = 'translateY(-2px)';
-      };
-      cancelButton.onmouseout = () => {
-        cancelButton.style.background = '#6b7280';
-        cancelButton.style.transform = 'translateY(0)';
-      };
-
-      // Função de salvamento
-      const saveEdit = () => {
-        const newText = textarea.value.trim();
-        
-        // ⛔ VALIDAÇÃO: Impedir campo vazio
-        if (!newText) {
-          textarea.style.borderColor = '#ef4444';
-          textarea.style.boxShadow = '0 0 0 4px rgba(239, 68, 68, 0.2)';
-          textarea.style.animation = 'shake 0.4s';
-          
-          const errorMsg = document.createElement('div');
-          errorMsg.textContent = '⚠️ O campo não pode ficar vazio!';
-          errorMsg.style.cssText = `
-            color: #ef4444;
-            font-size: 14px;
-            font-weight: 700;
-            margin-top: -16px;
-            margin-bottom: 16px;
-            padding: 12px;
-            background: #fef2f2;
-            border-radius: 6px;
-            border-left: 4px solid #ef4444;
-            animation: shake 0.4s;
-          `;
-          
-          buttonContainer.parentElement?.insertBefore(errorMsg, buttonContainer);
-          
-          setTimeout(() => {
-            errorMsg.remove();
-            textarea.style.borderColor = '#CFAF5A';
-            textarea.style.boxShadow = '';
-            textarea.style.animation = '';
-          }, 3000);
-          
-          return;
-        }
-        
-        console.log(`💡 PRÉVIA: Atualizando DOM com novo texto ANTES de salvar`);
-        console.log(`   Elemento ID: ${editId}`);
-        console.log(`   JSON Key: ${jsonKey}`);
-        console.log(`   Texto anterior: "${currentText.substring(0, 60)}..."`);
-        console.log(`   Texto novo: "${newText.substring(0, 60)}..."`);
-        
-        // 🎨 ATUALIZAR DOM IMEDIATAMENTE - PRÉVIA VISUAL
-        element.textContent = newText;
-        
-        // Adicionar indicador visual de "modificado mas não salvo"
-        element.style.background = 'rgba(251, 191, 36, 0.15)';
-        element.style.outline = '3px solid #fbbf24';
-        element.style.outlineOffset = '4px';
-        
-        console.log(`✅ DOM atualizado - prévia visual aplicada`);
-        
-        // Atualizar estado
-        setFields(prev => {
-          const updated = [...prev];
-          const fieldIndex = updated.findIndex(f => f.id === editId);
-          
-          if (fieldIndex >= 0) {
-            updated[fieldIndex] = {
-              ...updated[fieldIndex],
-              currentValue: newText,
-              isModified: updated[fieldIndex].originalValue !== newText
-            };
-          } else {
-            updated.push({
-              id: editId,
-              jsonKey,
-              originalValue: currentText,
-              currentValue: newText,
-              isModified: currentText !== newText
-            });
-          }
-          
-          console.log(`📝 Estado atualizado: ${updated.filter(f => f.isModified).length} campos modificados`);
-          return updated;
-        });
-        
-        cleanup();
-      };
-
-      // Event listeners
-      okButton.onclick = saveEdit;
       cancelButton.onclick = cleanup;
-      
-      // Atalhos de teclado
-      textarea.onkeydown = (e) => {
-        if (e.key === 'Escape') {
-          cleanup();
-        } else if (e.key === 'Enter' && e.ctrlKey) {
-          e.preventDefault();
-          saveEdit();
-        } else if (e.key === 'Enter' && e.shiftKey) {
-          // Shift+Enter insere quebra de linha
-          e.preventDefault();
-          const start = textarea.selectionStart;
-          const end = textarea.selectionEnd;
-          const value = textarea.value;
-          textarea.value = value.substring(0, start) + '\n' + value.substring(end);
-          textarea.selectionStart = textarea.selectionEnd = start + 1;
-        }
-      };
 
-      // Montar estrutura
       buttonContainer.appendChild(okButton);
       buttonContainer.appendChild(cancelButton);
-      
+
       editor.appendChild(title);
       editor.appendChild(subtitle);
       editor.appendChild(textarea);
       editor.appendChild(buttonContainer);
     }
 
-    // Função de limpeza
     function cleanup() {
       overlay.remove();
       editor.remove();
       activeEditorRef.current = null;
     }
 
-    // Fechar ao clicar no overlay
     overlay.onclick = cleanup;
     editor.onclick = (e) => e.stopPropagation();
 
-    // ESC fecha o editor
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         cleanup();
@@ -632,7 +921,7 @@ const VisualPageEditor = ({ pageId, pageComponent: PageComponent }: VisualPageEd
         openEditor(editId);
       }
     }
-  }, []);
+  }, [openEditor]);
 
   // 🔓 Ativar modo de edição
   const enableEditMode = useCallback(() => {
@@ -653,6 +942,9 @@ const VisualPageEditor = ({ pageId, pageComponent: PageComponent }: VisualPageEd
     isEditModeRef.current = false;
     removeVisualSelection();
     
+    // Limpar edições pendentes ao sair do modo de edição (TODAS as páginas)
+    clearPendingEdits();
+    
     document.removeEventListener('click', handleElementClick as EventListener, true);
     
     if (activeEditorRef.current) {
@@ -663,7 +955,7 @@ const VisualPageEditor = ({ pageId, pageComponent: PageComponent }: VisualPageEd
     }
     
     console.log('🔒 Edit mode DISABLED');
-  }, [handleElementClick]);
+  }, [handleElementClick, clearPendingEdits]);
 
   // 💾 Salvar mudanças no banco
   const saveChanges = async () => {
@@ -678,52 +970,177 @@ const VisualPageEditor = ({ pageId, pageComponent: PageComponent }: VisualPageEd
       return;
     }
 
-    console.log(`💾 Saving ${modifiedFields.length} changes...`);
+    // 📌 Preservar posição de scroll antes de qualquer operação
+    const savedScrollY = window.scrollY;
+    console.log(`💾 Saving ${modifiedFields.length} changes... (scroll position: ${savedScrollY}px)`);
     setIsSaving(true);
 
     try {
-      const edits = modifiedFields.reduce((acc, field) => {
-        acc[field.jsonKey] = { newText: field.currentValue };
-        return acc;
-      }, {} as Record<string, { newText: string }>);
-
       console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
       console.log('💾 SAVING TO DATABASE');
       console.log('Page ID:', pageId);
-      console.log('Number of edits:', Object.keys(edits).length);
+      console.log('Number of edits:', modifiedFields.length);
+      
       modifiedFields.forEach((field, i) => {
         console.log(`\nEdit ${i + 1}:`);
         console.log('  ID:', field.id);
         console.log('  JSON Key:', field.jsonKey);
         console.log('  Original:', field.originalValue.substring(0, 80) + '...');
-        console.log('  New:', field.currentValue.substring(0, 80) + '...');
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const isMultilang = (field as any).ptValue || (field as any).enValue;
+        if (isMultilang) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          console.log(`  PT-BR: "${(field as any).ptValue ? (field as any).ptValue.substring(0, 60) + '...' : '(nao alterado)'}"}`);
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          console.log(`  EN-US: "${(field as any).enValue ? (field as any).enValue.substring(0, 60) + '...' : '(nao alterado)'}"}`);
+        } else {
+          console.log('  New:', field.currentValue.substring(0, 80) + '...');
+        }
       });
       console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-      console.log('📤 Sending payload:', { pageId, edits });
-
-      const response = await fetch(`/api/content/${pageId}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ edits })
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`HTTP ${response.status}: ${errorText}`);
-      }
-
-      const result = await response.json();
       
-      if (result.success) {
-        console.log('✅ Changes saved successfully:', result);
+      // ━━━ Agrupar campos por sourcePageId (podem vir de páginas diferentes) ━━━
+      // Ex: na aba "purificacao", edições em testemunhos vão para /api/content/testemunhos
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const promises: Promise<any>[] = [];
+
+      // Coletar todos os sourcePageIds únicos dos campos modificados
+      const affectedPageIds = new Set<string>();
+      modifiedFields.forEach(f => {
+        const { sourcePageId: sp } = extractSourcePageId(f.jsonKey);
+        affectedPageIds.add(sp);
+      });
+      console.log(`📄 Páginas afetadas: ${[...affectedPageIds].join(', ')}`);
+
+      // Para cada página afetada, processar seus campos
+      for (const targetPageId of affectedPageIds) {
+        const pageFields = modifiedFields.filter(f => {
+          const { sourcePageId: sp } = extractSourcePageId(f.jsonKey);
+          return sp === targetPageId;
+        });
         
-        // 🔄 REFRESH: Recarregar dados do banco e atualizar DOM
-        await refreshSavedElements(modifiedFields.map(f => ({ id: f.id, jsonKey: f.jsonKey })));
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const pageMultilang = pageFields.filter((f: any) => f.ptValue || f.enValue);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const pageSimple = pageFields.filter((f: any) => !f.ptValue && !f.enValue);
+
+        console.log(`  [${targetPageId}] Multi: ${pageMultilang.length}, Simple: ${pageSimple.length}`);
+
+        // Multilíngues: GET → MERGE → PUT
+        if (pageMultilang.length > 0) {
+          console.log(`📥 GETting existing values from "${targetPageId}" for ${pageMultilang.length} multilingual fields...`);
+          
+          const getPromises = pageMultilang.map(field => {
+            const { cleanKey } = extractSourcePageId(field.jsonKey);
+            
+            return fetch(`/api/content/${targetPageId}`)
+              .then(r => r.json())
+              .then(data => {
+                let current = data.content || {};
+                const parts = cleanKey.split('.');
+                for (const part of parts) {
+                  const arrayMatch = part.match(/^(.+)\[(\d+)\]$/);
+                  if (arrayMatch) {
+                    const [, arrayName, index] = arrayMatch;
+                    current = current?.[arrayName]?.[parseInt(index)];
+                  } else {
+                    current = current?.[part];
+                  }
+                }
+                if (typeof current !== 'object' || !current) current = {};
+                return { field, currentValue: current };
+              });
+          });
+          
+          const existingValues = await Promise.all(getPromises);
+          
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const mergedEdits: Record<string, any> = {};
+          existingValues.forEach(({ field, currentValue }) => {
+            const mergedContent = {
+              'pt-BR': field.ptValue || currentValue['pt-BR'] || '',
+              'en-US': field.enValue || currentValue['en-US'] || ''
+            };
+            console.log(`  Merged ${field.jsonKey}: PT="${mergedContent['pt-BR'].substring(0, 50)}…" EN="${mergedContent['en-US'].substring(0, 50)}…"`);
+            mergedEdits[field.jsonKey] = { newText: mergedContent };
+          });
+          
+          if (Object.keys(mergedEdits).length > 0) {
+            console.log(`📤 PUT multilingual to "${targetPageId}" (${Object.keys(mergedEdits).length} fields)`);
+            promises.push(
+              fetch(`/api/content/${targetPageId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ edits: mergedEdits })
+              })
+            );
+          }
+        }
+        
+        // Campos simples: PUT direto
+        if (pageSimple.length > 0) {
+          const simpleEdits = pageSimple.reduce((acc, field) => {
+            acc[field.jsonKey] = { newText: field.currentValue };
+            return acc;
+          }, {} as Record<string, { newText: string }>);
+          
+          console.log(`📤 PUT simple to "${targetPageId}":`, simpleEdits);
+          promises.push(
+            fetch(`/api/content/${targetPageId}`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ edits: simpleEdits })
+            })
+          );
+        }
+      }
+      
+      // Aguardar todos os PUTs completarem
+      console.log(`⏳ Aguardando ${promises.length} PUT requests...`);
+      const responses = await Promise.all(promises);
+      
+      // Validar todas as respostas
+      for (const response of responses) {
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`HTTP ${response.status}: ${errorText}`);
+        }
+      }
+      
+      // Processar resultados
+      const results = await Promise.all(responses.map(r => r.json()));
+      console.log('✅ All PUT requests completed:', results);
+      
+      const allSuccess = results.every(r => r.success);
+      
+      if (allSuccess) {
+        console.log('✅ Changes saved successfully');
         
         // Atualizar originalValue dos campos salvos
         setFields(prev => prev.map(f => 
           f.isModified ? { ...f, originalValue: f.currentValue, isModified: false } : f
         ));
+        
+        // NÃO limpar edições pendentes aqui!
+        // Os pending edits servem como "ponte" — mantêm os valores corretos
+        // na tela enquanto o refetch silencioso traz os dados novos do DB.
+        // Se limparmos antes do refetch, o useMemo recalcula com dados antigos
+        // do cache → os valores "revertem" visualmente por um instante.
+        // Pending edits são limpos ao desativar o modo de edição.
+        
+        // Invalidar cache de TODAS as páginas afetadas
+        console.log(`🔄 Invalidating cache for pages: ${[...affectedPageIds].join(', ')}`);
+        affectedPageIds.forEach(pid => invalidateCache(pid));
+        
+        // Restaurar scroll e seleção visual usando double-rAF (sem timer hardcoded)
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            window.scrollTo(0, savedScrollY);
+            if (isEditModeRef.current) {
+              addVisualSelection();
+            }
+          });
+        });
         
         setDialogState({
           open: true,
@@ -731,14 +1148,14 @@ const VisualPageEditor = ({ pageId, pageComponent: PageComponent }: VisualPageEd
           message: `✅ ${modifiedFields.length} mudanças salvas com sucesso!`,
         });
       } else {
-        throw new Error(result.error || 'Failed to save');
+        throw new Error('Algumas requisicoes falharam');
       }
     } catch (error) {
       console.error('❌ Error saving changes:', error);
       setDialogState({
         open: true,
         type: 'success',
-        message: '❌ Erro ao salvar mudanças. Verifique o console.',
+        message: '❌ Erro ao salvar mudancas. Verifique o console.',
       });
     } finally {
       setIsSaving(false);
@@ -765,30 +1182,38 @@ const VisualPageEditor = ({ pageId, pageComponent: PageComponent }: VisualPageEd
       onConfirm: async () => {
     
     console.log(`🚫 Cancelando ${modifiedFields.length} mudanças...`);
-    console.log('🔄 Recarregando dados frescos do banco de dados...');
     
-    try {
-      // 🔄 RECARREGAR DO BANCO: Buscar dados atualizados via API
-      await refreshSavedElements(modifiedFields.map(f => ({ id: f.id, jsonKey: f.jsonKey })));
-      
-      // Limpar estado de campos modificados
-      setFields(prev => prev.filter(f => !f.isModified));
-      
-      console.log('✅ DOM recarregado do banco de dados');
-      console.log('✅ Todas as mudanças foram descartadas');
-      setDialogState({
-        open: true,
-        type: 'success',
-        message: '✅ Mudanças descartadas e dados recarregados do banco!',
+    // Limpar edições pendentes de TODAS as páginas (podem ter cross-page edits)
+    clearPendingEdits();
+    
+    // Coletar pageIds afetados para invalidar cache
+    const cancelAffected = new Set<string>();
+    modifiedFields.forEach(f => {
+      const { sourcePageId: sp } = extractSourcePageId(f.jsonKey);
+      cancelAffected.add(sp);
+    });
+    
+    // Limpar estado de campos modificados
+    setFields([]);
+    
+    // Invalidar cache de todas as páginas afetadas
+    cancelAffected.forEach(pid => invalidateCache(pid));
+    
+    // Re-aplicar seleção visual após React re-render
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        if (isEditModeRef.current) {
+          addVisualSelection();
+        }
       });
-    } catch (error) {
-      console.error('❌ Erro ao recarregar do banco:', error);
-      setDialogState({
-        open: true,
-        type: 'success',
-        message: '❌ Erro ao recarregar dados. Verifique o console.',
-      });
-    }
+    });
+    
+    console.log('✅ Todas as mudanças foram descartadas');
+    setDialogState({
+      open: true,
+      type: 'success',
+      message: '✅ Mudanças descartadas!',
+    });
       },
     });
   };
@@ -804,7 +1229,10 @@ const VisualPageEditor = ({ pageId, pageComponent: PageComponent }: VisualPageEd
 
   return (
     <>
-      <PageComponent />
+      {/* 🔄 RENDERIZAR PÁGINA COM IDIOMA SELECIONADO */}
+      <div>
+        <PageComponent />
+      </div>
       
       {/* 🟡 BOTÃO FLUTUANTE AMARELO - EDITAR TEXTOS */}
       <button
@@ -838,7 +1266,7 @@ const VisualPageEditor = ({ pageId, pageComponent: PageComponent }: VisualPageEd
 
       {/* Dialog centralizado para confirmações e mensagens */}
       <Dialog open={dialogState.open} onOpenChange={(open) => setDialogState(prev => ({ ...prev, open }))}>
-        <DialogContent className="sm:max-w-[425px] fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
+        <DialogContent className="sm:max-w-106.25 fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
           <DialogHeader>
             <DialogTitle>
               {dialogState.type === 'success' ? 'Sucesso' : 'Confirmação'}
@@ -879,3 +1307,4 @@ const VisualPageEditor = ({ pageId, pageComponent: PageComponent }: VisualPageEd
 };
 
 export default VisualPageEditor;
+

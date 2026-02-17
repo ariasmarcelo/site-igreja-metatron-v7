@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
+import EditableField from "@/components/ui/EditableField";
 import { Link } from "react-router-dom";
 import { Sparkles, Microscope, Heart, HandHelping, ShieldCheck, BookOpen, FileText, Target, Waves } from "lucide-react";
 import { Pentagram, Cuboctahedron } from "@/components/icons";
@@ -93,8 +94,18 @@ export default function QuemSomos() {
                 <BookOpen className="h-10 w-10" />
               </div>
             </div>
-            <h1 className="text-5xl font-bold mb-4 drop-shadow-lg" data-json-key="quemsomos.header.title">{texts.header?.title || 'Quem Somos'}</h1>
-            <p className="text-xl opacity-90 drop-shadow-md" data-json-key="quemsomos.header.subtitle">{texts.header?.subtitle || 'Nossa História e Valores'}</p>
+            <EditableField 
+              value={texts.header?.title}
+              jsonKey="quemsomos.header.title"
+              type="h1"
+              className="text-5xl font-bold mb-4 drop-shadow-lg"
+            />
+            <EditableField 
+              value={texts.header?.subtitle}
+              jsonKey="quemsomos.header.subtitle"
+              type="p"
+              className="text-xl opacity-90 drop-shadow-md"
+            />
           </div>
         </div>
       </section>
@@ -110,15 +121,18 @@ export default function QuemSomos() {
           </div>
           
           {/* Container principal agrupando título, texto introdutório e cards */}
-          <div className="max-w-5xl mx-auto pt-[250px] relative z-30 isolate">
+          <div className="max-w-5xl mx-auto pt-62.5 relative z-30 isolate">
             <div className="bg-white/40 backdrop-blur-md rounded-3xl shadow-2xl border-3 border-purple-300/60 p-8 md:p-12">
               {/* Efeito de brilho nas bordas da caixa principal */}
               <div className="absolute inset-0 rounded-3xl bg-linear-to-br from-purple-300/30 via-transparent to-indigo-300/30 pointer-events-none"></div>
               
               <div className="text-center mb-12 relative z-30">
-                <h2 className="text-4xl font-bold text-gray-800 mb-4" data-json-key="quemsomos.valores.title">
-                  {(texts as any)?.valores?.title || 'Valores e Princípios'}
-                </h2>
+                <EditableField 
+                  value={(texts as any)?.valores?.title}
+                  jsonKey="quemsomos.valores.title"
+                  type="h2"
+                  className="text-4xl font-bold text-gray-800 mb-4"
+                />
                 
                 {/* Pergaminho com texto introdutório */}
             {(texts as any)?.valores?.intro && (
@@ -135,10 +149,12 @@ export default function QuemSomos() {
                       <div className="absolute bottom-2 right-2 w-8 h-8 border-b-2 border-r-2 border-amber-700/40 rounded-br-lg"></div>
                       
                   {/* Texto do pergaminho */}
-                  <p className="relative text-base md:text-lg text-amber-900/90 leading-relaxed text-center font-serif drop-shadow-[0_1px_1px_rgba(0,0,0,0.05)]" 
-                     data-json-key="quemsomos.valores.intro">
-                    {(texts as any).valores.intro}
-                  </p>                      {/* Sombra interna para profundidade */}
+                  <EditableField 
+                    value={(texts as any).valores.intro}
+                    jsonKey="quemsomos.valores.intro"
+                    type="p"
+                    className="relative text-base md:text-lg text-amber-900/90 leading-relaxed text-center font-serif drop-shadow-[0_1px_1px_rgba(0,0,0,0.05)]"
+                  />                      {/* Sombra interna para profundidade */}
                       <div className="absolute inset-0 rounded-lg shadow-[inset_0_2px_8px_rgba(0,0,0,0.1)] pointer-events-none"></div>
                     </div>
                     
@@ -150,15 +166,9 @@ export default function QuemSomos() {
               
               {/* Container agrupador dos cards em estilo pedra */}
               <div className="relative z-20">
-                {!(texts as any)?.valores?.cards && (
-                  <div className="text-center p-8 bg-red-100 border-2 border-red-400 rounded-xl">
-                    <p className="text-red-800 font-bold">⚠️ DADOS NÃO ENCONTRADOS</p>
-                    <p className="text-red-600 text-sm mt-2">Execute o SQL: workspace/scripts/restore-valores-data.sql no Supabase</p>
-                  </div>
-                )}
                 <div className="grid md:grid-cols-2 gap-6 relative z-20">
-                {(texts as any)?.valores?.cards && Array.isArray((texts as any).valores.cards) && (
-                  (texts as any).valores.cards.map((card: { title: string; content: string }, idx: number) => {
+                {Array.from({ length: 10 }).map((_, idx) => {
+                  const card = (texts as any)?.valores?.cards?.[idx] || { title: '', content: '' };
                     return (
                     <div 
                       key={idx}
@@ -178,14 +188,18 @@ export default function QuemSomos() {
                           
                           {/* Textos */}
                           <div className="flex-1">
-                            <h3 className="text-xl md:text-2xl font-bold text-gray-800 mb-4 drop-shadow-[0_2px_3px_rgba(0,0,0,0.2)]"
-                                data-json-key={`quemsomos.valores.cards[${idx}].title`}>
-                              {card.title}
-                            </h3>
-                            <p className="text-base text-gray-700 leading-relaxed drop-shadow-[0_1px_2px_rgba(0,0,0,0.15)]" 
-                               data-json-key={`quemsomos.valores.cards[${idx}].content`}>
-                              {card.content}
-                            </p>
+                            <EditableField 
+                              value={card.title}
+                              jsonKey={`quemsomos.valores.cards[${idx}].title`}
+                              type="h3"
+                              className="text-xl md:text-2xl font-bold mb-4 drop-shadow-[0_2px_3px_rgba(0,0,0,0.2)]"
+                            />
+                            <EditableField 
+                              value={card.content}
+                              jsonKey={`quemsomos.valores.cards[${idx}].content`}
+                              type="p"
+                              className="text-base leading-relaxed drop-shadow-[0_1px_2px_rgba(0,0,0,0.15)]"
+                            />
                           </div>
                         </div>
                         
@@ -197,8 +211,7 @@ export default function QuemSomos() {
                       </div>
                     </div>
                   );
-                  })
-                )}
+                })}
                 </div>
               </div>
             </div>
@@ -208,19 +221,27 @@ export default function QuemSomos() {
       <div className="container mx-auto px-4 py-16 space-y-20 max-w-6xl relative">
         
         {/* Os Pilares da Instituição - Valores e Princípios Unificados */}
-        {texts.principios?.items && Array.isArray(texts.principios.items) && texts.principios.items.length > 0 && (
         <section className="bg-linear-to-br from-violet-50 via-purple-50 to-violet-100 rounded-2xl shadow-xl p-8 md:p-12 border border-violet-200">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-gray-800 mb-4" data-json-key="quemsomos.pilares.title">{texts.pilares?.title || 'Os Pilares da Instituição'}</h2>
-            <p className="text-lg text-gray-600 max-w-4xl mx-auto mb-8" data-json-key="quemsomos.pilares.description">
-              {texts.pilares?.description || 'Nossa instituição se fundamenta em valores éticos e princípios operacionais que guiam todas as nossas ações, criando uma base sólida para nosso trabalho de transformação espiritual e desenvolvimento humano.'}
-            </p>
+            <EditableField 
+              value={texts.pilares?.title}
+              jsonKey="quemsomos.pilares.title"
+              type="h2"
+              className="text-4xl font-bold text-gray-800 mb-4"
+            />
+            <EditableField 
+              value={texts.pilares?.description}
+              jsonKey="quemsomos.pilares.description"
+              type="p"
+              className="text-lg text-gray-600 max-w-4xl mx-auto mb-8"
+            />
           </div>
           
           {/* Grid de Cards com Valores e Princípios */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {texts.principios.items.map((item: { title: string; content: string; tipo?: string }, index: number) => {
-              const tipo = item.tipo || 'principio'; // fallback para 'principio' se não especificado
+            {Array.from({ length: 6 }).map((_, index) => {
+              const item = (texts as any)?.principios?.items?.[index] || { title: '', content: '' };
+              const tipo = item.tipo || 'principio';
               const badgeClass = tipo === 'valor' ? 'badge-valor' : 'badge-principio';
               const badgeText = tipo === 'valor' ? 'Valor' : 'Princípio';
               
@@ -236,27 +257,46 @@ export default function QuemSomos() {
                         <div className="absolute inset-0 bg-[linear-gradient(135deg,transparent_30%,rgba(255,255,255,0.2)_50%,transparent_70%)]"></div>
                         {PRINCIPIOS_ICONS[index % PRINCIPIOS_ICONS.length]}
                       </div>
-                      <CardTitle className="text-lg text-gray-800" data-json-key={`quemsomos.principios.items[${index}].title`}>{item.title}</CardTitle>
+                      <EditableField 
+                        value={item.title}
+                        jsonKey={`quemsomos.principios.items[${index}].title`}
+                        type="span"
+                        className="inline text-lg text-gray-800"
+                      />
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-gray-700 leading-relaxed text-sm" data-json-key={`quemsomos.principios.items[${index}].content`}>{item.content}</p>
+                    <EditableField 
+                      value={item.content}
+                      jsonKey={`quemsomos.principios.items[${index}].content`}
+                      type="p"
+                      className="text-gray-700 leading-relaxed text-sm"
+                    />
                   </CardContent>
                 </Card>
               );
             })}
           </div>
         </section>
-        )}
 
         {/* Histórico - Design Limpo com Elevação */}
         {texts.historico?.content && Array.isArray(texts.historico.content) && texts.historico.content.length > 0 && (
         <section className="bg-white rounded-2xl shadow-xl p-8 md:p-12 border border-gray-100">
-          <h2 className="text-4xl font-bold text-gray-800 mb-8 text-center" data-json-key="quemsomos.historico.title">{texts.historico?.title || 'Histórico'}</h2>
+          <EditableField 
+            value={texts.historico?.title}
+            jsonKey="quemsomos.historico.title"
+            type="h2"
+            className="text-4xl font-bold text-gray-800 mb-8 text-center"
+          />
           <div className="space-y-6">
             {texts.historico.content.map((paragraph: string, index: number) => (
               <div key={index} className="bg-linear-to-r from-gray-50 to-white p-6 rounded-lg border-l-4 border-[#5EA98D] shadow-sm hover:shadow-md transition-shadow">
-                <p className="text-gray-700 leading-relaxed" data-json-key={`quemsomos.historico.content[${index}]`}>{paragraph}</p>
+                <EditableField 
+                  value={paragraph}
+                  jsonKey={`quemsomos.historico.content[${index}]`}
+                  type="p"
+                  className="text-gray-700 leading-relaxed"
+                />
               </div>
             ))}
           </div>
@@ -264,7 +304,6 @@ export default function QuemSomos() {
         )}
 
         {/* Princípios Herméticos - Estilo Papiro */}
-        {texts.hermeticos?.items && Array.isArray(texts.hermeticos.items) && texts.hermeticos.items.length > 0 && (
         <section className="relative papiro-box p-12 rounded-lg border-4 border-amber-900/20 shadow-2xl">
                 
                 {/* Textura de papiro */}
@@ -293,14 +332,19 @@ export default function QuemSomos() {
             {/* Conteúdo interno */}
             <div className="relative z-10">
               {/* Espaço para o cuboctahedron */}
-              <div className="h-[200px] mb-6"></div>                  <div className="flex items-center justify-center gap-4 mb-8 relative z-50">
-                    <div className="relative w-[66px] h-[66px] rounded-full bg-linear-to-br from-gray-200 via-gray-50 to-gray-300 shadow-[0_8px_16px_rgba(0,0,0,0.3),inset_0_2px_4px_rgba(255,255,255,0.8),inset_0_-2px_4px_rgba(0,0,0,0.2)] flex items-center justify-center border border-gray-400/30">
+              <div className="h-50 mb-6"></div>                  <div className="flex items-center justify-center gap-4 mb-8 relative z-50">
+                    <div className="relative w-16.5 h-16.5 rounded-full bg-linear-to-br from-gray-200 via-gray-50 to-gray-300 shadow-[0_8px_16px_rgba(0,0,0,0.3),inset_0_2px_4px_rgba(255,255,255,0.8),inset_0_-2px_4px_rgba(0,0,0,0.2)] flex items-center justify-center border border-gray-400/30">
                       <Pentagram size={66} className="text-blue-600 shield-blue-icon drop-shadow-md" strokeWidth={2.5} />
                     </div>
-                    <h2 className="text-4xl font-bold text-center text-amber-950 font-serif" data-json-key="quemsomos.hermeticos.title">
-                      {texts.hermeticos?.title || 'Os Sete Princípios Herméticos'}
+                    <h2 className="text-4xl font-bold text-center text-amber-950 font-serif">
+                      <EditableField 
+                        value={texts.hermeticos?.title}
+                        jsonKey="quemsomos.hermeticos.title"
+                        type="span"
+                        className="inline"
+                      />
                     </h2>
-                    <div className="relative w-[66px] h-[66px] rounded-full bg-linear-to-br from-purple-700 via-purple-900 to-indigo-950 shadow-[0_12px_24px_rgba(0,0,0,0.6),0_6px_12px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(147,51,234,0.3),inset_0_-2px_8px_rgba(0,0,0,0.6)] flex items-center justify-center border border-purple-950/60">
+                    <div className="relative w-16.5 h-16.5 rounded-full bg-linear-to-br from-purple-700 via-purple-900 to-indigo-950 shadow-[0_12px_24px_rgba(0,0,0,0.6),0_6px_12px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(147,51,234,0.3),inset_0_-2px_8px_rgba(0,0,0,0.6)] flex items-center justify-center border border-purple-950/60">
                       <Pentagram size={66} className="text-red-600 shield-red-icon scale-y-[-1] drop-shadow-md" strokeWidth={2.5} />
                     </div>
                   </div>
@@ -308,44 +352,71 @@ export default function QuemSomos() {
                   {/* Parágrafo introdutório */}
                   {texts.hermeticos?.subtitle && (
                   <div className="mb-12 max-w-4xl mx-auto relative z-40">
-                    <p className="text-lg text-amber-900 leading-relaxed text-center font-serif italic" data-json-key="quemsomos.hermeticos.subtitle">
-                      {texts.hermeticos.subtitle}
+                    <p className="text-lg text-amber-900 leading-relaxed text-center font-serif italic">
+                      <EditableField 
+                        value={texts.hermeticos?.subtitle}
+                        jsonKey="quemsomos.hermeticos.subtitle"
+                        type="span"
+                        className="inline"
+                      />
                     </p>
                   </div>
                   )}
                   
                   {/* Cards dos 7 princípios */}
                   <div className="space-y-6">
-                    {texts.hermeticos?.items && Array.isArray(texts.hermeticos.items) && texts.hermeticos.items.map((item: { number: string; title: string; quote?: string; description: string }, index: number) => (
+                    {Array.from({ length: 7 }).map((_, index) => {
+                      const item = (texts as any)?.hermeticos?.items?.[index] || { number: String(index + 1), title: '', quote: undefined, description: '' };
+                      return (
                       <Card key={index} className="shadow-lg hover:shadow-xl transition-shadow duration-300 bg-white/80 backdrop-blur-sm border border-amber-200/40">
                         <CardHeader>
                           <CardTitle className="flex items-center gap-3 text-2xl text-amber-900">
                             <span className="w-10 h-10 rounded-full bg-amber-600 text-white flex items-center justify-center font-bold text-lg shrink-0">
                               {item.number}
                             </span>
-                            <span data-json-key={`quemsomos.hermeticos.items[${index}].title`}>{item.title}</span>
+                            <EditableField 
+                              value={item.title}
+                              jsonKey={`quemsomos.hermeticos.items[${index}].title`}
+                              type="span"
+                              className="inline"
+                            />
                           </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-3">
                           {item.quote && (
-                            <div className="pl-4 border-l-4 border-amber-500 italic text-amber-800 text-base mb-4" data-json-key={`quemsomos.hermeticos.items[${index}].quote`}>
-                              "{item.quote}"
+                            <div className="pl-4 border-l-4 border-amber-500 italic text-amber-800 text-base mb-4">
+                              "{<EditableField 
+                                value={item.quote}
+                                jsonKey={`quemsomos.hermeticos.items[${index}].quote`}
+                                type="span"
+                                className="inline"
+                              />}"
                             </div>
                           )}
-                          <p className="text-gray-700 leading-relaxed" data-json-key={`quemsomos.hermeticos.items[${index}].description`}>{item.description}</p>
+                          <EditableField 
+                            value={item.description}
+                            jsonKey={`quemsomos.hermeticos.items[${index}].description`}
+                            type="p"
+                            className="text-gray-700 leading-relaxed"
+                          />
                         </CardContent>
                       </Card>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
         </section>
-        )}
       </div>
 
       {/* Footer CTA Section com fundo céu, água, sol e lua */}
       <section className="relative overflow-hidden mt-16">
         {/* Fundo com transição céu-água */}
-        <FooterBackground gradientId="skyGradient" />
+        <FooterBackground
+          gradientId="skyGradientQuemSomos"
+          skyColors={['#60a5fa', '#93c5fd', '#bae6fd']}
+          earthColor="#7c6a42"
+          waterColors={['#34d399', '#10b981', '#059669']}
+        />
 
         {/* Sol Dourado - posicionado absolutamente, independente do fundo */}
         <div className="absolute top-4 left-8 w-20 h-20 z-10">
@@ -399,15 +470,26 @@ export default function QuemSomos() {
         {/* CTA Content - posicionado no céu */}
         <div className="container mx-auto px-4 relative z-50 pt-6 pb-4">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white text-shadow-strong whitespace-pre-line" data-json-key="quemsomos.cta.title">
-              {texts.cta?.title || 'Comece Sua Jornada'}
-            </h2>
-            <p className="text-lg mb-5 text-white text-shadow-medium whitespace-pre-line" data-json-key="quemsomos.cta.subtitle">
-              {texts.cta?.subtitle || 'Entre em contato conosco'}
-            </p>
+            <EditableField 
+              value={texts.cta?.title}
+              jsonKey="quemsomos.cta.title"
+              type="h2"
+              className="text-3xl md:text-4xl font-bold mb-4 text-white text-shadow-strong whitespace-pre-line"
+            />
+            <EditableField 
+              value={texts.cta?.subtitle}
+              jsonKey="quemsomos.cta.subtitle"
+              type="p"
+              className="text-lg mb-5 text-white text-shadow-medium whitespace-pre-line"
+            />
             <Link to="/contato">
-              <Button className="bg-[#CFAF5A] text-white font-semibold px-6 py-4 text-base rounded-lg shadow-[0_6px_20px_rgba(0,0,0,0.5)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.6)] transition-all duration-300 hover:scale-105" data-json-key="quemsomos.cta.buttonText">
-                {texts.cta.buttonText}
+              <Button className="bg-[#CFAF5A] text-white font-semibold px-6 py-4 text-base rounded-lg shadow-[0_6px_20px_rgba(0,0,0,0.5)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.6)] transition-all duration-300 hover:scale-105">
+                <EditableField 
+                  value={texts.cta.buttonText}
+                  jsonKey="quemsomos.cta.buttonText"
+                  type="span"
+                  className="inline"
+                />
               </Button>
             </Link>
           </div>

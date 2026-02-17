@@ -1,5 +1,5 @@
 import React from 'react';
-import { useContent } from '@/hooks/useContent';
+import { usePageContent } from '@/hooks/useContent';
 
 interface FooterProps {
   className?: string;
@@ -17,9 +17,10 @@ interface SharedContent {
  * Exibe copyright e trademark vindos do conteúdo compartilhado (page_id = '__shared__')
  */
 export const SharedFooter: React.FC<FooterProps> = ({ className = '' }) => {
-  const { data } = useContent<{ __shared__: SharedContent }>({ pages: ['__shared__'] });
-  
-  const footer = data?.['__shared__']?.footer;
+  // Usa usePageContent para integrar com PendingEditsContext (edições no Admin)
+  const { data } = usePageContent<SharedContent>('__shared__');
+
+  const footer = data?.footer;
   const copyright = footer?.copyright || '© 2025 Igreja de Metatron. Todos os direitos reservados.';
   const trademark = footer?.trademark || 'Marcas registradas® protegidas por lei.';
 

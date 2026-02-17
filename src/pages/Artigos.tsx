@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { usePageContent } from '@/hooks/useContent';
 import { usePageStyles } from '@/hooks/usePageStyles';
+import EditableField from '@/components/ui/EditableField';
 
 import { supabase } from '@/lib/supabase';
 import PageLoader from '@/components/PageLoader';
@@ -56,8 +57,8 @@ export default function Artigos() {
   const [activeTab, setActiveTab] = useState('esoterica');
 
   // Usar artigos do JSON em vez do Supabase
-  const articlesFromJSON = texts?.articles || { esoterica: [], cientifica: [], unificada: [] };
-  const currentArticles = articlesFromJSON[activeTab as keyof typeof articlesFromJSON] || [];
+  const articlesFromJSON = texts?.articles;
+  const currentArticles = articlesFromJSON?.[activeTab as keyof typeof articlesFromJSON];
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -96,9 +97,24 @@ export default function Artigos() {
                 <BookOpen className="h-10 w-10" />
               </div>
             </div>
-            <h1 className="text-5xl font-bold mb-4 drop-shadow-lg" data-json-key="artigos.hero.title">{texts.hero.title}</h1>
-            <p className="text-2xl opacity-90 drop-shadow-md mb-2" data-json-key="artigos.hero.subtitle">{texts.hero.subtitle}</p>
-            <p className="text-lg opacity-80 drop-shadow-md" data-json-key="artigos.hero.description">{texts.hero.description}</p>
+            <EditableField
+              value={texts.hero.title}
+              jsonKey="artigos.hero.title"
+              type="h1"
+              className="text-5xl font-bold mb-4 drop-shadow-lg"
+            />
+            <EditableField
+              value={texts.hero.subtitle}
+              jsonKey="artigos.hero.subtitle"
+              type="p"
+              className="text-2xl opacity-90 drop-shadow-md mb-2"
+            />
+            <EditableField
+              value={texts.hero.description}
+              jsonKey="artigos.hero.description"
+              type="p"
+              className="text-lg opacity-80 drop-shadow-md"
+            />
           </div>
         </div>
       </section>
@@ -144,19 +160,28 @@ export default function Artigos() {
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-amber-300 rounded-full blur-3xl"></div>
               </div>
               
-              <h2 className="text-3xl md:text-4xl font-bold text-center mb-6 text-slate-800 relative z-10 drop-shadow-sm" data-json-key="artigos.sections.esoterica_wisdom_title">
-                {texts.sections?.esoterica_wisdom_title || 'Sabedoria Ancestral'}
-              </h2>
-              <p className="text-lg md:text-xl text-center text-slate-700 max-w-3xl mx-auto relative z-10 leading-relaxed" data-json-key="artigos.sections.esoterica_wisdom_subtitle">
-                {texts.sections?.esoterica_wisdom_subtitle || 'Explore ensinamentos milenares, práticas espirituais e conhecimentos sagrados que transcendem o tempo.'}
-              </p>
+              <EditableField
+                value={texts.sections?.esoterica_wisdom_title}
+                jsonKey="artigos.sections.esoterica_wisdom_title"
+                type="h2"
+                className="text-3xl md:text-4xl font-bold text-center mb-6 text-slate-800 relative z-10 drop-shadow-sm"
+              />
+              <EditableField
+                value={texts.sections?.esoterica_wisdom_subtitle}
+                jsonKey="artigos.sections.esoterica_wisdom_subtitle"
+                type="p"
+                className="text-lg md:text-xl text-center text-slate-700 max-w-3xl mx-auto relative z-10 leading-relaxed"
+              />
             </div>
 
             {/* Categories Section - Esotérica */}
             <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-10 border-2 border-yellow-200/40">
-              <h2 className="text-3xl md:text-4xl font-bold text-center mb-8 text-slate-800 drop-shadow-sm" data-json-key="artigos.sections.esoterica_categories_title">
-                {texts.sections?.esoterica_categories_title || 'Categorias Esotéricas'}
-              </h2>
+              <EditableField
+                value={texts.sections?.esoterica_categories_title}
+                jsonKey="artigos.sections.esoterica_categories_title"
+                type="h2"
+                className="text-3xl md:text-4xl font-bold text-center mb-8 text-slate-800 drop-shadow-sm"
+              />
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {texts.categories.items.filter((cat: { id: string }) => ['espiritualidade', 'praticas'].includes(cat.id)).map((category: { id: string; name: string; description: string }, index: number) => (
                   <Link to={`/artigos/categoria/${category.id}`} key={category.id}>
@@ -183,9 +208,12 @@ export default function Artigos() {
             {/* Featured Articles - Esotérica */}
             {currentArticles.length > 0 && (
               <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-10 border-2 border-yellow-200/40">
-                <h2 className="text-3xl md:text-4xl font-bold text-center mb-8 text-slate-800 drop-shadow-sm" data-json-key="artigos.sections.esoterica_articles_title">
-                  {texts.sections?.esoterica_articles_title || 'Artigos Esotéricos'}
-                </h2>
+                <EditableField
+                  value={texts.sections?.esoterica_articles_title}
+                  jsonKey="artigos.sections.esoterica_articles_title"
+                  type="h2"
+                  className="text-3xl md:text-4xl font-bold text-center mb-8 text-slate-800 drop-shadow-sm"
+                />
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {currentArticles.map((post: { id: string; title: string; slug: string; excerpt: string; category: string; author: string; date: string; readTime: number }) => (
                     <Link to={`/artigos/${post.slug}`} key={post.id}>
@@ -230,19 +258,28 @@ export default function Artigos() {
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-amber-300 rounded-full blur-3xl"></div>
               </div>
               
-              <h2 className="text-3xl md:text-4xl font-bold text-center mb-6 text-slate-800 relative z-10 drop-shadow-sm" data-json-key="artigos.sections.cientifica_wisdom_title">
-                {texts.sections?.cientifica_wisdom_title || 'Conhecimento Científico'}
-              </h2>
-              <p className="text-lg md:text-xl text-center text-slate-700 max-w-3xl mx-auto relative z-10 leading-relaxed" data-json-key="artigos.sections.cientifica_wisdom_subtitle">
-                {texts.sections?.cientifica_wisdom_subtitle || 'Descubra pesquisas, estudos e evidências científicas sobre consciência, cura e transformação humana.'}
-              </p>
+              <EditableField
+                value={texts.sections?.cientifica_wisdom_title}
+                jsonKey="artigos.sections.cientifica_wisdom_title"
+                type="h2"
+                className="text-3xl md:text-4xl font-bold text-center mb-6 text-slate-800 relative z-10 drop-shadow-sm"
+              />
+              <EditableField
+                value={texts.sections?.cientifica_wisdom_subtitle}
+                jsonKey="artigos.sections.cientifica_wisdom_subtitle"
+                type="p"
+                className="text-lg md:text-xl text-center text-slate-700 max-w-3xl mx-auto relative z-10 leading-relaxed"
+              />
             </div>
 
             {/* Categories Section - Científica */}
             <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-10 border-2 border-yellow-200/40">
-              <h2 className="text-3xl md:text-4xl font-bold text-center mb-8 text-slate-800 drop-shadow-sm" data-json-key="artigos.sections.cientifica_categories_title">
-                {texts.sections?.cientifica_categories_title || 'Categorias Científicas'}
-              </h2>
+              <EditableField
+                value={texts.sections?.cientifica_categories_title}
+                jsonKey="artigos.sections.cientifica_categories_title"
+                type="h2"
+                className="text-3xl md:text-4xl font-bold text-center mb-8 text-slate-800 drop-shadow-sm"
+              />
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {texts.categories.items.filter((cat: { id: string }) => ['ciencia', 'praticas'].includes(cat.id)).map((category: { id: string; name: string; description: string }, index: number) => (
                   <Link to={`/artigos/categoria/${category.id}`} key={category.id}>
@@ -269,9 +306,12 @@ export default function Artigos() {
             {/* Featured Articles - Científica */}
             {currentArticles.length > 0 && (
               <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-10 border-2 border-yellow-200/40">
-                <h2 className="text-3xl md:text-4xl font-bold text-center mb-8 text-slate-800 drop-shadow-sm" data-json-key="artigos.sections.cientifica_articles_title">
-                  {texts.sections?.cientifica_articles_title || 'Artigos Científicos'}
-                </h2>
+                <EditableField
+                  value={texts.sections?.cientifica_articles_title}
+                  jsonKey="artigos.sections.cientifica_articles_title"
+                  type="h2"
+                  className="text-3xl md:text-4xl font-bold text-center mb-8 text-slate-800 drop-shadow-sm"
+                />
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {currentArticles.map((post: { id: string; title: string; slug: string; excerpt: string; category: string; author: string; date: string; readTime: number }) => (
                     <Link to={`/artigos/${post.slug}`} key={post.id}>
@@ -316,19 +356,28 @@ export default function Artigos() {
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-amber-300 rounded-full blur-3xl"></div>
               </div>
               
-              <h2 className="text-3xl md:text-4xl font-bold text-center mb-6 text-slate-800 relative z-10 drop-shadow-sm" data-json-key="artigos.sections.unificada_wisdom_title">
-                {texts.sections?.unificada_wisdom_title || 'Ponte entre Ciência e Espírito'}
-              </h2>
-              <p className="text-lg md:text-xl text-center text-slate-700 max-w-3xl mx-auto relative z-10 leading-relaxed" data-json-key="artigos.sections.unificada_wisdom_subtitle">
-                {texts.sections?.unificada_wisdom_subtitle || 'Explore a integração entre conhecimento científico e sabedoria espiritual, compreendendo como corpo e consciência se conectam em uma dança harmoniosa de transformação.'}
-              </p>
+              <EditableField
+                value={texts.sections?.unificada_wisdom_title}
+                jsonKey="artigos.sections.unificada_wisdom_title"
+                type="h2"
+                className="text-3xl md:text-4xl font-bold text-center mb-6 text-slate-800 relative z-10 drop-shadow-sm"
+              />
+              <EditableField
+                value={texts.sections?.unificada_wisdom_subtitle}
+                jsonKey="artigos.sections.unificada_wisdom_subtitle"
+                type="p"
+                className="text-lg md:text-xl text-center text-slate-700 max-w-3xl mx-auto relative z-10 leading-relaxed"
+              />
             </div>
 
             {/* Categories Section - Unificada */}
             <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-10 border-2 border-yellow-200/40">
-              <h2 className="text-3xl md:text-4xl font-bold text-center mb-8 text-slate-800 drop-shadow-sm" data-json-key="artigos.sections.unificada_categories_title">
-                {texts.sections?.unificada_categories_title || 'Categorias Integradas'}
-              </h2>
+              <EditableField
+                value={texts.sections?.unificada_categories_title}
+                jsonKey="artigos.sections.unificada_categories_title"
+                type="h2"
+                className="text-3xl md:text-4xl font-bold text-center mb-8 text-slate-800 drop-shadow-sm"
+              />
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {texts.categories.items.map((category: { id: string; name: string; description: string }, index: number) => (
                   <Link to={`/artigos/categoria/${category.id}`} key={category.id}>
@@ -355,9 +404,12 @@ export default function Artigos() {
             {/* Featured Articles - Unificada */}
             {currentArticles.length > 0 && (
               <div className="bg-white rounded-3xl shadow-2xl p-8 md:p-10 border-2 border-yellow-200/40">
-                <h2 className="text-3xl md:text-4xl font-bold text-center mb-8 text-slate-800 drop-shadow-sm" data-json-key="artigos.sections.unificada_articles_title">
-                  {texts.sections?.unificada_articles_title || 'Artigos Unificados'}
-                </h2>
+                <EditableField
+                  value={texts.sections?.unificada_articles_title}
+                  jsonKey="artigos.sections.unificada_articles_title"
+                  type="h2"
+                  className="text-3xl md:text-4xl font-bold text-center mb-8 text-slate-800 drop-shadow-sm"
+                />
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {currentArticles.map((post: { id: string; title: string; slug: string; excerpt: string; category: string; author: string; date: string; readTime: number }) => (
                     <Link to={`/artigos/${post.slug}`} key={post.id}>
@@ -397,11 +449,26 @@ export default function Artigos() {
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,white,transparent_70%)]"></div>
           </div>
           <div className="relative z-10">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 drop-shadow-lg" data-json-key="artigos.cta.title">{texts.cta.title}</h2>
-            <p className="text-lg md:text-xl mb-6 opacity-90 max-w-2xl mx-auto" data-json-key="artigos.cta.description">{texts.cta.description}</p>
+            <EditableField
+              value={texts.cta.title}
+              jsonKey="artigos.cta.title"
+              type="h2"
+              className="text-3xl md:text-4xl font-bold mb-4 drop-shadow-lg"
+            />
+            <EditableField
+              value={texts.cta.description}
+              jsonKey="artigos.cta.description"
+              type="p"
+              className="text-lg md:text-xl mb-6 opacity-90 max-w-2xl mx-auto"
+            />
             <Link to="/contato">
               <Button size="lg" className="bg-slate-900 text-yellow-400 hover:bg-slate-800 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 font-bold">
-                <span data-json-key="artigos.cta.button">{texts.cta.button}</span>
+                <EditableField
+                  value={texts.cta.button}
+                  jsonKey="artigos.cta.button"
+                  type="span"
+                  className="inline"
+                />
               </Button>
             </Link>
           </div>

@@ -2,6 +2,7 @@ import { defineConfig, loadEnv } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import fs from "fs";
+import Module from "node:module";
 import { pathToFileURL } from "url";
 
 // Load environment variables from .env.local
@@ -70,7 +71,10 @@ const apiPlugin = () => ({
           },
           json: (data: any) => {
             res.statusCode = vercelRes.statusCode;
-            res.setHeader('Content-Type', 'application/json');
+            // Preservar charset se ja definido pelo handler da API; senao, definir UTF-8 explicitamente
+            if (!res.getHeader('Content-Type')) {
+              res.setHeader('Content-Type', 'application/json; charset=utf-8');
+            }
             res.end(JSON.stringify(data));
           },
           end: (data?: string) => {
@@ -82,13 +86,23 @@ const apiPlugin = () => ({
         const fileUrl = pathToFileURL(apiPath).href;
         const timestamp = Date.now();
 
+        // O ?t=timestamp so funciona para ESM. Para CJS, limpar o cache do Node manualmente.
+        const absApiPath = path.resolve(apiPath);
+        // @ts-ignore - Node internal CJS cache
+        const cjsCache = Module._cache;
+        if (cjsCache) {
+          Object.keys(cjsCache).forEach(key => {
+            if (path.resolve(key) === absApiPath) delete cjsCache[key];
+          });
+        }
+
         import(`${fileUrl}?t=${timestamp}`).then((module: any) => {
           const apiHandler = module.default || module;
           return apiHandler(vercelReq, vercelRes);
         }).catch((error: any) => {
           console.error('[API Error]', error);
           res.statusCode = 500;
-          res.setHeader('Content-Type', 'application/json');
+          res.setHeader('Content-Type', 'application/json; charset=utf-8');
           res.end(JSON.stringify({ error: error.message, details: error.stack }));
         });
       };
