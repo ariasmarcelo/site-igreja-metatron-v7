@@ -765,6 +765,7 @@ module.exports = (req, res) => {
     'http://localhost:3000',
     'http://localhost:5173',
     'http://192.168.1.3:3000',
+    'https://shadcn-ui-silk-sigma.vercel.app',
     'https://igreja-metatron.vercel.app',
     'https://www.igrejademetatron.com.br'
   ];
