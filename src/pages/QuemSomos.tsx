@@ -1,4 +1,3 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import EditableField from "@/components/ui/EditableField";
 import { Link } from "react-router-dom";
@@ -24,23 +23,6 @@ interface QuemSomosTexts {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 }
-
-// Cores gradiente para cada princípio — 13 princípios unificados
-const PRINCIPLE_GRADIENTS = [
-  { from: 'from-violet-500/20', border: 'border-violet-400/40', glow: 'hover:shadow-violet-500/20' },
-  { from: 'from-blue-500/20', border: 'border-blue-400/40', glow: 'hover:shadow-blue-500/20' },
-  { from: 'from-emerald-500/20', border: 'border-emerald-400/40', glow: 'hover:shadow-emerald-500/20' },
-  { from: 'from-rose-500/20', border: 'border-rose-400/40', glow: 'hover:shadow-rose-500/20' },
-  { from: 'from-amber-500/20', border: 'border-amber-400/40', glow: 'hover:shadow-amber-500/20' },
-  { from: 'from-cyan-500/20', border: 'border-cyan-400/40', glow: 'hover:shadow-cyan-500/20' },
-  { from: 'from-indigo-500/20', border: 'border-indigo-400/40', glow: 'hover:shadow-indigo-500/20' },
-  { from: 'from-teal-500/20', border: 'border-teal-400/40', glow: 'hover:shadow-teal-500/20' },
-  { from: 'from-pink-500/20', border: 'border-pink-400/40', glow: 'hover:shadow-pink-500/20' },
-  { from: 'from-sky-500/20', border: 'border-sky-400/40', glow: 'hover:shadow-sky-500/20' },
-  { from: 'from-purple-500/20', border: 'border-purple-400/40', glow: 'hover:shadow-purple-500/20' },
-  { from: 'from-fuchsia-500/20', border: 'border-fuchsia-400/40', glow: 'hover:shadow-fuchsia-500/20' },
-  { from: 'from-orange-500/20', border: 'border-orange-400/40', glow: 'hover:shadow-orange-500/20' },
-];
 
 export default function QuemSomos() {
   usePageStyles('quemsomos');
@@ -100,200 +82,157 @@ export default function QuemSomos() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════════════
-           PRINCÍPIOS UNIFICADOS — Design "Tábuas de Cristal"
-           13 princípios em grid responsivo sobre fundo estrelado
+           PRINCÍPIOS UNIFICADOS — Violeta sacerdotal + Cuboctaedro com raios
+           13 princípios em lista de coluna única
          ═══════════════════════════════════════════════════════════════ */}
-      <section className="relative py-20 px-4 md:px-8 overflow-hidden principles-starfield">
-        {/* Fundo estrelado */}
-        <div className="absolute inset-0 bg-linear-to-b from-[#0f0a2e] via-[#1a1145] to-[#0f0a2e]" />
-        <div className="absolute inset-0 principles-stars opacity-60" />
-        
-        {/* Cuboctahedron central com glow */}
-        <div className="relative z-10 flex justify-center mb-4">
-          <div className="relative">
-            <div className="absolute inset-0 scale-150 bg-[radial-gradient(circle,rgba(139,92,246,0.3)_0%,transparent_70%)]" />
-            <Cuboctahedron size={140} className="text-violet-300/80 drop-shadow-[0_0_20px_rgba(139,92,246,0.5)]" strokeWidth={4} />
-          </div>
+      <section className="relative py-16 px-4 md:px-8 overflow-hidden bg-linear-to-br from-violet-200 via-purple-100 to-violet-200 border-y border-violet-300">
+        {/* Brilho radial em 12 direções — raios dourados */}
+        <div className="absolute inset-0 cuboctahedron-radial-glow-principios pointer-events-none z-20" />
+
+        {/* Cuboctaedro centralizado no topo com glow dourado */}
+        <div className="absolute top-14 left-1/2 -translate-x-1/2 z-30">
+          <div className="absolute inset-0 scale-[2.5] bg-[radial-gradient(circle,rgba(255,215,0,0.35)_0%,rgba(255,215,0,0.12)_30%,transparent_60%)] pointer-events-none" />
+          <Cuboctahedron size={180} className="text-violet-600 drop-shadow-[0_0_12px_rgba(255,215,0,0.5)]" strokeWidth={5} />
         </div>
 
-        {/* Título da seção */}
-        <div className="relative z-10 text-center mb-16">
-          <EditableField
-            value={(texts as any)?.principios_unificados?.title}
-            jsonKey="quemsomos.principios_unificados.title"
-            type="h2"
-            className="text-4xl md:text-5xl font-bold text-white/95 mb-3 drop-shadow-[0_2px_8px_rgba(139,92,246,0.4)]"
-          />
-          <div className="w-32 h-0.5 mx-auto bg-linear-to-r from-transparent via-violet-400 to-transparent" />
-        </div>
+        {/* Conteúdo principal */}
+        <div className="max-w-3xl mx-auto pt-56 relative z-30">
+          {/* Caixa translúcida */}
+          <div className="bg-white/50 backdrop-blur-md rounded-3xl shadow-2xl border-2 border-violet-300/50 p-8 md:p-12">
 
-        {/* Grid de Princípios — cards de cristal */}
-        <div className="relative z-10 max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {Array.from({ length: 13 }).map((_, idx) => {
-            const item = (texts as any)?.principios_unificados?.items?.[idx] || { title: '', content: '' };
-            const gradient = PRINCIPLE_GRADIENTS[idx % PRINCIPLE_GRADIENTS.length];
-            return (
-              <div
-                key={idx}
-                className={`group relative rounded-2xl border ${gradient.border} bg-white/[0.06] backdrop-blur-md p-6 transition-all duration-500 hover:bg-white/[0.12] hover:shadow-2xl ${gradient.glow} hover:-translate-y-1`}
-              >
-                {/* Glow interno sutil */}
-                <div className={`absolute inset-0 rounded-2xl bg-linear-to-br ${gradient.from} to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none`} />
-                
-                {/* Número */}
-                <div className="relative z-10 flex items-start gap-4">
-                  <span className="shrink-0 w-9 h-9 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-sm font-semibold text-white/70 group-hover:text-white group-hover:bg-white/20 transition-all duration-300">
-                    {idx + 1}
-                  </span>
-                  <div className="flex-1 min-w-0">
-                    <EditableField
-                      value={item.title}
-                      jsonKey={`quemsomos.principios_unificados.items[${idx}].title`}
-                      type="h3"
-                      className="text-lg font-semibold text-white/90 mb-2 group-hover:text-white transition-colors duration-300"
-                    />
-                    <EditableField
-                      value={item.content}
-                      jsonKey={`quemsomos.principios_unificados.items[${idx}].content`}
-                      type="p"
-                      className="text-sm text-white/60 leading-relaxed group-hover:text-white/75 transition-colors duration-300"
-                    />
+            {/* Título */}
+            <div className="text-center mb-10">
+              <EditableField
+                value={(texts as any)?.principios_unificados?.title}
+                jsonKey="quemsomos.principios_unificados.title"
+                type="h2"
+                className="text-4xl font-bold text-gray-800 mb-3"
+              />
+              <div className="w-24 h-0.5 mx-auto bg-linear-to-r from-transparent via-violet-500 to-transparent" />
+            </div>
+
+            {/* Lista de princípios — coluna única */}
+            <div className="space-y-4">
+              {Array.from({ length: 13 }).map((_, idx) => {
+                const item = (texts as any)?.principios_unificados?.items?.[idx] || { title: '', content: '' };
+                return (
+                  <div
+                    key={idx}
+                    className="group flex items-start gap-4 p-5 rounded-xl border border-violet-200/60 bg-white/40 hover:bg-white/70 hover:shadow-lg hover:border-violet-300 transition-all duration-300"
+                  >
+                    {/* Número */}
+                    <span className="shrink-0 w-9 h-9 rounded-full bg-violet-600 text-white flex items-center justify-center text-sm font-bold shadow-md">
+                      {idx + 1}
+                    </span>
+                    {/* Textos */}
+                    <div className="flex-1 min-w-0">
+                      <EditableField
+                        value={item.title}
+                        jsonKey={`quemsomos.principios_unificados.items[${idx}].title`}
+                        type="h3"
+                        className="text-lg font-semibold text-gray-800 mb-1 group-hover:text-violet-800 transition-colors duration-300"
+                      />
+                      <EditableField
+                        value={item.content}
+                        jsonKey={`quemsomos.principios_unificados.items[${idx}].content`}
+                        type="p"
+                        className="text-sm text-gray-600 leading-relaxed"
+                      />
+                    </div>
                   </div>
-                </div>
-              </div>
-            );
-          })}
+                );
+              })}
+            </div>
+          </div>
         </div>
       </section>
 
-      <div className="container mx-auto px-4 py-16 space-y-20 max-w-6xl relative">
-        {texts.historico?.content && Array.isArray(texts.historico.content) && texts.historico.content.length > 0 && (
-        <section className="bg-white rounded-2xl shadow-xl p-8 md:p-12 border border-gray-100">
-          <EditableField 
-            value={texts.historico?.title}
-            jsonKey="quemsomos.historico.title"
-            type="h2"
-            className="text-4xl font-bold text-gray-800 mb-8 text-center"
-          />
-          <div className="space-y-6">
-            {texts.historico.content.map((paragraph: string, index: number) => (
-              <div key={index} className="bg-linear-to-r from-gray-50 to-white p-6 rounded-lg border-l-4 border-[#5EA98D] shadow-sm hover:shadow-md transition-shadow">
-                <EditableField 
-                  value={paragraph}
-                  jsonKey={`quemsomos.historico.content[${index}]`}
-                  type="p"
-                  className="text-gray-700 leading-relaxed"
-                />
-              </div>
-            ))}
-          </div>
-        </section>
-        )}
+      {/* ═══════════════════════════════════════════════════════════════
+           FUNDAMENTOS HERMÉTICOS — mesmo estilo visual dos Princípios
+         ═══════════════════════════════════════════════════════════════ */}
+      <section className="relative py-16 px-4 md:px-8 overflow-hidden bg-linear-to-br from-amber-100 via-amber-50 to-amber-100 border-y border-amber-300">
 
-        {/* Princípios Herméticos - Estilo Papiro */}
-        <section className="relative papiro-box p-12 rounded-lg border-4 border-amber-900/20 shadow-2xl">
-                
-                {/* Textura de papiro */}
-                <div className="absolute inset-0 opacity-[0.03] pointer-events-none papiro-texture z-0"></div>
-                
-                {/* Bordas decorativas do papiro */}
-                <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-transparent via-amber-800/30 to-transparent z-5"></div>
-                <div className="absolute bottom-0 left-0 w-full h-1 bg-linear-to-r from-transparent via-amber-800/30 to-transparent z-5"></div>
-                <div className="absolute top-0 left-0 w-1 h-full bg-linear-to-b from-transparent via-amber-800/30 to-transparent z-5"></div>
-                <div className="absolute top-0 right-0 w-1 h-full bg-linear-to-b from-transparent via-amber-800/30 to-transparent z-5"></div>
-                
-                {/* Ornamentos nos cantos */}
-                <div className="absolute top-2 left-2 w-4 h-4 border-t-2 border-l-2 border-amber-800/40 rounded-tl-lg z-5"></div>
-                <div className="absolute top-2 right-2 w-4 h-4 border-t-2 border-r-2 border-amber-800/40 rounded-tr-lg z-5"></div>
-                <div className="absolute bottom-2 left-2 w-4 h-4 border-b-2 border-l-2 border-amber-800/40 rounded-bl-lg z-5"></div>
-                <div className="absolute bottom-2 right-2 w-4 h-4 border-b-2 border-r-2 border-amber-800/40 rounded-br-lg z-5"></div>
-                
-                {/* Raios de luz - acima de tudo */}
-                <div className="papiro-rays-container" />
-                
-                {/* Cuboctahedron - acima dos raios */}
-                <div className="papiro-cuboctahedron-container">
-                  <Cuboctahedron size={200} className="text-indigo-600" strokeWidth={6} />
-                </div>
-                
-            {/* Conteúdo interno */}
-            <div className="relative z-10">
-              {/* Espaço para o cuboctahedron */}
-              <div className="h-50 mb-6"></div>                  <div className="flex items-center justify-center gap-4 mb-8 relative z-50">
-                    <div className="relative w-16.5 h-16.5 rounded-full bg-linear-to-br from-gray-200 via-gray-50 to-gray-300 shadow-[0_8px_16px_rgba(0,0,0,0.3),inset_0_2px_4px_rgba(255,255,255,0.8),inset_0_-2px_4px_rgba(0,0,0,0.2)] flex items-center justify-center border border-gray-400/30">
-                      <Pentagram size={66} className="text-blue-600 shield-blue-icon drop-shadow-md" strokeWidth={2.5} />
-                    </div>
-                    <h2 className="text-4xl font-bold text-center text-amber-950 font-serif">
-                      <EditableField 
-                        value={texts.hermeticos?.title}
-                        jsonKey="quemsomos.hermeticos.title"
-                        type="span"
-                        className="inline"
-                      />
-                    </h2>
-                    <div className="relative w-16.5 h-16.5 rounded-full bg-linear-to-br from-purple-700 via-purple-900 to-indigo-950 shadow-[0_12px_24px_rgba(0,0,0,0.6),0_6px_12px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(147,51,234,0.3),inset_0_-2px_8px_rgba(0,0,0,0.6)] flex items-center justify-center border border-purple-950/60">
-                      <Pentagram size={66} className="text-red-600 shield-red-icon scale-y-[-1] drop-shadow-md" strokeWidth={2.5} />
-                    </div>
-                  </div>
-                  
-                  {/* Parágrafo introdutório */}
-                  {texts.hermeticos?.subtitle && (
-                  <div className="mb-12 max-w-4xl mx-auto relative z-40">
-                    <p className="text-lg text-amber-900 leading-relaxed text-center font-serif italic">
-                      <EditableField 
-                        value={texts.hermeticos?.subtitle}
-                        jsonKey="quemsomos.hermeticos.subtitle"
-                        type="span"
-                        className="inline"
-                      />
-                    </p>
-                  </div>
-                  )}
-                  
-                  {/* Cards dos 7 princípios */}
-                  <div className="space-y-6">
-                    {Array.from({ length: 7 }).map((_, index) => {
-                      const item = (texts as any)?.hermeticos?.items?.[index] || { number: String(index + 1), title: '', quote: undefined, description: '' };
-                      return (
-                      <Card key={index} className="shadow-lg hover:shadow-xl transition-shadow duration-300 bg-white/80 backdrop-blur-sm border border-amber-200/40">
-                        <CardHeader>
-                          <CardTitle className="flex items-center gap-3 text-2xl text-amber-900">
-                            <span className="w-10 h-10 rounded-full bg-amber-600 text-white flex items-center justify-center font-bold text-lg shrink-0">
-                              {item.number}
-                            </span>
-                            <EditableField 
-                              value={item.title}
-                              jsonKey={`quemsomos.hermeticos.items[${index}].title`}
+        {/* Conteúdo principal */}
+        <div className="max-w-3xl mx-auto relative z-10">
+          {/* Caixa translúcida */}
+          <div className="bg-white/50 backdrop-blur-md rounded-3xl shadow-2xl border-2 border-amber-300/50 p-8 md:p-12">
+
+            {/* Título com Pentagramas */}
+            <div className="flex items-center justify-center gap-4 mb-4">
+              <div className="relative w-14 h-14 rounded-full bg-linear-to-br from-gray-200 via-gray-50 to-gray-300 shadow-[0_6px_12px_rgba(0,0,0,0.25),inset_0_2px_4px_rgba(255,255,255,0.8),inset_0_-2px_4px_rgba(0,0,0,0.15)] flex items-center justify-center border border-gray-400/30">
+                <Pentagram size={56} className="text-blue-600 shield-blue-icon drop-shadow-md" strokeWidth={2.5} />
+              </div>
+              <EditableField
+                value={texts.hermeticos?.title}
+                jsonKey="quemsomos.hermeticos.title"
+                type="h2"
+                className="text-4xl font-bold text-gray-800 text-center"
+              />
+              <div className="relative w-14 h-14 rounded-full bg-linear-to-br from-purple-700 via-purple-900 to-indigo-950 shadow-[0_8px_16px_rgba(0,0,0,0.5),inset_0_2px_4px_rgba(147,51,234,0.3),inset_0_-2px_6px_rgba(0,0,0,0.5)] flex items-center justify-center border border-purple-950/60">
+                <Pentagram size={56} className="text-red-600 shield-red-icon scale-y-[-1] drop-shadow-md" strokeWidth={2.5} />
+              </div>
+            </div>
+            <div className="w-24 h-0.5 mx-auto bg-linear-to-r from-transparent via-amber-500 to-transparent mb-6" />
+
+            {/* Subtítulo introdutório */}
+            {texts.hermeticos?.subtitle && (
+              <p className="text-base text-amber-900/80 leading-relaxed text-center italic mb-10 max-w-2xl mx-auto">
+                <EditableField
+                  value={texts.hermeticos?.subtitle}
+                  jsonKey="quemsomos.hermeticos.subtitle"
+                  type="span"
+                  className="inline"
+                />
+              </p>
+            )}
+
+            {/* Lista dos 7 princípios — coluna única */}
+            <div className="space-y-4">
+              {Array.from({ length: 7 }).map((_, index) => {
+                const item = (texts as any)?.hermeticos?.items?.[index] || { number: String(index + 1), title: '', quote: undefined, description: '' };
+                return (
+                  <div
+                    key={index}
+                    className="group p-5 rounded-xl border border-amber-200/60 bg-white/40 hover:bg-white/70 hover:shadow-lg hover:border-amber-300 transition-all duration-300"
+                  >
+                    <div className="flex items-start gap-4">
+                      {/* Número */}
+                      <span className="shrink-0 w-9 h-9 rounded-full bg-amber-600 text-white flex items-center justify-center text-sm font-bold shadow-md">
+                        {item.number}
+                      </span>
+                      {/* Textos */}
+                      <div className="flex-1 min-w-0">
+                        <EditableField
+                          value={item.title}
+                          jsonKey={`quemsomos.hermeticos.items[${index}].title`}
+                          type="h3"
+                          className="text-lg font-semibold text-gray-800 mb-2 group-hover:text-amber-800 transition-colors duration-300"
+                        />
+                        {item.quote && (
+                          <div className="pl-4 border-l-3 border-amber-400 italic text-amber-800/80 text-sm mb-3">
+                            "<EditableField
+                              value={item.quote}
+                              jsonKey={`quemsomos.hermeticos.items[${index}].quote`}
                               type="span"
                               className="inline"
-                            />
-                          </CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-3">
-                          {item.quote && (
-                            <div className="pl-4 border-l-4 border-amber-500 italic text-amber-800 text-base mb-4">
-                              "{<EditableField 
-                                value={item.quote}
-                                jsonKey={`quemsomos.hermeticos.items[${index}].quote`}
-                                type="span"
-                                className="inline"
-                              />}"
-                            </div>
-                          )}
-                          <EditableField 
-                            value={item.description}
-                            jsonKey={`quemsomos.hermeticos.items[${index}].description`}
-                            type="p"
-                            className="text-gray-700 leading-relaxed"
-                          />
-                        </CardContent>
-                      </Card>
-                      );
-                    })}
+                            />"
+                          </div>
+                        )}
+                        <EditableField
+                          value={item.description}
+                          jsonKey={`quemsomos.hermeticos.items[${index}].description`}
+                          type="p"
+                          className="text-sm text-gray-600 leading-relaxed"
+                        />
+                      </div>
+                    </div>
                   </div>
-                </div>
-        </section>
-      </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Footer CTA Section com fundo céu, água, sol e lua */}
       <section className="relative overflow-hidden mt-16">

@@ -216,7 +216,8 @@ Todo o projeto opera exclusivamente em **UTF-8 sem BOM**. Violações de encodin
 | Backend | Vercel Serverless Functions (Node.js, CommonJS) | — |
 | Database | Supabase PostgreSQL — tabela `text_entries` com JSONB multilíngue | supabase-js 2.81 |
 | Deploy | Vercel (produção), Vite dev server com `apiPlugin()` (desenvolvimento) | — |
-| Package Manager | pnpm (projeto usa `type: "module"` no package.json) | — |
+| URL de Produção | `https://shadcn-ui-silk-sigma.vercel.app/` | — |
+| Package Manager | pnpm (Vercel/produção) / npm (Windows local — ver nota abaixo) | — |
 | TypeScript | Strict mode parcial (`noImplicitAny: false`, `strictNullChecks: false`) | 5.9 |
 | CSS | Tailwind CSS v4 (sintaxe canônica: `bg-linear-to-r`, não `bg-gradient-to-r`) | 4.1 |
 
@@ -715,7 +716,7 @@ Formato de erro:
 
 | Categoria | Implementação |
 |-----------|---------------|
-| **CORS** | Whitelist de origens: `localhost:3000`, `localhost:5173`, `192.168.1.3:3000`, `igreja-metatron.vercel.app`, `www.igrejademetatron.com.br`. Em non-prod aceita qualquer. |
+| **CORS** | Whitelist de origens: `localhost:3000`, `localhost:5173`, `192.168.1.3:3000`, `igreja-metatron.vercel.app`, `shadcn-ui-silk-sigma.vercel.app`, `www.igrejademetatron.com.br`. Em non-prod aceita qualquer. |
 | **Headers de segurança** | `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Cache-Control: no-store, no-cache, must-revalidate, proxy-revalidate` |
 | **Validação de input** | pageId ∈ whitelist, language ∈ `[pt-BR, en-US]` ou null, texto ≤ 5000 chars, json_key ≤ 255 chars |
 | **Limite de body** | 100KB máximo (status 413) |
@@ -912,6 +913,18 @@ O projeto usa um **plugin Vite customizado** que emula o ambiente Vercel Serverl
 - **Rewrites:** Tudo que NÃO começa com `/api/` é redirecionado para `index.html` (SPA routing)
 - **Functions:** Cada arquivo `.js` em `api/` vira uma serverless function com 1GB RAM e timeout de 10s
 
+### Nota: pnpm vs npm no Windows Local
+
+**O `pnpm install` falha silenciosamente no Windows** devido a um bug WMI (erro "Nó - NOVOATOM / Consulta inválida") que interrompe a instalação, deixando `node_modules` incompleto (sem symlinks `.bin/`, pacotes parciais). O exit code aparece como 1 mas sem mensagem de erro clara.
+
+**Solução para ambiente local (Windows):**
+- Usar `npm install` no lugar de `pnpm install` para instalar dependências localmente
+- O `package-lock.json` gerado pelo npm **NÃO deve ser commitado** — o Vercel usa `pnpm-lock.yaml`
+- Adicionar `package-lock.json` ao `.gitignore` se necessário
+- Para iniciar o dev server: `node node_modules\vite\bin\vite.js --host` (ou via `start-dev.ps1`)
+
+**No Vercel (Linux):** `pnpm` funciona normalmente — nenhuma mudança necessária no deploy.
+
 ---
 
 # CONVENÇÕES DE CÓDIGO
@@ -1051,6 +1064,8 @@ vercel --prod
 | API retorna HTML em vez de JSON | `apiPlugin()` ausente ou corrompido no `vite.config.ts` | Restaurar plugin — ver backup ou docs |
 | Caracteres corrompidos (U+FFFD) | Encoding UTF-16LE ao salvar arquivo | Verificar encoding, usar UTF-8 sem BOM |
 | `npm run dev` falha | Processos node travados | Executar `stop-dev.ps1` e depois `start-dev.ps1` |
+| `pnpm install` falha com exit code 1 (Windows) | Bug WMI "Nó - NOVOATOM / Consulta inválida" — interrompe linking | Usar `npm install` no lugar (ver seção Deploy > Nota pnpm vs npm) |
+| `Cannot find module @rollup/rollup-win32-x64-msvc` | `node_modules` incompleto após pnpm install falho | Deletar `node_modules` e reinstalar com `npm install` |
 | PUT aceita mas não salva | Hash idêntico (no-op) | Verificar `updateLog[].oldHash` vs `newHash` |
 | Tradução aparece igual em PT e EN | Key existente apenas em dot-notation e front usa bracket-notation | Atualizar AMBAS as notações se coexistirem |
 | `languageStatus` mostra FALTANDO | Idioma ausente no campo `content` da entry | PUT com o idioma faltante |

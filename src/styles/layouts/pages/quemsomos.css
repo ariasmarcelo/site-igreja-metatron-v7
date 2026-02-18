@@ -118,33 +118,76 @@
 }
 
 /* ═══════════════════════════════════════════════════════════
-   Princípios Unificados — "Tábuas de Cristal" starfield
+   Princípios Unificados — Raios de luz 12 direções
    ═══════════════════════════════════════════════════════════ */
-
-/* Estrelas sutis usando radial-gradient dots */
-.principles-stars {
-  background-image:
-    radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,0.7) 50%, transparent 100%),
-    radial-gradient(1px 1px at 25% 42%, rgba(255,255,255,0.5) 50%, transparent 100%),
-    radial-gradient(1.5px 1.5px at 40% 8%, rgba(200,180,255,0.8) 50%, transparent 100%),
-    radial-gradient(1px 1px at 55% 65%, rgba(255,255,255,0.6) 50%, transparent 100%),
-    radial-gradient(1px 1px at 70% 30%, rgba(255,255,255,0.4) 50%, transparent 100%),
-    radial-gradient(1.5px 1.5px at 85% 55%, rgba(200,180,255,0.7) 50%, transparent 100%),
-    radial-gradient(1px 1px at 15% 80%, rgba(255,255,255,0.5) 50%, transparent 100%),
-    radial-gradient(1px 1px at 45% 90%, rgba(255,255,255,0.3) 50%, transparent 100%),
-    radial-gradient(1px 1px at 90% 85%, rgba(255,255,255,0.6) 50%, transparent 100%),
-    radial-gradient(1px 1px at 60% 20%, rgba(200,180,255,0.5) 50%, transparent 100%),
-    radial-gradient(1px 1px at 5% 50%, rgba(255,255,255,0.4) 50%, transparent 100%),
-    radial-gradient(1px 1px at 75% 75%, rgba(255,255,255,0.5) 50%, transparent 100%),
-    radial-gradient(1.5px 1.5px at 35% 35%, rgba(200,180,255,0.6) 50%, transparent 100%),
-    radial-gradient(1px 1px at 95% 10%, rgba(255,255,255,0.7) 50%, transparent 100%),
-    radial-gradient(1px 1px at 50% 50%, rgba(255,255,255,0.3) 50%, transparent 100%);
-  animation: principles-twinkle 6s ease-in-out infinite alternate;
+.cuboctahedron-radial-glow-principios {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: conic-gradient(
+    from 15deg at 50% 146px,
+    transparent 0deg,
+    rgba(218, 165, 32, 0.6) 11deg,
+    rgba(255, 215, 0, 0.95) 15deg,
+    rgba(218, 165, 32, 0.6) 19deg,
+    transparent 30deg,
+    transparent 30deg,
+    rgba(218, 165, 32, 0.6) 41deg,
+    rgba(255, 215, 0, 0.95) 45deg,
+    rgba(218, 165, 32, 0.6) 49deg,
+    transparent 60deg,
+    transparent 60deg,
+    rgba(218, 165, 32, 0.6) 71deg,
+    rgba(255, 215, 0, 0.95) 75deg,
+    rgba(218, 165, 32, 0.6) 79deg,
+    transparent 90deg,
+    transparent 90deg,
+    rgba(218, 165, 32, 0.6) 101deg,
+    rgba(255, 215, 0, 0.95) 105deg,
+    rgba(218, 165, 32, 0.6) 109deg,
+    transparent 120deg,
+    transparent 120deg,
+    rgba(218, 165, 32, 0.6) 131deg,
+    rgba(255, 215, 0, 0.95) 135deg,
+    rgba(218, 165, 32, 0.6) 139deg,
+    transparent 150deg,
+    transparent 150deg,
+    rgba(218, 165, 32, 0.6) 161deg,
+    rgba(255, 215, 0, 0.95) 165deg,
+    rgba(218, 165, 32, 0.6) 169deg,
+    transparent 180deg,
+    transparent 180deg,
+    rgba(218, 165, 32, 0.6) 191deg,
+    rgba(255, 215, 0, 0.95) 195deg,
+    rgba(218, 165, 32, 0.6) 199deg,
+    transparent 210deg,
+    transparent 210deg,
+    rgba(218, 165, 32, 0.6) 221deg,
+    rgba(255, 215, 0, 0.95) 225deg,
+    rgba(218, 165, 32, 0.6) 229deg,
+    transparent 240deg,
+    transparent 240deg,
+    rgba(218, 165, 32, 0.6) 251deg,
+    rgba(255, 215, 0, 0.95) 255deg,
+    rgba(218, 165, 32, 0.6) 259deg,
+    transparent 270deg,
+    transparent 270deg,
+    rgba(218, 165, 32, 0.6) 281deg,
+    rgba(255, 215, 0, 0.95) 285deg,
+    rgba(218, 165, 32, 0.6) 289deg,
+    transparent 300deg,
+    transparent 300deg,
+    rgba(218, 165, 32, 0.6) 311deg,
+    rgba(255, 215, 0, 0.95) 315deg,
+    rgba(218, 165, 32, 0.6) 319deg,
+    transparent 330deg,
+    transparent 330deg,
+    rgba(218, 165, 32, 0.6) 341deg,
+    rgba(255, 215, 0, 0.95) 345deg,
+    rgba(218, 165, 32, 0.6) 349deg,
+    transparent 360deg
+  );
+  /* Máscara radial: brilho intenso no centro, desvanecendo ao emanar */
+  -webkit-mask-image: radial-gradient(circle at 50% 146px, black 0%, rgba(0,0,0,0.85) 8%, rgba(0,0,0,0.5) 25%, rgba(0,0,0,0.15) 50%, transparent 75%);
+  mask-image: radial-gradient(circle at 50% 146px, black 0%, rgba(0,0,0,0.85) 8%, rgba(0,0,0,0.5) 25%, rgba(0,0,0,0.15) 50%, transparent 75%);
 }
-
-@keyframes principles-twinkle {
-  0% { opacity: 0.4; }
-  50% { opacity: 0.7; }
-  100% { opacity: 0.5; }
-}
-

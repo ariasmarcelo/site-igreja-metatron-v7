@@ -1,18 +1,15 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Link } from 'react-router-dom';
-import { Heart, Brain, Ghost, Sparkles, ChevronRight } from 'lucide-react';
+import { Heart, Brain, Ghost, Sparkles, ChevronRight, TrendingUp, MessageCircle } from 'lucide-react';
 import EditableField from '@/components/ui/EditableField';
 import { Sun12Rays } from '../components/icons/Sun12Rays';
 import { LogoGold } from '../components/icons/LogoGold';
-import { lazy, Suspense } from 'react';
 import { usePageContent } from '@/hooks/useContent';
 import { usePageStyles } from '@/hooks/usePageStyles';
 import { PageLoading } from '@/components/PageLoading';
 import { FooterBackground } from '@/components/FooterBackground';
 import { SharedFooter } from '@/components/SharedFooter';
-
-const TestimonialsCarousel = lazy(() => import('@/components/TestimonialsCarousel'));
 
 interface IndexTexts {
   header: { title: string; subtitle: string };
@@ -43,21 +40,21 @@ export default function Index() {
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto text-center">
             <div className="inline-flex items-center justify-center mb-8 filter-[drop-shadow(0_20px_40px_rgba(0,0,0,0.25))_drop-shadow(0_10px_20px_rgba(0,0,0,0.15))]">
-              <LogoGold className="w-175 h-auto" />
+              <LogoGold className="w-190 h-auto" />
             </div>
             
             <EditableField 
               value={texts.hero.title}
               jsonKey="index.hero.title"
               type="h1"
-              className="text-5xl md:text-7xl font-bold mb-6 text-stone-900"
+              className="text-4xl md:text-6xl font-bold mb-6 text-stone-900"
             />
             
             <EditableField 
               value={texts.hero.subtitle}
               jsonKey="index.hero.subtitle"
               type="p"
-              className="text-2xl md:text-3xl text-amber-700 font-medium mb-12"
+              className="text-xl md:text-2xl text-amber-700 font-medium mb-12"
             />
 
             <div className="flex flex-wrap gap-4 justify-center">
@@ -88,79 +85,74 @@ export default function Index() {
         </div>
       </section>
 
-      {/* ==================== FIRST CALL ==================== */}
+      {/* ==================== REDESCUBRA ==================== */}
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
-          <Card className="max-w-7xl mx-auto border-0 shadow-2xl bg-linear-to-br from-amber-50 to-white">
-            <CardContent className="p-16">
-              <div className="grid lg:grid-cols-3 gap-12">
-                
-                {/* COLUNA ESQUERDA - Ícone e Título */}
-                <div className="lg:col-span-1 flex flex-col items-center justify-start text-center">
-                  <div className="w-24 h-24 bg-amber-100 rounded-3xl flex items-center justify-center mb-6 shadow-lg">
-                    <Heart className="w-14 h-14 text-amber-600" />
-                  </div>
-                  <EditableField 
-                    value={texts?.instituto?.firstCallTitle}
-                    jsonKey="index.instituto.firstCallTitle" 
-                    type="h2"
-                    className="text-3xl font-bold text-amber-800 leading-tight"
-                  />
-                </div>
+          <div className="max-w-5xl mx-auto">
+            {/* Título centralizado */}
+            <div className="text-center mb-12">
+              <div className="w-20 h-20 bg-amber-100 rounded-3xl flex items-center justify-center mb-6 mx-auto shadow-lg">
+                <Heart className="w-12 h-12 text-amber-600" />
+              </div>
+              <EditableField 
+                value={texts?.instituto?.firstCallTitle}
+                jsonKey="index.instituto.firstCallTitle" 
+                type="h2"
+                className="text-4xl font-bold text-amber-800 leading-tight"
+              />
+            </div>
 
-                {/* COLUNA DIREITA - Conteúdo */}
-                <div className="lg:col-span-2 space-y-6">
-                  {texts?.instituto?.firstCall?.map((p: string, i: number) => (
-                    <EditableField
-                      key={i}
-                      value={p}
-                      jsonKey={`index.instituto.firstCall[${i}]`}
-                      type="p"
-                      className={
-                        i === 0 
-                          ? 'text-xl text-amber-700 font-semibold italic leading-relaxed border-l-4 border-amber-500 pl-6 py-2'
-                          : i === 3 
-                          ? 'text-base text-stone-800 font-bold mt-8' 
-                          : 'text-base text-stone-600 leading-relaxed'
-                      }
-                    />
-                  ))}
+            {/* Conteúdo full-width */}
+            <div className="space-y-5 mb-10">
+              {texts?.instituto?.firstCall?.map((p: string, i: number) => (
+                <EditableField
+                  key={i}
+                  value={p}
+                  jsonKey={`index.instituto.firstCall[${i}]`}
+                  type="p"
+                  className={
+                    i === 0 
+                      ? 'text-xl text-amber-700 font-semibold italic leading-relaxed border-l-4 border-amber-500 pl-6 py-2'
+                      : i === 3 
+                      ? 'text-base text-stone-800 font-bold mt-6' 
+                      : 'text-base text-stone-600 leading-relaxed'
+                  }
+                />
+              ))}
+            </div>
 
-                  {(texts?.instituto?.firstCallList?.length || 0) > 0 && (
-                    <div className="bg-amber-100 rounded-xl p-6 my-6">
-                      <ul className="space-y-3">
-                        {texts.instituto.firstCallList.map((li: string, i: number) => (
-                          <li key={i} className="flex items-start gap-3">
-                            <div className="w-7 h-7 bg-amber-600 rounded-lg flex items-center justify-center shrink-0 mt-0.5 shadow">
-                              <span className="text-white text-sm font-bold">✓</span>
-                            </div>
-                            <EditableField
-                              value={li}
-                              jsonKey={`index.instituto.firstCallList[${i}]`}
-                              type="span"
-                              className="text-stone-800 font-medium"
-                            />
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-
-                  {texts?.instituto?.firstCallFooter && (
-                    <div className="bg-amber-600 text-white rounded-xl p-6 mt-8 shadow-lg">
+            {/* Checkmarks em 2 colunas */}
+            {(texts?.instituto?.firstCallList?.length || 0) > 0 && (
+              <div className="bg-amber-50 rounded-2xl p-8 mb-8 border border-amber-200">
+                <div className="grid md:grid-cols-2 gap-4">
+                  {texts.instituto.firstCallList.map((li: string, i: number) => (
+                    <div key={i} className="flex items-start gap-3">
+                      <div className="w-7 h-7 bg-amber-600 rounded-lg flex items-center justify-center shrink-0 mt-0.5 shadow">
+                        <span className="text-white text-sm font-bold">✓</span>
+                      </div>
                       <EditableField
-                        value={texts.instituto.firstCallFooter}
-                        jsonKey="index.instituto.firstCallFooter"
-                        type="p"
-                        className="text-lg font-bold text-center"
+                        value={li}
+                        jsonKey={`index.instituto.firstCallList[${i}]`}
+                        type="span"
+                        className="text-stone-800 font-medium"
                       />
                     </div>
-                  )}
+                  ))}
                 </div>
-
               </div>
-            </CardContent>
-          </Card>
+            )}
+
+            {texts?.instituto?.firstCallFooter && (
+              <div className="bg-amber-600 text-white rounded-xl p-6 shadow-lg">
+                <EditableField
+                  value={texts.instituto.firstCallFooter}
+                  jsonKey="index.instituto.firstCallFooter"
+                  type="p"
+                  className="text-lg font-bold text-center"
+                />
+              </div>
+            )}
+          </div>
         </div>
       </section>
 
@@ -215,7 +207,7 @@ export default function Index() {
                     className="text-stone-600 mb-6 leading-relaxed"
                   />
                   
-                  <ul className="space-y-3 mb-6">
+                  <ul className="space-y-3 mb-8">
                     {texts.fisicoEspiritual.fisico.items.map((item: string, i: number) => (
                       <li key={i} className="flex items-start gap-3">
                         <div className="w-2 h-2 bg-teal-500 rounded-full mt-2 shrink-0"></div>
@@ -229,20 +221,12 @@ export default function Index() {
                     ))}
                   </ul>
                   
-                  <div className="bg-teal-50 rounded-xl p-6 border-l-4 border-teal-500">
-                    <EditableField
-                      value={texts.fisicoEspiritual.fisico.abordagem.title}
-                      jsonKey="index.fisicoEspiritual.fisico.abordagem.title"
-                      type="p"
-                      className="font-bold text-teal-900 mb-2"
-                    />
-                    <EditableField
-                      value={texts.fisicoEspiritual.fisico.abordagem.description}
-                      jsonKey="index.fisicoEspiritual.fisico.abordagem.description"
-                      type="p"
-                      className="text-teal-800"
-                    />
-                  </div>
+                  <Link to="/tratamentos">
+                    <Button className="bg-teal-600 hover:bg-teal-700 text-white px-8 py-5 rounded-full text-base">
+                      Explorar Tratamentos
+                      <ChevronRight className="ml-2 w-4 h-4" />
+                    </Button>
+                  </Link>
                 </CardContent>
               </Card>
 
@@ -277,7 +261,7 @@ export default function Index() {
                     className="text-stone-600 mb-6 leading-relaxed"
                   />
                   
-                  <ul className="space-y-3 mb-6">
+                  <ul className="space-y-3 mb-8">
                     {texts.fisicoEspiritual.espiritual.items.map((item: string, i: number) => (
                       <li key={i} className="flex items-start gap-3">
                         <div className="w-2 h-2 bg-amber-500 rounded-full mt-2 shrink-0"></div>
@@ -291,20 +275,12 @@ export default function Index() {
                     ))}
                   </ul>
                   
-                  <div className="bg-amber-50 rounded-xl p-6 border-l-4 border-amber-500">
-                    <EditableField
-                      value={texts.fisicoEspiritual.espiritual.abordagem.title}
-                      jsonKey="index.fisicoEspiritual.espiritual.abordagem.title"
-                      type="p"
-                      className="font-bold text-amber-900 mb-2"
-                    />
-                    <EditableField
-                      value={texts.fisicoEspiritual.espiritual.abordagem.description}
-                      jsonKey="index.fisicoEspiritual.espiritual.abordagem.description"
-                      type="p"
-                      className="text-amber-800"
-                    />
-                  </div>
+                  <Link to="/purificacao">
+                    <Button className="bg-amber-600 hover:bg-amber-700 text-white px-8 py-5 rounded-full text-base">
+                      Caminho de Purificação
+                      <ChevronRight className="ml-2 w-4 h-4" />
+                    </Button>
+                  </Link>
                 </CardContent>
               </Card>
             </div>
@@ -312,166 +288,121 @@ export default function Index() {
         </div>
       </section>
 
-      {/* ==================== IGREJA DE METATRON ==================== */}
+      {/* ==================== DOIS CAMINHOS ==================== */}
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
-          <Card className="max-w-7xl mx-auto border-0 shadow-2xl overflow-hidden">
-            <div className="h-3 bg-linear-to-r from-amber-400 via-amber-500 to-amber-600"></div>
-            <CardContent className="p-0">
-              <div className="grid lg:grid-cols-5 gap-0">
-                <div className="lg:col-span-3 p-12">
-                  <div className="flex items-center gap-4 mb-8">
-                    <div className="w-20 h-20 bg-amber-100 rounded-2xl flex items-center justify-center">
-                      <Sun12Rays className="w-12 h-12 text-amber-600" />
-                    </div>
-                    <EditableField
-                      value={texts.igreja.title}
-                      jsonKey="index.igreja.title"
-                      type="h2"
-                      className="text-4xl font-bold text-stone-900"
-                    />
-                  </div>
-                  
-                  <div className="space-y-4 mb-8">
-                    {texts.igreja.description.map((p: string, i: number) => (
-                      <EditableField
-                        key={i}
-                        value={p}
-                        jsonKey={`index.igreja.description[${i}]`}
-                        type="p"
-                        className="text-lg text-stone-600 leading-relaxed"
-                      />
-                    ))}
-                  </div>
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-16">
+              <EditableField
+                value={texts.caminhos?.title}
+                jsonKey="index.caminhos.title"
+                type="h2"
+                className="text-5xl font-bold mb-4 text-stone-900"
+              />
+            </div>
 
-                  <Link to="/quemsomos">
-                    <Button size="lg" className="bg-amber-600 hover:bg-amber-700 text-white px-10 py-6 rounded-full text-lg">
-                      <EditableField
-                        value={texts.igreja.knowMoreButton}
-                        jsonKey="index.igreja.knowMoreButton"
-                        type="span"
-                        className="inline"
-                      />
-                      <ChevronRight className="ml-2 w-5 h-5" />
-                    </Button>
-                  </Link>
-                </div>
-
-                <div className="lg:col-span-2 bg-amber-50 p-10">
+            <div className="grid lg:grid-cols-2 gap-10">
+              {/* IGREJA */}
+              <div className="bg-linear-to-br from-amber-50 to-white rounded-2xl p-10 border border-amber-200 shadow-lg">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-16 h-16 bg-amber-100 rounded-2xl flex items-center justify-center shadow">
+                    <Sun12Rays className="w-10 h-10 text-amber-600" />
+                  </div>
                   <EditableField
-                    value={texts.purification.title}
-                    jsonKey="index.purification.title"
+                    value={texts.igreja?.title}
+                    jsonKey="index.igreja.title"
                     type="h3"
-                    className="text-2xl font-bold text-amber-800 mb-8"
+                    className="text-2xl font-bold text-amber-800"
                   />
-                  <div className="space-y-6">
-                    {texts.purification.phases.map((phase: any, i: number) => (
-                      <div key={i} className="flex gap-4">
-                        <div className="w-10 h-10 bg-amber-600 rounded-xl flex items-center justify-center text-white font-bold text-lg shrink-0">
-                          {i + 1}
-                        </div>
-                        <div>
-                          <EditableField
-                            value={phase.title}
-                            jsonKey={`index.purification.phases[${i}].title`}
-                            type="h4"
-                            className="font-bold text-stone-900 mb-1"
-                          />
-                          <EditableField
-                            value={phase.description}
-                            jsonKey={`index.purification.phases[${i}].description`}
-                            type="p"
-                            className="text-sm text-stone-600"
-                          />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
-
-      {/* ==================== INSTITUTO METATRON ==================== */}
-      <section className="py-20 bg-stone-50">
-        <div className="container mx-auto px-4">
-          <Card className="max-w-7xl mx-auto border-0 shadow-2xl overflow-hidden">
-            <div className="h-3 bg-linear-to-r from-teal-400 via-teal-500 to-teal-600"></div>
-            <CardContent className="p-0">
-              <div className="grid lg:grid-cols-5 gap-0">
-                <div className="lg:col-span-2 bg-teal-50 p-10 lg:order-2">
-                  <EditableField
-                    value={texts.treatments?.title}
-                    jsonKey="index.treatments.title"
-                    type="h3"
-                    className="text-2xl font-bold text-teal-800 mb-8"
-                  />
-                  <div className="space-y-3">
-                    {texts.instituto.treatments.slice(0, 7).map((t: string, i: number) => (
-                      <div key={i} className="flex items-center gap-3 bg-white rounded-lg p-3">
-                        <div className="w-2 h-2 bg-teal-500 rounded-full shrink-0"></div>
-                        <EditableField
-                          value={t}
-                          jsonKey={`index.instituto.treatments[${i}]`}
-                          type="span"
-                          className="text-stone-700"
-                        />
-                      </div>
-                    ))}
-                  </div>
                 </div>
 
-                <div className="lg:col-span-3 p-12 lg:order-1">
-                  <div className="flex items-center gap-4 mb-8">
-                    <div className="w-20 h-20 bg-teal-100 rounded-2xl flex items-center justify-center">
-                      <Brain className="w-12 h-12 text-teal-600" />
-                    </div>
-                    <EditableField
-                      value={texts.instituto.title}
-                      jsonKey="index.instituto.title"
-                      type="h2"
-                      className="text-4xl font-bold text-stone-900"
-                    />
-                  </div>
-                  
-                  <div className="space-y-4 mb-6">
-                    {texts.instituto.description.map((p: string, i: number) => (
-                      <EditableField
-                        key={i}
-                        value={p}
-                        jsonKey={`index.instituto.description[${i}]`}
-                        type="p"
-                        className="text-lg text-stone-600 leading-relaxed"
-                      />
-                    ))}
-                  </div>
+                <EditableField
+                  value={texts.caminhos?.igreja?.resumo}
+                  jsonKey="index.caminhos.igreja.resumo"
+                  type="p"
+                  className="text-stone-600 leading-relaxed mb-6"
+                />
 
-                  <div className="bg-amber-50 border-l-4 border-amber-500 rounded-r-xl p-4 mb-8">
-                    <EditableField
-                      value={texts.instituto.legalNotice}
-                      jsonKey="index.instituto.legalNotice"
-                      type="p"
-                      className="text-sm text-amber-900"
-                    />
-                  </div>
-
-                  <Link to="/tratamentos">
-                    <Button size="lg" className="bg-teal-600 hover:bg-teal-700 text-white px-10 py-6 rounded-full text-lg">
+                <ul className="space-y-3 mb-8">
+                  {texts.caminhos?.igreja?.items?.map((item: string, i: number) => (
+                    <li key={i} className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-amber-600 rounded-md flex items-center justify-center shrink-0 mt-0.5">
+                        <span className="text-white text-xs font-bold">✓</span>
+                      </div>
                       <EditableField
-                        value={texts.instituto.ctaButton}
-                        jsonKey="index.instituto.ctaButton"
+                        value={item}
+                        jsonKey={`index.caminhos.igreja.items[${i}]`}
                         type="span"
-                        className="inline"
+                        className="text-stone-700 font-medium"
                       />
-                      <ChevronRight className="ml-2 w-5 h-5" />
-                    </Button>
-                  </Link>
-                </div>
+                    </li>
+                  ))}
+                </ul>
+
+                <Link to="/quemsomos">
+                  <Button className="bg-amber-600 hover:bg-amber-700 text-white px-8 py-5 rounded-full text-base w-full">
+                    <EditableField
+                      value={texts.caminhos?.igreja?.button}
+                      jsonKey="index.caminhos.igreja.button"
+                      type="span"
+                      className="inline"
+                    />
+                    <ChevronRight className="ml-2 w-4 h-4" />
+                  </Button>
+                </Link>
               </div>
-            </CardContent>
-          </Card>
+
+              {/* INSTITUTO */}
+              <div className="bg-linear-to-br from-teal-50 to-white rounded-2xl p-10 border border-teal-200 shadow-lg">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-16 h-16 bg-teal-100 rounded-2xl flex items-center justify-center shadow">
+                    <Brain className="w-10 h-10 text-teal-600" />
+                  </div>
+                  <EditableField
+                    value={texts.instituto?.title}
+                    jsonKey="index.instituto.title"
+                    type="h3"
+                    className="text-2xl font-bold text-teal-800"
+                  />
+                </div>
+
+                <EditableField
+                  value={texts.caminhos?.instituto?.resumo}
+                  jsonKey="index.caminhos.instituto.resumo"
+                  type="p"
+                  className="text-stone-600 leading-relaxed mb-6"
+                />
+
+                <ul className="space-y-3 mb-8">
+                  {texts.caminhos?.instituto?.items?.map((item: string, i: number) => (
+                    <li key={i} className="flex items-start gap-3">
+                      <div className="w-6 h-6 bg-teal-600 rounded-md flex items-center justify-center shrink-0 mt-0.5">
+                        <span className="text-white text-xs font-bold">✓</span>
+                      </div>
+                      <EditableField
+                        value={item}
+                        jsonKey={`index.caminhos.instituto.items[${i}]`}
+                        type="span"
+                        className="text-stone-700 font-medium"
+                      />
+                    </li>
+                  ))}
+                </ul>
+
+                <Link to="/tratamentos">
+                  <Button className="bg-teal-600 hover:bg-teal-700 text-white px-8 py-5 rounded-full text-base w-full">
+                    <EditableField
+                      value={texts.caminhos?.instituto?.button}
+                      jsonKey="index.caminhos.instituto.button"
+                      type="span"
+                      className="inline"
+                    />
+                    <ChevronRight className="ml-2 w-4 h-4" />
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -501,7 +432,7 @@ export default function Index() {
                     <div className="w-16 h-16 mx-auto mb-6 bg-white rounded-2xl flex items-center justify-center shadow-md">
                       {i === 0 && <Sun12Rays className="w-10 h-10 text-amber-600" />}
                       {i === 1 && <Brain className="w-10 h-10 text-teal-600" />}
-                      {i === 2 && <Sparkles className="w-10 h-10 text-stone-600" />}
+                      {i === 2 && <TrendingUp className="w-10 h-10 text-stone-600" />}
                     </div>
                     <EditableField
                       value={b.title}
@@ -523,19 +454,38 @@ export default function Index() {
         </div>
       </section>
 
-      {/* ==================== TESTEMUNHOS ==================== */}
-      <Suspense fallback={
-        <section className="py-20 bg-stone-50">
-          <div className="container mx-auto px-4">
-            <div className="text-center">
-              <div className="animate-spin rounded-full h-16 w-16 border-4 border-amber-600 border-t-transparent mx-auto mb-4"></div>
-              <p className="text-stone-600 text-lg">Carregando testemunhos...</p>
+      {/* ==================== TESTEMUNHOS CTA ==================== */}
+      <section className="py-14 bg-linear-to-r from-stone-100 via-stone-50 to-stone-100 border-y border-stone-200">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8">
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 bg-amber-100 rounded-2xl flex items-center justify-center shadow">
+                <MessageCircle className="w-8 h-8 text-amber-600" />
+              </div>
+              <div>
+                <h3 className="text-2xl font-bold text-stone-900 mb-1">Testemunhos</h3>
+                <EditableField
+                  value={texts.testemunhos_cta}
+                  jsonKey="index.testemunhos_cta"
+                  type="p"
+                  className="text-stone-600"
+                />
+              </div>
             </div>
+            <Link to="/testemunhos">
+              <Button className="bg-amber-600 hover:bg-amber-700 text-white px-8 py-5 rounded-full text-base whitespace-nowrap">
+                <EditableField
+                  value={texts.testemunhos_cta?.button}
+                  jsonKey="index.testemunhos_cta.button"
+                  type="span"
+                  className="inline"
+                />
+                <ChevronRight className="ml-2 w-4 h-4" />
+              </Button>
+            </Link>
           </div>
-        </section>
-      }>
-        <TestimonialsCarousel />
-      </Suspense>
+        </div>
+      </section>
 
       {/* ==================== CTA FINAL / FOOTER ==================== */}
       <section className="relative overflow-hidden bg-slate-900">
