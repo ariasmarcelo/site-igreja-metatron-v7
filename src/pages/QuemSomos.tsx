@@ -1,9 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import EditableField from "@/components/ui/EditableField";
 import { Link } from "react-router-dom";
-import { Sparkles, Microscope, Heart, HandHelping, ShieldCheck, BookOpen, FileText, Target, Waves } from "lucide-react";
+import { BookOpen } from "lucide-react";
 import { Pentagram, Cuboctahedron } from "@/components/icons";
 import { usePageContent } from '@/hooks/useContent';
 import { usePageStyles } from '@/hooks/usePageStyles';
@@ -26,31 +25,21 @@ interface QuemSomosTexts {
   [key: string]: any;
 }
 
-// Constantes movidas para FORA do componente para evitar re-criação a cada render
-const PRINCIPIOS_ICONS = [
-  <Sparkles className="h-6 w-6" key="sparkles" />,
-  <Microscope className="h-6 w-6" key="microscope" />,
-  <Heart className="h-6 w-6" key="heart" />,
-  <HandHelping className="h-6 w-6" key="handhelping" />,
-  <ShieldCheck className="h-6 w-6" key="shieldcheck" />,
-  <FileText className="h-6 w-6" key="filetext" />
-];
-
-const HERMETICOS_CORES = [
-  // Mentalismo - Prata violeta (mente, consciência)
-  { from: 'from-violet-200', via: 'via-purple-300', to: 'to-slate-300', border: 'border-violet-300', shine: 'shadow-[0_0_20px_rgba(167,139,250,0.4)]' },
-  // Correspondência - Ouro rosa (reflexão, espelhamento)
-  { from: 'from-pink-200', via: 'via-rose-300', to: 'to-amber-200', border: 'border-rose-300', shine: 'shadow-[0_0_20px_rgba(251,207,232,0.4)]' },
-  // Vibração - Cobre laranja (energia, movimento)
-  { from: 'from-orange-200', via: 'via-amber-300', to: 'to-yellow-200', border: 'border-orange-300', shine: 'shadow-[0_0_20px_rgba(253,186,116,0.4)]' },
-  // Polaridade - Platina azul-prata (opostos, dualidade)
-  { from: 'from-slate-200', via: 'via-blue-300', to: 'to-cyan-200', border: 'border-slate-300', shine: 'shadow-[0_0_20px_rgba(148,163,184,0.4)]' },
-  // Ritmo - Turquesa metálico (ciclos, fluxos)
-  { from: 'from-teal-200', via: 'via-cyan-300', to: 'to-emerald-200', border: 'border-teal-300', shine: 'shadow-[0_0_20px_rgba(153,246,228,0.4)]' },
-  // Gênero - Rosa-ouro (masculino/feminino)
-  { from: 'from-pink-300', via: 'via-fuchsia-300', to: 'to-rose-300', border: 'border-pink-400', shine: 'shadow-[0_0_20px_rgba(244,114,182,0.4)]' },
-  // Causa e Efeito - Bronze dourado (transformação)
-  { from: 'from-amber-300', via: 'via-yellow-300', to: 'to-orange-300', border: 'border-amber-400', shine: 'shadow-[0_0_20px_rgba(252,211,77,0.4)]' }
+// Cores gradiente para cada princípio — 13 princípios unificados
+const PRINCIPLE_GRADIENTS = [
+  { from: 'from-violet-500/20', border: 'border-violet-400/40', glow: 'hover:shadow-violet-500/20' },
+  { from: 'from-blue-500/20', border: 'border-blue-400/40', glow: 'hover:shadow-blue-500/20' },
+  { from: 'from-emerald-500/20', border: 'border-emerald-400/40', glow: 'hover:shadow-emerald-500/20' },
+  { from: 'from-rose-500/20', border: 'border-rose-400/40', glow: 'hover:shadow-rose-500/20' },
+  { from: 'from-amber-500/20', border: 'border-amber-400/40', glow: 'hover:shadow-amber-500/20' },
+  { from: 'from-cyan-500/20', border: 'border-cyan-400/40', glow: 'hover:shadow-cyan-500/20' },
+  { from: 'from-indigo-500/20', border: 'border-indigo-400/40', glow: 'hover:shadow-indigo-500/20' },
+  { from: 'from-teal-500/20', border: 'border-teal-400/40', glow: 'hover:shadow-teal-500/20' },
+  { from: 'from-pink-500/20', border: 'border-pink-400/40', glow: 'hover:shadow-pink-500/20' },
+  { from: 'from-sky-500/20', border: 'border-sky-400/40', glow: 'hover:shadow-sky-500/20' },
+  { from: 'from-purple-500/20', border: 'border-purple-400/40', glow: 'hover:shadow-purple-500/20' },
+  { from: 'from-fuchsia-500/20', border: 'border-fuchsia-400/40', glow: 'hover:shadow-fuchsia-500/20' },
+  { from: 'from-orange-500/20', border: 'border-orange-400/40', glow: 'hover:shadow-orange-500/20' },
 ];
 
 export default function QuemSomos() {
@@ -110,176 +99,74 @@ export default function QuemSomos() {
         </div>
       </section>
 
-      {/* Valores e Princípios - Estilo Accordion (movido de Purificação) - LARGURA TOTAL */}
-      <section className="bg-linear-to-br from-indigo-300 via-purple-200 to-violet-300 shadow-xl py-16 px-4 md:px-8 border-y border-indigo-400 relative overflow-hidden min-h-screen">
-          {/* Fundo com brilho irradiante em 12 direções - ancorado no topo */}
-          <div className="absolute inset-0 cuboctahedron-radial-glow-fullheight pointer-events-none opacity-80 z-20" />
-          
-          {/* Cuboctahedron - ancorado no topo */}
-          <div className="absolute top-16 left-1/2 -translate-x-1/2 z-30">
-            <Cuboctahedron size={200} className="text-indigo-600" strokeWidth={6} />
+      {/* ═══════════════════════════════════════════════════════════════
+           PRINCÍPIOS UNIFICADOS — Design "Tábuas de Cristal"
+           13 princípios em grid responsivo sobre fundo estrelado
+         ═══════════════════════════════════════════════════════════════ */}
+      <section className="relative py-20 px-4 md:px-8 overflow-hidden principles-starfield">
+        {/* Fundo estrelado */}
+        <div className="absolute inset-0 bg-linear-to-b from-[#0f0a2e] via-[#1a1145] to-[#0f0a2e]" />
+        <div className="absolute inset-0 principles-stars opacity-60" />
+        
+        {/* Cuboctahedron central com glow */}
+        <div className="relative z-10 flex justify-center mb-4">
+          <div className="relative">
+            <div className="absolute inset-0 scale-150 bg-[radial-gradient(circle,rgba(139,92,246,0.3)_0%,transparent_70%)]" />
+            <Cuboctahedron size={140} className="text-violet-300/80 drop-shadow-[0_0_20px_rgba(139,92,246,0.5)]" strokeWidth={4} />
           </div>
-          
-          {/* Container principal agrupando título, texto introdutório e cards */}
-          <div className="max-w-5xl mx-auto pt-62.5 relative z-30 isolate">
-            <div className="bg-white/40 backdrop-blur-md rounded-3xl shadow-2xl border-3 border-purple-300/60 p-8 md:p-12">
-              {/* Efeito de brilho nas bordas da caixa principal */}
-              <div className="absolute inset-0 rounded-3xl bg-linear-to-br from-purple-300/30 via-transparent to-indigo-300/30 pointer-events-none"></div>
-              
-              <div className="text-center mb-12 relative z-30">
-                <EditableField 
-                  value={(texts as any)?.valores?.title}
-                  jsonKey="quemsomos.valores.title"
-                  type="h2"
-                  className="text-4xl font-bold text-gray-800 mb-4"
-                />
+        </div>
+
+        {/* Título da seção */}
+        <div className="relative z-10 text-center mb-16">
+          <EditableField
+            value={(texts as any)?.principios_unificados?.title}
+            jsonKey="quemsomos.principios_unificados.title"
+            type="h2"
+            className="text-4xl md:text-5xl font-bold text-white/95 mb-3 drop-shadow-[0_2px_8px_rgba(139,92,246,0.4)]"
+          />
+          <div className="w-32 h-0.5 mx-auto bg-linear-to-r from-transparent via-violet-400 to-transparent" />
+        </div>
+
+        {/* Grid de Princípios — cards de cristal */}
+        <div className="relative z-10 max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {Array.from({ length: 13 }).map((_, idx) => {
+            const item = (texts as any)?.principios_unificados?.items?.[idx] || { title: '', content: '' };
+            const gradient = PRINCIPLE_GRADIENTS[idx % PRINCIPLE_GRADIENTS.length];
+            return (
+              <div
+                key={idx}
+                className={`group relative rounded-2xl border ${gradient.border} bg-white/[0.06] backdrop-blur-md p-6 transition-all duration-500 hover:bg-white/[0.12] hover:shadow-2xl ${gradient.glow} hover:-translate-y-1`}
+              >
+                {/* Glow interno sutil */}
+                <div className={`absolute inset-0 rounded-2xl bg-linear-to-br ${gradient.from} to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none`} />
                 
-                {/* Pergaminho com texto introdutório */}
-            {(texts as any)?.valores?.intro && (
-              <div className="max-w-4xl mx-auto my-8 relative">
-                    {/* Bordas decorativas do pergaminho */}
-                    <div className="relative bg-linear-to-br from-amber-50 via-yellow-50 to-amber-100 rounded-lg shadow-2xl border-4 border-amber-800/30 p-8 md:p-10">
-                      {/* Textura de papel antigo */}
-                      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZmlsdGVyIGlkPSJub2lzZSI+PGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9IjAuOSIgbnVtT2N0YXZlcz0iNCIgLz48ZmVDb2xvck1hdHJpeCB0eXBlPSJzYXR1cmF0ZSIgdmFsdWVzPSIwIi8+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsdGVyPSJ1cmwoI25vaXNlKSIgb3BhY2l0eT0iMC4wNSIvPjwvc3ZnPg==')] opacity-50 rounded-lg pointer-events-none"></div>
-                      
-                      {/* Cantos decorativos */}
-                      <div className="absolute top-2 left-2 w-8 h-8 border-t-2 border-l-2 border-amber-700/40 rounded-tl-lg"></div>
-                      <div className="absolute top-2 right-2 w-8 h-8 border-t-2 border-r-2 border-amber-700/40 rounded-tr-lg"></div>
-                      <div className="absolute bottom-2 left-2 w-8 h-8 border-b-2 border-l-2 border-amber-700/40 rounded-bl-lg"></div>
-                      <div className="absolute bottom-2 right-2 w-8 h-8 border-b-2 border-r-2 border-amber-700/40 rounded-br-lg"></div>
-                      
-                  {/* Texto do pergaminho */}
-                  <EditableField 
-                    value={(texts as any).valores.intro}
-                    jsonKey="quemsomos.valores.intro"
-                    type="p"
-                    className="relative text-base md:text-lg text-amber-900/90 leading-relaxed text-center font-serif drop-shadow-[0_1px_1px_rgba(0,0,0,0.05)]"
-                  />                      {/* Sombra interna para profundidade */}
-                      <div className="absolute inset-0 rounded-lg shadow-[inset_0_2px_8px_rgba(0,0,0,0.1)] pointer-events-none"></div>
-                    </div>
-                    
-                    {/* Sombra externa do pergaminho */}
-                    <div className="absolute inset-0 bg-linear-to-b from-transparent via-amber-900/5 to-amber-900/10 rounded-lg translate-y-1 -z-10"></div>
+                {/* Número */}
+                <div className="relative z-10 flex items-start gap-4">
+                  <span className="shrink-0 w-9 h-9 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-sm font-semibold text-white/70 group-hover:text-white group-hover:bg-white/20 transition-all duration-300">
+                    {idx + 1}
+                  </span>
+                  <div className="flex-1 min-w-0">
+                    <EditableField
+                      value={item.title}
+                      jsonKey={`quemsomos.principios_unificados.items[${idx}].title`}
+                      type="h3"
+                      className="text-lg font-semibold text-white/90 mb-2 group-hover:text-white transition-colors duration-300"
+                    />
+                    <EditableField
+                      value={item.content}
+                      jsonKey={`quemsomos.principios_unificados.items[${idx}].content`}
+                      type="p"
+                      className="text-sm text-white/60 leading-relaxed group-hover:text-white/75 transition-colors duration-300"
+                    />
                   </div>
-                )}
-              </div>
-              
-              {/* Container agrupador dos cards em estilo pedra */}
-              <div className="relative z-20">
-                <div className="grid md:grid-cols-2 gap-6 relative z-20">
-                {Array.from({ length: 10 }).map((_, idx) => {
-                  const card = (texts as any)?.valores?.cards?.[idx] || { title: '', content: '' };
-                    return (
-                    <div 
-                      key={idx}
-                      className="relative group"
-                    >
-                      {/* Card de pedra */}
-                      <div className="relative bg-linear-to-br from-gray-300 via-gray-200 to-gray-400 rounded-xl shadow-[0_8px_16px_rgba(0,0,0,0.3),inset_0_2px_4px_rgba(255,255,255,0.6),inset_0_-4px_8px_rgba(0,0,0,0.2)] border-2 border-gray-400/50 p-6 md:p-8 overflow-hidden transition-all duration-300 hover:shadow-[0_12px_24px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(255,255,255,0.7),inset_0_-4px_8px_rgba(0,0,0,0.25)] isolate">
-                        {/* Textura de pedra */}
-                        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZmlsdGVyIGlkPSJub2lzZSI+PGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9IjAuOCIgbnVtT2N0YXZlcz0iNSIgLz48ZmVDb2xvck1hdHJpeCB0eXBlPSJzYXR1cmF0ZSIgdmFsdWVzPSIwIi8+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsdGVyPSJ1cmwoI25vaXNlKSIgb3BhY2l0eT0iMC4xNSIvPjwvc3ZnPg==')] opacity-60 rounded-xl pointer-events-none mix-blend-overlay"></div>
-                        
-                        {/* Conteúdo com número integrado */}
-                        <div className="relative z-30 flex gap-4">
-                          {/* Número gravado na pedra */}
-                          <div className="shrink-0 w-12 h-12 rounded-lg bg-linear-to-br from-gray-400 via-gray-300 to-gray-500 shadow-[inset_0_2px_4px_rgba(0,0,0,0.3),inset_0_-2px_4px_rgba(255,255,255,0.3)] flex items-center justify-center border border-gray-500/30">
-                            <span className="text-2xl font-bold text-gray-700 drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]">{idx + 1}</span>
-                          </div>
-                          
-                          {/* Textos */}
-                          <div className="flex-1">
-                            <EditableField 
-                              value={card.title}
-                              jsonKey={`quemsomos.valores.cards[${idx}].title`}
-                              type="h3"
-                              className="text-xl md:text-2xl font-bold mb-4 drop-shadow-[0_2px_3px_rgba(0,0,0,0.2)]"
-                            />
-                            <EditableField 
-                              value={card.content}
-                              jsonKey={`quemsomos.valores.cards[${idx}].content`}
-                              type="p"
-                              className="text-base leading-relaxed drop-shadow-[0_1px_2px_rgba(0,0,0,0.15)]"
-                            />
-                          </div>
-                        </div>
-                        
-                        {/* Brilho na borda superior (luz ambiente) */}
-                        <div className="absolute top-0 left-0 right-0 h-1/3 bg-linear-to-b from-white/20 to-transparent rounded-t-xl pointer-events-none"></div>
-                        
-                        {/* Sombra na borda inferior (profundidade) */}
-                        <div className="absolute bottom-0 left-0 right-0 h-1/4 bg-linear-to-t from-black/20 to-transparent rounded-b-xl pointer-events-none"></div>
-                      </div>
-                    </div>
-                  );
-                })}
                 </div>
               </div>
-            </div>
-          </div>
+            );
+          })}
+        </div>
       </section>
 
       <div className="container mx-auto px-4 py-16 space-y-20 max-w-6xl relative">
-        
-        {/* Os Pilares da Instituição - Valores e Princípios Unificados */}
-        <section className="bg-linear-to-br from-violet-50 via-purple-50 to-violet-100 rounded-2xl shadow-xl p-8 md:p-12 border border-violet-200">
-          <div className="text-center mb-12">
-            <EditableField 
-              value={texts.pilares?.title}
-              jsonKey="quemsomos.pilares.title"
-              type="h2"
-              className="text-4xl font-bold text-gray-800 mb-4"
-            />
-            <EditableField 
-              value={texts.pilares?.description}
-              jsonKey="quemsomos.pilares.description"
-              type="p"
-              className="text-lg text-gray-600 max-w-4xl mx-auto mb-8"
-            />
-          </div>
-          
-          {/* Grid de Cards com Valores e Princípios */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {Array.from({ length: 6 }).map((_, index) => {
-              const item = (texts as any)?.principios?.items?.[index] || { title: '', content: '' };
-              const tipo = item.tipo || 'principio';
-              const badgeClass = tipo === 'valor' ? 'badge-valor' : 'badge-principio';
-              const badgeText = tipo === 'valor' ? 'Valor' : 'Princípio';
-              
-              return (
-                <Card key={index} className="border-t-4 border-t-violet-600 pilar-card-hover">
-                  <CardHeader>
-                    <div className="flex items-center justify-between mb-3">
-                      <span className={badgeClass}>{badgeText}</span>
-                    </div>
-                    <div className="flex items-center gap-3 mb-2">
-                      <div className="w-11 h-11 rounded-full bg-linear-to-br from-violet-600 via-purple-600 to-violet-600 flex items-center justify-center shadow-md text-white relative overflow-hidden shrink-0">
-                        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.4),transparent_60%)]"></div>
-                        <div className="absolute inset-0 bg-[linear-gradient(135deg,transparent_30%,rgba(255,255,255,0.2)_50%,transparent_70%)]"></div>
-                        {PRINCIPIOS_ICONS[index % PRINCIPIOS_ICONS.length]}
-                      </div>
-                      <EditableField 
-                        value={item.title}
-                        jsonKey={`quemsomos.principios.items[${index}].title`}
-                        type="span"
-                        className="inline text-lg text-gray-800"
-                      />
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <EditableField 
-                      value={item.content}
-                      jsonKey={`quemsomos.principios.items[${index}].content`}
-                      type="p"
-                      className="text-gray-700 leading-relaxed text-sm"
-                    />
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
-        </section>
-
-        {/* Histórico - Design Limpo com Elevação */}
         {texts.historico?.content && Array.isArray(texts.historico.content) && texts.historico.content.length > 0 && (
         <section className="bg-white rounded-2xl shadow-xl p-8 md:p-12 border border-gray-100">
           <EditableField 
