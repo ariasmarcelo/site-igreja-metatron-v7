@@ -4,6 +4,7 @@ import { Menu, X } from 'lucide-react';
 import { useLanguage, type Language } from './contexts/LanguageContext';
 import { useNavigationLabels } from './hooks/useNavigationLabels';
 import Index from './pages/Index';
+import IndexAntiga from './pages/IndexAntiga';
 import QuemSomos from './pages/QuemSomos';
 import Tratamentos from './pages/Tratamentos';
 import Purificacao from './pages/Purificacao';
@@ -324,6 +325,7 @@ const Navigation = () => {
         {/* Routes */}
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/indexantiga" element={<IndexAntiga />} />
           <Route path="/quemsomos" element={<QuemSomos />} />
           <Route path="/tratamentos" element={<Tratamentos />} />
           <Route path="/purificacao" element={<Purificacao />} />

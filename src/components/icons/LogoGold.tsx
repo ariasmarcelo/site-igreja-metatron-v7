@@ -9,7 +9,7 @@ interface LogoGoldProps {
 export const LogoGold = ({ className = "w-24 h-24" }: LogoGoldProps) => {
   return (
     <img 
-      src="/logo-metatron.png" 
+      src="/logo-metatron-asas-gold-svgo.svg" 
       alt="Logo Igreja de Metatron" 
       className={className}
     />
