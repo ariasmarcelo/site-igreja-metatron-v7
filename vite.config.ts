@@ -107,7 +107,7 @@ const apiPlugin = () => ({
         });
       };
 
-      if (req.method === 'POST' || req.method === 'PUT') {
+      if (req.method === 'POST' || req.method === 'PUT' || req.method === 'DELETE') {
         let body = '';
         req.on('data', (chunk: any) => { body += chunk.toString(); });
         req.on('end', () => {

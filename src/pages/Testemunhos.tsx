@@ -66,7 +66,7 @@ const Testemunhos = () => {
       <div className="min-h-screen bg-linear-to-b from-rose-50 via-sky-100 to-sky-300">
       
       {/* Hero Section */}
-      <section className="relative py-20 overflow-hidden bg-pink-400">
+      <section className="relative py-10 overflow-hidden bg-pink-400">
         {/* Animated Metallic Gold Background Effects */}
         <div className="absolute inset-0 opacity-40">
           <div className="absolute top-20 left-[10%] w-96 h-96 bg-yellow-300/60 rounded-full blur-3xl animate-pulse orb-1" />
@@ -74,26 +74,43 @@ const Testemunhos = () => {
           <div className="absolute bottom-20 left-[20%] w-100 h-100 bg-yellow-400/55 rounded-full blur-3xl animate-pulse orb-3" />
           <div className="absolute top-60 right-[30%] w-80 h-80 bg-amber-300/45 rounded-full blur-3xl animate-pulse orb-4" />
         </div>
-
+        <div className="absolute inset-0 opacity-30">
+          <svg viewBox="0 0 100 100" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="20" fill="rgba(255,255,255,0.8)" />
+            {[...Array(12)].map((_, i) => {
+              const angle = (i * 30 * Math.PI) / 180;
+              const x1 = 50 + Math.cos(angle) * 25;
+              const y1 = 50 + Math.sin(angle) * 25;
+              const x2 = 50 + Math.cos(angle) * 40;
+              const y2 = 50 + Math.sin(angle) * 40;
+              return (
+                <line
+                  key={i}
+                  x1={x1}
+                  y1={y1}
+                  x2={x2}
+                  y2={y2}
+                  stroke="rgba(255,255,255,0.8)"
+                  strokeWidth="4.5"
+                  strokeLinecap="round"
+                />
+              );
+            })}
+          </svg>
+        </div>
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            
-            {/* Main Heart Icon */}
-            <div className="flex justify-center mb-6">
+            <div className="flex justify-center mb-3">
               <div className="w-16 h-16 rounded-full bg-white/40 backdrop-blur-xl flex items-center justify-center shadow-2xl shadow-white/20 overflow-visible">
                 <Heart className="h-18 w-18 text-yellow-400/60 fill-red-500 stroke-[2.5] animate-[heartbeat_3s_ease-in-out_infinite]" />
               </div>
             </div>
-
-            {/* Title */}
             <EditableField
               value={texts.testimonialsPage?.header?.title}
               jsonKey="testemunhos.testimonialsPage.header.title"
               type="h1"
-              className="text-5xl font-bold mb-4 text-white drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)]"
+              className="text-5xl md:text-6xl font-bold mb-6 text-white drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)]"
             />
-
-            {/* Subtitle */}
             <EditableField
               value={texts.testimonialsPage?.header?.subtitle}
               jsonKey="testemunhos.testimonialsPage.header.subtitle"
@@ -208,43 +225,9 @@ const Testemunhos = () => {
           skyColors={['#3b82f6', '#60a5fa', '#93c5fd']}
           earthColor="#6b5a3e"
           waterColors={['#22d3ee', '#06b6d4', '#0891b2']}
+          rightIcon={<Heart className="text-[#CFAF5A] fill-rose-300/80 stroke-[1.5]" />}
+          rightIconSize={48}
         />
-
-        {/* Sol Dourado - posicionado absolutamente no canto superior esquerdo */}
-        <div className="absolute top-4 left-8 w-20 h-20 z-10 drop-shadow-lg">
-          <svg
-            viewBox="0 0 100 100"
-            className="w-full h-full"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <circle cx="50" cy="50" r="20" fill="#CFAF5A" />
-            {[...Array(12)].map((_, i) => {
-              const angle = (i * 30 * Math.PI) / 180;
-              const x1 = 50 + Math.cos(angle) * 25;
-              const y1 = 50 + Math.sin(angle) * 25;
-              const x2 = 50 + Math.cos(angle) * 40;
-              const y2 = 50 + Math.sin(angle) * 40;
-              return (
-                <line
-                  key={i}
-                  x1={x1}
-                  y1={y1}
-                  x2={x2}
-                  y2={y2}
-                  stroke="#CFAF5A"
-                  strokeWidth="3"
-                  strokeLinecap="round"
-                />
-              );
-            })}
-          </svg>
-        </div>
-
-        {/* Heart Icon - posicionado no canto superior direito */}
-        <div className="absolute top-4 right-8 z-20">
-          <Heart className="w-14 h-14 text-[#CFAF5A] fill-rose-300/80 stroke-[2.5] drop-shadow-lg" />
-        </div>
 
         {/* CTA Content - posicionado no céu */}
         <div className="container mx-auto px-4 relative z-50 pt-6 pb-4">

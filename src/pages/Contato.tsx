@@ -17,10 +17,13 @@ export default function Contato() {
   usePageStyles('contato');
   const { data: texts, loading } = usePageContent<ContatoTexts>('contato');
   const [openFaqItems, setOpenFaqItems] = useState<Set<number>>(new Set());
+  const [showWhatsAppMsg, setShowWhatsAppMsg] = useState(false);
+  const [showEmailMsg, setShowEmailMsg] = useState(false);
   
   const handleWhatsAppClick = () => {
     const phoneNumber = '5511949555555';
-    const message = encodeURIComponent('Olá! Quero saber mais sobre *O Trabalho de Resgate*!');
+    const msg = texts?.contactCard?.whatsappMessage || 'Olá! Quero saber mais sobre *O Trabalho de Resgate*!';
+    const message = encodeURIComponent(msg);
     window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
   };
 
@@ -52,7 +55,7 @@ export default function Contato() {
     <div className="min-h-screen bg-linear-to-b from-teal-50 via-emerald-50 to-cyan-50">
       
       {/* Hero Section */}
-      <section className="relative py-20 overflow-hidden bg-linear-to-r from-teal-600 via-emerald-600 to-teal-600">
+      <section className="relative py-10 overflow-hidden bg-linear-to-r from-teal-600 via-emerald-600 to-teal-600">
         {/* Background Effects */}
         <div className="absolute inset-0 opacity-30">
           <div className="absolute top-10 left-10 w-64 h-64 bg-emerald-300 rounded-full blur-3xl animate-pulse"></div>
@@ -61,16 +64,14 @@ export default function Contato() {
 
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            {/* Mail Icon */}
-            <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-white/20 backdrop-blur-md border-2 border-white/40 mb-8">
-              <Mail className="w-12 h-12 text-white" />
+            <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-white/20 backdrop-blur-md border-2 border-white/40 mb-6">
+              <Mail className="w-10 h-10 text-white" />
             </div>
-
             <EditableField
               value={texts.header.title}
               jsonKey="contato.header.title"
               type="h1"
-              className="text-5xl md:text-6xl font-bold mb-6 text-white drop-shadow-lg"
+              className="text-5xl font-bold mb-4 text-white drop-shadow-lg"
             />
             <EditableField
               value={texts.header.subtitle}
@@ -94,9 +95,6 @@ export default function Contato() {
               
               <div className="relative bg-linear-to-br from-white via-green-50/50 to-emerald-50/30 rounded-3xl p-6 md:p-8 border-2 border-green-300/60 shadow-2xl">
                 <div className="text-center mb-6">
-                  <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-linear-to-br from-green-400 to-emerald-500 mb-4 shadow-lg shadow-green-400/50">
-                    <MessageCircle className="w-10 h-10 text-white" />
-                  </div>
                   <EditableField
                     value={texts.contactCard.title}
                     jsonKey="contato.contactCard.title"
@@ -111,98 +109,182 @@ export default function Contato() {
                   />
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-                  {/* WhatsApp Contact */}
-                  <div className="bg-white/80 rounded-2xl p-6 border border-green-200/60 shadow-lg">
-                    <Button
-                      onClick={handleWhatsAppClick}
-                      className="w-full bg-[#25D366] hover:bg-[#128C7E] text-white py-6 text-lg rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 flex items-center justify-center gap-3 mb-6"
-                    >
-                      <MessageCircle className="w-6 h-6" />
-                      <EditableField
-                        value={texts.contactCard.whatsappButton.text}
-                        jsonKey="contato.contactCard.whatsappButton.text"
-                        type="span"
-                        className="inline"
-                      />
-                    </Button>
-
-                    <div className="flex items-center gap-4 mb-4">
-                      <div className="w-12 h-12 rounded-full bg-[#25D366]/10 flex items-center justify-center">
+                <div className="max-w-4xl mx-auto space-y-4">
+                  <div className="grid md:grid-cols-2 gap-4 items-stretch">
+                  {/* WhatsApp */}
+                  <div className="flex flex-col bg-white/80 rounded-2xl p-6 border border-green-200/60 shadow-lg">
+                    <div className="relative flex items-center justify-center mx-auto mb-4">
+                      <div
+                        className="w-12 h-12 rounded-full bg-[#25D366]/10 flex items-center justify-center cursor-pointer hover:bg-[#25D366]/20 transition-colors duration-300"
+                        onMouseEnter={() => setShowWhatsAppMsg(true)}
+                        onMouseLeave={() => setShowWhatsAppMsg(false)}
+                      >
                         <MessageCircle className="w-6 h-6 text-[#25D366]" />
                       </div>
-                      <div>
-                        <EditableField
-                          value={texts.contactCard.whatsapp.label}
-                          jsonKey="contato.contactCard.whatsapp.label"
-                          type="p"
-                          className="text-sm text-gray-600"
-                        />
-                        <EditableField
-                          value={texts.contactCard.whatsapp.number}
-                          jsonKey="contato.contactCard.whatsapp.number"
-                          type="p"
-                          className="text-lg font-semibold text-gray-900"
-                        />
+                      {/* Tooltip: mensagem que será enviada ao WhatsApp */}
+                      <div
+                        className={`absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-max max-w-[80vw] transition-all duration-300 ease-out z-30 ${
+                          showWhatsAppMsg ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+                        }`}
+                        onMouseEnter={() => setShowWhatsAppMsg(true)}
+                        onMouseLeave={() => setShowWhatsAppMsg(false)}
+                      >
+                        <div className="relative bg-green-50 border border-green-300 rounded-xl shadow-xl p-4 text-left">
+                          <div className="absolute top-0 left-0 right-0 h-0.5 bg-linear-to-r from-green-400 via-emerald-500 to-green-400 rounded-t-xl"></div>
+                          <div className="flex items-start gap-3">
+                            <div className="shrink-0 mt-0.5">
+                              <MessageCircle className="w-5 h-5 text-green-600" />
+                            </div>
+                            <div className="flex-1">
+                              <p className="text-xs font-semibold text-green-800 mb-1">Mensagem pré-preenchida:</p>
+                              <EditableField
+                                value={texts.contactCard.whatsappMessage}
+                                jsonKey="contato.contactCard.whatsappMessage"
+                                type="p"
+                                className="text-sm text-green-900 italic leading-snug"
+                              />
+                            </div>
+                          </div>
+                          {/* Seta apontando para baixo */}
+                          <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-green-50 border-r border-b border-green-300 rotate-45"></div>
+                        </div>
                       </div>
                     </div>
-
                     <EditableField
-                      value={texts.contactCard.whatsappButton.description}
-                      jsonKey="contato.contactCard.whatsappButton.description"
+                      value={texts.contactCard.whatsapp.label}
+                      jsonKey="contato.contactCard.whatsapp.label"
                       type="p"
-                      className="text-sm text-center text-gray-600"
+                      className="text-sm text-gray-600 text-center"
                     />
+                    <EditableField
+                      value={texts.contactCard.whatsapp.number}
+                      jsonKey="contato.contactCard.whatsapp.number"
+                      type="p"
+                      className="text-base font-semibold text-gray-900 text-center mb-4"
+                    />
+                    <div className="mt-auto flex flex-col items-center">
+                      <Button
+                        onClick={handleWhatsAppClick}
+                        className="bg-[#25D366] hover:bg-[#128C7E] text-white px-8 h-12 text-base rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2 whitespace-nowrap"
+                      >
+                        <MessageCircle className="w-5 h-5" />
+                        <EditableField
+                          value={texts.contactCard.whatsappButton.text}
+                          jsonKey="contato.contactCard.whatsappButton.text"
+                          type="span"
+                          className="inline"
+                        />
+                      </Button>
+                      <EditableField
+                        value={texts.contactCard.whatsappButton.description}
+                        jsonKey="contato.contactCard.whatsappButton.description"
+                        type="p"
+                        className="text-xs text-center text-gray-500 mt-2"
+                      />
+                    </div>
                   </div>
 
-                  {/* Email & Hours */}
-                  <div className="space-y-4">
-                    {/* Email */}
-                    <div className="bg-white/80 rounded-2xl p-6 border border-violet-200/60 shadow-lg">
-                      <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-full bg-violet-100 flex items-center justify-center">
-                          <Mail className="w-6 h-6 text-violet-600" />
-                        </div>
-                        <div>
-                          <p className="text-sm text-gray-600">Email</p>
-                          <EditableField
-                            value={texts.contactCard.email.address}
-                            jsonKey="contato.contactCard.email.address"
-                            type="p"
-                            className="text-base font-semibold text-gray-900"
-                          />
+                  {/* Email */}
+                  <div className="flex flex-col bg-white/80 rounded-2xl p-6 border border-violet-200/60 shadow-lg">
+                    <div className="relative flex items-center justify-center mx-auto mb-4">
+                      <div
+                        className="w-12 h-12 rounded-full bg-violet-100 flex items-center justify-center cursor-pointer hover:bg-violet-200 transition-colors duration-300"
+                        onMouseEnter={() => setShowEmailMsg(true)}
+                        onMouseLeave={() => setShowEmailMsg(false)}
+                      >
+                        <Mail className="w-6 h-6 text-violet-600" />
+                      </div>
+                      {/* Tooltip: assunto e corpo do email */}
+                      <div
+                        className={`absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-max max-w-[80vw] transition-all duration-300 ease-out z-30 ${
+                          showEmailMsg ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+                        }`}
+                        onMouseEnter={() => setShowEmailMsg(true)}
+                        onMouseLeave={() => setShowEmailMsg(false)}
+                      >
+                        <div className="relative bg-violet-50 border border-violet-300 rounded-xl shadow-xl p-4 text-left">
+                          <div className="absolute top-0 left-0 right-0 h-0.5 bg-linear-to-r from-violet-400 via-purple-500 to-violet-400 rounded-t-xl"></div>
+                          <div className="flex items-start gap-3">
+                            <div className="shrink-0 mt-0.5">
+                              <Mail className="w-5 h-5 text-violet-600" />
+                            </div>
+                            <div className="flex-1 space-y-1.5">
+                              <div>
+                                <p className="text-xs font-semibold text-violet-800 mb-0.5">Assunto:</p>
+                                <EditableField
+                                  value={texts.contactCard.emailSubject}
+                                  jsonKey="contato.contactCard.emailSubject"
+                                  type="p"
+                                  className="text-sm text-violet-900 italic leading-snug"
+                                />
+                              </div>
+                              <div>
+                                <p className="text-xs font-semibold text-violet-800 mb-0.5">Mensagem:</p>
+                                <EditableField
+                                  value={texts.contactCard.emailBody}
+                                  jsonKey="contato.contactCard.emailBody"
+                                  type="p"
+                                  className="text-sm text-violet-900 italic leading-snug"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                          {/* Seta apontando para baixo */}
+                          <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-violet-50 border-r border-b border-violet-300 rotate-45"></div>
                         </div>
                       </div>
                     </div>
+                    <EditableField
+                      value={texts.contactCard.email.label}
+                      jsonKey="contato.contactCard.email.label"
+                      type="p"
+                      className="text-sm text-gray-600 text-center"
+                    />
+                    <EditableField
+                      value={texts.contactCard.email.address}
+                      jsonKey="contato.contactCard.email.address"
+                      type="p"
+                      className="text-base font-semibold text-gray-900 text-center mb-4"
+                    />
+                    <div className="mt-auto flex flex-col items-center">
+                      <a
+                        href={`mailto:${texts.contactCard.email.address}?subject=${encodeURIComponent(texts.contactCard.emailSubject || '')}&body=${encodeURIComponent(texts.contactCard.emailBody || '')}`}
+                        title="Enviar Email"
+                        className="inline-flex items-center justify-center bg-violet-600 hover:bg-violet-700 text-white px-8 h-12 text-base rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 whitespace-nowrap"
+                      >
+                        <Mail className="w-5 h-5 inline mr-2" />
+                        <EditableField
+                          value={texts.contactCard.emailButton?.text}
+                          jsonKey="contato.contactCard.emailButton.text"
+                          type="span"
+                          className="inline"
+                        />
+                      </a>
+                      <EditableField
+                        value={texts.contactCard.emailButton?.description}
+                        jsonKey="contato.contactCard.emailButton.description"
+                        type="p"
+                        className="text-xs text-center text-gray-500 mt-2"
+                      />
+                    </div>
+                  </div>
+                  </div>
 
-                    {/* Horários */}
-                    <div className="bg-white/80 rounded-2xl p-6 border border-slate-200/60 shadow-lg">
-                      <div className="flex items-start gap-4">
-                        <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center shrink-0">
-                          <Clock className="w-6 h-6 text-slate-600" />
-                        </div>
-                        <div>
-                          <EditableField
-                            value={texts.businessHours.title}
-                            jsonKey="contato.businessHours.title"
-                            type="p"
-                            className="text-sm text-gray-600 mb-2"
-                          />
-                          <EditableField
-                            value={texts.businessHours.hours.weekdays}
-                            jsonKey="contato.businessHours.hours.weekdays"
-                            type="p"
-                            className="text-sm text-gray-700"
-                          />
-                          <EditableField
-                            value={texts.businessHours.hours.saturday}
-                            jsonKey="contato.businessHours.hours.saturday"
-                            type="p"
-                            className="text-sm text-gray-700"
-                          />
-                        </div>
-                      </div>
-                    </div>
+                  {/* Horários */}
+                  <div className="flex items-center justify-center gap-3 bg-white/80 rounded-xl px-4 py-1.5 border border-slate-200/60 shadow-sm">
+                    <Clock className="w-4 h-4 text-slate-500 shrink-0" />
+                    <EditableField
+                      value={texts.businessHours.title}
+                      jsonKey="contato.businessHours.title"
+                      type="span"
+                      className="text-sm font-medium text-gray-600"
+                    />
+                    <EditableField
+                      value={texts.businessHours.hours.weekdays}
+                      jsonKey="contato.businessHours.hours.weekdays"
+                      type="span"
+                      className="text-sm font-medium text-gray-600"
+                    />
                   </div>
                 </div>
               </div>

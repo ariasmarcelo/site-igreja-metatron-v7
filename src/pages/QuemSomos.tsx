@@ -55,9 +55,33 @@ export default function QuemSomos() {
   return (
     <div className="min-h-screen bg-white">
       {/* Header Moderno */}
-      <section className="bg-linear-to-r from-violet-600 via-purple-600 to-violet-600 text-white py-12 relative overflow-hidden">
+      <section className="bg-linear-to-r from-violet-600 via-purple-600 to-violet-600 text-white py-10 relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.15),transparent_70%)]"></div>
         <div className="absolute inset-0 bg-[linear-gradient(110deg,transparent_40%,rgba(255,255,255,0.1)_50%,transparent_60%)]"></div>
+        <div className="absolute inset-0 opacity-15">
+          <svg viewBox="0 0 100 100" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="20" fill="rgba(255,255,255,0.8)" />
+            {[...Array(12)].map((_, i) => {
+              const angle = (i * 30 * Math.PI) / 180;
+              const x1 = 50 + Math.cos(angle) * 25;
+              const y1 = 50 + Math.sin(angle) * 25;
+              const x2 = 50 + Math.cos(angle) * 40;
+              const y2 = 50 + Math.sin(angle) * 40;
+              return (
+                <line
+                  key={i}
+                  x1={x1}
+                  y1={y1}
+                  x2={x2}
+                  y2={y2}
+                  stroke="rgba(255,255,255,0.8)"
+                  strokeWidth="4.5"
+                  strokeLinecap="round"
+                />
+              );
+            })}
+          </svg>
+        </div>
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
             <div className="flex justify-center mb-6">
@@ -243,55 +267,6 @@ export default function QuemSomos() {
           earthColor="#7c6a42"
           waterColors={['#34d399', '#10b981', '#059669']}
         />
-
-        {/* Sol Dourado - posicionado absolutamente, independente do fundo */}
-        <div className="absolute top-4 left-8 w-20 h-20 z-10">
-          <svg
-            viewBox="0 0 100 100"
-            className="w-full h-full"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <circle cx="50" cy="50" r="20" fill="#CFAF5A" />
-            {[...Array(12)].map((_, i) => {
-              const angle = (i * 30 * Math.PI) / 180;
-              const x1 = 50 + Math.cos(angle) * 25;
-              const y1 = 50 + Math.sin(angle) * 25;
-              const x2 = 50 + Math.cos(angle) * 40;
-              const y2 = 50 + Math.sin(angle) * 40;
-              return (
-                <line
-                  key={i}
-                  x1={x1}
-                  y1={y1}
-                  x2={x2}
-                  y2={y2}
-                  stroke="#CFAF5A"
-                  strokeWidth="3"
-                  strokeLinecap="round"
-                />
-              );
-            })}
-          </svg>
-        </div>
-
-        {/* Lua Crescente - posicionada no canto superior direito */}
-        <div className="absolute top-4 right-8 w-20 h-20 z-20">
-          <svg
-            viewBox="0 0 100 100"
-            className="w-full h-full"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <defs>
-              <mask id="crescentMaskQuemSomos">
-                <circle cx="50" cy="50" r="25" fill="white" />
-                <circle cx="58" cy="50" r="22" fill="black" />
-              </mask>
-            </defs>
-            <circle cx="50" cy="50" r="25" fill="#F3F4F6" mask="url(#crescentMaskQuemSomos)" />
-          </svg>
-        </div>
 
         {/* CTA Content - posicionado no céu */}
         <div className="container mx-auto px-4 relative z-50 pt-6 pb-4">

@@ -84,12 +84,35 @@ export default function Artigos() {
   return (
     <div className="min-h-screen bg-linear-to-b from-slate-50 to-yellow-50">
       {/* Hero Section */}
-      <section className="py-20 bg-linear-to-r from-yellow-500 via-yellow-400 to-amber-500 text-slate-900 relative overflow-hidden">
+      <section className="py-10 bg-linear-to-r from-yellow-500 via-yellow-400 to-amber-500 text-slate-900 relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,white,transparent_50%)]"></div>
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,white,transparent_50%)]"></div>
         </div>
-        
+        <div className="absolute inset-0 opacity-30">
+          <svg viewBox="0 0 100 100" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="20" fill="rgba(255,255,255,0.8)" />
+            {[...Array(12)].map((_, i) => {
+              const angle = (i * 30 * Math.PI) / 180;
+              const x1 = 50 + Math.cos(angle) * 25;
+              const y1 = 50 + Math.sin(angle) * 25;
+              const x2 = 50 + Math.cos(angle) * 40;
+              const y2 = 50 + Math.sin(angle) * 40;
+              return (
+                <line
+                  key={i}
+                  x1={x1}
+                  y1={y1}
+                  x2={x2}
+                  y2={y2}
+                  stroke="rgba(255,255,255,0.8)"
+                  strokeWidth="4.5"
+                  strokeLinecap="round"
+                />
+              );
+            })}
+          </svg>
+        </div>
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
             <div className="flex justify-center mb-6">

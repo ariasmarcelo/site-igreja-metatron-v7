@@ -193,13 +193,13 @@ const NavigationMenu = memo(() => {
           </div>
 
           {/* ═══ Center: Desktop Navigation Links ═══ */}
-          <div className="hidden md:flex items-center justify-center flex-1 mx-4">
+          <div className="hidden md:flex items-center justify-center flex-1 mx-2 lg:mx-4">
             <div className="flex items-center gap-0.5">
               {navigation.map((item) => (
                 <Link
                   key={item.id}
                   to={item.href}
-                  className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all duration-200 whitespace-nowrap ${
+                  className={`px-2 lg:px-3 py-1.5 rounded-md text-xs lg:text-sm font-medium transition-all duration-200 whitespace-nowrap ${
                     isActive(item.href)
                       ? 'text-white bg-linear-to-br from-[#CFAF5A] to-[#A08930] shadow-md shadow-[#CFAF5A]/30 -translate-y-px'
                       : 'text-stone-600 hover:text-[#CFAF5A] hover:bg-stone-50'
@@ -216,7 +216,7 @@ const NavigationMenu = memo(() => {
             <div className="flex items-center bg-stone-100 rounded-full p-0.5 gap-0.5">
               <button
                 onClick={() => setLanguage('pt-BR')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 ${
+                className={`flex items-center gap-1 lg:gap-1.5 px-2 lg:px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 ${
                   language === 'pt-BR'
                     ? 'bg-white text-stone-800 shadow-sm ring-1 ring-stone-200'
                     : 'text-stone-500 hover:text-stone-700'
@@ -224,11 +224,11 @@ const NavigationMenu = memo(() => {
                 title="Português (Brasil)"
               >
                 <BrazilFlag className="w-5 h-3.5 rounded-sm" />
-                <span>PT</span>
+                <span className="hidden lg:inline">PT</span>
               </button>
               <button
                 onClick={() => setLanguage('en-US')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 ${
+                className={`flex items-center gap-1 lg:gap-1.5 px-2 lg:px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 ${
                   language === 'en-US'
                     ? 'bg-white text-stone-800 shadow-sm ring-1 ring-stone-200'
                     : 'text-stone-500 hover:text-stone-700'
@@ -236,7 +236,7 @@ const NavigationMenu = memo(() => {
                 title="English (US)"
               >
                 <USFlag className="w-5 h-3.5 rounded-sm" />
-                <span>EN</span>
+                <span className="hidden lg:inline">EN</span>
               </button>
             </div>
           </div>

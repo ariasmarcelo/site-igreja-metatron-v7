@@ -5,6 +5,7 @@ import { Brain, Heart, Wind, Route, Flower2, Sparkles, AlertTriangle, Users, Inf
 import { Button } from '@/components/ui/button';
 import EditableField from '@/components/ui/EditableField';
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
 import { usePageContent } from '@/hooks/useContent';
 import { SharedFooter } from '@/components/SharedFooter';
 import { FooterBackground } from '@/components/FooterBackground';
@@ -30,6 +31,7 @@ interface TratamentosTexts {
 
 export default function Tratamentos() {
   usePageStyles('tratamentos');
+  const [showLegal, setShowLegal] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: texts, loading, error } = usePageContent<any>('tratamentos');
   
@@ -75,13 +77,36 @@ export default function Tratamentos() {
 
   return (
     <div className="min-h-screen bg-linear-to-b from-slate-50 to-blue-50">
-      {/* Header - Altura padrão */}
-      <section className="py-20 bg-linear-to-r from-cyan-600 via-blue-600 to-teal-600 text-white relative overflow-hidden">
+      {/* Header */}
+      <section className="py-10 bg-linear-to-r from-cyan-600 via-blue-600 to-teal-600 text-white relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,white,transparent_50%)]"></div>
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,white,transparent_50%)]"></div>
         </div>
-        
+        <div className="absolute inset-0 opacity-15">
+          <svg viewBox="0 0 100 100" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="20" fill="rgba(255,255,255,0.8)" />
+            {[...Array(12)].map((_, i) => {
+              const angle = (i * 30 * Math.PI) / 180;
+              const x1 = 50 + Math.cos(angle) * 25;
+              const y1 = 50 + Math.sin(angle) * 25;
+              const x2 = 50 + Math.cos(angle) * 40;
+              const y2 = 50 + Math.sin(angle) * 40;
+              return (
+                <line
+                  key={i}
+                  x1={x1}
+                  y1={y1}
+                  x2={x2}
+                  y2={y2}
+                  stroke="rgba(255,255,255,0.8)"
+                  strokeWidth="4.5"
+                  strokeLinecap="round"
+                />
+              );
+            })}
+          </svg>
+        </div>
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
             <div className="flex justify-center mb-6">
@@ -103,45 +128,54 @@ export default function Tratamentos() {
             />
           </div>
         </div>
-      </section>
 
-      <div className="container mx-auto px-4 pt-3 pb-16 space-y-6 max-w-6xl">
-        
-        {/* Aviso Legal - Card Destacado com Design Premium */}
-        <div className="flex justify-end">
-          <div className="relative bg-linear-to-br from-amber-50 via-orange-50 to-amber-100 rounded-2xl shadow-2xl p-4 border-2 border-amber-400 w-fit max-w-full overflow-hidden">
-            {/* Efeito decorativo de fundo */}
-            <div className="absolute inset-0 opacity-10">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-amber-400 rounded-full blur-3xl"></div>
-              <div className="absolute bottom-0 left-0 w-40 h-40 bg-orange-400 rounded-full blur-3xl"></div>
-            </div>
-            
-            {/* Borda decorativa superior */}
-            <div className="absolute top-0 left-0 right-0 h-1 bg-linear-to-r from-amber-400 via-orange-500 to-amber-400"></div>
-            
-            <div className="relative flex flex-col md:flex-row gap-3">
-              <div className="shrink-0 flex justify-center md:justify-start">
-                <div className="w-11 h-11 p-2 bg-amber-100 rounded-xl border-2 border-amber-400 shadow-lg flex items-center justify-center">
-                  <AlertTriangle className="w-7 h-7 text-amber-600 shrink-0" />
+        {/* Aviso Legal - ícone discreto no canto inferior direito */}
+        <div className="absolute bottom-3 right-4 z-20">
+          <div
+            className="w-7 h-7 rounded-full bg-amber-400 border border-amber-300 flex items-center justify-center cursor-pointer shadow-[0_2px_12px_rgba(0,0,0,0.4),0_0_20px_rgba(217,170,0,0.35)] hover:shadow-[0_3px_16px_rgba(0,0,0,0.5),0_0_28px_rgba(217,170,0,0.45)] hover:scale-105 transition-all duration-300 animate-[pulse_3s_ease-in-out_infinite]"
+            onClick={() => setShowLegal(!showLegal)}
+            onMouseEnter={() => setShowLegal(true)}
+            onMouseLeave={() => setShowLegal(false)}
+          >
+            <AlertTriangle className="w-4 h-4 text-stone-700 -mt-px" />
+          </div>
+          {/* Tooltip */}
+          <div
+            className={`absolute bottom-full right-0 mb-2 w-max max-w-[90vw] transition-all duration-300 ease-out ${
+              showLegal ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+            }`}
+            onMouseEnter={() => setShowLegal(true)}
+            onMouseLeave={() => setShowLegal(false)}
+          >
+            <div className="relative bg-amber-50 border-2 border-amber-400 rounded-xl shadow-2xl p-5 text-left">
+              <div className="absolute top-0 left-0 right-0 h-1 bg-linear-to-r from-amber-400 via-orange-500 to-amber-400 rounded-t-xl"></div>
+              <div className="flex items-start gap-4">
+                <div className="shrink-0 mt-1">
+                  <AlertTriangle className="w-10 h-10 text-amber-600" />
+                </div>
+                <div className="flex-1">
+                  <EditableField
+                    value={texts.legal.title}
+                    jsonKey="tratamentos.legal.title"
+                    type="h4"
+                    className="text-base font-bold text-amber-900 mb-2"
+                  />
+                  <EditableField
+                    value={texts.legal.notice}
+                    jsonKey="tratamentos.legal.notice"
+                    type="p"
+                    className="text-amber-900 text-sm leading-snug"
+                  />
                 </div>
               </div>
-              <div className="flex-1">
-                <EditableField
-                  value={texts.legal.title}
-                  jsonKey="tratamentos.legal.title"
-                  type="h4"
-                  className="text-xl font-bold text-amber-900 mb-2 inline-flex items-center justify-center md:justify-start gap-2"
-                />
-                <EditableField
-                  value={texts.legal.notice}
-                  jsonKey="tratamentos.legal.notice"
-                  type="p"
-                  className="text-amber-900 text-base leading-snug font-medium text-center md:text-left"
-                />
-              </div>
+              {/* Seta apontando para baixo */}
+              <div className="absolute -bottom-2 right-4 w-4 h-4 bg-amber-50 border-r-2 border-b-2 border-amber-400 rotate-45"></div>
             </div>
           </div>
         </div>
+      </section>
+
+      <div className="container mx-auto px-4 pt-3 pb-16 space-y-6 max-w-6xl">
 
         {/* Introdução - Destaque Premium */}
         <div className="relative bg-linear-to-br from-blue-50 via-cyan-50/90 to-teal-50/80 rounded-3xl shadow-2xl p-8 md:p-10 border-2 border-blue-200/60 overflow-hidden">
@@ -512,17 +546,11 @@ export default function Tratamentos() {
           skyColors={['#1e3a5f', '#2563eb', '#38bdf8']}
           earthColor="#4a3f2e"
           waterColors={['#14b8a6', '#0d9488', '#0f766e']}
+          leftIcon={<Activity className="text-[#CFAF5A] stroke-[1.5]" />}
+          leftIconSize={48}
+          rightIcon={<Waves className="text-[#CFAF5A] stroke-[1.5]" />}
+          rightIconSize={48}
         />
-
-        {/* Activity Icon - posicionado absolutamente no canto superior esquerdo */}
-        <div className="absolute top-4 left-8 w-14 h-14 z-10 drop-shadow-lg">
-          <Activity className="w-full h-full text-[#CFAF5A] stroke-[2.5]" />
-        </div>
-
-        {/* Waves Icon - posicionado no canto superior direito */}
-        <div className="absolute top-4 right-8 z-20">
-          <Waves className="w-14 h-14 text-[#CFAF5A] stroke-[2.5] drop-shadow-lg" />
-        </div>
 
         {/* CTA Content - posicionado no céu */}
         <div className="container mx-auto px-4 relative z-50 pt-6 pb-4">
