@@ -38,7 +38,7 @@ export default function Index() {
       {/* ==================== HERO ==================== */}
       <section className="relative bg-linear-to-b from-amber-50 via-white to-stone-50 py-16 border-b border-stone-200">
         <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto text-center">
+          <div className="max-w-4xl mx-auto text-center">
             <div className="inline-flex items-center justify-center mb-8 filter-[drop-shadow(0_20px_40px_rgba(0,0,0,0.25))_drop-shadow(0_10px_20px_rgba(0,0,0,0.15))]">
               <LogoGold className="w-190 h-auto" />
             </div>
@@ -88,7 +88,7 @@ export default function Index() {
       {/* ==================== REDESCUBRA ==================== */}
       <section className="py-10 bg-stone-50">
         <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
+          <div className="max-w-4xl mx-auto">
             <Card className="border border-amber-200/80 shadow-2xl overflow-hidden bg-white">
               {/* Barra dourada superior */}
               <div className="h-1.5 bg-linear-to-r from-amber-400 via-amber-500 to-amber-400"></div>
@@ -193,7 +193,7 @@ export default function Index() {
       {/* ==================== FÍSICO & ESPIRITUAL ==================== */}
       <section className="py-10 bg-stone-50">
         <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
+          <div className="max-w-4xl mx-auto">
             <Card className="border border-amber-200/80 shadow-2xl overflow-hidden bg-white">
               {/* Barra dourada superior */}
               <div className="h-1.5 bg-linear-to-r from-amber-400 via-amber-500 to-amber-400"></div>
@@ -259,7 +259,12 @@ export default function Index() {
                   
                   <Link to="/tratamentos">
                     <Button className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-4 rounded-full text-sm">
-                      Explorar Tratamentos
+                      <EditableField
+                        value={texts.fisicoEspiritual.fisico.buttonText}
+                        jsonKey="index.fisicoEspiritual.fisico.buttonText"
+                        type="span"
+                        className="inline"
+                      />
                       <ChevronRight className="ml-1 w-3.5 h-3.5" />
                     </Button>
                   </Link>
@@ -310,7 +315,12 @@ export default function Index() {
                   
                   <Link to="/purificacao">
                     <Button className="bg-amber-600 hover:bg-amber-700 text-white px-6 py-4 rounded-full text-sm">
-                      Caminho de Purificação
+                      <EditableField
+                        value={texts.fisicoEspiritual.espiritual.buttonText}
+                        jsonKey="index.fisicoEspiritual.espiritual.buttonText"
+                        type="span"
+                        className="inline"
+                      />
                       <ChevronRight className="ml-1 w-3.5 h-3.5" />
                     </Button>
                   </Link>
@@ -325,7 +335,7 @@ export default function Index() {
       {/* ==================== DOIS CAMINHOS ==================== */}
       <section className="py-10 bg-white">
         <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
+          <div className="max-w-4xl mx-auto">
             <Card className="border border-amber-200/80 shadow-2xl overflow-hidden bg-white">
               {/* Barra dourada superior */}
               <div className="h-1.5 bg-linear-to-r from-amber-400 via-amber-500 to-amber-400"></div>
@@ -455,7 +465,7 @@ export default function Index() {
       {/* ==================== BENEFÍCIOS ==================== */}
       <section className="py-10 bg-stone-50">
         <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
+          <div className="max-w-4xl mx-auto">
             <Card className="border border-amber-200/80 shadow-2xl overflow-hidden bg-white">
               {/* Barra dourada superior */}
               <div className="h-1.5 bg-linear-to-r from-amber-400 via-amber-500 to-amber-400"></div>

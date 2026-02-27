@@ -175,9 +175,10 @@ export default function Tratamentos() {
         </div>
       </section>
 
-      <div className="container mx-auto px-4 pt-3 pb-16 space-y-6 max-w-6xl">
-
-        {/* Introdução - Destaque Premium */}
+      {/* Introdução - Destaque Premium */}
+      <section className="pt-3 pb-6">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
         <div className="relative bg-linear-to-br from-blue-50 via-cyan-50/90 to-teal-50/80 rounded-3xl shadow-2xl p-8 md:p-10 border-2 border-blue-200/60 overflow-hidden">
           {/* Efeitos decorativos de fundo */}
           <div className="absolute inset-0 opacity-20">
@@ -197,7 +198,7 @@ export default function Tratamentos() {
             className="text-3xl md:text-4xl font-bold text-center mb-6 text-slate-800 relative z-10 drop-shadow-sm"
           />
           
-          <div className="max-w-5xl mx-auto space-y-5 relative z-10">
+          <div className="space-y-5 relative z-10">
             {/* Primeiro parágrafo com destaque */}
             <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 md:p-8 shadow-lg border border-blue-100/50">
               <div className="flex flex-col md:flex-row gap-4">
@@ -238,8 +239,14 @@ export default function Tratamentos() {
             <div className="h-1 w-32 bg-linear-to-r from-transparent via-cyan-400 to-transparent rounded-full"></div>
           </div>
         </div>
+          </div>
+        </div>
+      </section>
 
-        {/* Tratamentos - Accordion em Box Agrupado */}
+      {/* Tratamentos - Accordion em Box Agrupado */}
+      <section className="pb-6">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
         <div className="bg-white rounded-2xl shadow-2xl p-6 md:p-8 border border-slate-200">
           <EditableField
             value={texts.sections?.treatments_title}
@@ -248,7 +255,7 @@ export default function Tratamentos() {
             className="text-3xl md:text-4xl font-bold text-center mb-6 text-slate-800 drop-shadow-sm"
           />
           
-          <Accordion type="multiple" className="max-w-5xl mx-auto space-y-4">
+          <Accordion type="multiple" className="space-y-4">
             {treatments.map((treatment, index) => (
               <AccordionItem 
                 key={index} 
@@ -407,9 +414,14 @@ export default function Tratamentos() {
             ))}
           </Accordion>
         </div>
+          </div>
+        </div>
+      </section>
 
-        {/* Tripla Proteção - Design Premium com Simbolismo */}
-        <div className="mt-12 mb-0">
+      {/* Tripla Proteção - Design Premium com Simbolismo */}
+      <section className="pb-10">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
           <div className="relative bg-linear-to-br from-slate-50 via-stone-100 to-slate-50 rounded-3xl shadow-2xl border-2 border-stone-300 overflow-hidden">
             {/* Padrão decorativo de fundo - simbolizando interconexão */}
             <div className="absolute inset-0 opacity-[0.03]">
@@ -457,12 +469,12 @@ export default function Tratamentos() {
                   value={texts.triplaProtecao?.subtitle}
                   jsonKey="tratamentos.triplaProtecao.subtitle"
                   type="p"
-                  className="text-lg md:text-xl text-slate-700 max-w-5xl mx-auto leading-relaxed font-medium"
+                  className="text-lg md:text-xl text-slate-700 mx-auto leading-relaxed font-medium"
                 />
               </div>
 
               {/* Grid dos três pilares */}
-              <div className="grid md:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto">
+              <div className="grid md:grid-cols-3 gap-6 md:gap-8 mx-auto">
                 {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                 {texts.triplaProtecao?.items?.map((item: any, i: number) => {
                   const icons = [Compass, Heart, Sun];
@@ -535,8 +547,9 @@ export default function Tratamentos() {
               </div>
             </div>
           </div>
+          </div>
         </div>
-      </div>
+      </section>
 
       {/* Footer CTA Section com fundo céu, terra e água */}
       <section className="relative overflow-hidden -mt-4">

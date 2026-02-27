@@ -121,7 +121,7 @@ const Testemunhos = () => {
         </div>
       </section>
 
-      <div className="container mx-auto px-4 py-8 space-y-3 max-w-6xl">
+      <div className="container mx-auto px-4 py-8 space-y-3 max-w-4xl">
         
         {/* Intro Card */}
         <div className="max-w-3xl mx-auto bg-linear-to-br from-white/80 via-rose-50/80 to-pink-50/70 backdrop-blur-md rounded-2xl p-6 md:p-8 border border-rose-200/60 shadow-xl shadow-rose-200/30">
@@ -137,7 +137,7 @@ const Testemunhos = () => {
       {/* Testimonials Grid - 2 COLUMNS */}
       <section className="pb-16 relative">
         <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
+          <div className="max-w-4xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               {testimonials?.map((testimonial: Testimonial, index: number) => (
                 <div

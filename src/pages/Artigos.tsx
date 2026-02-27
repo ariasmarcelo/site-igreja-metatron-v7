@@ -142,7 +142,7 @@ export default function Artigos() {
         </div>
       </section>
 
-      <div className="container mx-auto px-4 pt-3 pb-16 max-w-6xl">
+      <div className="container mx-auto px-4 pt-3 pb-16 max-w-4xl">
         
         {/* Tabs Section */}
         <Tabs defaultValue="esoterica" className="w-full" onValueChange={setActiveTab}>
