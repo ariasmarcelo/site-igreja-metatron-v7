@@ -99,7 +99,7 @@ const Testemunhos = () => {
           </svg>
         </div>
         <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
+          <div className="max-w-section mx-auto text-center">
             <div className="flex justify-center mb-3">
               <div className="w-16 h-16 rounded-full bg-white/40 backdrop-blur-xl flex items-center justify-center shadow-2xl shadow-white/20 overflow-visible">
                 <Heart className="h-18 w-18 text-yellow-400/60 fill-red-500 stroke-[2.5] animate-[heartbeat_3s_ease-in-out_infinite]" />
@@ -121,7 +121,7 @@ const Testemunhos = () => {
         </div>
       </section>
 
-      <div className="container mx-auto px-4 py-8 space-y-3 max-w-4xl">
+      <div className="container mx-auto px-4 py-8 space-y-3 max-w-section">
         
         {/* Intro Card */}
         <div className="max-w-3xl mx-auto bg-linear-to-br from-white/80 via-rose-50/80 to-pink-50/70 backdrop-blur-md rounded-2xl p-6 md:p-8 border border-rose-200/60 shadow-xl shadow-rose-200/30">
@@ -137,7 +137,7 @@ const Testemunhos = () => {
       {/* Testimonials Grid - 2 COLUMNS */}
       <section className="pb-16 relative">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-section mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               {testimonials?.map((testimonial: Testimonial, index: number) => (
                 <div
@@ -193,7 +193,7 @@ const Testemunhos = () => {
       {/* Disclaimer */}
       <section className="py-16 relative">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-section mx-auto">
             <div className="bg-linear-to-br from-white/80 via-rose-50/70 to-pink-50/60 backdrop-blur-md rounded-2xl p-8 border border-rose-200/60 shadow-lg shadow-rose-200/20">
               <div className="flex items-start gap-4">
                 <Heart className="w-6 h-6 text-rose-500 shrink-0 mt-1 fill-rose-400/50" />
@@ -231,7 +231,7 @@ const Testemunhos = () => {
 
         {/* CTA Content - posicionado no céu */}
         <div className="container mx-auto px-4 relative z-50 pt-6 pb-4">
-          <div className="max-w-4xl mx-auto text-center">
+          <div className="max-w-section mx-auto text-center">
             <EditableField 
               value={texts.testimonialsPage?.cta?.title}
               jsonKey="testemunhos.testimonialsPage.cta.title"

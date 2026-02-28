@@ -65,6 +65,19 @@
   }
 }
 
+/* =============================================
+   Layout: Largura padrão das seções do site
+   Altere --section-max-width para ajustar todas as páginas de uma vez.
+   Valor atual: 940px (entre Tailwind 4xl=896px e 5xl=1024px)
+   ============================================= */
+:root {
+  --section-max-width: 940px;
+}
+
+@utility max-w-section {
+  max-width: var(--section-max-width);
+}
+
 .dark {
   --color-background: hsl(0 0% 3.9%);
   --color-foreground: hsl(0 0% 98%);

@@ -61,7 +61,7 @@ export default function ArtigosCategoria() {
             Voltar para Artigos
           </Link>
           
-          <div className="max-w-4xl">
+          <div className="max-w-section">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 drop-shadow-lg">
               {categoryName}
             </h1>

@@ -68,7 +68,7 @@ export default function ArtigoDetalhes() {
             Voltar para Artigos
           </Link>
           
-          <div className="max-w-4xl">
+          <div className="max-w-section">
             <Badge className="mb-4 bg-white/20 backdrop-blur-sm text-white border-white/30 hover:bg-white/30">
               {article.category}
             </Badge>
@@ -99,7 +99,7 @@ export default function ArtigoDetalhes() {
 
       {/* Content */}
       <div className="container mx-auto px-4 py-16">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-section mx-auto">
           <article className="bg-white rounded-3xl shadow-2xl p-8 md:p-12 border-2 border-yellow-200/40">
             <div className="prose prose-lg max-w-none">
               <div className="text-slate-700 leading-relaxed space-y-6">

@@ -105,7 +105,7 @@ export default function Purificacao() {
           </svg>
         </div>
         <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
+          <div className="max-w-section mx-auto text-center">
             <div className="flex justify-center mb-3">
               <svg
                 viewBox="0 0 100 100"
@@ -154,7 +154,7 @@ export default function Purificacao() {
       {/* Introdução */}
       <section className="py-4">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-section mx-auto">
             <Card className="border border-amber-200/80 shadow-2xl overflow-hidden bg-white">
               <div className="h-1.5 bg-linear-to-r from-amber-400 via-amber-500 to-amber-400"></div>
               <CardContent className="p-5 md:p-8 text-center">
@@ -185,7 +185,7 @@ export default function Purificacao() {
       {/* Fluxo das Três Fases — Timeline Dourada Quente */}
       <section className="py-10">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-section mx-auto">
             <Card className="border border-amber-200/80 shadow-2xl overflow-hidden bg-linear-to-b from-amber-50 via-[#FBF5E6] to-amber-50 relative">
               <div className="h-1.5 bg-linear-to-r from-amber-400 via-amber-500 to-amber-400"></div>
               {/* Efeitos de brilho suave */}
@@ -490,12 +490,6 @@ export default function Purificacao() {
                     <div className="px-6 pb-5 pt-2 space-y-3 border-t border-[#CFAF5A]/15">
                       <div>
                         <EditableField
-                          value={faseFinal.iniciacao.title}
-                          jsonKey="purificacao.faseFinal.iniciacao.title"
-                          type="h4"
-                          className="text-xl font-semibold mb-3 text-stone-800"
-                        />
-                        <EditableField
                           value={faseFinal.iniciacao.content}
                           jsonKey="purificacao.faseFinal.iniciacao.content"
                           type="p"
@@ -505,7 +499,17 @@ export default function Purificacao() {
 
                       <div className="bg-linear-to-r from-[#CFAF5A]/15 to-amber-100/50 border border-[#CFAF5A]/30 rounded-xl p-6">
                         <div className="flex items-center gap-4 mb-4">
-                          <Sun12Rays className="w-10 h-10 text-[#A08930]" />
+                          <svg viewBox="0 0 100 100" className="w-12 h-12 shrink-0" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="50" cy="50" r="20" fill="#A08930" />
+                            {[...Array(12)].map((_, i) => {
+                              const angle = (i * 30 * Math.PI) / 180;
+                              const x1 = 50 + Math.cos(angle) * 25;
+                              const y1 = 50 + Math.sin(angle) * 25;
+                              const x2 = 50 + Math.cos(angle) * 40;
+                              const y2 = 50 + Math.sin(angle) * 40;
+                              return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke="#A08930" strokeWidth="3" strokeLinecap="round" />;
+                            })}
+                          </svg>
                           <EditableField
                             value={faseFinal.evento.title ?? 'O Evento Iniciático'}
                             jsonKey="purificacao.faseFinal.evento.title"
@@ -589,7 +593,7 @@ export default function Purificacao() {
         </div>
         
         <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-section mx-auto">
             <Card className="bg-white/10 backdrop-blur-md border-2 border-purple-300/30 shadow-2xl">
               <CardHeader className="bg-linear-to-br from-purple-500/50 via-fuchsia-400/50 to-indigo-500/50 backdrop-blur-sm text-white pt-6 pb-3 px-8 relative overflow-hidden border-b-2 border-purple-300/40">
                 {/* Padr├Áes geom├®tricos sagrados */}
@@ -625,7 +629,7 @@ export default function Purificacao() {
               <CardContent className="p-8 pt-8 bg-linear-to-br from-white/95 via-purple-50/90 to-white/95 backdrop-blur-sm">
 
                 {/* Caixa Estilo Papiro Antigo - Texto Introdutório */}
-                <div className="max-w-4xl mx-auto mb-12">
+                <div className="max-w-section mx-auto mb-12">
                   <div className="relative papiro-box p-8 rounded-lg border-4 border-amber-900/20 shadow-2xl">
                     
                     {/* Textura de papiro */}
@@ -745,7 +749,7 @@ export default function Purificacao() {
                     type="h3"
                     className="font-semibold text-3xl text-purple-900 text-center mb-10 tracking-wide"
                   />
-                  <ul className="space-y-5 max-w-4xl mx-auto">
+                  <ul className="space-y-5 max-w-section mx-auto">
                     {psicodelicos.applications.items.map((item: string, idx: number) => (
                       <li key={idx} className="flex items-start gap-4 bg-white/70 backdrop-blur-sm p-5 rounded-xl border border-purple-200/60 hover:border-purple-400 transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5">
                         <span className="text-purple-600 mt-0.5 text-2xl font-bold shrink-0">✦</span>
@@ -759,7 +763,7 @@ export default function Purificacao() {
                 </div>
 
                 {/* Caixa Estilo Papiro - Conclusão */}
-                <div className="max-w-4xl mx-auto mb-16">
+                <div className="max-w-section mx-auto mb-16">
                   <div className="relative papiro-box p-10 rounded-lg border-4 border-amber-900/20 shadow-2xl">
                     
                     {/* Textura de papiro */}
@@ -846,7 +850,7 @@ export default function Purificacao() {
 
         {/* CTA Content - posicionado no céu */}
         <div className="container mx-auto px-4 relative z-50 pt-6 pb-4">
-          <div className="max-w-4xl mx-auto text-center">
+          <div className="max-w-section mx-auto text-center">
             <EditableField 
               value={cta.title}
               jsonKey="purificacao.cta.title"

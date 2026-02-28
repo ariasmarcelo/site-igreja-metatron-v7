@@ -84,7 +84,7 @@ export default function QuemSomos() {
           </svg>
         </div>
         <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
+          <div className="max-w-section mx-auto text-center">
             <div className="flex justify-center mb-6">
               <div className="w-20 h-20 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center shadow-lg">
                 <BookOpen className="h-10 w-10" />
@@ -121,7 +121,7 @@ export default function QuemSomos() {
         </div>
 
         {/* Conteúdo principal */}
-        <div className="max-w-4xl mx-auto pt-56 relative z-30">
+        <div className="max-w-section mx-auto pt-56 relative z-30">
           {/* Caixa translúcida */}
           <div className="bg-white/50 backdrop-blur-md rounded-3xl shadow-2xl border-2 border-violet-300/50 p-8 md:p-12">
 
@@ -178,7 +178,7 @@ export default function QuemSomos() {
       {texts.magia && (
         <section className="py-10">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-section mx-auto">
               <Card className="border border-amber-200/80 shadow-2xl overflow-hidden bg-linear-to-br from-amber-50 to-yellow-50/80 relative">
                 <div className="h-1.5 bg-linear-to-r from-amber-400 via-amber-500 to-amber-400"></div>
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(207,175,90,0.15),transparent_70%)] pointer-events-none"></div>
@@ -253,7 +253,7 @@ export default function QuemSomos() {
       <section className="relative py-16 px-4 md:px-8 overflow-hidden bg-linear-to-br from-amber-100 via-amber-50 to-amber-100 border-y border-amber-300">
 
         {/* Conteúdo principal */}
-        <div className="max-w-4xl mx-auto relative z-10">
+        <div className="max-w-section mx-auto relative z-10">
           {/* Caixa translúcida */}
           <div className="bg-white/50 backdrop-blur-md rounded-3xl shadow-2xl border-2 border-amber-300/50 p-8 md:p-12">
 
@@ -346,7 +346,7 @@ export default function QuemSomos() {
 
         {/* CTA Content - posicionado no céu */}
         <div className="container mx-auto px-4 relative z-50 pt-6 pb-4">
-          <div className="max-w-4xl mx-auto text-center">
+          <div className="max-w-section mx-auto text-center">
             <EditableField 
               value={texts.cta?.title}
               jsonKey="quemsomos.cta.title"

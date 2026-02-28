@@ -1,7 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Brain, Heart, Wind, Route, Flower2, Sparkles, AlertTriangle, Users, Infinity as InfinityIcon, Activity, Stethoscope, Waves, Compass, Sun } from 'lucide-react';
+import { Brain, Heart, Wind, Route, Flower2, Sparkles, AlertTriangle, Users, Activity, Stethoscope, Waves, Compass, Sun, HeartHandshake } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import EditableField from '@/components/ui/EditableField';
 import { Link } from 'react-router-dom';
@@ -55,7 +55,7 @@ export default function Tratamentos() {
     <Route className="w-12 h-12" />,
     <Heart className="w-12 h-12" />,
     <Flower2 className="w-12 h-12" />,
-    <InfinityIcon className="w-12 h-12" />,
+    <HeartHandshake className="w-12 h-12" />,
     <Sparkles className="w-12 h-12" />
   ];
 
@@ -108,7 +108,7 @@ export default function Tratamentos() {
           </svg>
         </div>
         <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
+          <div className="max-w-section mx-auto text-center">
             <div className="flex justify-center mb-6">
               <div className="w-20 h-20 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center shadow-lg">
                 <Stethoscope className="h-10 w-10" />
@@ -178,7 +178,7 @@ export default function Tratamentos() {
       {/* Introdução - Destaque Premium */}
       <section className="pt-3 pb-6">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-section mx-auto">
         <div className="relative bg-linear-to-br from-blue-50 via-cyan-50/90 to-teal-50/80 rounded-3xl shadow-2xl p-8 md:p-10 border-2 border-blue-200/60 overflow-hidden">
           {/* Efeitos decorativos de fundo */}
           <div className="absolute inset-0 opacity-20">
@@ -211,7 +211,7 @@ export default function Tratamentos() {
                   value={texts.intro.p1}
                   jsonKey="tratamentos.intro.p1"
                   type="p"
-                  className="text-lg md:text-xl text-slate-800 leading-relaxed font-medium text-center md:text-left"
+                  className="text-base md:text-lg text-stone-700 leading-loose text-center md:text-left"
                 />
               </div>
             </div>
@@ -228,7 +228,7 @@ export default function Tratamentos() {
                   value={texts.intro.p2}
                   jsonKey="tratamentos.intro.p2"
                   type="p"
-                  className="text-lg md:text-xl text-slate-800 leading-relaxed font-medium text-center md:text-left"
+                  className="text-base md:text-lg text-stone-700 leading-loose text-center md:text-left"
                 />
               </div>
             </div>
@@ -246,7 +246,7 @@ export default function Tratamentos() {
       {/* Tratamentos - Accordion em Box Agrupado */}
       <section className="pb-6">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-section mx-auto">
         <div className="bg-white rounded-2xl shadow-2xl p-6 md:p-8 border border-slate-200">
           <EditableField
             value={texts.sections?.treatments_title}
@@ -421,7 +421,7 @@ export default function Tratamentos() {
       {/* Tripla Proteção - Design Premium com Simbolismo */}
       <section className="pb-10">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-section mx-auto">
           <div className="relative bg-linear-to-br from-slate-50 via-stone-100 to-slate-50 rounded-3xl shadow-2xl border-2 border-stone-300 overflow-hidden">
             {/* Padrão decorativo de fundo - simbolizando interconexão */}
             <div className="absolute inset-0 opacity-[0.03]">
@@ -491,7 +491,7 @@ export default function Tratamentos() {
                       {/* Glow effect no hover */}
                       <div className={`absolute -inset-1 bg-linear-to-r ${gradients[i]} rounded-2xl opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-500`}></div>
                       
-                      <div className="relative bg-white rounded-2xl p-6 md:p-8 shadow-lg border-2 border-slate-200 group-hover:border-slate-300 transition-all duration-300 group-hover:scale-105 group-hover:shadow-2xl h-full flex flex-col">
+                      <div className="relative bg-white rounded-2xl p-4 md:p-5 shadow-lg border-2 border-slate-200 group-hover:border-slate-300 transition-all duration-300 group-hover:scale-105 group-hover:shadow-2xl h-full flex flex-col">
                         {/* Ícone com gradiente e animação */}
                         <div className="flex justify-center mb-6">
                           <div className="relative inline-block">
@@ -567,7 +567,7 @@ export default function Tratamentos() {
 
         {/* CTA Content - posicionado no céu */}
         <div className="container mx-auto px-4 relative z-50 pt-6 pb-4">
-          <div className="max-w-4xl mx-auto text-center">
+          <div className="max-w-section mx-auto text-center">
             <EditableField
               value={texts.cta?.title}
               jsonKey="tratamentos.cta.title"

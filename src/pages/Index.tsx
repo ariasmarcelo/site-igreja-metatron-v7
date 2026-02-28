@@ -38,7 +38,7 @@ export default function Index() {
       {/* ==================== HERO ==================== */}
       <section className="relative bg-linear-to-b from-amber-50 via-white to-stone-50 py-16 border-b border-stone-200">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center">
+          <div className="max-w-section mx-auto text-center">
             <div className="inline-flex items-center justify-center mb-8 filter-[drop-shadow(0_20px_40px_rgba(0,0,0,0.25))_drop-shadow(0_10px_20px_rgba(0,0,0,0.15))]">
               <LogoGold className="w-190 h-auto" />
             </div>
@@ -88,11 +88,11 @@ export default function Index() {
       {/* ==================== REDESCUBRA ==================== */}
       <section className="py-10 bg-stone-50">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-section mx-auto">
             <Card className="border border-amber-200/80 shadow-2xl overflow-hidden bg-white">
               {/* Barra dourada superior */}
               <div className="h-1.5 bg-linear-to-r from-amber-400 via-amber-500 to-amber-400"></div>
-              <CardContent className="p-8 md:p-14">
+              <CardContent className="p-6 md:p-8">
                 {/* Título centralizado com coração irradiante */}
                 <div className="text-center mb-10">
                   <div className="w-20 h-20 bg-linear-to-br from-amber-100 to-amber-50 rounded-full flex items-center justify-center mb-6 mx-auto shadow-[0_0_30px_rgba(217,119,6,0.3)] border-2 border-amber-300/60">
@@ -107,7 +107,7 @@ export default function Index() {
                 </div>
 
                 {/* Conteúdo */}
-                <div className="bg-stone-50 rounded-xl border border-stone-200 p-6 md:p-8 mb-10">
+                <div className="bg-stone-50 rounded-xl border border-stone-200 p-5 md:p-7 mb-10">
                   {/* Gancho — pergunta destacada, centralizada */}
                   {texts?.instituto?.firstCall?.[0] && (
                     <div className="bg-amber-50 border-2 border-amber-300 rounded-xl px-5 md:px-6 py-5 mb-6 text-center shadow-xl">
@@ -140,7 +140,7 @@ export default function Index() {
 
                 {/* Checkmarks em 2 colunas — com titulo de transicao (ultimo item do firstCall) */}
                 {(texts?.instituto?.firstCallList?.length || 0) > 0 && (
-                  <div className="bg-amber-50 rounded-2xl pt-4 md:pt-5 pb-6 md:pb-8 px-6 md:px-8 mb-8 border border-amber-200">
+                  <div className="bg-amber-50 rounded-2xl pt-4 md:pt-5 pb-6 md:pb-8 px-2 md:px-3 mb-8 border border-amber-200">
                     {/* Titulo introdutorio movido do bloco de texto */}
                     {texts?.instituto?.firstCall?.length > 1 && (
                       <div className="mb-4 pb-4 border-b border-amber-200 text-center">
@@ -154,9 +154,9 @@ export default function Index() {
                     )}
                     <div className="grid md:grid-cols-2 gap-4">
                       {texts.instituto.firstCallList.map((li: string, i: number) => (
-                        <div key={i} className="flex items-start gap-3">
-                          <div className="w-7 h-7 bg-amber-600 rounded-lg flex items-center justify-center shrink-0 mt-0.5 shadow">
-                            <span className="text-white text-sm font-bold">✓</span>
+                        <div key={i} className="flex items-start gap-2">
+                          <div className="w-5 h-5 bg-amber-600 rounded-md flex items-center justify-center shrink-0 mt-0.5 shadow">
+                            <span className="text-white text-xs font-bold">✓</span>
                           </div>
                           <EditableField
                             value={li}
@@ -193,7 +193,7 @@ export default function Index() {
       {/* ==================== FÍSICO & ESPIRITUAL ==================== */}
       <section className="py-10 bg-stone-50">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-section mx-auto">
             <Card className="border border-amber-200/80 shadow-2xl overflow-hidden bg-white">
               {/* Barra dourada superior */}
               <div className="h-1.5 bg-linear-to-r from-amber-400 via-amber-500 to-amber-400"></div>
@@ -214,64 +214,8 @@ export default function Index() {
                   />
                 </div>
 
-                {/* FÍSICO */}
-                <div className="bg-teal-50 rounded-xl border border-teal-200 p-6 md:p-8 mb-6">
-                  <div className="flex items-center gap-4 mb-5">
-                    <div className="w-14 h-14 bg-teal-100 rounded-2xl flex items-center justify-center shrink-0 border border-teal-200">
-                      <Brain className="w-8 h-8 text-teal-600" />
-                    </div>
-                    <div className="text-left">
-                      <EditableField 
-                        value={texts.fisicoEspiritual.fisico.title}
-                        jsonKey="index.fisicoEspiritual.fisico.title"
-                        type="h3"
-                        className="text-2xl font-bold text-teal-700"
-                      />
-                      <EditableField 
-                        value={texts.fisicoEspiritual.fisico.subtitle}
-                        jsonKey="index.fisicoEspiritual.fisico.subtitle"
-                        type="p"
-                        className="text-sm text-teal-600 font-semibold"
-                      />
-                    </div>
-                  </div>
-                  
-                  <EditableField 
-                    value={texts.fisicoEspiritual.fisico.description}
-                    jsonKey="index.fisicoEspiritual.fisico.description"
-                    type="p"
-                    className="text-base text-stone-600 mb-5 leading-relaxed"
-                  />
-                  
-                  <ul className="space-y-2.5 mb-6">
-                    {texts.fisicoEspiritual.fisico.items.map((item: string, i: number) => (
-                      <li key={i} className="flex items-start gap-3">
-                        <div className="w-1.5 h-1.5 bg-teal-500 rounded-full mt-2.5 shrink-0"></div>
-                        <EditableField
-                          value={item}
-                          jsonKey={`index.fisicoEspiritual.fisico.items[${i}]`}
-                          type="span"
-                          className="text-base text-stone-600"
-                        />
-                      </li>
-                    ))}
-                  </ul>
-                  
-                  <Link to="/tratamentos">
-                    <Button className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-4 rounded-full text-sm">
-                      <EditableField
-                        value={texts.fisicoEspiritual.fisico.buttonText}
-                        jsonKey="index.fisicoEspiritual.fisico.buttonText"
-                        type="span"
-                        className="inline"
-                      />
-                      <ChevronRight className="ml-1 w-3.5 h-3.5" />
-                    </Button>
-                  </Link>
-                </div>
-
                 {/* ESPIRITUAL */}
-                <div className="bg-amber-50 rounded-xl border border-amber-200 p-6 md:p-8">
+                <div className="bg-amber-50 rounded-xl border border-amber-200 p-6 md:p-8 mb-6">
                   <div className="flex items-center gap-4 mb-5">
                     <div className="w-14 h-14 bg-amber-100 rounded-2xl flex items-center justify-center shrink-0 border border-amber-200">
                       <Ghost className="w-8 h-8 text-amber-600" />
@@ -326,6 +270,62 @@ export default function Index() {
                   </Link>
                 </div>
 
+                {/* FÍSICO */}
+                <div className="bg-teal-50 rounded-xl border border-teal-200 p-6 md:p-8">
+                  <div className="flex items-center gap-4 mb-5">
+                    <div className="w-14 h-14 bg-teal-100 rounded-2xl flex items-center justify-center shrink-0 border border-teal-200">
+                      <Brain className="w-8 h-8 text-teal-600" />
+                    </div>
+                    <div className="text-left">
+                      <EditableField 
+                        value={texts.fisicoEspiritual.fisico.title}
+                        jsonKey="index.fisicoEspiritual.fisico.title"
+                        type="h3"
+                        className="text-2xl font-bold text-teal-700"
+                      />
+                      <EditableField 
+                        value={texts.fisicoEspiritual.fisico.subtitle}
+                        jsonKey="index.fisicoEspiritual.fisico.subtitle"
+                        type="p"
+                        className="text-sm text-teal-600 font-semibold"
+                      />
+                    </div>
+                  </div>
+                  
+                  <EditableField 
+                    value={texts.fisicoEspiritual.fisico.description}
+                    jsonKey="index.fisicoEspiritual.fisico.description"
+                    type="p"
+                    className="text-base text-stone-600 mb-5 leading-relaxed"
+                  />
+                  
+                  <ul className="space-y-2.5 mb-6">
+                    {texts.fisicoEspiritual.fisico.items.map((item: string, i: number) => (
+                      <li key={i} className="flex items-start gap-3">
+                        <div className="w-1.5 h-1.5 bg-teal-500 rounded-full mt-2.5 shrink-0"></div>
+                        <EditableField
+                          value={item}
+                          jsonKey={`index.fisicoEspiritual.fisico.items[${i}]`}
+                          type="span"
+                          className="text-base text-stone-600"
+                        />
+                      </li>
+                    ))}
+                  </ul>
+                  
+                  <Link to="/tratamentos">
+                    <Button className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-4 rounded-full text-sm">
+                      <EditableField
+                        value={texts.fisicoEspiritual.fisico.buttonText}
+                        jsonKey="index.fisicoEspiritual.fisico.buttonText"
+                        type="span"
+                        className="inline"
+                      />
+                      <ChevronRight className="ml-1 w-3.5 h-3.5" />
+                    </Button>
+                  </Link>
+                </div>
+
               </CardContent>
             </Card>
           </div>
@@ -335,7 +335,7 @@ export default function Index() {
       {/* ==================== DOIS CAMINHOS ==================== */}
       <section className="py-10 bg-white">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-section mx-auto">
             <Card className="border border-amber-200/80 shadow-2xl overflow-hidden bg-white">
               {/* Barra dourada superior */}
               <div className="h-1.5 bg-linear-to-r from-amber-400 via-amber-500 to-amber-400"></div>
@@ -351,58 +351,6 @@ export default function Index() {
                 </div>
 
                 <div className="grid lg:grid-cols-2 gap-6">
-                  {/* IGREJA */}
-                  <div className="bg-amber-50 rounded-xl border border-amber-200 p-6 md:p-8 flex flex-col">
-                    <div className="flex items-center gap-4 mb-5">
-                      <div className="w-14 h-14 bg-amber-100 rounded-2xl flex items-center justify-center shrink-0 border border-amber-200">
-                        <Sun12Rays className="w-8 h-8 text-amber-600" />
-                      </div>
-                      <EditableField
-                        value={texts.igreja?.title}
-                        jsonKey="index.igreja.title"
-                        type="h3"
-                        className="text-2xl font-bold text-amber-700"
-                      />
-                    </div>
-
-                    <EditableField
-                      value={texts.caminhos?.igreja?.resumo}
-                      jsonKey="index.caminhos.igreja.resumo"
-                      type="p"
-                      className="text-base text-stone-600 leading-relaxed mb-5"
-                    />
-
-                    <ul className="space-y-2.5 mb-6">
-                      {texts.caminhos?.igreja?.items?.map((item: string, i: number) => (
-                        <li key={i} className="flex items-start gap-3">
-                          <div className="w-6 h-6 bg-amber-600 rounded-md flex items-center justify-center shrink-0 mt-0.5">
-                            <span className="text-white text-xs font-bold">✓</span>
-                          </div>
-                          <EditableField
-                            value={item}
-                            jsonKey={`index.caminhos.igreja.items[${i}]`}
-                            type="span"
-                            className="text-base text-stone-700 font-medium"
-                          />
-                        </li>
-                      ))}
-                    </ul>
-
-                    <div className="mt-auto">
-                      <Link to="/quemsomos">
-                        <Button className="bg-amber-600 hover:bg-amber-700 text-white px-6 py-4 rounded-full text-sm w-full">
-                          <EditableField
-                            value={texts.caminhos?.igreja?.button}
-                            jsonKey="index.caminhos.igreja.button"
-                            type="span"
-                            className="inline"
-                          />
-                          <ChevronRight className="ml-1 w-3.5 h-3.5" />
-                        </Button>
-                      </Link>
-                    </div>
-                  </div>
-
                   {/* INSTITUTO */}
                   <div className="bg-teal-50 rounded-xl border border-teal-200 p-6 md:p-8 flex flex-col">
                     <div className="flex items-center gap-4 mb-5">
@@ -454,6 +402,58 @@ export default function Index() {
                       </Link>
                     </div>
                   </div>
+
+                  {/* IGREJA */}
+                  <div className="bg-amber-50 rounded-xl border border-amber-200 p-6 md:p-8 flex flex-col">
+                    <div className="flex items-center gap-4 mb-5">
+                      <div className="w-14 h-14 bg-amber-100 rounded-2xl flex items-center justify-center shrink-0 border border-amber-200">
+                        <Sun12Rays className="w-8 h-8 text-amber-600" />
+                      </div>
+                      <EditableField
+                        value={texts.igreja?.title}
+                        jsonKey="index.igreja.title"
+                        type="h3"
+                        className="text-2xl font-bold text-amber-700"
+                      />
+                    </div>
+
+                    <EditableField
+                      value={texts.caminhos?.igreja?.resumo}
+                      jsonKey="index.caminhos.igreja.resumo"
+                      type="p"
+                      className="text-base text-stone-600 leading-relaxed mb-5"
+                    />
+
+                    <ul className="space-y-2.5 mb-6">
+                      {texts.caminhos?.igreja?.items?.map((item: string, i: number) => (
+                        <li key={i} className="flex items-start gap-3">
+                          <div className="w-6 h-6 bg-amber-600 rounded-md flex items-center justify-center shrink-0 mt-0.5">
+                            <span className="text-white text-xs font-bold">✓</span>
+                          </div>
+                          <EditableField
+                            value={item}
+                            jsonKey={`index.caminhos.igreja.items[${i}]`}
+                            type="span"
+                            className="text-base text-stone-700 font-medium"
+                          />
+                        </li>
+                      ))}
+                    </ul>
+
+                    <div className="mt-auto">
+                      <Link to="/quemsomos">
+                        <Button className="bg-amber-600 hover:bg-amber-700 text-white px-6 py-4 rounded-full text-sm w-full">
+                          <EditableField
+                            value={texts.caminhos?.igreja?.button}
+                            jsonKey="index.caminhos.igreja.button"
+                            type="span"
+                            className="inline"
+                          />
+                          <ChevronRight className="ml-1 w-3.5 h-3.5" />
+                        </Button>
+                      </Link>
+                    </div>
+                  </div>
                 </div>
 
               </CardContent>
@@ -465,7 +465,7 @@ export default function Index() {
       {/* ==================== BENEFÍCIOS ==================== */}
       <section className="py-10 bg-stone-50">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-section mx-auto">
             <Card className="border border-amber-200/80 shadow-2xl overflow-hidden bg-white">
               {/* Barra dourada superior */}
               <div className="h-1.5 bg-linear-to-r from-amber-400 via-amber-500 to-amber-400"></div>
@@ -565,7 +565,7 @@ export default function Index() {
 
         {/* CTA Content - posicionado no céu */}
         <div className="container mx-auto px-4 relative z-50 pt-6 pb-4">
-          <div className="max-w-4xl mx-auto text-center">
+          <div className="max-w-section mx-auto text-center">
             <EditableField
               value={texts.cta?.title}
               jsonKey="index.cta.title"

@@ -63,7 +63,7 @@ export default function Contato() {
         </div>
 
         <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
+          <div className="max-w-section mx-auto text-center">
             <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-white/20 backdrop-blur-md border-2 border-white/40 mb-6">
               <Mail className="w-10 h-10 text-white" />
             </div>
@@ -86,7 +86,7 @@ export default function Contato() {
       {/* Main Content */}
       <section className="py-8 relative">
         <div className="container mx-auto px-4">
-          <div className="max-w-5xl mx-auto space-y-4">
+          <div className="max-w-section mx-auto space-y-4">
             
             {/* FAÇA CONTATO - DESTAQUE */}
             <div className="relative">
@@ -109,7 +109,7 @@ export default function Contato() {
                   />
                 </div>
 
-                <div className="max-w-4xl mx-auto space-y-4">
+                <div className="max-w-section mx-auto space-y-4">
                   <div className="grid md:grid-cols-2 gap-4 items-stretch">
                   {/* WhatsApp */}
                   <div className="flex flex-col bg-white/80 rounded-2xl p-6 border border-green-200/60 shadow-lg">

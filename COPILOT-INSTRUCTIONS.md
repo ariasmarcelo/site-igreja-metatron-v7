@@ -366,7 +366,6 @@ workspace/shadcn-ui/                    # RAIZ DO PROJETO (diretório de trabalh
 ├── vite.config.ts                     # Config Vite + apiPlugin() customizado
 ├── vercel.json                        # Deploy config (rewrites, functions)
 ├── start-dev.ps1                      # Script para iniciar dev server
-├── stop-dev.ps1                       # Script para parar dev server
 └── package.json                       # type: "module", scripts, deps
 ```
 
@@ -967,7 +966,7 @@ O projeto usa **Tailwind CSS v4**, que tem sintaxe diferente do v3:
 
 # DESENVOLVIMENTO LOCAL
 
-## Iniciar Servidor
+## Iniciar Reiniciar/Servidor
 
 ```powershell
 # SEMPRE usar o script (OBRIGATÓRIO — ver Regras Pétreas §6):
@@ -1063,7 +1062,6 @@ vercel --prod
 |----------|----------------|---------|
 | API retorna HTML em vez de JSON | `apiPlugin()` ausente ou corrompido no `vite.config.ts` | Restaurar plugin — ver backup ou docs |
 | Caracteres corrompidos (U+FFFD) | Encoding UTF-16LE ao salvar arquivo | Verificar encoding, usar UTF-8 sem BOM |
-| `npm run dev` falha | Processos node travados | Executar `stop-dev.ps1` e depois `start-dev.ps1` |
 | `pnpm install` falha com exit code 1 (Windows) | Bug WMI "Nó - NOVOATOM / Consulta inválida" — interrompe linking | Usar `npm install` no lugar (ver seção Deploy > Nota pnpm vs npm) |
 | `Cannot find module @rollup/rollup-win32-x64-msvc` | `node_modules` incompleto após pnpm install falho | Deletar `node_modules` e reinstalar com `npm install` |
 | PUT aceita mas não salva | Hash idêntico (no-op) | Verificar `updateLog[].oldHash` vs `newHash` |

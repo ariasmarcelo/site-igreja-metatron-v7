@@ -114,7 +114,7 @@ export default function Artigos() {
           </svg>
         </div>
         <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
+          <div className="max-w-section mx-auto text-center">
             <div className="flex justify-center mb-6">
               <div className="w-20 h-20 rounded-full bg-white/30 backdrop-blur-sm flex items-center justify-center shadow-lg">
                 <BookOpen className="h-10 w-10" />
@@ -142,7 +142,7 @@ export default function Artigos() {
         </div>
       </section>
 
-      <div className="container mx-auto px-4 pt-3 pb-16 max-w-4xl">
+      <div className="container mx-auto px-4 pt-3 pb-16 max-w-section">
         
         {/* Tabs Section */}
         <Tabs defaultValue="esoterica" className="w-full" onValueChange={setActiveTab}>

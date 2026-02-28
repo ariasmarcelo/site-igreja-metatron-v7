@@ -550,10 +550,23 @@ const VisualPageEditor = ({ pageId, pageComponent: PageComponent, selectedLangua
       display: flex;
       gap: 12px;
       justify-content: flex-end;
+      align-items: center;
       margin-top: auto;
       padding-top: 16px;
       border-top: 1px solid #e5e7eb;
     `;
+
+    // Dica de formatação Markdown (à esquerda dos botões)
+    const formatHint = document.createElement('div');
+    formatHint.style.cssText = `
+      flex: 1;
+      font-size: 12px;
+      color: #9ca3af;
+      line-height: 1.5;
+    `;
+    formatHint.innerHTML = '<span style="color:#6b7280;font-weight:600">Formatação:</span> '
+      + '<code style="background:#f3f4f6;padding:1px 4px;border-radius:3px;font-size:11px">**texto**</code> → <strong>negrito</strong> · '
+      + '<code style="background:#f3f4f6;padding:1px 4px;border-radius:3px;font-size:11px">*texto*</code> → <em>itálico</em>';
 
     // Botão OK (Aplicar = preview no layout, NÃO salva no DB ainda)
     const okButton = document.createElement('button');
@@ -688,6 +701,7 @@ const VisualPageEditor = ({ pageId, pageComponent: PageComponent, selectedLangua
     okButton.onclick = saveEdit;
     cancelButton.onclick = cleanup;
     
+    buttonContainer.appendChild(formatHint);
     buttonContainer.appendChild(okButton);
     buttonContainer.appendChild(cancelButton);
     
@@ -1142,11 +1156,11 @@ const VisualPageEditor = ({ pageId, pageComponent: PageComponent, selectedLangua
           });
         });
         
-        setDialogState({
-          open: true,
-          type: 'success',
-          message: `✅ ${modifiedFields.length} mudanças salvas com sucesso!`,
-        });
+        // Success feedback via console only (dialog removed for UX speed)
+        console.log(`✅ ${modifiedFields.length} mudanças salvas com sucesso!`);
+        
+        // Return to read mode after successful save
+        disableEditMode();
       } else {
         throw new Error('Algumas requisicoes falharam');
       }
@@ -1167,11 +1181,6 @@ const VisualPageEditor = ({ pageId, pageComponent: PageComponent, selectedLangua
     const modifiedFields = fields.filter(f => f.isModified);
     
     if (modifiedFields.length === 0) {
-      setDialogState({
-        open: true,
-        type: 'success',
-        message: 'Nenhuma mudança para cancelar',
-      });
       return;
     }
     
@@ -1209,11 +1218,6 @@ const VisualPageEditor = ({ pageId, pageComponent: PageComponent, selectedLangua
     });
     
     console.log('✅ Todas as mudanças foram descartadas');
-    setDialogState({
-      open: true,
-      type: 'success',
-      message: '✅ Mudanças descartadas!',
-    });
       },
     });
   };
