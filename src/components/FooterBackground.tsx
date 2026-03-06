@@ -4,6 +4,8 @@
  * Cada página passa suas próprias cores para progressão noite→dia
  */
 
+import { FOOTER } from './footer-constants';
+
 /**
  * Estrelas fixas — distribuição inspirada no céu noturno do hemisfério sul.
  * Renderizadas como divs HTML para manter forma circular perfeita
@@ -143,7 +145,7 @@ interface FooterBackgroundProps {
 
 // Defaults: azul médio (design original, usado por Purificação)
 const defaultSky: [string, string, string] = ['#1e3a5f', '#2563eb', '#38bdf8'];
-const defaultWater: [string, string, string] = ['#14b8a6', '#0d9488', '#0f766e'];
+const defaultWater: [string, string, string] = ['#3b82f6', '#2563eb', '#1d4ed8'];
 
 export const FooterBackground = ({
   gradientId = "skyGradient",
@@ -160,7 +162,7 @@ export const FooterBackground = ({
       {/* CAMADA 1 — Gradiente do céu (fundo) */}
       <svg
         className="absolute left-1/2 -translate-x-1/2 h-full w-[max(100%,1200px)] z-0"
-        viewBox="0 0 1200 370"
+        viewBox={`0 0 1200 ${FOOTER.viewBoxHeight}`}
         preserveAspectRatio="none"
         xmlns="http://www.w3.org/2000/svg"
       >
@@ -171,7 +173,7 @@ export const FooterBackground = ({
             <stop offset="100%" stopColor={skyColors[2]} />
           </linearGradient>
         </defs>
-        <rect width="1200" height="370" fill={`url(#${gradientId})`} />
+        <rect width="1200" height={FOOTER.viewBoxHeight} fill={`url(#${gradientId})`} />
       </svg>
 
       {/* CAMADA 2 — Estrelas (divs circulares sobre o gradiente) */}
@@ -204,31 +206,57 @@ export const FooterBackground = ({
       {/* CAMADA 3 — Terra + Água (cobre estrelas abaixo do horizonte) */}
       <svg
         className="absolute left-1/2 -translate-x-1/2 h-full w-[max(100%,1200px)] z-2"
-        viewBox="0 0 1200 370"
+        viewBox={`0 0 1200 ${FOOTER.viewBoxHeight}`}
         preserveAspectRatio="none"
         xmlns="http://www.w3.org/2000/svg"
       >
+        {/* Back mountain range */}
         <path
-          d="M0,251 Q600,161 1200,251 L1200,400 L0,400 Z"
-          fill={earthColor}
+          d="M0,381 Q75,350 150,322 Q225,361 300,300 Q375,322 450,269 Q525,294 600,244 Q675,277 750,260 Q825,311 900,292 Q975,339 1050,319 Q1125,361 1200,378 L1200,518 L0,518 Z"
+          fill="#3d5a4a"
         />
+        {/* Valley surface between mountain ranges */}
+        <path
+          d="M0,386 Q150,364 300,333 Q450,319 600,296 Q750,314 900,325 Q1050,352 1200,384 L1200,518 L0,518 Z"
+          fill="#2d4a3a"
+        />
+        {/* Front mountain range */}
+        <path
+          d="M0,389 Q100,372 200,344 Q275,378 350,322 Q425,350 500,292 Q550,311 600,274 Q650,300 700,280 Q800,328 900,311 Q975,356 1050,339 Q1100,372 1200,386 L1200,518 L0,518 Z"
+          fill="#2d4a3a"
+        />
+        {/* Wave gradient definitions — transparent at crest, colored at depth */}
+        <defs>
+          <linearGradient id={`${gradientId}_wg1`} gradientUnits="userSpaceOnUse" x1="0" y1="392" x2="0" y2="518">
+            <stop offset="0%" stopColor={waterColors[0]} stopOpacity="0" />
+            <stop offset="40%" stopColor={waterColors[0]} stopOpacity="0.2" />
+            <stop offset="100%" stopColor={waterColors[0]} stopOpacity="0.5" />
+          </linearGradient>
+          <linearGradient id={`${gradientId}_wg2`} gradientUnits="userSpaceOnUse" x1="0" y1="399" x2="0" y2="518">
+            <stop offset="0%" stopColor={waterColors[1]} stopOpacity="0" />
+            <stop offset="40%" stopColor={waterColors[1]} stopOpacity="0.25" />
+            <stop offset="100%" stopColor={waterColors[1]} stopOpacity="0.55" />
+          </linearGradient>
+          <linearGradient id={`${gradientId}_wg3`} gradientUnits="userSpaceOnUse" x1="0" y1="406" x2="0" y2="518">
+            <stop offset="0%" stopColor={waterColors[2]} stopOpacity="0" />
+            <stop offset="40%" stopColor={waterColors[2]} stopOpacity="0.3" />
+            <stop offset="100%" stopColor={waterColors[2]} stopOpacity="0.6" />
+          </linearGradient>
+        </defs>
         <path
           className="animate-wave-1"
-          d="M-100,318 Q600,198 1300,318 L1300,380 L-100,380 Z"
-          fill={waterColors[0]}
-          opacity="0.25"
+          d="M-100,482 Q600,398 1300,482 L1300,518 L-100,518 Z"
+          fill={`url(#${gradientId}_wg1)`}
         />
         <path
           className="animate-wave-2"
-          d="M-100,330 Q600,210 1300,330 L1300,380 L-100,380 Z"
-          fill={waterColors[1]}
-          opacity="0.25"
+          d="M-100,490 Q600,406 1300,490 L1300,518 L-100,518 Z"
+          fill={`url(#${gradientId}_wg2)`}
         />
         <path
           className="animate-wave-3"
-          d="M-100,338 Q600,218 1300,338 L1300,380 L-100,380 Z"
-          fill={waterColors[2]}
-          opacity="0.25"
+          d="M-100,496 Q600,412 1300,496 L1300,518 L-100,518 Z"
+          fill={`url(#${gradientId}_wg3)`}
         />
       </svg>
     </div>

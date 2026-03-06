@@ -1,6 +1,6 @@
 import { usePageContent } from '@/hooks/useContent';
-import { SharedFooter } from '@/components/SharedFooter';
 import { FooterBackground } from '@/components/FooterBackground';
+import { FOOTER } from '@/components/footer-constants';
 import EditableField from '@/components/ui/EditableField';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
@@ -32,7 +32,7 @@ interface TestemunhosTexts {
 }
 
 const Testemunhos = () => {
-  const { data: texts, loading, error } = usePageContent<any>('testemunhos');
+  const { data: texts, loading, error } = usePageContent<any>('testemunhos', { includePages: ['__shared__'] });
 
   if (loading) {
     return (
@@ -217,52 +217,61 @@ const Testemunhos = () => {
         </div>
       </section>
 
-      {/* Footer Section - Céu-Terra-Água */}
-      <section className="relative overflow-hidden mt-16">
-        {/* Fundo com transição céu-água */}
-        <FooterBackground
-          gradientId="skyGradientTestemunhos"
-          skyColors={['#3b82f6', '#60a5fa', '#93c5fd']}
-          earthColor="#6b5a3e"
-          waterColors={['#22d3ee', '#06b6d4', '#0891b2']}
-          rightIcon={<Heart className="text-[#CFAF5A] fill-rose-300/80 stroke-[1.5]" />}
-          rightIconSize={48}
-        />
+      {/* Footer — paisagem padronizada */}
+      <footer className="relative overflow-hidden mt-16">
+        <div className="relative">
+          <FooterBackground
+            gradientId="skyGradientTestemunhos"
+            skyColors={['#3b82f6', '#60a5fa', '#93c5fd']}
+            earthColor="#6b5a3e"
+            waterColors={['#22d3ee', '#06b6d4', '#0891b2']}
+            rightIcon={<Heart className="text-[#CFAF5A] fill-rose-300/80 stroke-[1.5]" />}
+            rightIconSize={48}
+          />
 
-        {/* CTA Content - posicionado no céu */}
-        <div className="container mx-auto px-4 relative z-10 pt-6 pb-4">
-          <div className="max-w-section mx-auto text-center">
-            <EditableField 
-              value={texts.testimonialsPage?.cta?.title}
-              jsonKey="testemunhos.testimonialsPage.cta.title"
-              type="h2"
-              className="text-3xl md:text-4xl font-bold mb-4 text-white text-shadow-strong"
-            />
-            <EditableField 
-              value={texts.testimonialsPage?.cta?.subtitle}
-              jsonKey="testemunhos.testimonialsPage.cta.subtitle"
-              type="p"
-              className="text-lg mb-5 text-white text-shadow-medium"
-            />
-            <Link to="/contato">
-              <Button className="bg-[#CFAF5A] text-white font-semibold px-6 py-4 text-base rounded-lg shadow-[0_6px_20px_rgba(0,0,0,0.5)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.6)] transition-all duration-300 hover:scale-105">
-                <EditableField 
-                  value={texts.testimonialsPage?.cta?.buttonText}
-                  jsonKey="testemunhos.testimonialsPage.cta.buttonText"
-                  type="span"
-                  className="inline"
-                />
-              </Button>
-            </Link>
+          <div className={FOOTER.containerClass} style={{ height: FOOTER.containerHeight }}>
+            <div className="max-w-section mx-auto text-center">
+              <EditableField
+                value={texts.testimonialsPage?.cta?.title}
+                jsonKey="testemunhos.testimonialsPage.cta.title"
+                type="h2"
+                className={FOOTER.titleClass}
+              />
+              <EditableField
+                value={texts.testimonialsPage?.cta?.subtitle}
+                jsonKey="testemunhos.testimonialsPage.cta.subtitle"
+                type="p"
+                className={FOOTER.subtitleClass}
+              />
+              <Link to="/contato">
+                <Button className={FOOTER.buttonClass}>
+                  <EditableField
+                    value={texts.testimonialsPage?.cta?.buttonText}
+                    jsonKey="testemunhos.testimonialsPage.cta.buttonText"
+                    type="span"
+                    className="inline"
+                  />
+                </Button>
+              </Link>
+            </div>
+
+            <div>
+              <EditableField
+                value={(texts as any).__shared__?.copyright}
+                jsonKey="__shared__.copyright"
+                type="p"
+                className={FOOTER.copyrightClass}
+              />
+              <EditableField
+                value={(texts as any).__shared__?.trademark}
+                jsonKey="__shared__.trademark"
+                type="p"
+                className={FOOTER.trademarkClass}
+              />
+            </div>
           </div>
         </div>
-
-        {/* Footer Content - Copyright (do DB: compartilhado) */}
-        <SharedFooter 
-          copyright={texts?.footer?.copyright}
-          trademark={texts?.footer?.trademark}
-        />
-      </section>
+      </footer>
       </div>
     </>
   );

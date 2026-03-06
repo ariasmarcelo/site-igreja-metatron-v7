@@ -6,7 +6,7 @@
  * Route: /
  */
 import { Link } from 'react-router-dom';
-import { Heart, Brain, Ghost, Sparkles, TrendingUp } from 'lucide-react';
+import { Heart, Brain, Ghost, Sparkles, TrendingUp, ArrowRight } from 'lucide-react';
 import EditableField from '@/components/ui/EditableField';
 import { Sun12Rays } from '../components/icons/Sun12Rays';
 import { LogoGold } from '../components/icons/LogoGold';
@@ -14,7 +14,7 @@ import { usePageContent } from '@/hooks/useContent';
 import { usePageStyles } from '@/hooks/usePageStyles';
 import { PageLoading } from '@/components/PageLoading';
 import { FooterBackground } from '@/components/FooterBackground';
-import { SharedFooter } from '@/components/SharedFooter';
+import { FOOTER } from '@/components/footer-constants';
 import { Button } from '@/components/ui/button';
 
 interface IndexTexts {
@@ -25,7 +25,7 @@ interface IndexTexts {
 
 export default function Index() {
   const stylesLoaded = usePageStyles('index');
-  const { data: texts, loading } = usePageContent<IndexTexts>('index');
+  const { data: texts, loading } = usePageContent<IndexTexts>('index', { includePages: ['__shared__'] });
 
   if (!texts || !stylesLoaded || loading) {
     return (
@@ -411,47 +411,61 @@ export default function Index() {
         </div>
       </section>
 
-      {/* ==================== CTA FINAL / FOOTER ==================== */}
-      <section className="ds-footer-section relative overflow-hidden">
-        {/* Horizonte terrestre: céu noturno profundo */}
-        <FooterBackground
-          gradientId="skyGradIndex"
-          skyColors={['#0C1520', '#071020', '#091830']}
-          earthColor="#1a1508"
-          waterColors={['#0a3a3a', '#072e2e', '#052222']}
-        />
+      {/* ==================== LANDSCAPE FOOTER ==================== */}
+      <footer className="ds-footer-section relative overflow-hidden">
+        <div className="relative">
+          <FooterBackground
+            gradientId="skyGradIndex"
+            skyColors={['#0C1520', '#071020', '#091830']}
+            earthColor="#1a1508"
+            waterColors={['#0a3a3a', '#072e2e', '#052222']}
+          />
 
-        {/* CTA Content - posicionado no céu */}
-        <div className="container mx-auto px-4 relative z-10 pt-6 pb-4">
-          <div className="max-w-section mx-auto text-center">
-            <EditableField
-              value={texts.cta?.title}
-              jsonKey="index.cta.title"
-              type="h2"
-              className="text-3xl md:text-4xl font-bold mb-4 text-white text-shadow-strong"
-            />
-            <EditableField
-              value={texts.cta?.subtitle}
-              jsonKey="index.cta.subtitle"
-              type="p"
-              className="text-lg mb-5 text-white text-shadow-medium"
-            />
-            <Link to="/contato">
-              <Button className="bg-[#CFAF5A] text-white font-semibold px-6 py-4 text-base rounded-lg shadow-[0_6px_20px_rgba(0,0,0,0.5)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.6)] transition-all duration-300 hover:scale-105">
-                <EditableField
-                  value={texts.cta?.buttonText}
-                  jsonKey="index.cta.buttonText"
-                  type="span"
-                  className="inline"
-                />
-              </Button>
-            </Link>
+          <div className={FOOTER.containerClass} style={{ height: FOOTER.containerHeight }}>
+            <div className="max-w-section mx-auto text-center">
+              <EditableField
+                value={texts.cta?.title}
+                jsonKey="index.cta.title"
+                type="h2"
+                className={FOOTER.titleClass}
+              />
+              <EditableField
+                value={texts.cta?.subtitle}
+                jsonKey="index.cta.subtitle"
+                type="p"
+                className={FOOTER.subtitleClass}
+              />
+              <Link to="/contato">
+                <Button className={FOOTER.buttonClass}>
+                  <EditableField
+                    value={texts.cta?.buttonText}
+                    jsonKey="index.cta.buttonText"
+                    type="span"
+                    className="inline"
+                  />
+                </Button>
+              </Link>
+            </div>
+
+            <div>
+              <EditableField
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                value={(texts as any).__shared__?.copyright}
+                jsonKey="__shared__.copyright"
+                type="p"
+                className={FOOTER.copyrightClass}
+              />
+              <EditableField
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                value={(texts as any).__shared__?.trademark}
+                jsonKey="__shared__.trademark"
+                type="p"
+                className={FOOTER.trademarkClass}
+              />
+            </div>
           </div>
         </div>
-
-        {/* Footer Content - Copyright (do DB: compartilhado) */}
-        <SharedFooter className="pt-8 pb-4" />
-      </section>
+      </footer>
     </div>
   );
 }

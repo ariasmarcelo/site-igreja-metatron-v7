@@ -6,8 +6,8 @@ import { BookOpen, Waves, Target } from "lucide-react";
 import { Pentagram, Cuboctahedron } from "@/components/icons";
 import { usePageContent } from '@/hooks/useContent';
 import { usePageStyles } from '@/hooks/usePageStyles';
-import { SharedFooter } from '@/components/SharedFooter';
 import { FooterBackground } from '@/components/FooterBackground';
+import { FOOTER } from '@/components/footer-constants';
 import { PageLoading, PageError } from '@/components/PageLoading';
 import '@/styles/layouts/pages/quemsomos.css';
 import '@/styles/waves.css';
@@ -27,7 +27,7 @@ interface QuemSomosTexts {
 
 export default function QuemSomos() {
   usePageStyles('quemsomos');
-  const { data: texts, loading, error } = usePageContent<QuemSomosTexts>('quemsomos');
+  const { data: texts, loading, error } = usePageContent<QuemSomosTexts>('quemsomos', { includePages: ['__shared__'] });
 
   if (loading) {
     return (
@@ -334,50 +334,59 @@ export default function QuemSomos() {
         </div>
       </section>
 
-      {/* Footer CTA Section com fundo céu, água, sol e lua */}
-      <section className="relative overflow-hidden">
-        {/* Fundo com transição céu-água */}
-        <FooterBackground
-          gradientId="skyGradientQuemSomos"
-          skyColors={['#60a5fa', '#93c5fd', '#bae6fd']}
-          earthColor="#7c6a42"
-          waterColors={['#34d399', '#10b981', '#059669']}
-        />
+      {/* Footer — paisagem padronizada */}
+      <footer className="relative overflow-hidden">
+        <div className="relative">
+          <FooterBackground
+            gradientId="skyGradientQuemSomos"
+            skyColors={['#60a5fa', '#93c5fd', '#bae6fd']}
+            earthColor="#7c6a42"
+            waterColors={['#34d399', '#10b981', '#059669']}
+          />
 
-        {/* CTA Content - posicionado no céu */}
-        <div className="container mx-auto px-4 relative z-10 pt-6 pb-4">
-          <div className="max-w-section mx-auto text-center">
-            <EditableField 
-              value={texts.cta?.title}
-              jsonKey="quemsomos.cta.title"
-              type="h2"
-              className="text-3xl md:text-4xl font-bold mb-4 text-white text-shadow-strong whitespace-pre-line"
-            />
-            <EditableField 
-              value={texts.cta?.subtitle}
-              jsonKey="quemsomos.cta.subtitle"
-              type="p"
-              className="text-lg mb-5 text-white text-shadow-medium whitespace-pre-line"
-            />
-            <Link to="/contato">
-              <Button className="bg-[#CFAF5A] text-white font-semibold px-6 py-4 text-base rounded-lg shadow-[0_6px_20px_rgba(0,0,0,0.5)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.6)] transition-all duration-300 hover:scale-105">
-                <EditableField 
-                  value={texts.cta.buttonText}
-                  jsonKey="quemsomos.cta.buttonText"
-                  type="span"
-                  className="inline"
-                />
-              </Button>
-            </Link>
+          <div className={FOOTER.containerClass} style={{ height: FOOTER.containerHeight }}>
+            <div className="max-w-section mx-auto text-center">
+              <EditableField
+                value={texts.cta?.title}
+                jsonKey="quemsomos.cta.title"
+                type="h2"
+                className={FOOTER.titleClass}
+              />
+              <EditableField
+                value={texts.cta?.subtitle}
+                jsonKey="quemsomos.cta.subtitle"
+                type="p"
+                className={FOOTER.subtitleClass}
+              />
+              <Link to="/contato">
+                <Button className={FOOTER.buttonClass}>
+                  <EditableField
+                    value={texts.cta?.buttonText}
+                    jsonKey="quemsomos.cta.buttonText"
+                    type="span"
+                    className="inline"
+                  />
+                </Button>
+              </Link>
+            </div>
+
+            <div>
+              <EditableField
+                value={(texts as any).__shared__?.copyright}
+                jsonKey="__shared__.copyright"
+                type="p"
+                className={FOOTER.copyrightClass}
+              />
+              <EditableField
+                value={(texts as any).__shared__?.trademark}
+                jsonKey="__shared__.trademark"
+                type="p"
+                className={FOOTER.trademarkClass}
+              />
+            </div>
           </div>
         </div>
-
-        {/* Footer Content - Copyright (do DB: compartilhado) */}
-        <SharedFooter 
-          copyright={texts?.footer?.copyright}
-          trademark={texts?.footer?.trademark}
-        />
-      </section>
+      </footer>
     </div>
   );
 }

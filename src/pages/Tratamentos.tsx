@@ -7,8 +7,8 @@ import EditableField from '@/components/ui/EditableField';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { usePageContent } from '@/hooks/useContent';
-import { SharedFooter } from '@/components/SharedFooter';
 import { FooterBackground } from '@/components/FooterBackground';
+import { FOOTER } from '@/components/footer-constants';
 import { usePageStyles } from '@/hooks/usePageStyles';
 import { PageLoading } from '@/components/PageLoading';
 import '@/styles/layouts/pages/tratamentos.css';
@@ -33,7 +33,7 @@ export default function Tratamentos() {
   usePageStyles('tratamentos');
   const [showLegal, setShowLegal] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: texts, loading, error } = usePageContent<any>('tratamentos');
+  const { data: texts, loading, error } = usePageContent<any>('tratamentos', { includePages: ['__shared__'] });
   // Conteúdo da seção "Redescubra" — vive no page_id 'index'
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: indexTexts } = usePageContent<any>('index');
@@ -662,50 +662,64 @@ export default function Tratamentos() {
       </section>
 
       {/* Footer CTA Section com fundo céu, terra e água */}
-      <section className="relative overflow-hidden -mt-4">
-        {/* Fundo com transição céu-água — Amanhecer */}
-        <FooterBackground
-          gradientId="skyGradientTratamentos"
-          skyColors={['#1e3a5f', '#2563eb', '#38bdf8']}
-          earthColor="#4a3f2e"
-          waterColors={['#14b8a6', '#0d9488', '#0f766e']}
-          leftIcon={<Activity className="text-[#CFAF5A] stroke-[1.5]" />}
-          leftIconSize={48}
-          rightIcon={<Waves className="text-[#CFAF5A] stroke-[1.5]" />}
-          rightIconSize={48}
-        />
+      <footer className="relative overflow-hidden -mt-4">
+        <div className="relative">
+          <FooterBackground
+            gradientId="skyGradientTratamentos"
+            skyColors={['#1e3a5f', '#2563eb', '#38bdf8']}
+            earthColor="#4a3f2e"
+            waterColors={['#14b8a6', '#0d9488', '#0f766e']}
+            leftIcon={<Activity className="text-[#CFAF5A] stroke-[1.5]" />}
+            leftIconSize={48}
+            rightIcon={<Waves className="text-[#CFAF5A] stroke-[1.5]" />}
+            rightIconSize={48}
+          />
 
-        {/* CTA Content - posicionado no céu */}
-        <div className="container mx-auto px-4 relative z-10 pt-6 pb-4">
-          <div className="max-w-section mx-auto text-center">
-            <EditableField
-              value={texts.cta?.title}
-              jsonKey="tratamentos.cta.title"
-              type="h2"
-              className="text-3xl md:text-4xl font-bold mb-4 text-white text-shadow-strong"
-            />
-            <EditableField
-              value={texts.cta?.subtitle}
-              jsonKey="tratamentos.cta.subtitle"
-              type="p"
-              className="text-lg mb-5 text-white text-shadow-medium"
-            />
-            <Link to="/contato">
-              <Button className="bg-[#CFAF5A] text-white font-semibold px-6 py-4 text-base rounded-lg shadow-[0_6px_20px_rgba(0,0,0,0.5)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.6)] transition-all duration-300 hover:scale-105">
-                <EditableField
-                  value={texts.cta?.buttonText}
-                  jsonKey="tratamentos.cta.buttonText"
-                  type="span"
-                  className="inline"
-                />
-              </Button>
-            </Link>
+          <div className={FOOTER.containerClass} style={{ height: FOOTER.containerHeight }}>
+            <div className="max-w-section mx-auto text-center">
+              <EditableField
+                value={texts.cta?.title}
+                jsonKey="tratamentos.cta.title"
+                type="h2"
+                className={FOOTER.titleClass}
+              />
+              <EditableField
+                value={texts.cta?.subtitle}
+                jsonKey="tratamentos.cta.subtitle"
+                type="p"
+                className={FOOTER.subtitleClass}
+              />
+              <Link to="/contato">
+                <Button className={FOOTER.buttonClass}>
+                  <EditableField
+                    value={texts.cta?.buttonText}
+                    jsonKey="tratamentos.cta.buttonText"
+                    type="span"
+                    className="inline"
+                  />
+                </Button>
+              </Link>
+            </div>
+
+            <div>
+              <EditableField
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                value={(texts as any).__shared__?.copyright}
+                jsonKey="__shared__.copyright"
+                type="p"
+                className={FOOTER.copyrightClass}
+              />
+              <EditableField
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                value={(texts as any).__shared__?.trademark}
+                jsonKey="__shared__.trademark"
+                type="p"
+                className={FOOTER.trademarkClass}
+              />
+            </div>
           </div>
         </div>
-
-        {/* Footer Content - Copyright (do DB: compartilhado) */}
-        <SharedFooter />
-      </section>
+      </footer>
     </div>
   );
 }

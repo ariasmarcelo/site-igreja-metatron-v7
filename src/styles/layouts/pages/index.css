@@ -104,22 +104,7 @@
   z-index: 4;
 }
 
-/* Dark vignette for text contrast — z-index: 1 ensures it sits BELOW
-   .ds-hero-inner (z-index: 2) so the logo is never darkened by it. */
-.ds-new .ds-hero::before {
-  content: '';
-  position: absolute;
-  /* Extend 150px below hero so vignette fades gradually
-     instead of cutting off at the section boundary */
-  inset: 0 0 -150px 0;
-  z-index: 1;
-  background: radial-gradient(
-    ellipse 70% 90% at center 35%,
-    rgba(0, 0, 0, 0.30) 0%,
-    transparent 100%
-  );
-  pointer-events: none;
-}
+/* Dark vignette removed — was creating visible dark radiance around logo */
 
 .ds-new .ds-hero-inner {
   position: relative;
@@ -730,6 +715,16 @@
   color: rgba(232, 226, 216, 0.2);
   padding-top: 18px;
   border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.ds-new .ds-footer-nav-link {
+  font-size: 0.85rem;
+  color: rgba(232, 226, 216, 0.5);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+.ds-new .ds-footer-nav-link:hover {
+  color: var(--ds-sacred-gold);
 }
 
 /* ─────────────────────────────────────────────

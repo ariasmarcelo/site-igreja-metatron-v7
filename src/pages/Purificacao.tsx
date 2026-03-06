@@ -14,8 +14,8 @@ import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { usePageContent } from '@/hooks/useContent';
 import { PageLoading } from '@/components/PageLoading';
-import { SharedFooter } from '@/components/SharedFooter';
 import { FooterBackground } from '@/components/FooterBackground';
+import { FOOTER } from '@/components/footer-constants';
 import '@/styles/layouts/pages/purificacao.css';
 
 
@@ -28,7 +28,7 @@ interface PurificacaoTexts {
 
 export default function Purificacao() {
   const [expandedPhase, setExpandedPhase] = useState<number | null>(null);
-  const { data: texts, loading } = usePageContent<PurificacaoTexts>('purificacao');
+  const { data: texts, loading } = usePageContent<PurificacaoTexts>('purificacao', { includePages: ['__shared__'] });
 
   const togglePhase = (phase: number) => {
     setExpandedPhase(expandedPhase === phase ? null : phase);
@@ -344,22 +344,41 @@ export default function Purificacao() {
         </div>
       </section>
 
-      {/* Rodapé — mantido */}
-      <section className="relative overflow-hidden bg-slate-900">
-        <FooterBackground gradientId="skyGradientPurificacao" skyColors={['#1e3a5f', '#4b6cb7', '#d4a843']} earthColor="#5c4a30" waterColors={['#0ea5e9', '#0284c7', '#0369a1']} />
-        <div className="container mx-auto px-4 relative z-10 pt-6 pb-4">
-          <div className="max-w-section mx-auto text-center">
-            <EditableField value={cta.title} jsonKey="purificacao.cta.title" type="h2" className="text-3xl md:text-4xl font-bold mb-4 text-white text-shadow-strong" />
-            <EditableField value={cta.subtitle} jsonKey="purificacao.cta.subtitle" type="p" className="text-lg mb-5 text-white text-shadow-medium" />
-            <Link to="/contato">
-              <Button className="bg-[#CFAF5A] text-white font-semibold px-6 py-4 text-base rounded-lg shadow-[0_6px_20px_rgba(0,0,0,0.5)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.6)] transition-all duration-300 hover:scale-105">
-                <EditableField value={cta.buttonText} jsonKey="purificacao.cta.buttonText" type="span" className="inline" />
-              </Button>
-            </Link>
+      {/* Rodapé — paisagem padronizada */}
+      <footer className="relative overflow-hidden">
+        <div className="relative">
+          <FooterBackground gradientId="skyGradientPurificacao" skyColors={['#1e3a5f', '#4b6cb7', '#d4a843']} earthColor="#5c4a30" waterColors={['#0ea5e9', '#0284c7', '#0369a1']} />
+
+          <div className={FOOTER.containerClass} style={{ height: FOOTER.containerHeight }}>
+            <div className="max-w-section mx-auto text-center">
+              <EditableField value={cta.title} jsonKey="purificacao.cta.title" type="h2" className={FOOTER.titleClass} />
+              <EditableField value={cta.subtitle} jsonKey="purificacao.cta.subtitle" type="p" className={FOOTER.subtitleClass} />
+              <Link to="/contato">
+                <Button className={FOOTER.buttonClass}>
+                  <EditableField value={cta.buttonText} jsonKey="purificacao.cta.buttonText" type="span" className="inline" />
+                </Button>
+              </Link>
+            </div>
+
+            <div>
+              <EditableField
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                value={(texts as any).__shared__?.copyright}
+                jsonKey="__shared__.copyright"
+                type="p"
+                className={FOOTER.copyrightClass}
+              />
+              <EditableField
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                value={(texts as any).__shared__?.trademark}
+                jsonKey="__shared__.trademark"
+                type="p"
+                className={FOOTER.trademarkClass}
+              />
+            </div>
           </div>
         </div>
-        <SharedFooter className="pt-8 pb-4" />
-      </section>
+      </footer>
     </div>
   );
 }
