@@ -1,9 +1,11 @@
 /**
- * Index — Design System V2 (promoted from NewIndex)
+ * NewIndex — Design System V2 prototype
  * 
- * Uses Supabase content via usePageContent('index').
+ * Uses the SAME Supabase content as Index.tsx (usePageContent('index'))
+ * but with the new layout/color system from the Design System guide.
+ * 
  * Scoped under CSS class `.ds-new` — styles in styles/layouts/pages/index.css
- * Route: /
+ * Route: /newindex
  */
 import { Link } from 'react-router-dom';
 import { Heart, Brain, Ghost, Sparkles, TrendingUp } from 'lucide-react';
@@ -23,7 +25,7 @@ interface IndexTexts {
   [key: string]: any;
 }
 
-export default function Index() {
+export default function NewIndex() {
   const stylesLoaded = usePageStyles('index');
   const { data: texts, loading } = usePageContent<IndexTexts>('index');
 
@@ -415,7 +417,7 @@ export default function Index() {
       <section className="ds-footer-section relative overflow-hidden">
         {/* Horizonte terrestre: céu noturno profundo */}
         <FooterBackground
-          gradientId="skyGradIndex"
+          gradientId="skyGradNewIndex"
           skyColors={['#0C1520', '#071020', '#091830']}
           earthColor="#1a1508"
           waterColors={['#0a3a3a', '#072e2e', '#052222']}

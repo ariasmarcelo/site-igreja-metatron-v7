@@ -1,4 +1,5 @@
 import React from 'react';
+import { logger } from '@/lib/logger';
 
 /**
  * Parses lightweight Markdown (**bold** and *italic*) into React fragments.
@@ -36,7 +37,7 @@ function parseInlineMarkdown(text: string): React.ReactNode {
     parts.push(text.slice(lastIndex));
   }
 
-  console.log('[MD] Final parts count:', parts.length, 'types:', parts.map(p => typeof p === 'string' ? 'text' : 'element'));
+  logger.debug('[MD] Final parts count:', parts.length, 'types:', parts.map(p => typeof p === 'string' ? 'text' : 'element'));
   return parts.length === 1 && typeof parts[0] === 'string' ? parts[0] : <>{parts}</>;
 }
 

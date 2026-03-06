@@ -1,7 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Brain, Heart, Wind, Route, Flower2, Sparkles, AlertTriangle, Users, Activity, Stethoscope, Waves, Compass, Sun, HeartHandshake } from 'lucide-react';
+import { Brain, Heart, Wind, Route, Flower2, Sparkles, AlertTriangle, Users, Activity, Stethoscope, Waves, Compass, Sun, HeartHandshake, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import EditableField from '@/components/ui/EditableField';
 import { Link } from 'react-router-dom';
@@ -34,6 +34,9 @@ export default function Tratamentos() {
   const [showLegal, setShowLegal] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: texts, loading, error } = usePageContent<any>('tratamentos');
+  // Conteúdo da seção "Redescubra" — vive no page_id 'index'
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: indexTexts } = usePageContent<any>('index');
   
   if (loading || !texts) {
     console.log(`[${new Date().toISOString()}] [TRATAMENTOS] Waiting for data: loading=${loading}`);
@@ -174,6 +177,113 @@ export default function Tratamentos() {
           </div>
         </div>
       </section>
+
+      {/* ==================== REDESCUBRA (conteúdo do index) ==================== */}
+      {indexTexts && (
+      <section className="py-10 bg-stone-50">
+        <div className="container mx-auto px-4">
+          <div className="max-w-section mx-auto">
+            <Card className="border border-amber-200/80 shadow-2xl overflow-hidden bg-white">
+              {/* Barra dourada superior */}
+              <div className="h-1.5 bg-linear-to-r from-amber-400 via-amber-500 to-amber-400"></div>
+              <CardContent className="p-6 md:p-8">
+                {/* Título centralizado com coração irradiante */}
+                <div className="text-center mb-10">
+                  <div className="w-20 h-20 bg-linear-to-br from-amber-100 to-amber-50 rounded-full flex items-center justify-center mb-6 mx-auto shadow-[0_0_30px_rgba(217,119,6,0.3)] border-2 border-amber-300/60">
+                    <Heart className="w-10 h-10 text-amber-500 fill-amber-500 drop-shadow-[0_0_8px_rgba(217,119,6,0.6)]" />
+                  </div>
+                  <EditableField 
+                    value={indexTexts?.instituto?.firstCallTitle}
+                    jsonKey="index.instituto.firstCallTitle" 
+                    type="h2"
+                    className="text-3xl font-bold text-amber-800 leading-tight"
+                  />
+                </div>
+
+                {/* Conteúdo */}
+                <div className="bg-stone-50 rounded-xl border border-stone-200 p-5 md:p-7 mb-10">
+                  {/* Gancho — pergunta destacada, centralizada */}
+                  {indexTexts?.instituto?.firstCall?.[0] && (
+                    <div className="bg-amber-50 border-2 border-amber-300 rounded-xl px-5 md:px-6 py-5 mb-6 text-center shadow-xl">
+                      <EditableField
+                        value={indexTexts.instituto.firstCall[0]}
+                        jsonKey="index.instituto.firstCall[0]"
+                        type="p"
+                        className="text-base md:text-lg text-amber-800 font-semibold italic leading-relaxed text-center"
+                      />
+                    </div>
+                  )}
+
+                  {/* Corpo explicativo — todos os itens entre o primeiro e o ultimo */}
+                  {indexTexts?.instituto?.firstCall?.length > 2 && (
+                    <div className="space-y-3">
+                      {indexTexts.instituto.firstCall.slice(1, -1).map((p: string, i: number) => (
+                        <div key={i + 1} className="flex items-start gap-3">
+                          <div className="w-1.5 h-1.5 bg-amber-500 rounded-full mt-2.5 shrink-0"></div>
+                          <EditableField
+                            value={p}
+                            jsonKey={`index.instituto.firstCall[${i + 1}]`}
+                            type="p"
+                            className="text-base text-stone-600 leading-relaxed"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Checkmarks em 2 colunas — com titulo de transicao (ultimo item do firstCall) */}
+                {(indexTexts?.instituto?.firstCallList?.length || 0) > 0 && (
+                  <div className="bg-amber-50 rounded-2xl pt-4 md:pt-5 pb-6 md:pb-8 px-2 md:px-3 mb-8 border border-amber-200">
+                    {/* Titulo introdutorio movido do bloco de texto */}
+                    {indexTexts?.instituto?.firstCall?.length > 1 && (
+                      <div className="mb-4 pb-4 border-b border-amber-200 text-center">
+                        <EditableField
+                          value={indexTexts.instituto.firstCall[indexTexts.instituto.firstCall.length - 1]}
+                          jsonKey={`index.instituto.firstCall[${indexTexts.instituto.firstCall.length - 1}]`}
+                          type="p"
+                          className="text-base md:text-lg text-amber-800 font-bold text-center"
+                        />
+                      </div>
+                    )}
+                    <div className="grid md:grid-cols-2 gap-4">
+                      {indexTexts.instituto.firstCallList.map((li: string, i: number) => (
+                        <div key={i} className="flex items-start gap-2">
+                          <div className="w-5 h-5 bg-amber-600 rounded-md flex items-center justify-center shrink-0 mt-0.5 shadow">
+                            <span className="text-white text-xs font-bold">✓</span>
+                          </div>
+                          <EditableField
+                            value={li}
+                            jsonKey={`index.instituto.firstCallList[${i}]`}
+                            type="span"
+                            className="text-stone-800 font-medium"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {indexTexts?.instituto?.firstCallFooter && (
+                  <div className="relative bg-linear-to-r from-amber-600 via-amber-500 to-amber-600 text-white rounded-xl shadow-lg overflow-hidden w-fit mx-auto">
+                    <div className="h-0.5 bg-linear-to-r from-transparent via-amber-200/50 to-transparent"></div>
+                    <div className="px-6 md:px-8 py-3 text-center">
+                      <EditableField
+                        value={indexTexts.instituto.firstCallFooter}
+                        jsonKey="index.instituto.firstCallFooter"
+                        type="p"
+                        className="text-base md:text-lg font-semibold leading-relaxed text-center"
+                      />
+                    </div>
+                    <div className="h-0.5 bg-linear-to-r from-transparent via-amber-200/50 to-transparent"></div>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+      )}
 
       {/* Introdução - Destaque Premium */}
       <section className="pt-3 pb-6">
@@ -566,7 +676,7 @@ export default function Tratamentos() {
         />
 
         {/* CTA Content - posicionado no céu */}
-        <div className="container mx-auto px-4 relative z-50 pt-6 pb-4">
+        <div className="container mx-auto px-4 relative z-10 pt-6 pb-4">
           <div className="max-w-section mx-auto text-center">
             <EditableField
               value={texts.cta?.title}

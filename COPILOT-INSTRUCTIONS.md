@@ -87,6 +87,14 @@ O site opera em **pt-BR** (primário) e **en-US**. Os dados no banco seguem estr
 
 ## 5. Padrões de Código
 
+**Proibição de Fallback em EditableField (DURANTE DESENVOLVIMENTO):**
+- NUNCA usar operador `??` ou valores fallback hardcoded no prop `value` de `EditableField`
+- Se o campo não existe no banco, ele DEVE aparecer como "FALTANDO" no editor visual
+- Isso permite ao usuário identificar campos ausentes e inserir o conteúdo correto via banco/API
+- Fallbacks mascaram campos ausentes e impedem a edição, causando confusão
+- Exemplo ERRADO: `value={texts.campo ?? "texto padrão"}`
+- Exemplo CORRETO: `value={texts.campo}`
+
 **Qualidade:**
 - Código limpo e modular
 - Comentários claros e consistentes

@@ -37,6 +37,7 @@
    6. LAYOUTS - Layouts e páginas específicas
    ========================================================================== */
 @import "./styles/layouts/admin-console.css";
+@import "./styles/layouts/pages/oldindex.css";
 @import "./styles/layouts/pages/index.css";
 @import "./styles/layouts/pages/quemsomos.css";
 @import "./styles/layouts/pages/contato.css";

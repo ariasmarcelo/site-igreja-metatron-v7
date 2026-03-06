@@ -47,6 +47,13 @@ VITE_SUPABASE_ANON_KEY=eyJhbGc...seu_token_anonimo
 VITE_API_URL=
 ```
 
+**Variáveis opcionais:**
+```env
+# Ativar logs de debug no console (EditableField, etc.)
+# Omitir ou false = silencioso em produção
+VITE_DEBUG_LOGS=true
+```
+
 **Observações:**
 - `VITE_API_URL` deve estar **vazio** (`''` ou omitido)
 - Isso permite que APIs funcionem tanto local quanto em produção sem mudanças
@@ -96,6 +103,9 @@ VITE_SUPABASE_ANON_KEY=your_anon_key_here
 
 # API URL (deixe vazio para usar caminhos relativos)
 VITE_API_URL=
+
+# Logs de debug (opcional; omitir = silencioso em produção)
+# VITE_DEBUG_LOGS=true
 ```
 
 **Observações:**
@@ -122,6 +132,27 @@ SUPABASE_SERVICE_KEY=eyJhbGc...seu_service_role_key
 **Observações:**
 - Geralmente configurado no dashboard da Vercel, não localmente
 - **NUNCA commitar este arquivo com valores reais**
+
+---
+
+## 📝 Logging e Debug
+
+O projeto usa um logger controlado por `VITE_DEBUG_LOGS`:
+
+| Valor | Comportamento |
+|-------|---------------|
+| `true` | Logs de debug/info/warn exibidos no console |
+| Omitido ou outro | Silencioso (apenas `logger.error` exibido) |
+
+**Uso no código:**
+```typescript
+import { logger } from '@/lib/logger';
+
+logger.debug('mensagem de debug');  // só quando VITE_DEBUG_LOGS=true
+logger.error('erro crítico');       // sempre exibido
+```
+
+Em produção, não defina `VITE_DEBUG_LOGS` para evitar poluir o console do usuário.
 
 ---
 

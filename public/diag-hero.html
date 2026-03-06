@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head><title>Hero h1 Diagnostic</title></head>
+<body>
+<h2>Hero h1 CSS Diagnostic</h2>
+<pre id="output">Loading...</pre>
+<script>
+async function diagnose() {
+  // Navigate to newindex via iframe to inspect
+  const iframe = document.createElement('iframe');
+  iframe.src = '/newindex';
+  iframe.style.width = '1200px';
+  iframe.style.height = '800px';
+  document.body.appendChild(iframe);
+  
+  iframe.onload = () => {
+    try {
+      const doc = iframe.contentDocument;
+      const h1 = doc.querySelector('.ds-hero h1');
+      if (!h1) { document.getElementById('output').textContent = 'h1 NOT FOUND'; return; }
+      
+      const cs = iframe.contentWindow.getComputedStyle(h1);
+      const result = {
+        '=== h1 computed ===': '',
+        color: cs.color,
+        opacity: cs.opacity,
+        webkitTextFillColor: cs.webkitTextFillColor,
+        visibility: cs.visibility,
+        display: cs.display,
+        fontWeight: cs.fontWeight,
+        fontSize: cs.fontSize,
+        textShadow: cs.textShadow?.substring(0, 120),
+        mixBlendMode: cs.mixBlendMode,
+        filter: cs.filter,
+        backdropFilter: cs.backdropFilter,
+        fontSmoothing: cs.webkitFontSmoothing,
+      };
+      
+      // Walk ancestors
+      let el = h1;
+      let depth = 0;
+      const ancestors = {};
+      while (el && depth < 15) {
+        const s = iframe.contentWindow.getComputedStyle(el);
+        const op = s.opacity;
+        const fl = s.filter;
+        const mb = s.mixBlendMode;
+        const bf = s.backdropFilter;
+        const vis = s.visibility;
+        // Flag anything suspicious
+        if (op !== '1' || fl !== 'none' || mb !== 'normal' || bf !== 'none' || vis !== 'visible') {
+          ancestors['[' + depth + '] ' + el.tagName + '.' + (el.className?.split?.(' ')?.[0] || '')] = {
+            opacity: op,
+            filter: fl, 
+            mixBlendMode: mb,
+            backdropFilter: bf,
+            visibility: vis
+          };
+        }
+        el = el.parentElement;
+        depth++;
+      }
+      
+      result['=== suspicious ancestors ==='] = ancestors;
+      
+      // Also check ::before on hero section
+      const hero = doc.querySelector('.ds-hero');
+      if (hero) {
+        const beforeS = iframe.contentWindow.getComputedStyle(hero, '::before');
+        result['=== .ds-hero::before ==='] = {
+          content: beforeS.content,
+          position: beforeS.position,
+          inset: beforeS.inset,
+          background: beforeS.background?.substring(0, 200),
+          zIndex: beforeS.zIndex,
+          opacity: beforeS.opacity,
+          pointerEvents: beforeS.pointerEvents,
+          mixBlendMode: beforeS.mixBlendMode,
+        };
+      }
+      
+      // Check subtitle too
+      const sub = doc.querySelector('.ds-hero-sub');
+      if (sub) {
+        const subS = iframe.contentWindow.getComputedStyle(sub);
+        result['=== subtitle computed ==='] = {
+          color: subS.color,
+          opacity: subS.opacity,
+          webkitTextFillColor: subS.webkitTextFillColor,
+          visibility: subS.visibility,
+        };
+      }
+
+      document.getElementById('output').textContent = JSON.stringify(result, null, 2);
+    } catch(e) {
+      document.getElementById('output').textContent = 'Error: ' + e.message;
+    }
+  };
+}
+diagnose();
+</script>
+</body>
+</html>

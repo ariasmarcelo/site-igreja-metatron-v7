@@ -5,9 +5,11 @@ import { useLanguage, type Language } from './contexts/LanguageContext';
 import { useNavigationLabels } from './hooks/useNavigationLabels';
 import Index from './pages/Index';
 import IndexAntiga from './pages/IndexAntiga';
+import OldIndex from './pages/OldIndex';
 import QuemSomos from './pages/QuemSomos';
 import Tratamentos from './pages/Tratamentos';
 import Purificacao from './pages/Purificacao';
+import OldPurificacao from './pages/OldPurificacao';
 import Artigos from './pages/Artigos';
 import ArtigoDetalhes from './pages/ArtigoDetalhes';
 import ArtigosCategoria from './pages/ArtigosCategoria';
@@ -326,9 +328,11 @@ const Navigation = () => {
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/indexantiga" element={<IndexAntiga />} />
+          <Route path="/oldindex" element={<OldIndex />} />
           <Route path="/quemsomos" element={<QuemSomos />} />
           <Route path="/tratamentos" element={<Tratamentos />} />
           <Route path="/purificacao" element={<Purificacao />} />
+          <Route path="/oldpurificacao" element={<OldPurificacao />} />
           <Route path="/artigos" element={<Artigos />} />
           <Route path="/artigos/categoria/:categoria" element={<ArtigosCategoria />} />
           <Route path="/artigos/:slug" element={<ArtigoDetalhes />} />

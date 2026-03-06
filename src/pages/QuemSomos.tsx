@@ -345,7 +345,7 @@ export default function QuemSomos() {
         />
 
         {/* CTA Content - posicionado no céu */}
-        <div className="container mx-auto px-4 relative z-50 pt-6 pb-4">
+        <div className="container mx-auto px-4 relative z-10 pt-6 pb-4">
           <div className="max-w-section mx-auto text-center">
             <EditableField 
               value={texts.cta?.title}

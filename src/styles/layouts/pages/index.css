@@ -1,16 +1,754 @@
-/* Index Page Specific Styles */
+/**
+ * NEW INDEX — Design System V2
+ * Estilos isolados sob o escopo `.ds-new`
+ * Quando quiser promover para produção, basta remover o seletor .ds-new
+ * e atualizar o Index.tsx principal.
+ *
+ * Palette (Design System):
+ *   Church (gold):    #C4943B / #D4A84B / #8B7240
+ *   Institute (sage): #4A7B6F / #558980
+ *   Navy:             #1C2D3F / #24384D / #151F2B
+ *   Backgrounds:      #F6F3EC / #EDE8DF / #FBF9F5 / #FEFDFB
+ *   Text:             #2D2926 / #6B6259 / #8A8179 / #E8E2D8
+ */
 
-/* Hero background pattern */
-.hero-pattern {
-  background-image: radial-gradient(circle at 2px 2px, #78716c 1px, transparent 0);
-  background-size: 40px 40px;
+/* ─────────────────────────────────────────────
+   CSS Variables (scoped to .ds-new)
+   ───────────────────────────────────────────── */
+.ds-new {
+  /* Foundation — shared */
+  --ds-deep-navy:        #1C2D3F;
+  --ds-navy-mid:         #1A2A3C;
+  --ds-navy-footer:      #0C1520;
+  --ds-sacred-gold:      #C4943B;
+  --ds-gold-light:       #D4A84B;
+  --ds-gold-muted:       #8B7240;
+  --ds-gold-glow:        rgba(196, 148, 59, 0.12);
+  --ds-gold-border:      rgba(196, 148, 59, 0.25);
+
+  /* Backgrounds */
+  --ds-bg-page:          #F6F3EC;
+  --ds-bg-sand:          #EDE8DF;
+  --ds-bg-cream:         #FBF9F5;
+  --ds-bg-white:         #FEFDFB;
+
+  /* Text */
+  --ds-text-dark:        #2D2926;
+  --ds-text-muted:       #6B6259;
+  --ds-text-light:       #8A8179;
+  --ds-text-on-navy:     #E8E2D8;
+  --ds-text-heading-navy:#F2EDE5;
+
+  /* Church accent (warm gold) */
+  --ds-church-accent:    #C4943B;
+  --ds-church-bg:        #FDF8EF;
+  --ds-church-bg-subtle: rgba(196, 148, 59, 0.06);
+  --ds-church-border:    rgba(196, 148, 59, 0.2);
+
+  /* Institute accent (sage) */
+  --ds-inst-accent:      #4A7B6F;
+  --ds-inst-bg:          #F0F6F4;
+  --ds-inst-bg-subtle:   rgba(74, 123, 111, 0.06);
+  --ds-inst-border:      rgba(74, 123, 111, 0.2);
+
+  /* Nav */
+  --ds-nav-active:       #2A4A3E;
+
+  /* Functional */
+  --ds-border-light:     rgba(139, 114, 64, 0.15);
+  --ds-shadow-sm:        0 2px 12px rgba(44, 41, 38, 0.06);
+  --ds-shadow-md:        0 4px 24px rgba(44, 41, 38, 0.08);
+  --ds-shadow-gold:      0 4px 20px rgba(196, 148, 59, 0.18);
+  --ds-radius-sm:        8px;
+  --ds-radius-md:        12px;
+  --ds-radius-lg:        16px;
+
+  /* Body defaults — uniform navy covers the entire page */
+  background: var(--ds-deep-navy);
+  color: var(--ds-text-dark);
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+  /* Flexbox layout — pushes footer to bottom at any zoom level */
+  display: flex;
+  flex-direction: column;
 }
 
-/* Footer CTA text shadows */
-.index-cta-title {
-  text-shadow: 0 4px 16px rgba(0, 0, 0, 0.8), 0 2px 8px rgba(0, 0, 0, 0.6) !important;
+/* When ds-new is used as an embedded wrapper inside another page,
+   neutralize root-level layout styles while keeping CSS variables. */
+.ds-new.ds-embedded {
+  background: transparent;
+  position: static;
+  display: block;
+  color: inherit;
 }
 
-.index-cta-subtitle {
-  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7), 0 1px 6px rgba(0, 0, 0, 0.5) !important;
+/* Silver shimmer overlay — REMOVED.
+   Was causing visual artifacts over fine SVG details (logo wings).
+   The deep navy background is calm and elegant without it. */
+
+/* Direct children — positioned for layering but NO z-index
+   (shimmer overlay was removed, stacking contexts blocked hero glow) */
+.ds-new > * {
+  position: relative;
+}
+
+/* ─────────────────────────────────────────────
+   HERO (dark navy)
+   ───────────────────────────────────────────── */
+.ds-new .ds-hero {
+  background: transparent;
+  padding: 56px 24px 52px;
+  text-align: center;
+  position: relative;
+  /* overflow kept visible so logo glow / text-shadow bleeds into next section */
+  z-index: 4;
+}
+
+/* Dark vignette for text contrast — z-index: 1 ensures it sits BELOW
+   .ds-hero-inner (z-index: 2) so the logo is never darkened by it. */
+.ds-new .ds-hero::before {
+  content: '';
+  position: absolute;
+  /* Extend 150px below hero so vignette fades gradually
+     instead of cutting off at the section boundary */
+  inset: 0 0 -150px 0;
+  z-index: 1;
+  background: radial-gradient(
+    ellipse 70% 90% at center 35%,
+    rgba(0, 0, 0, 0.30) 0%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+.ds-new .ds-hero-inner {
+  position: relative;
+  z-index: 2;
+  max-width: var(--section-max-width, 940px);
+  margin: 0 auto;
+}
+
+.ds-new .ds-hero h1 {
+  font-family: 'Playfair Display', serif;
+  /* Title and subtitle share the same vw reference to keep
+     a consistent ~2.5:1 ratio at every viewport width. */
+  font-size: clamp(2.1rem, 6vw, 3.75rem);
+  font-weight: 700;
+  color: #FFFFFF;
+  margin-bottom: 10px;
+  line-height: 1.15;
+  text-shadow:
+    0 0 8px rgba(255, 255, 255, 0.6),
+    0 0 24px rgba(255, 255, 255, 0.3),
+    0 0 48px rgba(255, 255, 255, 0.12),
+    0 0 60px rgba(196, 148, 59, 0.2);
+  /* position: relative elevates h1 to stacking-context layer (step 6)
+     so it paints ABOVE the logo's filter-created stacking context */
+  position: relative;
+  z-index: 1;
+}
+
+.ds-new .ds-hero .ds-hero-sub {
+  font-size: clamp(1rem, 2.4vw, 1.5rem);
+  font-style: italic;
+  color: var(--ds-sacred-gold);
+  margin-bottom: 36px;
+  position: relative;
+  z-index: 1;
+}
+
+.ds-new .ds-hero-buttons {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
+}
+
+/* Dark projected shadows on hero buttons for depth */
+.ds-new .ds-hero-buttons .ds-btn {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.40);
+}
+
+/* ─────────────────────────────────────────────
+   CHALLENGES SECTION (light bg, gold-topped card)
+   ───────────────────────────────────────────── */
+.ds-new .ds-section-challenges {
+  background: transparent;
+  padding: 56px 24px;
+}
+
+.ds-new .ds-challenges-inner {
+  max-width: var(--section-max-width, 940px);
+  margin: 0 auto;
+  background: var(--ds-bg-cream);
+  border-radius: var(--ds-radius-lg);
+  border-top: 3px solid var(--ds-sacred-gold);
+  box-shadow: var(--ds-shadow-md);
+  padding: 44px 32px;
+}
+
+@media (min-width: 768px) {
+  .ds-new .ds-challenges-inner { padding: 56px 48px; }
+}
+
+.ds-new .ds-section-heading {
+  font-size: 1.85rem;
+  font-weight: 500;
+  color: var(--ds-text-dark);
+  text-align: center;
+  margin-bottom: 10px;
+  line-height: 1.25;
+}
+
+.ds-new .ds-section-sub {
+  font-size: 0.95rem;
+  color: var(--ds-text-muted);
+  text-align: center;
+  max-width: 520px;
+  margin: 0 auto 36px;
+  line-height: 1.7;
+}
+
+.ds-new .ds-challenge-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+@media (min-width: 768px) {
+  .ds-new .ds-challenge-cards { grid-template-columns: 1fr 1fr; }
+}
+
+.ds-new .ds-challenge-card {
+  padding: 28px 24px;
+  border-radius: var(--ds-radius-md);
+  border: 1px solid;
+}
+
+.ds-new .ds-challenge-card.spiritual {
+  background: var(--ds-church-bg);
+  border-color: var(--ds-church-border);
+  border-left: 3px solid var(--ds-church-accent);
+}
+
+.ds-new .ds-challenge-card.clinical {
+  background: var(--ds-inst-bg);
+  border-color: var(--ds-inst-border);
+  border-left: 3px solid var(--ds-inst-accent);
+}
+
+.ds-new .ds-challenge-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+.ds-new .ds-brand-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ds-new .ds-brand-icon.church {
+  background: var(--ds-gold-glow);
+  color: var(--ds-church-accent);
+}
+
+.ds-new .ds-brand-icon.institute {
+  background: var(--ds-inst-bg-subtle);
+  color: var(--ds-inst-accent);
+}
+
+.ds-new .ds-challenge-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.ds-new .ds-challenge-title.spiritual { color: var(--ds-church-accent); }
+.ds-new .ds-challenge-title.clinical  { color: var(--ds-inst-accent); }
+
+.ds-new .ds-challenge-subtitle {
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  margin-bottom: 14px;
+  margin-left: 52px;
+}
+.ds-new .ds-challenge-subtitle.spiritual { color: var(--ds-gold-muted); }
+.ds-new .ds-challenge-subtitle.clinical  { color: var(--ds-inst-accent); opacity: 0.7; }
+
+.ds-new .ds-challenge-desc {
+  font-size: 0.85rem;
+  color: var(--ds-text-muted);
+  margin-bottom: 14px;
+  line-height: 1.6;
+}
+
+.ds-new .ds-challenge-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+  padding: 0;
+}
+
+.ds-new .ds-challenge-list li {
+  font-size: 0.85rem;
+  color: var(--ds-text-dark);
+  padding-left: 16px;
+  position: relative;
+  line-height: 1.5;
+}
+
+.ds-new .ds-challenge-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+}
+
+.ds-new .ds-challenge-card.spiritual .ds-challenge-list li::before { background: var(--ds-church-accent); }
+.ds-new .ds-challenge-card.clinical  .ds-challenge-list li::before { background: var(--ds-inst-accent); }
+
+/* ─────────────────────────────────────────────
+   JOURNEY SECTION (sand bg)
+   ───────────────────────────────────────────── */
+.ds-new .ds-section-journey {
+  background: transparent;
+  padding: 56px 24px;
+}
+
+.ds-new .ds-journey-inner {
+  max-width: var(--section-max-width, 940px);
+  margin: 0 auto;
+  background: var(--ds-bg-cream);
+  border-radius: var(--ds-radius-lg);
+  border-top: 3px solid var(--ds-sacred-gold);
+  box-shadow: var(--ds-shadow-md);
+  padding: 44px 32px;
+}
+
+@media (min-width: 768px) {
+  .ds-new .ds-journey-inner { padding: 56px 48px; }
+}
+
+.ds-new .ds-journey-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 28px;
+  margin-top: 36px;
+}
+
+@media (min-width: 768px) {
+  .ds-new .ds-journey-cards { grid-template-columns: 1fr 1fr; }
+}
+
+.ds-new .ds-journey-card {
+  background: var(--ds-bg-white);
+  border-radius: var(--ds-radius-lg);
+  padding: 32px 28px;
+  box-shadow: var(--ds-shadow-sm);
+  border: 1px solid;
+  display: flex;
+  flex-direction: column;
+}
+
+.ds-new .ds-journey-card.institute {
+  border-color: var(--ds-inst-border);
+  border-top: 3px solid var(--ds-inst-accent);
+}
+
+.ds-new .ds-journey-card.church {
+  border-color: var(--ds-church-border);
+  border-top: 3px solid var(--ds-church-accent);
+}
+
+.ds-new .ds-journey-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.ds-new .ds-journey-card-name {
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+.ds-new .ds-journey-card-name.institute { color: var(--ds-inst-accent); }
+.ds-new .ds-journey-card-name.church    { color: var(--ds-church-accent); }
+
+.ds-new .ds-journey-card-desc {
+  font-size: 0.9rem;
+  color: var(--ds-text-muted);
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+.ds-new .ds-journey-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.ds-new .ds-journey-list li {
+  font-size: 0.85rem;
+  color: var(--ds-text-dark);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ds-new .ds-check {
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  color: white;
+  flex-shrink: 0;
+}
+
+.ds-new .ds-check.church    { background: var(--ds-church-accent); }
+.ds-new .ds-check.institute { background: var(--ds-inst-accent); }
+
+/* ─────────────────────────────────────────────
+   HOW CAN WE HELP (light bg, gold-topped card)
+   ───────────────────────────────────────────── */
+.ds-new .ds-section-help {
+  background: transparent;
+  padding: 56px 24px 80px;
+  position: relative;
+}
+
+/* No darkening gradient — uniform navy background throughout */
+
+.ds-new .ds-help-inner {
+  max-width: var(--section-max-width, 940px);
+  margin: 0 auto;
+  background: var(--ds-bg-cream);
+  border-radius: var(--ds-radius-lg);
+  border-top: 3px solid var(--ds-sacred-gold);
+  box-shadow: var(--ds-shadow-md);
+  padding: 44px 32px;
+  position: relative;
+  z-index: 1;
+}
+
+@media (min-width: 768px) {
+  .ds-new .ds-help-inner { padding: 56px 48px; }
+}
+
+.ds-new .ds-pillars-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  margin-top: 36px;
+  margin-bottom: 32px;
+}
+
+@media (min-width: 768px) {
+  .ds-new .ds-pillars-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.ds-new .ds-pillar-card {
+  background: var(--ds-bg-white);
+  border-radius: var(--ds-radius-md);
+  padding: 28px 20px;
+  text-align: center;
+  border: 1px solid var(--ds-border-light);
+  transition: all 0.3s;
+}
+
+.ds-new .ds-pillar-card:hover {
+  box-shadow: var(--ds-shadow-md);
+  transform: translateY(-2px);
+}
+
+.ds-new .ds-pillar-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+
+.ds-new .ds-pillar-icon.warm     { background: var(--ds-gold-glow);      color: var(--ds-sacred-gold); }
+.ds-new .ds-pillar-icon.balanced { background: var(--ds-inst-bg-subtle); color: var(--ds-inst-accent); }
+.ds-new .ds-pillar-icon.growth   { background: var(--ds-gold-glow);      color: var(--ds-gold-muted); }
+
+.ds-new .ds-pillar-card h3 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--ds-text-dark);
+  margin-bottom: 10px;
+}
+
+.ds-new .ds-pillar-card p {
+  font-size: 0.85rem;
+  color: var(--ds-text-muted);
+  line-height: 1.7;
+}
+
+/* Testimonial banner */
+.ds-new .ds-testimonial-banner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 14px;
+  background: var(--ds-bg-white);
+  border: 1px solid var(--ds-border-light);
+  border-radius: var(--ds-radius-md);
+  padding: 18px 24px;
+}
+
+@media (min-width: 768px) {
+  .ds-new .ds-testimonial-banner {
+    flex-direction: row;
+    text-align: left;
+    justify-content: space-between;
+  }
+}
+
+.ds-new .ds-testimonial-banner-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.ds-new .ds-testimonial-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--ds-gold-glow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ds-sacred-gold);
+  flex-shrink: 0;
+}
+
+.ds-new .ds-testimonial-text {
+  font-size: 0.9rem;
+  color: var(--ds-text-muted);
+}
+
+/* ─────────────────────────────────────────────
+   CTA (dark navy)
+   ───────────────────────────────────────────── */
+.ds-new .ds-section-cta {
+  background: transparent;
+  padding: 64px 24px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.ds-new .ds-cta-inner {
+  position: relative;
+  z-index: 1;
+  max-width: var(--section-max-width, 940px);
+  margin: 0 auto;
+}
+
+.ds-new .ds-cta-heading {
+  font-size: clamp(1.8rem, 4vw, 2.3rem);
+  font-weight: 400;
+  font-style: italic;
+  color: var(--ds-text-heading-navy);
+  margin-bottom: 10px;
+}
+
+.ds-new .ds-cta-sub {
+  font-size: 0.95rem;
+  color: var(--ds-text-on-navy);
+  margin-bottom: 28px;
+  opacity: 0.7;
+}
+
+/* ─────────────────────────────────────────────
+   BUTTON SYSTEM
+   ───────────────────────────────────────────── */
+.ds-new .ds-btn {
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: 12px 26px;
+  border-radius: var(--ds-radius-sm);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  letter-spacing: 0.3px;
+  line-height: 1.4;
+}
+
+.ds-new .ds-btn-gold {
+  background: var(--ds-sacred-gold);
+  color: #fff;
+  box-shadow: var(--ds-shadow-gold);
+}
+.ds-new .ds-btn-gold:hover {
+  background: var(--ds-gold-light);
+  transform: translateY(-1px);
+}
+
+.ds-new .ds-btn-ghost-gold {
+  background: transparent;
+  color: var(--ds-sacred-gold);
+  border: 1.5px solid var(--ds-gold-border);
+}
+.ds-new .ds-btn-ghost-gold:hover {
+  border-color: var(--ds-sacred-gold);
+  background: var(--ds-church-bg-subtle);
+}
+
+/* Hero-specific ghost variant (light text on dark navy) */
+.ds-new .ds-btn-hero-ghost {
+  border-color: rgba(232, 226, 216, 0.2);
+  color: var(--ds-text-on-navy);
+}
+.ds-new .ds-btn-hero-ghost:hover {
+  border-color: var(--ds-sacred-gold);
+  color: var(--ds-sacred-gold);
+}
+
+.ds-new .ds-btn-sage {
+  background: var(--ds-inst-accent);
+  color: #fff;
+}
+.ds-new .ds-btn-sage:hover {
+  background: #558980;
+  transform: translateY(-1px);
+}
+
+.ds-new .ds-btn-navy {
+  background: var(--ds-deep-navy);
+  color: var(--ds-text-heading-navy);
+}
+.ds-new .ds-btn-navy:hover {
+  background: var(--ds-navy-mid);
+  transform: translateY(-1px);
+}
+
+.ds-new .ds-btn-full {
+  width: 100%;
+  justify-content: center;
+}
+
+.ds-new .ds-btn-sm {
+  font-size: 0.82rem;
+  padding: 10px 22px;
+}
+
+.ds-new .ds-btn-noshrink {
+  flex-shrink: 0;
+}
+
+.ds-new .ds-btn .ds-arrow {
+  font-size: 1rem;
+  transition: transform 0.2s;
+}
+.ds-new .ds-btn:hover .ds-arrow {
+  transform: translateX(3px);
+}
+
+/* ─────────────────────────────────────────────
+   FOOTER SECTION
+   Elevated above the page background with an upward shadow
+   ───────────────────────────────────────────── */
+.ds-new .ds-footer-section {
+  background: #0C1520;
+  /* Push footer to bottom when content is shorter than viewport */
+  margin-top: auto;
+  position: relative;
+  box-shadow: 0 -24px 48px rgba(0, 0, 0, 0.50),
+              0 -8px 16px rgba(0, 0, 0, 0.30);
+}
+
+/* ─────────────────────────────────────────────
+   FOOTER
+   ───────────────────────────────────────────── */
+.ds-new .ds-footer {
+  background: var(--ds-navy-footer);
+  padding: 36px 24px 24px;
+  text-align: center;
+}
+
+.ds-new .ds-footer-brand {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ds-text-on-navy);
+  margin-bottom: 4px;
+}
+
+.ds-new .ds-footer-sub {
+  font-size: 0.7rem;
+  color: var(--ds-text-light);
+  margin-bottom: 18px;
+}
+
+.ds-new .ds-footer-links {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.ds-new .ds-footer-link {
+  font-size: 0.75rem;
+  color: rgba(232, 226, 216, 0.4);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.ds-new .ds-footer-link:hover { color: var(--ds-sacred-gold); }
+
+.ds-new .ds-footer-copy {
+  font-size: 0.65rem;
+  color: rgba(232, 226, 216, 0.2);
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+/* ─────────────────────────────────────────────
+   LOGO AREA (hero placeholder or logo)
+   ───────────────────────────────────────────── */
+.ds-new .ds-hero-logo {
+  margin: 0 auto 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  isolation: isolate;
+}
+
+/* Gold glow + projected shadow for elevation */
+.ds-new .ds-hero-logo img {
+  filter:
+    drop-shadow(0 0 0.4px rgba(196, 148, 59, 0.6))
+    drop-shadow(0 0 6px  rgba(196, 148, 59, 0.20))
+    drop-shadow(0 0 20px rgba(196, 148, 59, 0.10))
+    drop-shadow(0 2px 2px rgba(255, 255, 255, 1.0))
+    drop-shadow(0 30px 12px rgba(0, 0, 0, 0.50));
 }
