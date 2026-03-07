@@ -1,131 +1,30 @@
-/* Quem Somos Page Specific Styles */
+/* ─────────────────────────────────────────────
+   QUEM SOMOS — Efeitos visuais específicos
+   ───────────────────────────────────────────── */
 
-/* Ícones de escudo com drop-shadow personalizados */
-.shield-blue-icon {
-  filter: drop-shadow(0 4px 8px rgba(37, 99, 235, 0.3));
-}
-
-.shield-red-icon {
-  filter: drop-shadow(0 4px 8px rgba(220, 38, 38, 0.3));
-}
-
-.waves-amber-icon {
-  filter: drop-shadow(0 4px 12px rgba(217, 119, 6, 0.4));
-}
-
-.target-amber-icon {
-  filter: drop-shadow(0 4px 12px rgba(217, 119, 6, 0.4));
-}
-
-/* Badges de tipo — REMOVIDOS (não mais usados) */
-
-/* Textura de papiro para seção de Valores */
-.papiro-texture {
-  background-image: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    rgba(139, 90, 0, 0.1) 2px,
-    rgba(139, 90, 0, 0.1) 4px
-  );
-  background-size: 100% 4px;
-}
-
-.papiro-box {
-  background: linear-gradient(135deg, #A89A88 0%, #947F6A 50%, #A89A88 100%) !important;
-}
-
-/* Card hover e glow radial — REMOVIDOS (não mais usados) */
-
-/* Seção papiro - Princípios Herméticos com raios */
-.papiro-rays-container {
+/* Origem dos raios — centro = centro do logo (cuboctaedro). Raios irradiam deste ponto. */
+.quemsomos-rays-origin {
   position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0.8;
-  z-index: 30;
-  background: conic-gradient(
-    from 0deg at 50% 130px,
-    transparent 0deg,
-    rgba(255, 255, 255, 0.6) 12deg,
-    rgba(255, 255, 255, 0.8) 15deg,
-    rgba(255, 255, 255, 0.6) 18deg,
-    transparent 30deg,
-    transparent 30deg,
-    rgba(255, 255, 255, 0.6) 42deg,
-    rgba(255, 255, 255, 0.8) 45deg,
-    rgba(255, 255, 255, 0.6) 48deg,
-    transparent 60deg,
-    transparent 60deg,
-    rgba(255, 255, 255, 0.6) 72deg,
-    rgba(255, 255, 255, 0.8) 75deg,
-    rgba(255, 255, 255, 0.6) 78deg,
-    transparent 90deg,
-    transparent 90deg,
-    rgba(255, 255, 255, 0.6) 102deg,
-    rgba(255, 255, 255, 0.8) 105deg,
-    rgba(255, 255, 255, 0.6) 108deg,
-    transparent 120deg,
-    transparent 120deg,
-    rgba(255, 255, 255, 0.6) 132deg,
-    rgba(255, 255, 255, 0.8) 135deg,
-    rgba(255, 255, 255, 0.6) 138deg,
-    transparent 150deg,
-    transparent 150deg,
-    rgba(255, 255, 255, 0.6) 162deg,
-    rgba(255, 255, 255, 0.8) 165deg,
-    rgba(255, 255, 255, 0.6) 168deg,
-    transparent 180deg,
-    transparent 180deg,
-    rgba(255, 255, 255, 0.6) 192deg,
-    rgba(255, 255, 255, 0.8) 195deg,
-    rgba(255, 255, 255, 0.6) 198deg,
-    transparent 210deg,
-    transparent 210deg,
-    rgba(255, 255, 255, 0.6) 222deg,
-    rgba(255, 255, 255, 0.8) 225deg,
-    rgba(255, 255, 255, 0.6) 228deg,
-    transparent 240deg,
-    transparent 240deg,
-    rgba(255, 255, 255, 0.6) 252deg,
-    rgba(255, 255, 255, 0.8) 255deg,
-    rgba(255, 255, 255, 0.6) 258deg,
-    transparent 270deg,
-    transparent 270deg,
-    rgba(255, 255, 255, 0.6) 282deg,
-    rgba(255, 255, 255, 0.8) 285deg,
-    rgba(255, 255, 255, 0.6) 288deg,
-    transparent 300deg,
-    transparent 300deg,
-    rgba(255, 255, 255, 0.6) 312deg,
-    rgba(255, 255, 255, 0.8) 315deg,
-    rgba(255, 255, 255, 0.6) 318deg,
-    transparent 330deg,
-    transparent 330deg,
-    rgba(255, 255, 255, 0.6) 342deg,
-    rgba(255, 255, 255, 0.8) 345deg,
-    rgba(255, 255, 255, 0.6) 348deg,
-    transparent 360deg
-  );
-}
-
-.papiro-cuboctahedron-container {
-  position: absolute;
-  top: 30px;
+  top: 51px;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 60;
+  width: 180px;
+  height: 180px;
+  overflow: visible;
+  z-index: 20;
 }
 
-/* ═══════════════════════════════════════════════════════════
-   Princípios Unificados — Raios de luz 12 direções
-   ═══════════════════════════════════════════════════════════ */
+/* 12 raios dourados irradiados do centro do símbolo (conic-gradient)
+   Centro em 50% 50% = centro do wrapper = centro do logo */
 .cuboctahedron-radial-glow-principios {
   position: absolute;
-  width: 100%;
-  height: 100%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 300vmax;
+  height: 300vmax;
   background: conic-gradient(
-    from 15deg at 50% 146px,
+    from 15deg at 50% 50%,
     transparent 0deg,
     rgba(218, 165, 32, 0.6) 11deg,
     rgba(255, 215, 0, 0.95) 15deg,
@@ -187,7 +86,34 @@
     rgba(218, 165, 32, 0.6) 349deg,
     transparent 360deg
   );
-  /* Máscara radial: brilho intenso no centro, desvanecendo ao emanar */
-  -webkit-mask-image: radial-gradient(circle at 50% 146px, black 0%, rgba(0,0,0,0.85) 8%, rgba(0,0,0,0.5) 25%, rgba(0,0,0,0.15) 50%, transparent 75%);
-  mask-image: radial-gradient(circle at 50% 146px, black 0%, rgba(0,0,0,0.85) 8%, rgba(0,0,0,0.5) 25%, rgba(0,0,0,0.15) 50%, transparent 75%);
+  -webkit-mask-image: radial-gradient(
+    circle at 50% 50%,
+    black 0%,
+    rgba(0, 0, 0, 0.85) 8%,
+    rgba(0, 0, 0, 0.5) 25%,
+    rgba(0, 0, 0, 0.15) 50%,
+    transparent 75%
+  );
+  mask-image: radial-gradient(
+    circle at 50% 50%,
+    black 0%,
+    rgba(0, 0, 0, 0.85) 8%,
+    rgba(0, 0, 0, 0.5) 25%,
+    rgba(0, 0, 0, 0.15) 50%,
+    transparent 75%
+  );
+}
+
+/* Ícones decorativos — sombras douradas */
+.waves-amber-icon,
+.target-amber-icon {
+  filter: drop-shadow(0 4px 12px rgba(217, 119, 6, 0.4));
+}
+
+.shield-blue-icon {
+  filter: drop-shadow(0 4px 8px rgba(37, 99, 235, 0.3));
+}
+
+.shield-red-icon {
+  filter: drop-shadow(0 4px 8px rgba(220, 38, 38, 0.3));
 }

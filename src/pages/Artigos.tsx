@@ -84,7 +84,7 @@ export default function Artigos() {
   return (
     <div className="min-h-screen bg-linear-to-b from-slate-50 to-yellow-50">
       {/* Hero Section */}
-      <section className="py-10 bg-linear-to-r from-yellow-500 via-yellow-400 to-amber-500 text-slate-900 relative overflow-hidden">
+      <section className="section-padding-y-hero bg-linear-to-r from-yellow-500 via-yellow-400 to-amber-500 text-slate-900 relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,white,transparent_50%)]"></div>
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,white,transparent_50%)]"></div>
@@ -142,7 +142,7 @@ export default function Artigos() {
         </div>
       </section>
 
-      <div className="container mx-auto px-4 pt-3 pb-16 max-w-section">
+      <div className="container mx-auto px-4 pt-3 section-padding-bottom-lg max-w-section">
         
         {/* Tabs Section */}
         <Tabs defaultValue="esoterica" className="w-full" onValueChange={setActiveTab}>

@@ -412,7 +412,7 @@ export default function Index() {
       </section>
 
       {/* ==================== LANDSCAPE FOOTER ==================== */}
-      <footer className="ds-footer-section relative overflow-hidden">
+      <footer className={`ds-footer-section ${FOOTER.sectionClass}`}>
         <div className="relative">
           <FooterBackground
             gradientId="skyGradIndex"
@@ -450,15 +450,15 @@ export default function Index() {
             <div>
               <EditableField
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                value={(texts as any).__shared__?.copyright}
-                jsonKey="__shared__.copyright"
+                value={(texts as any).__shared__?.footer?.copyright}
+                jsonKey="__shared__.footer.copyright"
                 type="p"
                 className={FOOTER.copyrightClass}
               />
               <EditableField
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                value={(texts as any).__shared__?.trademark}
-                jsonKey="__shared__.trademark"
+                value={(texts as any).__shared__?.footer?.trademark}
+                jsonKey="__shared__.footer.trademark"
                 type="p"
                 className={FOOTER.trademarkClass}
               />

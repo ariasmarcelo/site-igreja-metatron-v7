@@ -26,30 +26,147 @@
   --purificacao-white:      #FEFDFB;
 }
 
-/* Override background para página dourada (não navy) */
+/* Fundo único — degrade dourado de cima para baixo, toda a página
+   Topo mais claro | base bem mais clara | interstícios dos raios mostram este fundo */
 .purificacao-sacred {
-  background: linear-gradient(180deg, #1a1510 0%, #251f18 30%, #2d261c 100%);
+  background: linear-gradient(
+    180deg,
+    #5c4a28 0%,
+    #6b562e 25%,
+    #8b7240 50%,
+    #a08650 75%,
+    #b89a68 100%
+  );
   color: var(--purificacao-text-dark);
 }
 
 /* ─────────────────────────────────────────────
-   Hero — dourado metálico, logo sol
+   Bloco hero + 2 seções — mesmo fundo, raios irradiam até desfazer
    ───────────────────────────────────────────── */
-.purificacao-hero {
-  background: linear-gradient(135deg, #3d3220 0%, #5c4a28 25%, #6b562e 50%, #5c4a28 75%, #3d3220 100%);
-  padding: 56px 24px 52px;
-  text-align: center;
+.purificacao-hero-block {
   position: relative;
-  overflow: hidden;
+  background: transparent;
 }
 
-.purificacao-hero::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse 80% 60% at 50% 30%, rgba(212, 168, 75, 0.25) 0%, transparent 50%);
-  pointer-events: none;
+/* Origem dos raios — wrapper que contém logo + raios. Centro dos raios = centro do logo (cuboctaedro). */
+.purificacao-rays-origin {
+  position: relative;
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--section-padding-y-hero) 0 16px;
+  z-index: 1;
 }
+
+/* Camada de raios — irradia do centro do wrapper (= centro do logo). Cobre hero + seções. */
+.purificacao-hero-rays-layer {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 300vmax;
+  height: 300vmax;
+  z-index: 0;
+  background: conic-gradient(
+    from 15deg at 50% 50%,
+    transparent 0deg,
+    rgba(212, 168, 75, 0.5) 11deg,
+    rgba(255, 215, 0, 0.85) 15deg,
+    rgba(212, 168, 75, 0.5) 19deg,
+    transparent 30deg,
+    transparent 30deg,
+    rgba(212, 168, 75, 0.5) 41deg,
+    rgba(255, 215, 0, 0.85) 45deg,
+    rgba(212, 168, 75, 0.5) 49deg,
+    transparent 60deg,
+    transparent 60deg,
+    rgba(212, 168, 75, 0.5) 71deg,
+    rgba(255, 215, 0, 0.85) 75deg,
+    rgba(212, 168, 75, 0.5) 79deg,
+    transparent 90deg,
+    transparent 90deg,
+    rgba(212, 168, 75, 0.5) 101deg,
+    rgba(255, 215, 0, 0.85) 105deg,
+    rgba(212, 168, 75, 0.5) 109deg,
+    transparent 120deg,
+    transparent 120deg,
+    rgba(212, 168, 75, 0.5) 131deg,
+    rgba(255, 215, 0, 0.85) 135deg,
+    rgba(212, 168, 75, 0.5) 139deg,
+    transparent 150deg,
+    transparent 150deg,
+    rgba(212, 168, 75, 0.5) 161deg,
+    rgba(255, 215, 0, 0.85) 165deg,
+    rgba(212, 168, 75, 0.5) 169deg,
+    transparent 180deg,
+    transparent 180deg,
+    rgba(212, 168, 75, 0.5) 191deg,
+    rgba(255, 215, 0, 0.85) 195deg,
+    rgba(212, 168, 75, 0.5) 199deg,
+    transparent 210deg,
+    transparent 210deg,
+    rgba(212, 168, 75, 0.5) 221deg,
+    rgba(255, 215, 0, 0.85) 225deg,
+    rgba(212, 168, 75, 0.5) 229deg,
+    transparent 240deg,
+    transparent 240deg,
+    rgba(212, 168, 75, 0.5) 251deg,
+    rgba(255, 215, 0, 0.85) 255deg,
+    rgba(212, 168, 75, 0.5) 259deg,
+    transparent 270deg,
+    transparent 270deg,
+    rgba(212, 168, 75, 0.5) 281deg,
+    rgba(255, 215, 0, 0.85) 285deg,
+    rgba(212, 168, 75, 0.5) 289deg,
+    transparent 300deg,
+    transparent 300deg,
+    rgba(212, 168, 75, 0.5) 311deg,
+    rgba(255, 215, 0, 0.85) 315deg,
+    rgba(212, 168, 75, 0.5) 319deg,
+    transparent 330deg,
+    transparent 330deg,
+    rgba(212, 168, 75, 0.5) 341deg,
+    rgba(255, 215, 0, 0.85) 345deg,
+    rgba(212, 168, 75, 0.5) 349deg,
+    transparent 360deg
+  );
+  -webkit-mask-image: radial-gradient(
+    circle at 50% 50%,
+    black 0%,
+    rgba(0, 0, 0, 0.85) 8%,
+    rgba(0, 0, 0, 0.5) 25%,
+    rgba(0, 0, 0, 0.15) 50%,
+    transparent 75%
+  );
+  mask-image: radial-gradient(
+    circle at 50% 50%,
+    black 0%,
+    rgba(0, 0, 0, 0.85) 8%,
+    rgba(0, 0, 0, 0.5) 25%,
+    rgba(0, 0, 0, 0.15) 50%,
+    transparent 75%
+  );
+}
+
+/* Hero — mesmo fundo que o bloco (transparente). Logo está em .purificacao-rays-origin acima. */
+.purificacao-hero {
+  background: transparent;
+  padding: 0 24px var(--section-padding-y);
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+/* Área do logo */
+.purificacao-hero-logo-area {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 24px;
+}
+
 
 .purificacao-hero-inner {
   position: relative;
@@ -59,7 +176,8 @@
 }
 
 .purificacao-hero-logo {
-  margin: 0 auto 24px;
+  position: relative;
+  z-index: 10;
   display: flex;
   justify-content: center;
   filter: drop-shadow(0 0 12px rgba(212, 168, 75, 0.4)) drop-shadow(0 4px 20px rgba(0, 0, 0, 0.4));
@@ -72,22 +190,35 @@
   color: #FEFDFB;
   margin-bottom: 10px;
   line-height: 1.15;
-  text-shadow: 0 0 20px rgba(254, 253, 251, 0.3), 0 2px 8px rgba(0, 0, 0, 0.5);
+  -webkit-text-stroke: 0.5px rgba(0, 0, 0, 0.5);
+  text-stroke: 0.5px rgba(0, 0, 0, 0.5);
+  text-shadow:
+    0 0 3px rgba(0, 0, 0, 0.9),
+    0 0 6px rgba(0, 0, 0, 0.7),
+    0 2px 4px rgba(0, 0, 0, 0.8),
+    0 0 24px rgba(254, 253, 251, 0.35);
 }
 
 .purificacao-hero-sub {
-  font-size: clamp(1rem, 2.2vw, 1.35rem);
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
   font-style: italic;
-  color: var(--purificacao-gold-light);
-  opacity: 0.95;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  color: #FFFFFF;
+  opacity: 0.98;
+  -webkit-text-stroke: 0.5px rgba(0, 0, 0, 0.45);
+  text-stroke: 0.5px rgba(0, 0, 0, 0.45);
+  text-shadow:
+    0 0 2px rgba(0, 0, 0, 0.85),
+    0 0 5px rgba(0, 0, 0, 0.65),
+    0 1px 4px rgba(0, 0, 0, 0.75);
 }
 
 /* ─────────────────────────────────────────────
    Seções e cards
    ───────────────────────────────────────────── */
 .purificacao-section {
-  padding: 40px 0;
+  position: relative;
+  z-index: 1;
+  padding: var(--section-padding-y) 0;
 }
 
 .purificacao-card {
@@ -375,14 +506,14 @@
    Psicodélicos — dourado metálico sagrado
    ───────────────────────────────────────────── */
 .purificacao-psicodelicos {
-  padding: 64px 0;
+  padding: var(--section-padding-y) 0;
   position: relative;
 }
 
 .purificacao-psicodelicos-bg {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, #2d261c 0%, #3d3220 40%, #4a3d28 100%);
+  background: transparent;
   pointer-events: none;
 }
 

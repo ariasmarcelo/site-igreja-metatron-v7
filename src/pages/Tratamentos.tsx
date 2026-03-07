@@ -81,7 +81,7 @@ export default function Tratamentos() {
   return (
     <div className="min-h-screen bg-linear-to-b from-slate-50 to-blue-50">
       {/* Header */}
-      <section className="py-10 bg-linear-to-r from-cyan-600 via-blue-600 to-teal-600 text-white relative overflow-hidden">
+      <section className="section-padding-y-hero bg-linear-to-r from-cyan-600 via-blue-600 to-teal-600 text-white relative overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,white,transparent_50%)]"></div>
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,white,transparent_50%)]"></div>
@@ -180,7 +180,7 @@ export default function Tratamentos() {
 
       {/* ==================== REDESCUBRA (conteúdo do index) ==================== */}
       {indexTexts && (
-      <section className="py-10 bg-stone-50">
+      <section className="section-padding-y bg-stone-50">
         <div className="container mx-auto px-4">
           <div className="max-w-section mx-auto">
             <Card className="border border-amber-200/80 shadow-2xl overflow-hidden bg-white">
@@ -662,7 +662,7 @@ export default function Tratamentos() {
       </section>
 
       {/* Footer CTA Section com fundo céu, terra e água */}
-      <footer className="relative overflow-hidden -mt-4">
+      <footer className={`${FOOTER.sectionClass} -mt-4`}>
         <div className="relative">
           <FooterBackground
             gradientId="skyGradientTratamentos"
@@ -704,15 +704,15 @@ export default function Tratamentos() {
             <div>
               <EditableField
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                value={(texts as any).__shared__?.copyright}
-                jsonKey="__shared__.copyright"
+                value={(texts as any).__shared__?.footer?.copyright}
+                jsonKey="__shared__.footer.copyright"
                 type="p"
                 className={FOOTER.copyrightClass}
               />
               <EditableField
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                value={(texts as any).__shared__?.trademark}
-                jsonKey="__shared__.trademark"
+                value={(texts as any).__shared__?.footer?.trademark}
+                jsonKey="__shared__.footer.trademark"
                 type="p"
                 className={FOOTER.trademarkClass}
               />

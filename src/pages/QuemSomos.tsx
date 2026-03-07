@@ -1,9 +1,9 @@
-import { Card, CardContent } from '@/components/ui/card';
 import { Button } from "@/components/ui/button";
 import EditableField from "@/components/ui/EditableField";
 import { Link } from "react-router-dom";
 import { BookOpen, Waves, Target } from "lucide-react";
-import { Pentagram, Cuboctahedron } from "@/components/icons";
+import { Pentagram } from "@/components/icons";
+import { LogoGoldNoWings } from "@/components/icons/LogoGoldNoWings";
 import { usePageContent } from '@/hooks/useContent';
 import { usePageStyles } from '@/hooks/usePageStyles';
 import { FooterBackground } from '@/components/FooterBackground';
@@ -56,7 +56,7 @@ export default function QuemSomos() {
   return (
     <div className="min-h-screen bg-white">
       {/* Header Moderno */}
-      <section className="bg-linear-to-r from-violet-600 via-purple-600 to-violet-600 text-white py-10 relative overflow-hidden">
+      <section className="bg-linear-to-r from-violet-600 via-purple-600 to-violet-600 text-white section-padding-y-hero relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.15),transparent_70%)]"></div>
         <div className="absolute inset-0 bg-[linear-gradient(110deg,transparent_40%,rgba(255,255,255,0.1)_50%,transparent_60%)]"></div>
         <div className="absolute inset-0 opacity-15">
@@ -107,21 +107,21 @@ export default function QuemSomos() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════════════
-           PRINCÍPIOS UNIFICADOS — Violeta sacerdotal + Cuboctaedro com raios
+           PRINCÍPIOS UNIFICADOS — Violeta sacerdotal + Símbolo central com raios
            13 princípios em lista de coluna única
          ═══════════════════════════════════════════════════════════════ */}
-      <section className="relative py-16 px-4 md:px-8 overflow-hidden bg-linear-to-br from-violet-200 via-purple-100 to-violet-200 border-y border-violet-300">
-        {/* Brilho radial em 12 direções — raios dourados */}
-        <div className="absolute inset-0 cuboctahedron-radial-glow-principios pointer-events-none z-20" />
-
-        {/* Cuboctaedro centralizado no topo com glow dourado */}
-        <div className="absolute top-14 left-1/2 -translate-x-1/2 z-30">
-          <div className="absolute inset-0 scale-[2.5] bg-[radial-gradient(circle,rgba(255,215,0,0.35)_0%,rgba(255,215,0,0.12)_30%,transparent_60%)] pointer-events-none" />
-          <Cuboctahedron size={180} className="text-violet-600 drop-shadow-[0_0_12px_rgba(255,215,0,0.5)]" strokeWidth={5} />
+      <section className="relative overflow-hidden bg-linear-to-br from-violet-200 via-purple-100 to-violet-200 border-y border-violet-300">
+        {/* Origem dos raios = centro do logo (cuboctaedro). Raios irradiam deste ponto. */}
+        <div className="quemsomos-rays-origin">
+          <div className="cuboctahedron-radial-glow-principios pointer-events-none" />
+          <div className="relative z-30">
+            <div className="absolute inset-0 scale-[2.5] bg-[radial-gradient(circle,rgba(255,215,0,0.35)_0%,rgba(255,215,0,0.12)_30%,transparent_60%)] pointer-events-none" />
+            <LogoGoldNoWings className="w-[180px] h-[180px] object-contain drop-shadow-[0_0_12px_rgba(255,215,0,0.5)]" />
+          </div>
         </div>
 
         {/* Conteúdo principal */}
-        <div className="max-w-section mx-auto pt-56 relative z-30">
+        <div className="container mx-auto px-4 pt-56 section-content-padding-lg relative z-30">
           {/* Caixa translúcida */}
           <div className="bg-white/50 backdrop-blur-md rounded-3xl shadow-2xl border-2 border-violet-300/50 p-8 md:p-12">
 
@@ -176,22 +176,20 @@ export default function QuemSomos() {
            A MAGIA DIVINA — movido de Purificacao.tsx
          ═══════════════════════════════════════════════════════════════ */}
       {texts.magia && (
-        <section className="py-10">
-          <div className="container mx-auto px-4">
-            <div className="max-w-section mx-auto">
-              <Card className="border border-amber-200/80 shadow-2xl overflow-hidden bg-linear-to-br from-amber-50 to-yellow-50/80 relative">
-                <div className="h-1.5 bg-linear-to-r from-amber-400 via-amber-500 to-amber-400"></div>
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(207,175,90,0.15),transparent_70%)] pointer-events-none"></div>
-                <CardContent className="p-8 md:p-14 relative z-10">
+        <section className="relative overflow-hidden bg-linear-to-br from-amber-50 via-yellow-50/80 to-amber-50 border-y border-amber-200/80">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(207,175,90,0.15),transparent_70%)] pointer-events-none"></div>
+          <div className="container mx-auto px-4 section-content-padding-lg relative z-10">
+            <div className="bg-white/50 backdrop-blur-md rounded-3xl shadow-2xl border-2 border-amber-300/50 p-8 md:p-12">
+              <div className="h-1.5 bg-linear-to-r from-amber-400 via-amber-500 to-amber-400 rounded-full mb-8"></div>
                   <div className="flex items-center justify-center gap-4 mb-8">
                     <div className="relative w-16 h-16">
                       <Waves className="w-16 h-16 text-[#CFAF5A] waves-amber-icon" />
                     </div>
                     <EditableField
                       value={texts.magia.title}
-                      jsonKey="purificacao.magia.title"
-                      type="h3"
-                      className="text-3xl font-bold text-amber-800"
+                      jsonKey="quemsomos.magia.title"
+                      type="h2"
+                      className="text-4xl font-bold text-amber-800 text-center"
                     />
                     <div className="relative w-16 h-16">
                       <Target className="w-16 h-16 text-[#CFAF5A] target-amber-icon" />
@@ -205,7 +203,7 @@ export default function QuemSomos() {
                       value={paragraph}
                       jsonKey={`quemsomos.magia.introducao[${index}]`}
                       type="p"
-                      className="text-stone-800 leading-relaxed"
+                      className="text-sm text-stone-800 leading-relaxed"
                     />
                   </div>
                 ))}
@@ -218,7 +216,7 @@ export default function QuemSomos() {
                     value={texts.magia.caracteristicas.title}
                     jsonKey="quemsomos.magia.caracteristicas.title"
                     type="h4"
-                    className="text-2xl font-bold text-amber-800 mb-6 text-center"
+                    className="text-lg font-semibold text-amber-800 mb-6 text-center"
                   />
                   <div className="grid gap-4">
                     {texts.magia.caracteristicas.items && texts.magia.caracteristicas.items.map((item: { title: string; content: string }, index: number) => (
@@ -227,21 +225,19 @@ export default function QuemSomos() {
                           value={item.title}
                           jsonKey={`quemsomos.magia.caracteristicas.items[${index}].title`}
                           type="h5"
-                          className="font-bold text-lg text-amber-900 mb-2"
+                          className="text-lg font-semibold text-amber-900 mb-2"
                         />
                         <EditableField
                           value={item.content}
                           jsonKey={`quemsomos.magia.caracteristicas.items[${index}].content`}
                           type="p"
-                          className="text-stone-700 leading-relaxed"
+                          className="text-sm text-stone-700 leading-relaxed"
                         />
                       </div>
                     ))}
                   </div>
                 </div>
               )}
-                </CardContent>
-              </Card>
             </div>
           </div>
         </section>
@@ -250,10 +246,11 @@ export default function QuemSomos() {
       {/* ═══════════════════════════════════════════════════════════════
            FUNDAMENTOS HERMÉTICOS — mesmo estilo visual dos Princípios
          ═══════════════════════════════════════════════════════════════ */}
-      <section className="relative py-16 px-4 md:px-8 overflow-hidden bg-linear-to-br from-amber-100 via-amber-50 to-amber-100 border-y border-amber-300">
+      <section className="relative overflow-hidden bg-linear-to-br from-amber-100 via-amber-50 to-amber-100 border-y border-amber-300">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(207,175,90,0.15),transparent_70%)] pointer-events-none"></div>
 
         {/* Conteúdo principal */}
-        <div className="max-w-section mx-auto relative z-10">
+        <div className="container mx-auto px-4 section-content-padding-lg relative z-10">
           {/* Caixa translúcida */}
           <div className="bg-white/50 backdrop-blur-md rounded-3xl shadow-2xl border-2 border-amber-300/50 p-8 md:p-12">
 
@@ -335,7 +332,7 @@ export default function QuemSomos() {
       </section>
 
       {/* Footer — paisagem padronizada */}
-      <footer className="relative overflow-hidden">
+      <footer className={FOOTER.sectionClass}>
         <div className="relative">
           <FooterBackground
             gradientId="skyGradientQuemSomos"
@@ -372,14 +369,14 @@ export default function QuemSomos() {
 
             <div>
               <EditableField
-                value={(texts as any).__shared__?.copyright}
-                jsonKey="__shared__.copyright"
+                value={(texts as any).__shared__?.footer?.copyright}
+                jsonKey="__shared__.footer.copyright"
                 type="p"
                 className={FOOTER.copyrightClass}
               />
               <EditableField
-                value={(texts as any).__shared__?.trademark}
-                jsonKey="__shared__.trademark"
+                value={(texts as any).__shared__?.footer?.trademark}
+                jsonKey="__shared__.footer.trademark"
                 type="p"
                 className={FOOTER.trademarkClass}
               />

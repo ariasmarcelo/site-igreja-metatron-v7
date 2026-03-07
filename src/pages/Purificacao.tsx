@@ -48,7 +48,7 @@ export default function Purificacao() {
 
   const textsTyped = texts as Record<string, Record<string, unknown>>;
   const header = textsTyped.header as { title: string; subtitle: string };
-  const intro = textsTyped.intro as { mainText: string; description: string };
+  const intro = textsTyped.intro as { sectionTitle?: string; mainText: string; description: string };
   const faseInicial = textsTyped.faseInicial as any;
   const faseIntermediaria = textsTyped.faseIntermediaria as any;
   const faseFinal = textsTyped.faseFinal as any;
@@ -57,16 +57,25 @@ export default function Purificacao() {
 
   return (
     <div className="ds-new purificacao-sacred min-h-screen">
-      {/* Hero — dourado metálico, logo da Index (sol) */}
-      <section className="purificacao-hero">
-        <div className="purificacao-hero-inner">
-          <div className="purificacao-hero-logo">
-            <LogoGold className="w-190 h-auto" />
+      {/* Bloco unificado: hero + 2 seções — mesmo fundo, raios irradiam até desfazer */}
+      <div className="purificacao-hero-block">
+        {/* Origem dos raios: centro = centro do logo (cuboctaedro). Raios irradiam deste ponto. */}
+        <div className="purificacao-rays-origin">
+          <div className="purificacao-hero-rays-layer pointer-events-none" aria-hidden />
+          <div className="purificacao-hero-logo-area">
+            <div className="purificacao-hero-logo">
+              <LogoGold className="w-190 h-auto" />
+            </div>
           </div>
-          <EditableField value={header.title} jsonKey="purificacao.header.title" type="h1" className="purificacao-hero-title" />
-          <p className="purificacao-hero-sub">
-            <EditableField value={header.subtitle} jsonKey="purificacao.header.subtitle" type="span" className="" />
-          </p>
+        </div>
+        <section className="purificacao-hero relative">
+          <div className="purificacao-hero-inner relative z-10">
+          <div className="purificacao-hero-text relative z-10">
+            <EditableField value={header.title} jsonKey="purificacao.header.title" type="h1" className="purificacao-hero-title" />
+            <p className="purificacao-hero-sub">
+              <EditableField value={header.subtitle} jsonKey="purificacao.header.subtitle" type="span" className="" />
+            </p>
+          </div>
         </div>
       </section>
 
@@ -232,6 +241,7 @@ export default function Purificacao() {
           </div>
         </div>
       </section>
+      </div>
 
       {/* Psicodélicos — dourado metálico sagrado */}
       <section className="purificacao-psicodelicos">
@@ -345,7 +355,7 @@ export default function Purificacao() {
       </section>
 
       {/* Rodapé — paisagem padronizada */}
-      <footer className="relative overflow-hidden">
+      <footer className={FOOTER.sectionClass}>
         <div className="relative">
           <FooterBackground gradientId="skyGradientPurificacao" skyColors={['#1e3a5f', '#4b6cb7', '#d4a843']} earthColor="#5c4a30" waterColors={['#0ea5e9', '#0284c7', '#0369a1']} />
 
@@ -363,15 +373,15 @@ export default function Purificacao() {
             <div>
               <EditableField
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                value={(texts as any).__shared__?.copyright}
-                jsonKey="__shared__.copyright"
+                value={(texts as any).__shared__?.footer?.copyright}
+                jsonKey="__shared__.footer.copyright"
                 type="p"
                 className={FOOTER.copyrightClass}
               />
               <EditableField
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                value={(texts as any).__shared__?.trademark}
-                jsonKey="__shared__.trademark"
+                value={(texts as any).__shared__?.footer?.trademark}
+                jsonKey="__shared__.footer.trademark"
                 type="p"
                 className={FOOTER.trademarkClass}
               />

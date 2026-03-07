@@ -15,7 +15,7 @@ interface ContatoTexts {
 
 export default function Contato() {
   usePageStyles('contato');
-  const { data: texts, loading } = usePageContent<ContatoTexts>('contato');
+  const { data: texts, loading } = usePageContent<ContatoTexts>('contato', { includePages: ['__shared__'] });
   const [openFaqItems, setOpenFaqItems] = useState<Set<number>>(new Set());
   const [showWhatsAppMsg, setShowWhatsAppMsg] = useState(false);
   const [showEmailMsg, setShowEmailMsg] = useState(false);
@@ -52,10 +52,10 @@ export default function Contato() {
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-b from-teal-50 via-emerald-50 to-cyan-50">
+    <div className="min-h-screen bg-linear-to-b from-emerald-50 via-teal-50 to-emerald-100">
       
       {/* Hero Section */}
-      <section className="relative py-10 overflow-hidden bg-linear-to-r from-teal-600 via-emerald-600 to-teal-600">
+      <section className="relative section-padding-y-hero overflow-hidden bg-linear-to-r from-teal-600 via-emerald-600 to-teal-600">
         {/* Background Effects */}
         <div className="absolute inset-0 opacity-30">
           <div className="absolute top-10 left-10 w-64 h-64 bg-emerald-300 rounded-full blur-3xl animate-pulse"></div>
@@ -84,8 +84,13 @@ export default function Contato() {
       </section>
 
       {/* Main Content */}
-      <section className="py-8 relative">
-        <div className="container mx-auto px-4">
+      <section className="section-padding-y relative overflow-hidden">
+        <div className="absolute inset-0 opacity-30 pointer-events-none">
+          <div className="absolute top-20 right-0 w-80 h-80 bg-emerald-300 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-40 left-0 w-96 h-96 bg-teal-300 rounded-full blur-3xl animate-pulse delay-1000"></div>
+          <div className="absolute top-1/2 left-1/3 w-64 h-64 bg-emerald-200 rounded-full blur-3xl animate-pulse delay-500"></div>
+        </div>
+        <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-section mx-auto space-y-4">
             
             {/* FAÇA CONTATO - DESTAQUE */}
@@ -291,109 +296,153 @@ export default function Contato() {
             </div>
 
             {/* Sobre a Avaliação Inicial */}
-            <div className="bg-linear-to-br from-white via-amber-50/30 to-yellow-50/20 backdrop-blur-md rounded-3xl p-6 md:p-8 border border-amber-200/60 shadow-xl">
-              <div className="flex items-center justify-center gap-4">
-                <div className="shrink-0 flex items-center justify-center w-14 h-14 rounded-full bg-linear-to-br from-amber-400/30 to-yellow-400/30 border border-amber-300/50">
-                  <Clock className="w-7 h-7 text-amber-700" />
-                </div>
-              <EditableField
-                value={texts.initialAssessment.title}
-                jsonKey="contato.initialAssessment.title"
-                type="h2"
-                className="text-2xl md:text-3xl font-bold text-amber-900"
-              />
+            <div className="relative bg-linear-to-br from-sky-100 via-blue-50 to-sky-100 rounded-3xl p-6 md:p-8 border border-sky-300/60 shadow-xl overflow-hidden">
+              <div className="absolute inset-0 opacity-30 pointer-events-none">
+                <div className="absolute top-4 left-8 w-48 h-48 bg-sky-300 rounded-full blur-3xl animate-pulse"></div>
+                <div className="absolute bottom-4 right-8 w-64 h-64 bg-blue-300 rounded-full blur-3xl animate-pulse delay-1000"></div>
+                <div className="absolute top-1/2 right-1/4 w-40 h-40 bg-sky-200 rounded-full blur-3xl animate-pulse delay-500"></div>
               </div>
-                
-              <div className="grid md:grid-cols-2 gap-6">
-                {/* O Que Esperar */}
-                <div className="bg-white/60 rounded-2xl p-5 border border-amber-200/40">
+              <div className="relative z-10">
+                <div className="flex items-center justify-center gap-4">
+                  <div className="shrink-0 flex items-center justify-center w-14 h-14 rounded-full bg-linear-to-br from-amber-400/30 to-yellow-400/30 border border-amber-300/50">
+                    <Clock className="w-7 h-7 text-amber-700" />
+                  </div>
                   <EditableField
-                    value={texts.initialAssessment.whatToExpect.title}
-                    jsonKey="contato.initialAssessment.whatToExpect.title"
-                    type="h4"
-                    className="text-lg font-semibold text-amber-800 mb-3 inline-flex items-center gap-3"
+                    value={texts.initialAssessment.title}
+                    jsonKey="contato.initialAssessment.title"
+                    type="h2"
+                    className="text-2xl md:text-3xl font-bold text-amber-900"
                   />
-                  <ul className="space-y-3">
-                    {texts.initialAssessment.whatToExpect.items.map((item: string, idx: number) => (
-                      <li key={idx} className="flex items-start gap-3 text-gray-700">
-                        <span className="text-amber-600 mt-1 font-bold">✦</span>
-                      <EditableField
-                        value={item}
-                        jsonKey={`contato.initialAssessment.whatToExpect.items[${idx}]`}
-                        type="span"
-                        className="text-gray-700"
-                      />
-                      </li>
-                    ))}
-                  </ul>
                 </div>
+                <EditableField
+                  value={texts.initialAssessment.whatToExpect.title}
+                  jsonKey="contato.initialAssessment.whatToExpect.title"
+                  type="p"
+                  className="text-base text-amber-700/80 text-center mb-6"
+                />
 
-                {/* Nosso Compromisso */}
-                <div className="bg-white/60 rounded-2xl p-5 border border-amber-200/40">
-                  <EditableField
-                    value={texts.initialAssessment.commitment.title}
-                    jsonKey="contato.initialAssessment.commitment.title"
-                    type="h4"
-                    className="text-lg font-semibold text-amber-800 mb-3 inline-flex items-center gap-3"
-                  />
-                  <div className="flex items-start gap-3">
-                    <ShieldCheck className="w-7 h-7 text-amber-600 shrink-0 mt-1" />
+                <div className="grid grid-cols-1 gap-5">
+                  {/* O Que Esperar */}
+                  <div className="bg-white/60 rounded-2xl p-5 border border-amber-200/40">
+                    <ul className="space-y-3">
+                      {texts.initialAssessment.whatToExpect.items.map((item: string, idx: number) => (
+                        <li key={idx} className="flex items-start gap-3 text-gray-700">
+                          <span className="text-amber-600 mt-1 font-bold">✦</span>
+                          <EditableField
+                            value={item}
+                            jsonKey={`contato.initialAssessment.whatToExpect.items[${idx}]`}
+                            type="span"
+                            className="text-gray-700"
+                          />
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Nosso Compromisso */}
+                  <div className="bg-white/60 rounded-2xl p-5 border border-amber-200/40">
                     <EditableField
-                      value={texts.initialAssessment.commitment.description}
-                      jsonKey="contato.initialAssessment.commitment.description"
-                      type="p"
-                      className="text-gray-700 leading-relaxed text-sm"
+                      value={texts.initialAssessment.commitment.title}
+                      jsonKey="contato.initialAssessment.commitment.title"
+                      type="h4"
+                      className="text-lg font-semibold text-amber-800 mb-3 inline-flex items-center gap-3"
                     />
+                    <div className="flex items-start gap-3">
+                      <ShieldCheck className="w-7 h-7 text-amber-600 shrink-0 mt-1" />
+                      <EditableField
+                        value={texts.initialAssessment.commitment.description}
+                        jsonKey="contato.initialAssessment.commitment.description"
+                        type="p"
+                        className="text-gray-700 leading-relaxed text-sm"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Perguntas Frequentes */}
-            <div className="bg-linear-to-br from-white via-slate-50/30 to-gray-50/20 rounded-3xl p-8 md:p-12 border border-slate-200/60 shadow-xl">
-              <EditableField
-                value={texts.faq.title}
-                jsonKey="contato.faq.title"
-                type="h2"
-                className="text-3xl md:text-4xl font-bold text-center mb-10 text-slate-900"
-              />
-              <div className="space-y-4 max-w-3xl mx-auto">
-                {texts.faq.items.map((qa: { question: string; answer: string }, idx: number) => {
-                  const isOpen = openFaqItems.has(idx);
-                  return (
-                    <div key={idx} className="bg-white rounded-2xl border border-slate-200/40 shadow-md hover:shadow-lg transition-all overflow-hidden">
-                      <button
-                        onClick={() => toggleFaqItem(idx)}
-                        title={isOpen ? 'Fechar pergunta' : 'Abrir pergunta'}
-                        className="w-full text-left px-6 py-4 flex items-center justify-between gap-4 bg-linear-to-r from-slate-50 to-slate-100/50 hover:from-slate-100 hover:to-slate-50 transition-all"
-                      >
-                        <EditableField
-                          value={qa.question}
-                          jsonKey={`contato.faq.items[${idx}].question`}
-                          type="h4"
-                          className="text-lg font-bold text-slate-900 drop-shadow-sm"
-                        />
-                        <ChevronDown className={`w-5 h-5 text-slate-700 shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
-                      </button>
-                      {isOpen && (
-                        <div className="px-6 pb-4 pt-3 bg-white border-t border-slate-100">
+            <div className="relative bg-linear-to-br from-amber-100 via-yellow-50 to-amber-100 rounded-3xl p-8 md:p-12 border border-amber-300/60 shadow-xl overflow-hidden">
+              <div className="absolute inset-0 opacity-30 pointer-events-none">
+                <div className="absolute top-6 left-10 w-48 h-48 bg-amber-300 rounded-full blur-3xl animate-pulse"></div>
+                <div className="absolute bottom-6 right-10 w-64 h-64 bg-yellow-300 rounded-full blur-3xl animate-pulse delay-1000"></div>
+                <div className="absolute top-1/2 right-1/3 w-40 h-40 bg-amber-200 rounded-full blur-3xl animate-pulse delay-500"></div>
+              </div>
+              <div className="relative z-10">
+                <EditableField
+                  value={texts.faq.title}
+                  jsonKey="contato.faq.title"
+                  type="h2"
+                  className="text-3xl md:text-4xl font-bold text-center mb-3 text-amber-900"
+                />
+                <EditableField
+                  value={texts.faq?.subtitle}
+                  jsonKey="contato.faq.subtitle"
+                  type="p"
+                  className="text-base text-amber-700/70 text-center mb-8"
+                />
+                <div className="space-y-4 max-w-3xl mx-auto">
+                  {texts.faq.items.map((qa: { question: string; answer: string }, idx: number) => {
+                    const isOpen = openFaqItems.has(idx);
+                    return (
+                      <div key={idx} className="bg-white/80 rounded-2xl border border-amber-200/40 shadow-md hover:shadow-lg transition-all overflow-hidden">
+                        <button
+                          onClick={() => toggleFaqItem(idx)}
+                          title={isOpen ? 'Fechar pergunta' : 'Abrir pergunta'}
+                          className="w-full text-left px-6 py-4 flex items-center justify-between gap-4 bg-linear-to-r from-amber-50/60 to-yellow-50/40 hover:from-amber-100/60 hover:to-yellow-50/60 transition-all"
+                        >
                           <EditableField
-                            value={qa.answer}
-                            jsonKey={`contato.faq.items[${idx}].answer`}
-                            type="p"
-                            className="text-gray-600 leading-relaxed"
+                            value={qa.question}
+                            jsonKey={`contato.faq.items[${idx}].question`}
+                            type="h4"
+                            className="text-lg font-bold text-slate-900 drop-shadow-sm"
                           />
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
+                          <ChevronDown className={`w-5 h-5 text-slate-700 shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+                        </button>
+                        {isOpen && (
+                          <div className="px-6 pb-4 pt-3 bg-white/90 border-t border-amber-100">
+                            <EditableField
+                              value={qa.answer}
+                              jsonKey={`contato.faq.items[${idx}].answer`}
+                              type="p"
+                              className="text-gray-600 leading-relaxed"
+                            />
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             </div>
 
           </div>
         </div>
       </section>
+
+      {/* Footer — mesmo fundo do hero, apenas copyright */}
+      <footer className="relative overflow-hidden bg-linear-to-r from-teal-600 via-emerald-600 to-teal-600 py-[15px] shadow-[0_-24px_48px_rgba(0,0,0,0.50),0_-8px_16px_rgba(0,0,0,0.30)]">
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute bottom-2 left-1/4 w-48 h-48 bg-emerald-300 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-2 right-1/4 w-64 h-64 bg-teal-300 rounded-full blur-3xl"></div>
+        </div>
+        <div className="relative z-10 text-center px-4">
+          <EditableField
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            value={(texts as any).__shared__?.footer?.copyright}
+            jsonKey="__shared__.footer.copyright"
+            type="p"
+            className="text-xs text-white font-medium drop-shadow-[0_1px_2px_rgba(0,0,0,0.45)]"
+          />
+          <EditableField
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            value={(texts as any).__shared__?.footer?.trademark}
+            jsonKey="__shared__.footer.trademark"
+            type="p"
+            className="text-[10px] text-white/80 mt-1 drop-shadow-[0_1px_2px_rgba(0,0,0,0.35)]"
+          />
+        </div>
+      </footer>
     </div>
   );
 }

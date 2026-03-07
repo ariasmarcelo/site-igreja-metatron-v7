@@ -8,7 +8,7 @@
 /* ==========================================================================
    1. SETTINGS - Variáveis e tokens (mais genérico)
    ========================================================================== */
-@import "./styles/settings/design-tokens.css";
+@import "./styles/settings/design-parameters.css";
 
 /* ==========================================================================
    2. TOOLS - Mixins e funções (não geram CSS diretamente)

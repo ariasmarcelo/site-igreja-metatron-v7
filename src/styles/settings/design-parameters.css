@@ -1,7 +1,7 @@
 /**
- * DESIGN TOKENS - Sistema de Design Igreja de Metatron
- * Mantém todas as cores, ícones e textos originais
- * Refatoração total da estrutura CSS
+ * DESIGN PARAMETERS - Sistema de Design Igreja de Metatron
+ * Variáveis globais: cores, tipografia, espaçamento, bordas, sombras.
+ * Mantém todas as cores, ícones e textos originais.
  */
 
 @layer base {
@@ -150,10 +150,49 @@
        Todas as seções de conteúdo das páginas usam este valor
        como padrão (exceto Contato que tem layout próprio). */
     --section-max-width: 56rem;
+
+    /* Espaçamento vertical entre seções — Index, Purificação, etc.
+       Reduz distância entre seções para layout mais compacto. */
+    --section-padding-y: 32px;
+    --section-padding-y-hero: 40px;
+    --section-padding-y-lg: 48px;
   }
 }
 
 @layer components {
+  /* ========================================
+     ESPAÇAMENTO DE SEÇÕES — classes utilitárias
+     ======================================== */
+  
+  .section-padding-y-hero {
+    padding-top: var(--section-padding-y-hero);
+    padding-bottom: var(--section-padding-y-hero);
+  }
+  
+  .section-padding-y {
+    padding-top: var(--section-padding-y);
+    padding-bottom: var(--section-padding-y);
+  }
+  
+  .section-padding-y-lg {
+    padding-top: var(--section-padding-y-lg);
+    padding-bottom: var(--section-padding-y-lg);
+  }
+  
+  .section-content-padding {
+    padding-top: var(--section-padding-y);
+    padding-bottom: var(--section-padding-y);
+  }
+  
+  .section-content-padding-lg {
+    padding-top: var(--section-padding-y-lg);
+    padding-bottom: var(--section-padding-y-lg);
+  }
+  
+  .section-padding-bottom-lg {
+    padding-bottom: var(--section-padding-y-lg);
+  }
+  
   /* ========================================
      TIPOGRAFIA - CLASSES UTILITÁRIAS
      ======================================== */

@@ -66,7 +66,7 @@ const Testemunhos = () => {
       <div className="min-h-screen bg-linear-to-b from-rose-50 via-sky-100 to-sky-300">
       
       {/* Hero Section */}
-      <section className="relative py-10 overflow-hidden bg-pink-400">
+      <section className="relative section-padding-y-hero overflow-hidden bg-pink-400">
         {/* Animated Metallic Gold Background Effects */}
         <div className="absolute inset-0 opacity-40">
           <div className="absolute top-20 left-[10%] w-96 h-96 bg-yellow-300/60 rounded-full blur-3xl animate-pulse orb-1" />
@@ -121,7 +121,7 @@ const Testemunhos = () => {
         </div>
       </section>
 
-      <div className="container mx-auto px-4 py-8 space-y-3 max-w-section">
+      <div className="container mx-auto px-4 section-content-padding space-y-3 max-w-section">
         
         {/* Intro Card */}
         <div className="max-w-3xl mx-auto bg-linear-to-br from-white/80 via-rose-50/80 to-pink-50/70 backdrop-blur-md rounded-2xl p-6 md:p-8 border border-rose-200/60 shadow-xl shadow-rose-200/30">
@@ -191,7 +191,7 @@ const Testemunhos = () => {
       </section>
 
       {/* Disclaimer */}
-      <section className="py-16 relative">
+      <section className="section-padding-y-lg relative">
         <div className="container mx-auto px-4">
           <div className="max-w-section mx-auto">
             <div className="bg-linear-to-br from-white/80 via-rose-50/70 to-pink-50/60 backdrop-blur-md rounded-2xl p-8 border border-rose-200/60 shadow-lg shadow-rose-200/20">
@@ -218,7 +218,7 @@ const Testemunhos = () => {
       </section>
 
       {/* Footer — paisagem padronizada */}
-      <footer className="relative overflow-hidden mt-16">
+      <footer className={`${FOOTER.sectionClass} mt-16`}>
         <div className="relative">
           <FooterBackground
             gradientId="skyGradientTestemunhos"
@@ -257,14 +257,14 @@ const Testemunhos = () => {
 
             <div>
               <EditableField
-                value={(texts as any).__shared__?.copyright}
-                jsonKey="__shared__.copyright"
+                value={(texts as any).__shared__?.footer?.copyright}
+                jsonKey="__shared__.footer.copyright"
                 type="p"
                 className={FOOTER.copyrightClass}
               />
               <EditableField
-                value={(texts as any).__shared__?.trademark}
-                jsonKey="__shared__.trademark"
+                value={(texts as any).__shared__?.footer?.trademark}
+                jsonKey="__shared__.footer.trademark"
                 type="p"
                 className={FOOTER.trademarkClass}
               />

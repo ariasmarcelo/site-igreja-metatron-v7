@@ -97,7 +97,7 @@
    ───────────────────────────────────────────── */
 .ds-new .ds-hero {
   background: transparent;
-  padding: 56px 24px 52px;
+  padding: var(--section-padding-y-hero) 24px var(--section-padding-y);
   text-align: center;
   position: relative;
   /* overflow kept visible so logo glow / text-shadow bleeds into next section */
@@ -161,7 +161,7 @@
    ───────────────────────────────────────────── */
 .ds-new .ds-section-challenges {
   background: transparent;
-  padding: 56px 24px;
+  padding: var(--section-padding-y) 24px;
 }
 
 .ds-new .ds-challenges-inner {
@@ -312,7 +312,7 @@
    ───────────────────────────────────────────── */
 .ds-new .ds-section-journey {
   background: transparent;
-  padding: 56px 24px;
+  padding: var(--section-padding-y) 24px;
 }
 
 .ds-new .ds-journey-inner {
@@ -398,6 +398,11 @@
   gap: 10px;
 }
 
+/* items[4] — mais margem direita */
+.ds-new .ds-journey-card.institute .ds-journey-list li:nth-child(5) {
+  padding-right: 1.5rem;
+}
+
 .ds-new .ds-check {
   width: 20px;
   height: 20px;
@@ -418,7 +423,7 @@
    ───────────────────────────────────────────── */
 .ds-new .ds-section-help {
   background: transparent;
-  padding: 56px 24px 80px;
+  padding: var(--section-padding-y) 24px var(--section-padding-y-lg);
   position: relative;
 }
 
@@ -542,7 +547,7 @@
    ───────────────────────────────────────────── */
 .ds-new .ds-section-cta {
   background: transparent;
-  padding: 64px 24px;
+  padding: var(--section-padding-y-lg) 24px;
   text-align: center;
   position: relative;
   overflow: hidden;
