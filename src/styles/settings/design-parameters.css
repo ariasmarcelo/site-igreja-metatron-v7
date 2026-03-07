@@ -141,22 +141,22 @@
     /* xl: 1280px */
     /* 2xl: 1536px */
     
-    /* ========================================
-       LAYOUT - Largura padrão de seções
-       ======================================== */
-    
-    /* Largura máxima padrão para containers de seção de conteúdo.
-       Equivale a Tailwind max-w-4xl (56rem = 896px).
-       Todas as seções de conteúdo das páginas usam este valor
-       como padrão (exceto Contato que tem layout próprio). */
-    --section-max-width: 56rem;
-
-    /* Espaçamento vertical entre seções — Index, Purificação, etc.
-       Reduz distância entre seções para layout mais compacto. */
-    --section-padding-y: 32px;
-    --section-padding-y-hero: 40px;
-    --section-padding-y-lg: 48px;
   }
+}
+
+/* ========================================
+   LAYOUT - Variáveis globais de espaçamento de seções
+   Fora de @layer para garantir que sejam resolvidas
+   por todos os estilos (inclusive fora de layers).
+   ======================================== */
+:root {
+  --section-max-width: 56rem;
+  --section-padding-y: 32px;
+  --section-padding-y-hero: 40px;
+  --section-padding-y-lg: 48px;
+  --hero-sub-to-next: 36px;
+  --section-box-padding-top: 24px;
+  --section-title-to-content: 16px;
 }
 
 @layer components {

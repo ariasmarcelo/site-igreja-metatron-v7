@@ -82,6 +82,7 @@ export default function Tratamentos() {
     <div className="min-h-screen bg-linear-to-b from-slate-50 to-blue-50">
       {/* Header */}
       <section className="section-padding-y-hero bg-linear-to-r from-cyan-600 via-blue-600 to-teal-600 text-white relative overflow-hidden">
+        
         <div className="absolute inset-0 opacity-10">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,white,transparent_50%)]"></div>
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,white,transparent_50%)]"></div>
@@ -675,7 +676,7 @@ export default function Tratamentos() {
             rightIconSize={48}
           />
 
-          <div className={FOOTER.containerClass} style={{ height: FOOTER.containerHeight }}>
+          <div className={FOOTER.containerClass}>
             <div className="max-w-section mx-auto text-center">
               <EditableField
                 value={texts.cta?.title}

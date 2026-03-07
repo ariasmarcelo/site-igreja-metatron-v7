@@ -108,8 +108,9 @@ export default function AdminConsole() {
               <TabsContent value="pages">
                 <div>
                   <Tabs value={pageTab} onValueChange={setPageTab}>
-                    {/* 🔒 BARRA STICKY: seletores sempre visíveis durante edição */}
-                    <div className="sticky top-0 z-50 bg-white pb-4 shadow-sm border-b border-stone-200 mb-4">
+                    {/* 🔒 BARRA FIXA: seletores sempre visíveis durante edição (fixed evita quebra por overflow-x no root) */}
+                    <div className="fixed top-0 left-0 right-0 z-50 bg-white pb-4 pt-4 px-4 shadow-sm border-b border-stone-200">
+                      <div className="max-w-[1280px] mx-auto">
                       {/* 🌐 SELETOR DE IDIOMA AO NÍVEL DA PÁGINA */}
                       <div className="flex items-center gap-3 bg-linear-to-r from-amber-50 to-yellow-50 border-2 border-[#d4af37] rounded-lg p-4">
                         <span className="text-sm font-semibold text-gray-700">🌐 Idioma de Visualização:</span>
@@ -156,7 +157,10 @@ export default function AdminConsole() {
                           ))}
                         </TabsList>
                       </div>
+                      </div>
                     </div>
+                    {/* Espaço para a barra fixa — altura aproximada da barra de controles */}
+                    <div className="h-[220px] shrink-0" aria-hidden="true" />
 
                     {pages.map(page => (
                       <TabsContent key={page.id} value={page.id} className="admin-console-page-content">

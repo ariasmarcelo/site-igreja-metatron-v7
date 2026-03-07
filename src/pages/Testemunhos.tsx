@@ -229,7 +229,7 @@ const Testemunhos = () => {
             rightIconSize={48}
           />
 
-          <div className={FOOTER.containerClass} style={{ height: FOOTER.containerHeight }}>
+          <div className={FOOTER.containerClass}>
             <div className="max-w-section mx-auto text-center">
               <EditableField
                 value={texts.testimonialsPage?.cta?.title}

@@ -5,14 +5,14 @@
  */
 
 export const FOOTER = {
+  /** Classes do <footer> wrapper — sombra projetada para cima separando do conteúdo */
+  sectionClass: 'relative overflow-hidden shadow-[0_-24px_48px_rgba(0,0,0,0.50),0_-8px_16px_rgba(0,0,0,0.30)]',
+
   /** Altura do viewBox SVG (coordenadas internas) */
   viewBoxHeight: 518,
 
-  /** Altura renderizada do container do footer em px */
-  containerHeight: 269,
-
-  /** Classes Tailwind do container interno (z-10, flex, padding) */
-  containerClass: 'relative z-10 flex flex-col items-center justify-between px-4 pt-6 pb-4',
+  /** Classes Tailwind do container interno (z-10, flex, padding, height) */
+  containerClass: 'relative z-10 flex flex-col items-center justify-between px-4 pt-6 pb-4 h-[269px]',
 
   /** Classes do título CTA (h2) */
   titleClass: 'text-3xl md:text-4xl font-bold mb-4 text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]',

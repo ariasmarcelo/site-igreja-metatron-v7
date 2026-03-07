@@ -26,16 +26,15 @@
   --purificacao-white:      #FEFDFB;
 }
 
-/* Fundo único — degrade dourado de cima para baixo, toda a página
-   Topo mais claro | base bem mais clara | interstícios dos raios mostram este fundo */
+/* Fundo único — degrade: violeta do QuemSomos no topo (onde os raios funcionam), transição até amarelo na base. */
 .purificacao-sacred {
   background: linear-gradient(
     180deg,
-    #5c4a28 0%,
-    #6b562e 25%,
-    #8b7240 50%,
-    #a08650 75%,
-    #b89a68 100%
+    #ddd6fe 0%,
+    #e9d5ff 15%,
+    #f5e6c8 35%,
+    #FFE599 70%,
+    #FFD766 100%
   );
   color: var(--purificacao-text-dark);
 }
@@ -48,22 +47,22 @@
   background: transparent;
 }
 
-/* Origem dos raios — wrapper que contém logo + raios. Centro dos raios = centro do logo (cuboctaedro). */
+/* Origem dos raios — igual ao QuemSomos. Centro = centro do logo (cuboctaedro). */
 .purificacao-rays-origin {
   position: relative;
   overflow: visible;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: var(--section-padding-y-hero) 0 16px;
+  padding: var(--section-padding-y-hero) 0 0;
   z-index: 1;
 }
 
-/* Camada de raios — irradia do centro do wrapper (= centro do logo). Cobre hero + seções. */
+/* Camada de raios — cópia de cuboctahedron-radial-glow-principios (QuemSomos), onde funciona. */
 .purificacao-hero-rays-layer {
   position: absolute;
   left: 50%;
-  top: 50%;
+  top: 46.43%;
   transform: translate(-50%, -50%);
   width: 300vmax;
   height: 300vmax;
@@ -71,64 +70,64 @@
   background: conic-gradient(
     from 15deg at 50% 50%,
     transparent 0deg,
-    rgba(212, 168, 75, 0.5) 11deg,
-    rgba(255, 215, 0, 0.85) 15deg,
-    rgba(212, 168, 75, 0.5) 19deg,
+    rgba(218, 165, 32, 0.6) 11deg,
+    rgba(255, 215, 0, 0.95) 15deg,
+    rgba(218, 165, 32, 0.6) 19deg,
     transparent 30deg,
     transparent 30deg,
-    rgba(212, 168, 75, 0.5) 41deg,
-    rgba(255, 215, 0, 0.85) 45deg,
-    rgba(212, 168, 75, 0.5) 49deg,
+    rgba(218, 165, 32, 0.6) 41deg,
+    rgba(255, 215, 0, 0.95) 45deg,
+    rgba(218, 165, 32, 0.6) 49deg,
     transparent 60deg,
     transparent 60deg,
-    rgba(212, 168, 75, 0.5) 71deg,
-    rgba(255, 215, 0, 0.85) 75deg,
-    rgba(212, 168, 75, 0.5) 79deg,
+    rgba(218, 165, 32, 0.6) 71deg,
+    rgba(255, 215, 0, 0.95) 75deg,
+    rgba(218, 165, 32, 0.6) 79deg,
     transparent 90deg,
     transparent 90deg,
-    rgba(212, 168, 75, 0.5) 101deg,
-    rgba(255, 215, 0, 0.85) 105deg,
-    rgba(212, 168, 75, 0.5) 109deg,
+    rgba(218, 165, 32, 0.6) 101deg,
+    rgba(255, 215, 0, 0.95) 105deg,
+    rgba(218, 165, 32, 0.6) 109deg,
     transparent 120deg,
     transparent 120deg,
-    rgba(212, 168, 75, 0.5) 131deg,
-    rgba(255, 215, 0, 0.85) 135deg,
-    rgba(212, 168, 75, 0.5) 139deg,
+    rgba(218, 165, 32, 0.6) 131deg,
+    rgba(255, 215, 0, 0.95) 135deg,
+    rgba(218, 165, 32, 0.6) 139deg,
     transparent 150deg,
     transparent 150deg,
-    rgba(212, 168, 75, 0.5) 161deg,
-    rgba(255, 215, 0, 0.85) 165deg,
-    rgba(212, 168, 75, 0.5) 169deg,
+    rgba(218, 165, 32, 0.6) 161deg,
+    rgba(255, 215, 0, 0.95) 165deg,
+    rgba(218, 165, 32, 0.6) 169deg,
     transparent 180deg,
     transparent 180deg,
-    rgba(212, 168, 75, 0.5) 191deg,
-    rgba(255, 215, 0, 0.85) 195deg,
-    rgba(212, 168, 75, 0.5) 199deg,
+    rgba(218, 165, 32, 0.6) 191deg,
+    rgba(255, 215, 0, 0.95) 195deg,
+    rgba(218, 165, 32, 0.6) 199deg,
     transparent 210deg,
     transparent 210deg,
-    rgba(212, 168, 75, 0.5) 221deg,
-    rgba(255, 215, 0, 0.85) 225deg,
-    rgba(212, 168, 75, 0.5) 229deg,
+    rgba(218, 165, 32, 0.6) 221deg,
+    rgba(255, 215, 0, 0.95) 225deg,
+    rgba(218, 165, 32, 0.6) 229deg,
     transparent 240deg,
     transparent 240deg,
-    rgba(212, 168, 75, 0.5) 251deg,
-    rgba(255, 215, 0, 0.85) 255deg,
-    rgba(212, 168, 75, 0.5) 259deg,
+    rgba(218, 165, 32, 0.6) 251deg,
+    rgba(255, 215, 0, 0.95) 255deg,
+    rgba(218, 165, 32, 0.6) 259deg,
     transparent 270deg,
     transparent 270deg,
-    rgba(212, 168, 75, 0.5) 281deg,
-    rgba(255, 215, 0, 0.85) 285deg,
-    rgba(212, 168, 75, 0.5) 289deg,
+    rgba(218, 165, 32, 0.6) 281deg,
+    rgba(255, 215, 0, 0.95) 285deg,
+    rgba(218, 165, 32, 0.6) 289deg,
     transparent 300deg,
     transparent 300deg,
-    rgba(212, 168, 75, 0.5) 311deg,
-    rgba(255, 215, 0, 0.85) 315deg,
-    rgba(212, 168, 75, 0.5) 319deg,
+    rgba(218, 165, 32, 0.6) 311deg,
+    rgba(255, 215, 0, 0.95) 315deg,
+    rgba(218, 165, 32, 0.6) 319deg,
     transparent 330deg,
     transparent 330deg,
-    rgba(212, 168, 75, 0.5) 341deg,
-    rgba(255, 215, 0, 0.85) 345deg,
-    rgba(212, 168, 75, 0.5) 349deg,
+    rgba(218, 165, 32, 0.6) 341deg,
+    rgba(255, 215, 0, 0.95) 345deg,
+    rgba(218, 165, 32, 0.6) 349deg,
     transparent 360deg
   );
   -webkit-mask-image: radial-gradient(
@@ -152,7 +151,7 @@
 /* Hero — mesmo fundo que o bloco (transparente). Logo está em .purificacao-rays-origin acima. */
 .purificacao-hero {
   background: transparent;
-  padding: 0 24px var(--section-padding-y);
+  padding: 0 24px 0;
   text-align: center;
   position: relative;
   z-index: 1;
@@ -171,8 +170,6 @@
 .purificacao-hero-inner {
   position: relative;
   z-index: 2;
-  max-width: var(--section-max-width, 940px);
-  margin: 0 auto;
 }
 
 .purificacao-hero-logo {
@@ -180,36 +177,39 @@
   z-index: 10;
   display: flex;
   justify-content: center;
-  filter: drop-shadow(0 0 12px rgba(212, 168, 75, 0.4)) drop-shadow(0 4px 20px rgba(0, 0, 0, 0.4));
+  filter: drop-shadow(0 0 12px rgba(212, 168, 75, 0.4)) drop-shadow(0 9px 20px rgba(0, 0, 0, 0.55));
 }
 
+/* Hero título/subtítulo — texto escuro com halo claro para destaque no fundo */
 .purificacao-hero-title {
   font-family: 'Playfair Display', serif;
-  font-size: clamp(2rem, 5.5vw, 3.5rem);
+  font-size: clamp(2.1rem, 6vw, 3.75rem);
   font-weight: 700;
-  color: #FEFDFB;
+  color: var(--purificacao-text-dark);
   margin-bottom: 10px;
   line-height: 1.15;
-  -webkit-text-stroke: 0.5px rgba(0, 0, 0, 0.5);
-  text-stroke: 0.5px rgba(0, 0, 0, 0.5);
+  position: relative;
+  z-index: 1;
   text-shadow:
-    0 0 3px rgba(0, 0, 0, 0.9),
-    0 0 6px rgba(0, 0, 0, 0.7),
-    0 2px 4px rgba(0, 0, 0, 0.8),
-    0 0 24px rgba(254, 253, 251, 0.35);
+    0 0 1px rgba(255, 255, 255, 1),
+    0 0 3px rgba(255, 255, 255, 0.9),
+    0 1px 3px rgba(0, 0, 0, 0.12),
+    0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
 .purificacao-hero-sub {
-  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+  font-size: clamp(1rem, 2.4vw, 1.5rem);
   font-style: italic;
-  color: #FFFFFF;
-  opacity: 0.98;
-  -webkit-text-stroke: 0.5px rgba(0, 0, 0, 0.45);
-  text-stroke: 0.5px rgba(0, 0, 0, 0.45);
+  font-weight: 600;
+  color: var(--purificacao-text-dark);
+  letter-spacing: 0.04em;
+  opacity: 0.72;
   text-shadow:
-    0 0 2px rgba(0, 0, 0, 0.85),
-    0 0 5px rgba(0, 0, 0, 0.65),
-    0 1px 4px rgba(0, 0, 0, 0.75);
+    0 0 6px rgba(255, 255, 255, 0.9),
+    0 0 12px rgba(255, 255, 255, 0.5);
+  margin-bottom: var(--hero-sub-to-next, 36px);
+  position: relative;
+  z-index: 1;
 }
 
 /* ─────────────────────────────────────────────
@@ -218,7 +218,12 @@
 .purificacao-section {
   position: relative;
   z-index: 1;
-  padding: var(--section-padding-y) 0;
+  padding: var(--section-padding-y) 24px;
+}
+
+/* Primeira seção — gap de 36px (hero-sub-to-next) entre subtitle e card, como na Index. */
+.purificacao-section-first {
+  padding-top: 0 !important;
 }
 
 .purificacao-card {
@@ -232,15 +237,27 @@
   height: 4px;
 }
 
+/* Espaço do topo da caixa ao título — padronizado com Index (section-box-padding-top) */
+.purificacao-card-content {
+  padding-top: var(--section-box-padding-top, 24px) !important;
+}
+
 .purificacao-card-bar.gold {
   background: linear-gradient(90deg, var(--purificacao-gold-muted), var(--purificacao-gold), var(--purificacao-gold-muted));
 }
 
 .purificacao-heading {
   font-family: 'Playfair Display', serif;
-  font-size: 1.85rem;
+  font-size: clamp(1.35rem, 4vw, 1.85rem);
   font-weight: 500;
   color: var(--purificacao-text-dark);
+  margin-bottom: var(--section-title-to-content, 16px);
+  line-height: 1.25;
+}
+
+.purificacao-section-title-block,
+.purificacao-section-title {
+  margin-bottom: var(--section-title-to-content, 16px);
 }
 
 .purificacao-heading.gold {
@@ -258,7 +275,7 @@
 }
 
 .purificacao-subheading {
-  font-size: 1.1rem;
+  font-size: clamp(0.95rem, 2.4vw, 1.1rem);
   font-weight: 600;
   color: var(--purificacao-text-dark);
   margin-bottom: 8px;
@@ -413,7 +430,7 @@
 }
 
 .purificacao-phase-title {
-  font-size: 1.25rem;
+  font-size: clamp(1.05rem, 2.8vw, 1.25rem);
   font-weight: 600;
   color: var(--purificacao-text-dark);
 }
@@ -506,7 +523,7 @@
    Psicodélicos — dourado metálico sagrado
    ───────────────────────────────────────────── */
 .purificacao-psicodelicos {
-  padding: var(--section-padding-y) 0;
+  padding: var(--section-padding-y) 24px;
   position: relative;
 }
 
@@ -527,7 +544,7 @@
 
 .purificacao-psicodelicos-header {
   background: linear-gradient(135deg, #4a3d28 0%, #5c4a28 50%, #4a3d28 100%);
-  padding: 32px 24px;
+  padding: var(--section-box-padding-top, 24px) 24px 32px;
   text-align: center;
   position: relative;
   border-bottom: 3px solid var(--purificacao-gold);
@@ -549,14 +566,14 @@
 
 .purificacao-psicodelicos-title {
   font-family: 'Playfair Display', serif;
-  font-size: 1.75rem;
+  font-size: clamp(1.3rem, 3.8vw, 1.75rem);
   font-weight: 600;
   color: #FEFDFB;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .purificacao-psicodelicos-subtitle {
-  font-size: 1.1rem;
+  font-size: clamp(0.95rem, 2.4vw, 1.1rem);
   color: rgba(254, 253, 251, 0.9);
   font-style: italic;
 }
@@ -600,36 +617,70 @@
   letter-spacing: 0.02em;
 }
 
-.purificacao-triple-wrap {
-  padding: 28px 20px;
-  border-radius: var(--ds-radius-md, 12px);
-  background: var(--purificacao-gold-bg);
-  border: 1px solid rgba(196, 148, 59, 0.2);
+.purificacao-triple-section {
+  background: var(--purificacao-cream);
+  border-radius: var(--ds-radius-lg, 16px);
+  border-top: 3px solid var(--purificacao-gold);
+  box-shadow: var(--ds-shadow-md, 0 4px 24px rgba(0, 0, 0, 0.08));
+  padding: var(--section-box-padding-top, 24px) 32px 44px;
+  position: relative;
+}
+
+@media (min-width: 768px) {
+  .purificacao-triple-section { padding: var(--section-box-padding-top, 24px) 48px 56px; }
+}
+
+.purificacao-triple-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  margin-top: var(--section-title-to-content, 16px);
   margin-bottom: 32px;
+}
+
+@media (min-width: 768px) {
+  .purificacao-triple-grid { grid-template-columns: repeat(3, 1fr); }
 }
 
 .purificacao-shield-wrap {
   display: flex;
   justify-content: center;
   margin-bottom: 12px;
+  position: relative;
 }
 
 .purificacao-shield-icon {
-  color: var(--purificacao-gold);
-  filter: drop-shadow(0 2px 8px rgba(196, 148, 59, 0.4));
+  position: relative;
+  z-index: 1;
+  animation: shield-pulse 5.6s ease-in-out infinite;
+}
+
+@keyframes shield-pulse {
+  0%, 100% {
+    filter: drop-shadow(0 2px 0 rgba(59, 130, 246, 0.85));
+  }
+  50% {
+    filter: drop-shadow(0 2px 10px rgba(59, 130, 246, 0.85));
+  }
 }
 
 .purificacao-triple-card {
-  text-align: center;
-  padding: 24px 20px;
   background: var(--purificacao-white);
-  border-radius: var(--ds-radius-sm, 8px);
-  border: 1px solid rgba(139, 114, 64, 0.15);
+  border-radius: var(--ds-radius-md, 12px);
+  padding: 28px 20px;
+  text-align: center;
+  border: 1px solid var(--ds-border-light, rgba(139, 114, 64, 0.12));
+  transition: all 0.3s;
+}
+
+.purificacao-triple-card:hover {
+  box-shadow: var(--ds-shadow-md, 0 4px 16px rgba(0, 0, 0, 0.1));
+  transform: translateY(-2px);
 }
 
 .purificacao-triple-icon {
-  width: 56px;
-  height: 56px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -650,6 +701,21 @@
 .purificacao-triple-icon.gold {
   background: var(--purificacao-gold-bg);
   color: var(--purificacao-gold);
+}
+
+.purificacao-triple-card h3,
+.purificacao-triple-card .purificacao-subheading {
+  font-size: clamp(1rem, 2.5vw, 1.15rem);
+  font-weight: 600;
+  color: var(--purificacao-text-dark);
+  margin-bottom: 10px;
+}
+
+.purificacao-triple-card p,
+.purificacao-triple-card .purificacao-body {
+  font-size: 0.85rem;
+  color: var(--purificacao-text-muted);
+  line-height: 1.7;
 }
 
 .purificacao-application-item {

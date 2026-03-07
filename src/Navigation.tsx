@@ -149,101 +149,86 @@ const NavigationMenu = memo(() => {
   };
 
   return (
-    <nav className="bg-white/95 backdrop-blur-md shadow-lg sticky top-0 z-40 border-b border-stone-200/60">
-      <div className="container mx-auto px-4">
-        <div className="flex items-center h-12 md:h-14">
+    <nav className="fixed top-0 left-0 right-0 w-full min-w-0 bg-white/95 backdrop-blur-md shadow-lg z-50 border-b border-stone-200/60">
+      <div className="w-full max-w-full min-w-0 mx-auto px-4">
+        <div className="flex items-center justify-center min-h-12 md:min-h-14 flex-nowrap gap-4">
 
-          {/* ═══ Logo (left) ═══ */}
-          <div className="flex items-center gap-2 shrink-0">
+          {/* ═══ Mobile: logo à esquerda ═══ */}
+          <div className="flex md:hidden items-center shrink-0">
             <Link to="/" className="shrink-0">
-              <svg
-                viewBox="0 0 100 100"
-                className="w-8 h-8 md:w-9 md:h-9"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
+              <svg viewBox="0 0 100 100" className="w-8 h-8" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <circle cx="50" cy="50" r="20" fill="#CFAF5A" />
                 {[...Array(12)].map((_, i) => {
                   const angle = (i * 30 * Math.PI) / 180;
-                  const x1 = 50 + Math.cos(angle) * 25;
-                  const y1 = 50 + Math.sin(angle) * 25;
-                  const x2 = 50 + Math.cos(angle) * 40;
-                  const y2 = 50 + Math.sin(angle) * 40;
-                  return (
-                    <line
-                      key={i}
-                      x1={x1}
-                      y1={y1}
-                      x2={x2}
-                      y2={y2}
-                      stroke="#CFAF5A"
-                      strokeWidth="3"
-                      strokeLinecap="round"
-                    />
-                  );
+                  const x1 = 50 + Math.cos(angle) * 25, y1 = 50 + Math.sin(angle) * 25;
+                  const x2 = 50 + Math.cos(angle) * 40, y2 = 50 + Math.sin(angle) * 40;
+                  return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke="#CFAF5A" strokeWidth="3" strokeLinecap="round" />;
                 })}
               </svg>
             </Link>
-
-            {/* Logo Text — desktop only */}
-            <Link to="/" className="hidden lg:block">
-              <div className="text-left leading-tight">
-                <div className="text-base font-bold text-[#CFAF5A] tracking-tight leading-tight">{logo.title}</div>
-                <div className="text-[10px] text-stone-500 font-medium">{logo.subtitle}</div>
-              </div>
-            </Link>
           </div>
 
-          {/* ═══ Center: Desktop Navigation Links ═══ */}
-          <div className="hidden md:flex items-center justify-center flex-1 mx-2 lg:mx-4">
-            <div className="flex items-center gap-0.5">
-              {navigation.map((item) => (
-                <Link
-                  key={item.id}
-                  to={item.href}
-                  className={`px-2 lg:px-3 py-1.5 rounded-md text-xs lg:text-sm font-medium transition-all duration-200 whitespace-nowrap ${
-                    isActive(item.href)
-                      ? 'text-white bg-linear-to-br from-[#CFAF5A] to-[#A08930] shadow-md shadow-[#CFAF5A]/30 -translate-y-px'
-                      : 'text-stone-600 hover:text-[#CFAF5A] hover:bg-stone-50'
-                  }`}
-                >
-                  {item.label}
-                </Link>
-              ))}
+          {/* ═══ Desktop: tabela centralizada (logo | links | idioma) ═══ */}
+          <div className="hidden md:flex items-center flex-nowrap gap-4 overflow-x-auto">
+            <div className="flex items-center gap-2 shrink-0">
+              <Link to="/" className="shrink-0">
+                <svg viewBox="0 0 100 100" className="w-8 h-8 md:w-9 md:h-9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="50" cy="50" r="20" fill="#CFAF5A" />
+                  {[...Array(12)].map((_, i) => {
+                    const angle = (i * 30 * Math.PI) / 180;
+                    const x1 = 50 + Math.cos(angle) * 25, y1 = 50 + Math.sin(angle) * 25;
+                    const x2 = 50 + Math.cos(angle) * 40, y2 = 50 + Math.sin(angle) * 40;
+                    return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke="#CFAF5A" strokeWidth="3" strokeLinecap="round" />;
+                  })}
+                </svg>
+              </Link>
+              <Link to="/" className="hidden min-[1044px]:block">
+                <div className="text-left leading-tight">
+                  <div className="text-base font-bold text-[#CFAF5A] tracking-tight leading-tight">{logo.title}</div>
+                  <div className="text-[10px] text-stone-500 font-medium">{logo.subtitle}</div>
+                </div>
+              </Link>
             </div>
-          </div>
-
-          {/* ═══ Right: Language Switcher (desktop) ═══ */}
-          <div className="hidden md:flex items-center shrink-0 ml-auto">
-            <div className="flex items-center bg-stone-100 rounded-full p-0.5 gap-0.5">
+            {navigation.map((item) => (
+              <Link
+                key={item.id}
+                to={item.href}
+                className={`px-2 py-1.5 rounded-md text-xs lg:text-sm font-medium transition-all duration-200 whitespace-nowrap shrink-0 ${
+                  isActive(item.href)
+                    ? 'text-white bg-linear-to-br from-[#CFAF5A] to-[#A08930] shadow-md shadow-[#CFAF5A]/30'
+                    : 'text-stone-600 hover:text-[#CFAF5A] hover:bg-stone-50'
+                }`}
+              >
+                {item.label}
+              </Link>
+            ))}
+            <div className="flex flex-col shrink-0 ml-1 max-[856px]:flex-col max-[856px]:overflow-hidden max-[856px]:h-11 min-[857px]:flex-row min-[857px]:gap-1">
               <button
                 onClick={() => setLanguage('pt-BR')}
-                className={`flex items-center gap-1 lg:gap-1.5 px-2 lg:px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 ${
+                className={`flex items-center justify-center w-7 h-7 rounded-full transition-all duration-200 shrink-0 max-[856px]:w-6 max-[856px]:h-6 max-[856px]:relative ${
                   language === 'pt-BR'
-                    ? 'bg-white text-stone-800 shadow-sm ring-1 ring-stone-200'
-                    : 'text-stone-500 hover:text-stone-700'
+                    ? 'bg-white text-stone-800 shadow-md ring-1 ring-stone-200 max-[856px]:z-10'
+                    : 'bg-stone-100 text-stone-500 hover:text-stone-700 hover:bg-stone-200 max-[856px]:z-0'
                 }`}
                 title="Português (Brasil)"
               >
-                <BrazilFlag className="w-5 h-3.5 rounded-sm" />
-                <span className="hidden lg:inline">PT</span>
+                <BrazilFlag className="w-4 h-3 rounded-sm max-[856px]:w-3.5 max-[856px]:h-2.5" />
               </button>
               <button
                 onClick={() => setLanguage('en-US')}
-                className={`flex items-center gap-1 lg:gap-1.5 px-2 lg:px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 ${
+                className={`flex items-center justify-center w-7 h-7 rounded-full transition-all duration-200 shrink-0 max-[856px]:w-6 max-[856px]:h-6 max-[856px]:relative max-[856px]:-mt-1 ${
                   language === 'en-US'
-                    ? 'bg-white text-stone-800 shadow-sm ring-1 ring-stone-200'
-                    : 'text-stone-500 hover:text-stone-700'
+                    ? 'bg-white text-stone-800 shadow-md ring-1 ring-stone-200 max-[856px]:z-10'
+                    : 'bg-stone-100 text-stone-500 hover:text-stone-700 hover:bg-stone-200 max-[856px]:z-0'
                 }`}
                 title="English (US)"
               >
-                <USFlag className="w-5 h-3.5 rounded-sm" />
-                <span className="hidden lg:inline">EN</span>
+                <USFlag className="w-4 h-3 rounded-sm max-[856px]:w-3.5 max-[856px]:h-2.5" />
               </button>
             </div>
           </div>
 
-          {/* ═══ Mobile: center logo text + right hamburger ═══ */}
+          {/* ═══ Mobile: logo text centralizado + hamburger ═══ */}
           <Link to="/" className="md:hidden absolute left-1/2 -translate-x-1/2">
             <div className="text-center leading-tight">
               <div className="text-base font-bold text-[#CFAF5A] tracking-tight">{logo.title}</div>
@@ -324,7 +309,8 @@ const Navigation = () => {
       <ScrollManager />
       <NavigationMenu />
 
-        {/* Routes */}
+        {/* Espaço para a barra fixa — evita conteúdo sob a nav */}
+        <div className="pt-12 md:pt-14">
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/indexantiga" element={<IndexAntiga />} />
@@ -349,6 +335,7 @@ const Navigation = () => {
           />
           <Route path="*" element={<NotFound />} />
         </Routes>
+        </div>
 
         {/* WhatsApp Button */}
         <WhatsAppButton />

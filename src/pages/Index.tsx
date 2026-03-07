@@ -44,7 +44,7 @@ export default function Index() {
 
       {/* ==================== HERO (dark navy) ==================== */}
       <section className="ds-hero">
-        <div className="ds-hero-inner">
+        <div className="ds-hero-inner max-w-section mx-auto">
           <div className="ds-hero-logo">
             <LogoGold className="w-190 h-auto" />
           </div>
@@ -90,7 +90,7 @@ export default function Index() {
 
       {/* ==================== CHALLENGES ("Is what we suffer...") ==================== */}
       <section className="ds-section-challenges">
-        <div className="ds-challenges-inner">
+        <div className="ds-challenges-inner max-w-section mx-auto">
           <h2 className="ds-section-heading">
             <EditableField
               value={texts.fisicoEspiritual.title}
@@ -222,7 +222,7 @@ export default function Index() {
 
       {/* ==================== JOURNEY ("One Journey, Two Stages") ==================== */}
       <section className="ds-section-journey">
-        <div className="ds-journey-inner">
+        <div className="ds-journey-inner max-w-section mx-auto">
           <h2 className="ds-section-heading">
             <EditableField
               value={texts.caminhos?.title}
@@ -231,6 +231,7 @@ export default function Index() {
               className=""
             />
           </h2>
+          <div className="ds-sun-divider" />
 
           <div className="ds-journey-cards">
             {/* INSTITUTO */}
@@ -336,7 +337,7 @@ export default function Index() {
 
       {/* ==================== HOW CAN WE HELP ==================== */}
       <section className="ds-section-help">
-        <div className="ds-help-inner">
+        <div className="ds-help-inner max-w-section mx-auto">
           <h2 className="ds-section-heading">
             <EditableField
               value={texts.benefitsSection.title}
@@ -421,7 +422,7 @@ export default function Index() {
             waterColors={['#0a3a3a', '#072e2e', '#052222']}
           />
 
-          <div className={FOOTER.containerClass} style={{ height: FOOTER.containerHeight }}>
+          <div className={FOOTER.containerClass}>
             <div className="max-w-section mx-auto text-center">
               <EditableField
                 value={texts.cta?.title}

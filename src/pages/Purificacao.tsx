@@ -6,7 +6,7 @@
  */
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Sparkles, Crown, Compass, Heart, Infinity as InfinityIcon, LineChart, ChevronDown, Shield } from 'lucide-react';
+import { Sparkles, Crown, Compass, Heart, Infinity as InfinityIcon, LineChart, ChevronDown } from 'lucide-react';
 import EditableField from '@/components/ui/EditableField';
 import { Sun12Rays } from '../components/icons/Sun12Rays';
 import { LogoGold } from '../components/icons/LogoGold';
@@ -23,6 +23,8 @@ interface PurificacaoTexts {
   header: { title: string; subtitle: string };
   sections?: { process_title?: string; process_subtitle?: string };
   intro: { sectionTitle?: string; mainText: string; description: string };
+  testemunhosCta?: { text?: string; button?: string };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 }
 
@@ -49,10 +51,14 @@ export default function Purificacao() {
   const textsTyped = texts as Record<string, Record<string, unknown>>;
   const header = textsTyped.header as { title: string; subtitle: string };
   const intro = textsTyped.intro as { sectionTitle?: string; mainText: string; description: string };
-  const faseInicial = textsTyped.faseInicial as any;
-  const faseIntermediaria = textsTyped.faseIntermediaria as any;
-  const faseFinal = textsTyped.faseFinal as any;
-  const psicodelicos = textsTyped.psicodelicos as any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const faseInicial = textsTyped.faseInicial as Record<string, any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const faseIntermediaria = textsTyped.faseIntermediaria as Record<string, any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const faseFinal = textsTyped.faseFinal as Record<string, any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const psicodelicos = textsTyped.psicodelicos as Record<string, any>;
   const cta = textsTyped.cta as { title?: string; subtitle?: string; buttonText: string };
 
   return (
@@ -61,15 +67,15 @@ export default function Purificacao() {
       <div className="purificacao-hero-block">
         {/* Origem dos raios: centro = centro do logo (cuboctaedro). Raios irradiam deste ponto. */}
         <div className="purificacao-rays-origin">
-          <div className="purificacao-hero-rays-layer pointer-events-none" aria-hidden />
           <div className="purificacao-hero-logo-area">
+            <div className="purificacao-hero-rays-layer pointer-events-none" aria-hidden />
             <div className="purificacao-hero-logo">
               <LogoGold className="w-190 h-auto" />
             </div>
           </div>
         </div>
         <section className="purificacao-hero relative">
-          <div className="purificacao-hero-inner relative z-10">
+          <div className="purificacao-hero-inner max-w-section mx-auto relative z-10">
           <div className="purificacao-hero-text relative z-10">
             <EditableField value={header.title} jsonKey="purificacao.header.title" type="h1" className="purificacao-hero-title" />
             <p className="purificacao-hero-sub">
@@ -80,29 +86,26 @@ export default function Purificacao() {
       </section>
 
       {/* Introdução — card dourado */}
-      <section className="purificacao-section">
-        <div className="container mx-auto px-4">
-          <div className="max-w-section mx-auto">
-            <Card className="purificacao-card purificacao-card-gold">
-              <div className="purificacao-card-bar gold" />
-              <CardContent className="p-5 md:p-8 text-center">
-                <EditableField value={intro.sectionTitle || ''} jsonKey="purificacao.intro.sectionTitle" type="h2" className="purificacao-heading gold" />
-                <EditableField value={intro.mainText} jsonKey="purificacao.intro.mainText" type="p" className="purificacao-body mb-3 whitespace-pre-line" />
-                <EditableField value={intro.description} jsonKey="purificacao.intro.description" type="p" className="purificacao-body" />
-              </CardContent>
-            </Card>
-          </div>
+      <section className="purificacao-section purificacao-section-first">
+        <div className="max-w-section mx-auto">
+          <Card className="purificacao-card purificacao-card-gold">
+            <div className="purificacao-card-bar gold" />
+            <CardContent className="purificacao-card-content p-5 md:p-8 text-center">
+              <EditableField value={intro.sectionTitle || ''} jsonKey="purificacao.intro.sectionTitle" type="h2" className="purificacao-heading gold" />
+              <EditableField value={intro.mainText} jsonKey="purificacao.intro.mainText" type="p" className="purificacao-body mb-3 whitespace-pre-line" />
+              <EditableField value={intro.description} jsonKey="purificacao.intro.description" type="p" className="purificacao-body" />
+            </CardContent>
+          </Card>
         </div>
       </section>
 
       {/* Fluxo das Três Fases */}
       <section className="purificacao-section">
-        <div className="container mx-auto px-4">
-          <div className="max-w-section mx-auto">
+        <div className="max-w-section mx-auto">
             <Card className="purificacao-card purificacao-timeline-card">
               <div className="purificacao-card-bar gold" />
-              <CardContent className="p-6 md:p-10 relative z-10">
-                <div className="text-center mb-8">
+              <CardContent className="purificacao-card-content p-6 md:p-10 relative z-10">
+                <div className="purificacao-section-title-block text-center">
                   <EditableField value={texts.sections?.process_title} jsonKey="purificacao.sections.process_title" type="h2" className="purificacao-heading gold mb-3" />
                   <p className="purificacao-body muted max-w-full mx-auto mb-4">
                     <EditableField value={texts.sections?.process_subtitle} jsonKey="purificacao.sections.process_subtitle" type="span" className="inline" />
@@ -209,7 +212,7 @@ export default function Purificacao() {
                         </div>
                         <div className="purificacao-phase-block metallic">
                           <div className="flex items-center gap-4 mb-4">
-                            <Sun12Rays className="w-12 h-12 text-[var(--purificacao-gold)] shrink-0" />
+                            <Sun12Rays className="w-12 h-12 text-(--purificacao-gold) shrink-0" />
                             <EditableField value={faseFinal.evento.title ?? 'O Evento Iniciático'} jsonKey="purificacao.faseFinal.evento.title" type="h5" className="purificacao-subheading gold" />
                           </div>
                           {faseFinal.evento.content.map((para: string, i: number) => (
@@ -239,15 +242,13 @@ export default function Purificacao() {
               </CardContent>
             </Card>
           </div>
-        </div>
       </section>
       </div>
 
       {/* Psicodélicos — dourado metálico sagrado */}
       <section className="purificacao-psicodelicos">
         <div className="purificacao-psicodelicos-bg" />
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-section mx-auto">
+        <div className="max-w-section mx-auto relative z-10">
             <Card className="purificacao-psicodelicos-card">
               <CardHeader className="purificacao-psicodelicos-header">
                 <div className="text-center relative z-10">
@@ -258,37 +259,13 @@ export default function Purificacao() {
                   <EditableField value={psicodelicos.subtitle} jsonKey="purificacao.psicodelicos.subtitle" type="p" className="purificacao-psicodelicos-subtitle" />
                 </div>
               </CardHeader>
-              <CardContent className="purificacao-psicodelicos-content">
+              <CardContent className="purificacao-card-content purificacao-psicodelicos-content">
                 <div className="purificacao-papiro-wrap">
                   <div className="papiro-texture" />
                   <div className="papiro-text text-center text-xl md:text-2xl leading-relaxed font-serif italic" data-json-key="purificacao.psicodelicos.intro" dangerouslySetInnerHTML={{ __html: psicodelicos.intro }} />
                 </div>
 
-                <div className="purificacao-triple-wrap">
-                  <div className="purificacao-shield-wrap">
-                    <Shield className="w-16 h-16 purificacao-shield-icon" />
-                  </div>
-                  <EditableField value={psicodelicos.tripleProtection.title} jsonKey="purificacao.psicodelicos.tripleProtection.title" type="h4" className="purificacao-heading gold text-center mb-8" />
-                  <div className="grid md:grid-cols-3 gap-8">
-                    <div className="purificacao-triple-card">
-                      <div className="purificacao-triple-icon sage"><Compass className="w-10 h-10" /></div>
-                      <EditableField value={psicodelicos.tripleProtection.cards[0].title} jsonKey="purificacao.psicodelicos.tripleProtection.cards[0].title" type="h5" className="purificacao-subheading" />
-                      <EditableField value={psicodelicos.tripleProtection.cards[0].description} jsonKey="purificacao.psicodelicos.tripleProtection.cards[0].description" type="p" className="purificacao-body text-sm" />
-                    </div>
-                    <div className="purificacao-triple-card">
-                      <div className="purificacao-triple-icon fire"><Heart className="w-10 h-10" /></div>
-                      <EditableField value={psicodelicos.tripleProtection.cards[1].title} jsonKey="purificacao.psicodelicos.tripleProtection.cards[1].title" type="h5" className="purificacao-subheading" />
-                      <EditableField value={psicodelicos.tripleProtection.cards[1].description} jsonKey="purificacao.psicodelicos.tripleProtection.cards[1].description" type="p" className="purificacao-body text-sm" />
-                    </div>
-                    <div className="purificacao-triple-card">
-                      <div className="purificacao-triple-icon gold"><Sun12Rays className="w-10 h-10" /></div>
-                      <EditableField value={psicodelicos.tripleProtection.cards[2].title} jsonKey="purificacao.psicodelicos.tripleProtection.cards[2].title" type="h5" className="purificacao-subheading" />
-                      <EditableField value={psicodelicos.tripleProtection.cards[2].description} jsonKey="purificacao.psicodelicos.tripleProtection.cards[2].description" type="p" className="purificacao-body text-sm" />
-                    </div>
-                  </div>
-                </div>
-
-                <EditableField value={psicodelicos.applications.title} jsonKey="purificacao.psicodelicos.applications.title" type="h3" className="purificacao-heading gold text-center mt-16 mb-10" />
+                <EditableField value={psicodelicos.applications.title} jsonKey="purificacao.psicodelicos.applications.title" type="h3" className="purificacao-heading gold text-center" />
                 <ul className="space-y-5">
                   {psicodelicos.applications.items.map((item: string, idx: number) => (
                     <li key={idx} className="purificacao-application-item">
@@ -300,7 +277,7 @@ export default function Purificacao() {
 
                 <div className="purificacao-papiro-wrap mt-16">
                   <div className="papiro-texture" />
-                  <h4 className="papiro-title text-center font-bold text-2xl md:text-3xl text-[var(--purificacao-text-dark)] mb-4">
+                  <h4 className="papiro-title purificacao-section-title text-center font-bold text-2xl md:text-3xl text-(--purificacao-text-dark)">
                     <EditableField value={psicodelicos.conclusion.title} jsonKey="purificacao.psicodelicos.conclusion.title" type="span" className="inline" />
                   </h4>
                   <p className="papiro-text text-center text-lg md:text-xl leading-relaxed font-serif italic">
@@ -319,13 +296,59 @@ export default function Purificacao() {
               </CardContent>
             </Card>
           </div>
-        </div>
+      </section>
+
+      {/* Tripla Proteção — seção independente, formato "Como Podemos Ajudar?" da Index */}
+      <section className="purificacao-section">
+        <div className="max-w-section mx-auto">
+            <div className="purificacao-triple-section">
+              <div className="purificacao-shield-wrap">
+                <svg className="purificacao-shield-icon" width="56" height="56" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <linearGradient id="shieldMetalLeft" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#e8ecf1" />
+                      <stop offset="35%" stopColor="#c0c8d4" />
+                      <stop offset="60%" stopColor="#8a9bb0" />
+                      <stop offset="100%" stopColor="#5a6e85" />
+                    </linearGradient>
+                    <linearGradient id="shieldMetalRight" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#cbd5e1" />
+                      <stop offset="35%" stopColor="#94a3b8" />
+                      <stop offset="60%" stopColor="#64748b" />
+                      <stop offset="100%" stopColor="#3b4f65" />
+                    </linearGradient>
+                  </defs>
+                  <path d="M12 2 L3 7 L3 12 C3 17.5 7 21.5 12 23 C12 23 12 23 12 23 L12 2 Z" fill="url(#shieldMetalLeft)" />
+                  <path d="M12 2 L21 7 L21 12 C21 17.5 17 21.5 12 23 C12 23 12 23 12 23 L12 2 Z" fill="url(#shieldMetalRight)" />
+                  <path d="M12 22C17.5 20.5 20 16.5 20 12V7.5L12 3L4 7.5V12C4 16.5 6.5 20.5 12 22Z" fill="none" stroke="#475569" strokeWidth="0.5" opacity="0.4" />
+                </svg>
+              </div>
+              <EditableField value={psicodelicos.tripleProtection.title} jsonKey="purificacao.psicodelicos.tripleProtection.title" type="h2" className="purificacao-heading gold text-center" />
+
+              <div className="purificacao-triple-grid">
+                <div className="purificacao-triple-card">
+                  <div className="purificacao-triple-icon sage"><Compass className="w-6 h-6" /></div>
+                  <EditableField value={psicodelicos.tripleProtection.cards[0].title} jsonKey="purificacao.psicodelicos.tripleProtection.cards[0].title" type="h3" className="purificacao-subheading" />
+                  <EditableField value={psicodelicos.tripleProtection.cards[0].description} jsonKey="purificacao.psicodelicos.tripleProtection.cards[0].description" type="p" className="purificacao-body" />
+                </div>
+                <div className="purificacao-triple-card">
+                  <div className="purificacao-triple-icon fire"><Heart className="w-6 h-6" /></div>
+                  <EditableField value={psicodelicos.tripleProtection.cards[1].title} jsonKey="purificacao.psicodelicos.tripleProtection.cards[1].title" type="h3" className="purificacao-subheading" />
+                  <EditableField value={psicodelicos.tripleProtection.cards[1].description} jsonKey="purificacao.psicodelicos.tripleProtection.cards[1].description" type="p" className="purificacao-body" />
+                </div>
+                <div className="purificacao-triple-card">
+                  <div className="purificacao-triple-icon gold"><Sun12Rays className="w-6 h-6" /></div>
+                  <EditableField value={psicodelicos.tripleProtection.cards[2].title} jsonKey="purificacao.psicodelicos.tripleProtection.cards[2].title" type="h3" className="purificacao-subheading" />
+                  <EditableField value={psicodelicos.tripleProtection.cards[2].description} jsonKey="purificacao.psicodelicos.tripleProtection.cards[2].description" type="p" className="purificacao-body" />
+                </div>
+              </div>
+            </div>
+          </div>
       </section>
 
       {/* Banner de testemunhos — texto editável + link */}
       <section className="purificacao-section">
-        <div className="container mx-auto px-4">
-          <div className="max-w-section mx-auto">
+        <div className="max-w-section mx-auto">
             <div className="purificacao-testimonial-banner">
               <div className="purificacao-testimonial-left">
                 <div className="purificacao-testimonial-icon">
@@ -351,7 +374,6 @@ export default function Purificacao() {
               </Link>
             </div>
           </div>
-        </div>
       </section>
 
       {/* Rodapé — paisagem padronizada */}
@@ -359,7 +381,7 @@ export default function Purificacao() {
         <div className="relative">
           <FooterBackground gradientId="skyGradientPurificacao" skyColors={['#1e3a5f', '#4b6cb7', '#d4a843']} earthColor="#5c4a30" waterColors={['#0ea5e9', '#0284c7', '#0369a1']} />
 
-          <div className={FOOTER.containerClass} style={{ height: FOOTER.containerHeight }}>
+          <div className={FOOTER.containerClass}>
             <div className="max-w-section mx-auto text-center">
               <EditableField value={cta.title} jsonKey="purificacao.cta.title" type="h2" className={FOOTER.titleClass} />
               <EditableField value={cta.subtitle} jsonKey="purificacao.cta.subtitle" type="p" className={FOOTER.subtitleClass} />

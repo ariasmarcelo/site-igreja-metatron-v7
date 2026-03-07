@@ -341,7 +341,7 @@ export default function QuemSomos() {
             waterColors={['#34d399', '#10b981', '#059669']}
           />
 
-          <div className={FOOTER.containerClass} style={{ height: FOOTER.containerHeight }}>
+          <div className={FOOTER.containerClass}>
             <div className="max-w-section mx-auto text-center">
               <EditableField
                 value={texts.cta?.title}

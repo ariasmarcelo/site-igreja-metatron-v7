@@ -1,48 +1,93 @@
-/* WhatsApp Button Component Styles */
-
-.whatsapp-button {
+.whatsapp-fab {
   position: fixed;
   bottom: 1.5rem;
   right: 1.5rem;
   z-index: 50;
-  
   display: flex;
   align-items: center;
   justify-content: center;
-  
-  width: 3.5rem;
-  height: 3.5rem;
-  
-  background-color: #25D366;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
   color: white;
-  border-radius: 9999px;
-  
-  transition: all 0.3s ease;
-  
-  /* Sombra base permanente */
-  box-shadow: 
-    0 8px 16px rgba(0, 0, 0, 0.3),
-    0 4px 8px rgba(0, 0, 0, 0.2);
-  
-  /* Animação de flutuação */
-  animation: whatsapp-float 3s ease-in-out infinite;
+  animation:
+    whatsapp-enter 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both,
+    whatsapp-float 3.5s ease-in-out 1.6s infinite;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
 }
 
-.whatsapp-button:hover {
-  transform: scale(1.1);
-  box-shadow: 
-    0 20px 50px rgba(37, 211, 102, 0.5),
-    0 10px 25px rgba(0, 0, 0, 0.4);
+.whatsapp-fab:hover {
+  animation-play-state: paused;
+  transform: translateY(-3px) scale(1.1);
+  box-shadow:
+    0 12px 28px rgba(37, 211, 102, 0.35),
+    0 6px 12px rgba(0, 0, 0, 0.12),
+    0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.whatsapp-fab:active {
+  transform: translateY(0) scale(0.95);
+  box-shadow:
+    0 2px 8px rgba(37, 211, 102, 0.3),
+    0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.whatsapp-fab-icon {
+  width: 28px;
+  height: 28px;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.15));
+}
+
+.whatsapp-fab-ring {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid rgba(37, 211, 102, 0.3);
+  animation: whatsapp-ring 3.5s ease-in-out 1.6s infinite;
+  pointer-events: none;
+}
+
+.whatsapp-fab:hover .whatsapp-fab-ring {
+  animation-play-state: paused;
+  opacity: 0;
+}
+
+@keyframes whatsapp-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.3) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
 @keyframes whatsapp-float {
   0%, 100% {
-    transform: translateY(0px);
+    transform: translateY(0);
+    box-shadow:
+      0 2px 4px rgba(0, 0, 0, 0.5),
+      0 4px 12px rgba(0, 0, 0, 0.35),
+      0 6px 20px rgba(37, 211, 102, 0.5);
   }
   50% {
-    transform: translateY(-6px);
-    box-shadow: 
-      0 14px 20px rgba(0, 0, 0, 0.4),
-      0 7px 10px rgba(0, 0, 0, 0.3);
+    transform: translateY(-8px);
+    box-shadow:
+      0 8px 12px rgba(0, 0, 0, 0.35),
+      0 16px 32px rgba(0, 0, 0, 0.2),
+      0 20px 48px rgba(37, 211, 102, 0.3);
+  }
+}
+
+@keyframes whatsapp-ring {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0;
   }
 }
