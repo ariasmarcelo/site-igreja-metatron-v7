@@ -1,8 +1,6 @@
 /**
- * NEW INDEX — Design System V2
- * Estilos isolados sob o escopo `.ds-new`
- * Quando quiser promover para produção, basta remover o seletor .ds-new
- * e atualizar o Index.tsx principal.
+ * INDEX — Redesign V8 (visitor-centered)
+ * Scoped under `.ds-new`
  *
  * Palette (Design System):
  *   Church (gold):    #C4943B / #D4A84B / #8B7240
@@ -16,7 +14,6 @@
    CSS Variables (scoped to .ds-new)
    ───────────────────────────────────────────── */
 .ds-new {
-  /* Foundation — shared */
   --ds-deep-navy:        #1C2D3F;
   --ds-navy-mid:         #1A2A3C;
   --ds-navy-footer:      #0C1520;
@@ -26,55 +23,54 @@
   --ds-gold-glow:        rgba(196, 148, 59, 0.12);
   --ds-gold-border:      rgba(196, 148, 59, 0.25);
 
-  /* Backgrounds */
   --ds-bg-page:          #F6F3EC;
   --ds-bg-sand:          #EDE8DF;
   --ds-bg-cream:         #FBF9F5;
   --ds-bg-white:         #FEFDFB;
 
-  /* Text */
   --ds-text-dark:        #2D2926;
   --ds-text-muted:       #6B6259;
   --ds-text-light:       #8A8179;
   --ds-text-on-navy:     #E8E2D8;
   --ds-text-heading-navy:#F2EDE5;
 
-  /* Church accent (warm gold) */
   --ds-church-accent:    #C4943B;
   --ds-church-bg:        #FDF8EF;
   --ds-church-bg-subtle: rgba(196, 148, 59, 0.06);
   --ds-church-border:    rgba(196, 148, 59, 0.2);
 
-  /* Institute accent (sage) */
   --ds-inst-accent:      #4A7B6F;
   --ds-inst-bg:          #F0F6F4;
   --ds-inst-bg-subtle:   rgba(74, 123, 111, 0.06);
   --ds-inst-border:      rgba(74, 123, 111, 0.2);
 
-  /* Nav */
   --ds-nav-active:       #2A4A3E;
 
-  /* Functional */
   --ds-border-light:     rgba(139, 114, 64, 0.15);
   --ds-shadow-sm:        0 2px 12px rgba(44, 41, 38, 0.06);
   --ds-shadow-md:        0 4px 24px rgba(44, 41, 38, 0.08);
+  --ds-shadow-lg:        0 8px 32px rgba(0, 0, 0, 0.18), 0 2px 8px rgba(0, 0, 0, 0.12);
   --ds-shadow-gold:      0 4px 20px rgba(196, 148, 59, 0.18);
+  --ds-shadow-float:
+    0 0 50px rgba(255, 255, 255, 0.20),
+    0 0 20px rgba(255, 255, 255, 0.15),
+    0 0 100px rgba(255, 255, 255, 0.10);
+  --ds-shadow-float-gold:
+    0 0 50px rgba(196, 148, 59, 0.25),
+    0 0 20px rgba(196, 148, 59, 0.18),
+    0 0 100px rgba(196, 148, 59, 0.10);
   --ds-radius-sm:        8px;
   --ds-radius-md:        12px;
   --ds-radius-lg:        16px;
 
-  /* Body defaults — uniform navy covers the entire page */
   background: var(--ds-deep-navy);
   color: var(--ds-text-dark);
   -webkit-font-smoothing: antialiased;
   position: relative;
-  /* Flexbox layout — pushes footer to bottom at any zoom level */
   display: flex;
   flex-direction: column;
 }
 
-/* When ds-new is used as an embedded wrapper inside another page,
-   neutralize root-level layout styles while keeping CSS variables. */
 .ds-new.ds-embedded {
   background: transparent;
   position: static;
@@ -82,29 +78,20 @@
   color: inherit;
 }
 
-/* Silver shimmer overlay — REMOVED.
-   Was causing visual artifacts over fine SVG details (logo wings).
-   The deep navy background is calm and elegant without it. */
-
-/* Direct children — positioned for layering but NO z-index
-   (shimmer overlay was removed, stacking contexts blocked hero glow) */
 .ds-new > * {
   position: relative;
 }
 
 /* ─────────────────────────────────────────────
-   HERO (dark navy)
+   HERO
    ───────────────────────────────────────────── */
 .ds-new .ds-hero {
   background: transparent;
   padding: var(--section-padding-y-hero) 24px var(--section-padding-y);
   text-align: center;
   position: relative;
-  /* overflow kept visible so logo glow / text-shadow bleeds into next section */
   z-index: 4;
 }
-
-/* Dark vignette removed — was creating visible dark radiance around logo */
 
 .ds-new .ds-hero-inner {
   position: relative;
@@ -113,29 +100,29 @@
 
 .ds-new .ds-hero h1 {
   font-family: 'Playfair Display', serif;
-  /* Title and subtitle share the same vw reference to keep
-     a consistent ~2.5:1 ratio at every viewport width. */
-  font-size: clamp(2.1rem, 6vw, 3.75rem);
+  font-size: clamp(2rem, 5.5vw, 3.5rem);
   font-weight: 700;
   color: #FFFFFF;
-  margin-bottom: 10px;
-  line-height: 1.15;
+  margin-bottom: 16px;
+  line-height: 1.2;
   text-shadow:
     0 0 8px rgba(255, 255, 255, 0.6),
     0 0 24px rgba(255, 255, 255, 0.3),
     0 0 48px rgba(255, 255, 255, 0.12),
     0 0 60px rgba(196, 148, 59, 0.2);
-  /* position: relative elevates h1 to stacking-context layer (step 6)
-     so it paints ABOVE the logo's filter-created stacking context */
   position: relative;
   z-index: 1;
 }
 
 .ds-new .ds-hero .ds-hero-sub {
-  font-size: clamp(1rem, 2.4vw, 1.5rem);
-  font-style: italic;
-  color: var(--ds-sacred-gold);
-  margin-bottom: var(--hero-sub-to-next, 36px);
+  font-size: clamp(1rem, 2.4vw, 1.35rem);
+  color: var(--ds-text-on-navy);
+  margin-bottom: 36px;
+  line-height: 1.7;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  opacity: 0.85;
   position: relative;
   z-index: 1;
 }
@@ -149,37 +136,330 @@
   z-index: 1;
 }
 
-/* Dark projected shadows on hero buttons for depth */
 .ds-new .ds-hero-buttons .ds-btn {
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.40);
 }
 
 /* ─────────────────────────────────────────────
-   CHALLENGES SECTION (light bg, gold-topped card)
+   RECOGNITION SECTION ("Você se reconhece?")
    ───────────────────────────────────────────── */
-.ds-new .ds-section-challenges {
+.ds-new .ds-section-recognition {
   background: transparent;
   padding: var(--section-padding-y) 24px;
 }
 
-.ds-new .ds-challenges-inner {
+.ds-new .ds-recognition-inner {
   background: var(--ds-bg-cream);
   border-radius: var(--ds-radius-lg);
   border-top: 3px solid var(--ds-sacred-gold);
-  box-shadow: var(--ds-shadow-md);
-  padding: var(--section-box-padding-top, 24px) 32px 44px;
+  box-shadow: var(--ds-shadow-float);
+  padding: 36px 32px 44px;
 }
 
 @media (min-width: 768px) {
-  .ds-new .ds-challenges-inner { padding: var(--section-box-padding-top, 24px) 48px 56px; }
+  .ds-new .ds-recognition-inner { padding: 44px 48px 56px; }
 }
 
+.ds-new .ds-recognition-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+@media (min-width: 640px) {
+  .ds-new .ds-recognition-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (min-width: 1024px) {
+  .ds-new .ds-recognition-grid { grid-template-columns: 1fr 1fr 1fr; }
+}
+
+.ds-new .ds-recognition-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 20px;
+  background: var(--ds-bg-white);
+  border-radius: var(--ds-radius-md);
+  border: 1px solid var(--ds-border-light);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.ds-new .ds-recognition-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--ds-shadow-md);
+}
+
+.ds-new .ds-recognition-icon {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  border-radius: 50%;
+  background: var(--ds-gold-glow);
+  color: var(--ds-sacred-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ds-new .ds-recognition-text {
+  font-size: 0.9rem;
+  color: var(--ds-text-dark);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ─────────────────────────────────────────────
+   BRIDGE SECTION (insight diferenciador)
+   ───────────────────────────────────────────── */
+.ds-new .ds-section-bridge {
+  background: transparent;
+  padding: var(--section-padding-y) 24px;
+}
+
+.ds-new .ds-bridge-inner {
+  background: #213348;
+  border-radius: var(--ds-radius-lg);
+  padding: 44px 32px;
+  text-align: center;
+  border: 1px solid rgba(196, 148, 59, 0.15);
+  box-shadow:
+    var(--ds-shadow-float-gold),
+    0 0 80px rgba(196, 148, 59, 0.04);
+}
+
+@media (min-width: 768px) {
+  .ds-new .ds-bridge-inner { padding: 56px 64px; }
+}
+
+.ds-new .ds-bridge-preamble {
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
+  color: var(--ds-text-on-navy);
+  line-height: 1.7;
+  max-width: 600px;
+  margin: 0 auto 28px;
+  opacity: 0.7;
+  font-style: italic;
+  letter-spacing: 0.01em;
+}
+
+.ds-new .ds-bridge-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.3rem, 3.5vw, 1.75rem);
+  font-weight: 600;
+  color: var(--ds-sacred-gold);
+  margin-bottom: 24px;
+  line-height: 1.3;
+}
+
+.ds-new .ds-bridge-body p {
+  font-size: clamp(0.95rem, 2vw, 1.05rem);
+  color: var(--ds-text-on-navy);
+  line-height: 1.8;
+  max-width: 680px;
+  margin: 0 auto 24px;
+  opacity: 0.85;
+}
+
+.ds-new .ds-bridge-highlight p {
+  font-size: clamp(1rem, 2.2vw, 1.15rem);
+  color: #FFFFFF;
+  font-style: italic;
+  line-height: 1.7;
+  max-width: 600px;
+  margin: 0 auto;
+  padding-top: 24px;
+  border-top: 1px solid rgba(196, 148, 59, 0.2);
+}
+
+/* ─────────────────────────────────────────────
+   PATHS SECTION (Igreja + Instituto)
+   ───────────────────────────────────────────── */
+.ds-new .ds-section-paths {
+  background: transparent;
+  padding: var(--section-padding-y) 24px;
+}
+
+.ds-new .ds-paths-inner {
+  background: var(--ds-bg-cream);
+  border-radius: var(--ds-radius-lg);
+  border-top: 3px solid var(--ds-sacred-gold);
+  box-shadow: var(--ds-shadow-float);
+  padding: 36px 32px 44px;
+}
+
+@media (min-width: 768px) {
+  .ds-new .ds-paths-inner { padding: 44px 48px 56px; }
+}
+
+.ds-new .ds-paths-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 28px;
+  margin-top: 24px;
+}
+
+@media (min-width: 768px) {
+  .ds-new .ds-paths-cards { grid-template-columns: 1fr 1fr; }
+}
+
+.ds-new .ds-path-card {
+  background: var(--ds-bg-white);
+  border-radius: var(--ds-radius-lg);
+  padding: 32px 28px;
+  box-shadow: var(--ds-shadow-lg);
+  border: 1px solid;
+  display: flex;
+  flex-direction: column;
+}
+
+.ds-new .ds-path-card.church {
+  border-color: var(--ds-church-border);
+  border-top: 3px solid var(--ds-church-accent);
+}
+
+.ds-new .ds-path-card.institute {
+  border-color: var(--ds-inst-border);
+  border-top: 3px solid var(--ds-inst-accent);
+}
+
+.ds-new .ds-path-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.ds-new .ds-path-name {
+  font-size: clamp(1.1rem, 2.8vw, 1.3rem);
+  font-weight: 600;
+}
+.ds-new .ds-path-name.church    { color: var(--ds-church-accent); }
+.ds-new .ds-path-name.institute { color: var(--ds-inst-accent); }
+
+.ds-new .ds-path-desc {
+  font-size: 0.9rem;
+  color: var(--ds-text-muted);
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+.ds-new .ds-path-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.ds-new .ds-path-list li {
+  font-size: 0.85rem;
+  color: var(--ds-text-dark);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ─────────────────────────────────────────────
+   SOCIAL PROOF SECTION
+   ───────────────────────────────────────────── */
+.ds-new .ds-section-social-proof {
+  background: transparent;
+  padding: var(--section-padding-y) 24px var(--section-padding-y-lg);
+}
+
+.ds-new .ds-social-inner {
+  background: var(--ds-bg-cream);
+  border-radius: var(--ds-radius-lg);
+  border-top: 3px solid var(--ds-sacred-gold);
+  box-shadow: var(--ds-shadow-float);
+  padding: 36px 32px 44px;
+}
+
+@media (min-width: 768px) {
+  .ds-new .ds-social-inner { padding: 44px 48px 56px; }
+}
+
+.ds-new .ds-testimonials-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  margin-top: 24px;
+  margin-bottom: 32px;
+}
+
+@media (min-width: 768px) {
+  .ds-new .ds-testimonials-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.ds-new .ds-testimonial-card {
+  background: var(--ds-bg-white);
+  border-radius: var(--ds-radius-md);
+  padding: 28px 24px;
+  border: 1px solid var(--ds-border-light);
+  display: flex;
+  flex-direction: column;
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.08),
+    0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease;
+}
+
+.ds-new .ds-testimonial-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, 0.1),
+    0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.ds-new .ds-testimonial-quote {
+  font-family: 'Playfair Display', serif;
+  font-size: 3rem;
+  line-height: 1;
+  color: var(--ds-sacred-gold);
+  opacity: 0.4;
+  margin-bottom: -8px;
+}
+
+.ds-new .ds-testimonial-body {
+  font-size: 0.85rem;
+  color: var(--ds-text-muted);
+  line-height: 1.7;
+  flex-grow: 1;
+  margin-bottom: 16px;
+}
+
+.ds-new .ds-testimonial-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-top: 14px;
+  border-top: 1px solid var(--ds-border-light);
+}
+
+.ds-new .ds-testimonial-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ds-text-dark);
+}
+
+.ds-new .ds-testimonial-tag {
+  font-size: 0.75rem;
+  color: var(--ds-sacred-gold);
+  font-weight: 500;
+}
+
+/* ─────────────────────────────────────────────
+   SHARED ELEMENTS
+   ───────────────────────────────────────────── */
 .ds-new .ds-section-heading {
   font-size: clamp(1.35rem, 4vw, 1.85rem);
   font-weight: 500;
   color: var(--ds-text-dark);
   text-align: center;
-  margin-bottom: var(--section-title-to-content, 16px);
+  margin-bottom: 12px;
   line-height: 1.25;
 }
 
@@ -187,64 +467,9 @@
   font-size: 0.95rem;
   color: var(--ds-text-muted);
   text-align: center;
-  max-width: 520px;
-  margin: 0 auto var(--section-title-to-content, 16px);
+  max-width: 560px;
+  margin: 0 auto;
   line-height: 1.7;
-}
-
-.ds-new .ds-sun-divider {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  margin-bottom: var(--section-title-to-content, 16px);
-}
-
-.ds-new .ds-sun-divider::before,
-.ds-new .ds-sun-divider::after {
-  content: '';
-  width: 96px;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--ds-sacred-gold));
-}
-
-.ds-new .ds-sun-divider::after {
-  background: linear-gradient(90deg, var(--ds-sacred-gold), transparent);
-}
-
-.ds-new .ds-challenge-cards {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 24px;
-}
-
-@media (min-width: 768px) {
-  .ds-new .ds-challenge-cards { grid-template-columns: 1fr 1fr; }
-}
-
-.ds-new .ds-challenge-card {
-  padding: 28px 24px;
-  border-radius: var(--ds-radius-md);
-  border: 1px solid;
-}
-
-.ds-new .ds-challenge-card.spiritual {
-  background: var(--ds-church-bg);
-  border-color: var(--ds-church-border);
-  border-left: 3px solid var(--ds-church-accent);
-}
-
-.ds-new .ds-challenge-card.clinical {
-  background: var(--ds-inst-bg);
-  border-color: var(--ds-inst-border);
-  border-left: 3px solid var(--ds-inst-accent);
-}
-
-.ds-new .ds-challenge-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 6px;
 }
 
 .ds-new .ds-brand-icon {
@@ -267,155 +492,6 @@
   color: var(--ds-inst-accent);
 }
 
-.ds-new .ds-challenge-title {
-  font-size: clamp(1rem, 2.6vw, 1.2rem);
-  font-weight: 600;
-  line-height: 1.3;
-}
-
-.ds-new .ds-challenge-title.spiritual { color: var(--ds-church-accent); }
-.ds-new .ds-challenge-title.clinical  { color: var(--ds-inst-accent); }
-
-.ds-new .ds-challenge-subtitle {
-  font-size: 0.7rem;
-  font-weight: 500;
-  letter-spacing: 0.5px;
-  margin-bottom: 14px;
-  margin-left: 52px;
-}
-.ds-new .ds-challenge-subtitle.spiritual { color: var(--ds-gold-muted); }
-.ds-new .ds-challenge-subtitle.clinical  { color: var(--ds-inst-accent); opacity: 0.7; }
-
-.ds-new .ds-challenge-desc {
-  font-size: 0.85rem;
-  color: var(--ds-text-muted);
-  margin-bottom: 14px;
-  line-height: 1.6;
-}
-
-.ds-new .ds-challenge-list {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-bottom: 20px;
-  padding: 0;
-}
-
-.ds-new .ds-challenge-list li {
-  font-size: 0.85rem;
-  color: var(--ds-text-dark);
-  padding-left: 16px;
-  position: relative;
-  line-height: 1.5;
-}
-
-.ds-new .ds-challenge-list li::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 8px;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-}
-
-.ds-new .ds-challenge-card.spiritual .ds-challenge-list li::before { background: var(--ds-church-accent); }
-.ds-new .ds-challenge-card.clinical  .ds-challenge-list li::before { background: var(--ds-inst-accent); }
-
-/* ─────────────────────────────────────────────
-   JOURNEY SECTION (sand bg)
-   ───────────────────────────────────────────── */
-.ds-new .ds-section-journey {
-  background: transparent;
-  padding: var(--section-padding-y) 24px;
-}
-
-.ds-new .ds-journey-inner {
-  background: var(--ds-bg-cream);
-  border-radius: var(--ds-radius-lg);
-  border-top: 3px solid var(--ds-sacred-gold);
-  box-shadow: var(--ds-shadow-md);
-  padding: var(--section-box-padding-top, 24px) 32px 44px;
-}
-
-@media (min-width: 768px) {
-  .ds-new .ds-journey-inner { padding: var(--section-box-padding-top, 24px) 48px 56px; }
-}
-
-.ds-new .ds-journey-cards {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 28px;
-}
-
-@media (min-width: 768px) {
-  .ds-new .ds-journey-cards { grid-template-columns: 1fr 1fr; }
-}
-
-.ds-new .ds-journey-card {
-  background: var(--ds-bg-white);
-  border-radius: var(--ds-radius-lg);
-  padding: 32px 28px;
-  box-shadow: var(--ds-shadow-sm);
-  border: 1px solid;
-  display: flex;
-  flex-direction: column;
-}
-
-.ds-new .ds-journey-card.institute {
-  border-color: var(--ds-inst-border);
-  border-top: 3px solid var(--ds-inst-accent);
-}
-
-.ds-new .ds-journey-card.church {
-  border-color: var(--ds-church-border);
-  border-top: 3px solid var(--ds-church-accent);
-}
-
-.ds-new .ds-journey-card-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 14px;
-}
-
-.ds-new .ds-journey-card-name {
-  font-size: clamp(1.1rem, 2.8vw, 1.3rem);
-  font-weight: 600;
-}
-.ds-new .ds-journey-card-name.institute { color: var(--ds-inst-accent); }
-.ds-new .ds-journey-card-name.church    { color: var(--ds-church-accent); }
-
-.ds-new .ds-journey-card-desc {
-  font-size: 0.9rem;
-  color: var(--ds-text-muted);
-  line-height: 1.7;
-  margin-bottom: 20px;
-}
-
-.ds-new .ds-journey-list {
-  list-style: none;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 24px;
-}
-
-.ds-new .ds-journey-list li {
-  font-size: 0.85rem;
-  color: var(--ds-text-dark);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-/* items[4] — mais margem direita */
-.ds-new .ds-journey-card.institute .ds-journey-list li:nth-child(5) {
-  padding-right: 1.5rem;
-}
-
 .ds-new .ds-check {
   width: 20px;
   height: 20px;
@@ -431,91 +507,7 @@
 .ds-new .ds-check.church    { background: var(--ds-church-accent); }
 .ds-new .ds-check.institute { background: var(--ds-inst-accent); }
 
-/* ─────────────────────────────────────────────
-   HOW CAN WE HELP (light bg, gold-topped card)
-   ───────────────────────────────────────────── */
-.ds-new .ds-section-help {
-  background: transparent;
-  padding: var(--section-padding-y) 24px var(--section-padding-y-lg);
-  position: relative;
-}
-
-/* No darkening gradient — uniform navy background throughout */
-
-.ds-new .ds-help-inner {
-  background: var(--ds-bg-cream);
-  border-radius: var(--ds-radius-lg);
-  border-top: 3px solid var(--ds-sacred-gold);
-  box-shadow: var(--ds-shadow-md);
-  padding: var(--section-box-padding-top, 24px) 32px 44px;
-  position: relative;
-  z-index: 1;
-}
-
-@media (min-width: 768px) {
-  .ds-new .ds-help-inner { padding: var(--section-box-padding-top, 24px) 48px 56px; }
-}
-
-.ds-new .ds-pillars-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 24px;
-  margin-top: var(--section-title-to-content, 16px);
-  margin-bottom: 32px;
-}
-
-@media (min-width: 768px) {
-  .ds-new .ds-pillars-grid { grid-template-columns: repeat(3, 1fr); }
-}
-
-.ds-new .ds-pillar-card {
-  background: var(--ds-bg-white);
-  border-radius: var(--ds-radius-md);
-  padding: 28px 20px;
-  text-align: center;
-  border: 1px solid var(--ds-border-light);
-  box-shadow:
-    0 2px 6px rgba(0, 0, 0, 0.08),
-    0 1px 2px rgba(0, 0, 0, 0.05);
-  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease;
-}
-
-.ds-new .ds-pillar-card:hover {
-  transform: translateY(-6px);
-  box-shadow:
-    0 12px 28px rgba(0, 0, 0, 0.12),
-    0 6px 12px rgba(0, 0, 0, 0.06),
-    0 2px 4px rgba(0, 0, 0, 0.04);
-}
-
-.ds-new .ds-pillar-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 16px;
-}
-
-.ds-new .ds-pillar-icon.warm     { background: var(--ds-gold-glow);      color: var(--ds-sacred-gold); }
-.ds-new .ds-pillar-icon.balanced { background: var(--ds-inst-bg-subtle); color: var(--ds-inst-accent); }
-.ds-new .ds-pillar-icon.growth   { background: var(--ds-gold-glow);      color: var(--ds-gold-muted); }
-
-.ds-new .ds-pillar-card h3 {
-  font-size: clamp(1rem, 2.5vw, 1.15rem);
-  font-weight: 600;
-  color: var(--ds-text-dark);
-  margin-bottom: 10px;
-}
-
-.ds-new .ds-pillar-card p {
-  font-size: 0.85rem;
-  color: var(--ds-text-muted);
-  line-height: 1.7;
-}
-
-/* Testimonial banner */
+/* Testimonial banner (shared) */
 .ds-new .ds-testimonial-banner {
   display: flex;
   flex-direction: column;
@@ -563,37 +555,6 @@
 }
 
 /* ─────────────────────────────────────────────
-   CTA (dark navy)
-   ───────────────────────────────────────────── */
-.ds-new .ds-section-cta {
-  background: transparent;
-  padding: var(--section-padding-y-lg) 24px;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-
-.ds-new .ds-cta-inner {
-  position: relative;
-  z-index: 1;
-}
-
-.ds-new .ds-cta-heading {
-  font-size: clamp(1.8rem, 4vw, 2.3rem);
-  font-weight: 400;
-  font-style: italic;
-  color: var(--ds-text-heading-navy);
-  margin-bottom: 10px;
-}
-
-.ds-new .ds-cta-sub {
-  font-size: 0.95rem;
-  color: var(--ds-text-on-navy);
-  margin-bottom: 28px;
-  opacity: 0.7;
-}
-
-/* ─────────────────────────────────────────────
    BUTTON SYSTEM
    ───────────────────────────────────────────── */
 .ds-new .ds-btn {
@@ -632,7 +593,6 @@
   background: var(--ds-church-bg-subtle);
 }
 
-/* Hero-specific ghost variant (light text on dark navy) */
 .ds-new .ds-btn-hero-ghost {
   border-color: rgba(232, 226, 216, 0.2);
   color: var(--ds-text-on-navy);
@@ -684,11 +644,9 @@
 
 /* ─────────────────────────────────────────────
    FOOTER SECTION
-   Elevated above the page background with an upward shadow
    ───────────────────────────────────────────── */
 .ds-new .ds-footer-section {
   background: #0C1520;
-  /* Push footer to bottom when content is shorter than viewport */
   margin-top: auto;
   position: relative;
   box-shadow: 0 -24px 48px rgba(0, 0, 0, 0.50),
@@ -696,62 +654,7 @@
 }
 
 /* ─────────────────────────────────────────────
-   FOOTER
-   ───────────────────────────────────────────── */
-.ds-new .ds-footer {
-  background: var(--ds-navy-footer);
-  padding: 36px 24px 24px;
-  text-align: center;
-}
-
-.ds-new .ds-footer-brand {
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--ds-text-on-navy);
-  margin-bottom: 4px;
-}
-
-.ds-new .ds-footer-sub {
-  font-size: 0.7rem;
-  color: var(--ds-text-light);
-  margin-bottom: 18px;
-}
-
-.ds-new .ds-footer-links {
-  display: flex;
-  gap: 20px;
-  justify-content: center;
-  margin-bottom: 24px;
-  flex-wrap: wrap;
-}
-
-.ds-new .ds-footer-link {
-  font-size: 0.75rem;
-  color: rgba(232, 226, 216, 0.4);
-  text-decoration: none;
-  transition: color 0.2s;
-}
-.ds-new .ds-footer-link:hover { color: var(--ds-sacred-gold); }
-
-.ds-new .ds-footer-copy {
-  font-size: 0.65rem;
-  color: rgba(232, 226, 216, 0.2);
-  padding-top: 18px;
-  border-top: 1px solid rgba(255, 255, 255, 0.04);
-}
-
-.ds-new .ds-footer-nav-link {
-  font-size: 0.85rem;
-  color: rgba(232, 226, 216, 0.5);
-  text-decoration: none;
-  transition: color 0.3s;
-}
-.ds-new .ds-footer-nav-link:hover {
-  color: var(--ds-sacred-gold);
-}
-
-/* ─────────────────────────────────────────────
-   LOGO AREA (hero placeholder or logo)
+   LOGO AREA
    ───────────────────────────────────────────── */
 .ds-new .ds-hero-logo {
   margin: 0 auto 24px;
@@ -761,12 +664,10 @@
   isolation: isolate;
 }
 
-/* Gold glow + projected shadow for elevation */
 .ds-new .ds-hero-logo img {
   filter:
     drop-shadow(0 0 0.4px rgba(196, 148, 59, 0.6))
     drop-shadow(0 0 6px  rgba(196, 148, 59, 0.20))
     drop-shadow(0 0 20px rgba(196, 148, 59, 0.10))
-    /* drop-shadow(0 0 2px rgba(255, 255, 255, 1.0)) — removida para teste */
     drop-shadow(0 30px 12px rgba(0, 0, 0, 0.50));
 }

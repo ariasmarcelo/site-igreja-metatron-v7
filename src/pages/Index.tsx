@@ -1,12 +1,13 @@
 /**
- * Index — Design System V2 (promoted from NewIndex)
- * 
- * Uses Supabase content via usePageContent('index').
+ * Index — Redesign V8 (visitor-centered)
+ *
+ * Flow: Pain/Desire → Validation → Promise → Social Proof → Action
+ * All CTAs point to WhatsApp (AI attendant handles triage + scheduling).
+ * Content from Supabase via usePageContent('index').
  * Scoped under CSS class `.ds-new` — styles in styles/layouts/pages/index.css
- * Route: /
  */
 import { Link } from 'react-router-dom';
-import { Heart, Brain, Ghost, Sparkles, TrendingUp, ArrowRight } from 'lucide-react';
+import { Heart, Brain, Sparkles, Shield, MessageCircle } from 'lucide-react';
 import EditableField from '@/components/ui/EditableField';
 import { Sun12Rays } from '../components/icons/Sun12Rays';
 import { LogoGold } from '../components/icons/LogoGold';
@@ -17,15 +18,49 @@ import { FooterBackground } from '@/components/FooterBackground';
 import { FOOTER } from '@/components/footer-constants';
 import { Button } from '@/components/ui/button';
 
+const WHATSAPP_NUMBER = '5511949555555';
+const whatsappUrl = (msg: string) =>
+  `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+
 interface IndexTexts {
-  header: { title: string; subtitle: string };
+  hero: { title: string; headline: string; subheadline: string; primaryCta: string; secondaryCta: string };
+  recognition: {
+    title: string;
+    subtitle: string;
+    cards: { text: string; icon: string }[];
+  };
+  bridge: { title: string; body: string; highlight: string };
+  paths: {
+    title: string;
+    subtitle: string;
+    igreja: { title: string; description: string; items: string[]; cta: string };
+    instituto: { title: string; description: string; items: string[]; cta: string };
+  };
+  socialProof: {
+    title: string;
+    subtitle: string;
+    testimonials: { name: string; text: string; tag: string }[];
+    cta: string;
+  };
+  footerCta: { title: string; subtitle: string; buttonText: string };
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 }
 
+const RECOGNITION_ICONS = [
+  <Heart key="h" className="w-5 h-5" />,
+  <Brain key="b" className="w-5 h-5" />,
+  <Shield key="s" className="w-5 h-5" />,
+  <Sparkles key="sp" className="w-5 h-5" />,
+  <Heart key="h2" className="w-5 h-5" />,
+  <Sun12Rays key="sr" className="w-5 h-5" />,
+];
+
 export default function Index() {
   const stylesLoaded = usePageStyles('index');
-  const { data: texts, loading } = usePageContent<IndexTexts>('index', { includePages: ['__shared__'] });
+  const { data: texts, loading } = usePageContent<IndexTexts>('index', {
+    includePages: ['__shared__'],
+  });
 
   if (!texts || !stylesLoaded || loading) {
     return (
@@ -41,8 +76,7 @@ export default function Index() {
 
   return (
     <div className="ds-new min-h-screen">
-
-      {/* ==================== HERO (dark navy) ==================== */}
+      {/* ==================== HERO ==================== */}
       <section className="ds-hero">
         <div className="ds-hero-inner max-w-section mx-auto">
           <div className="ds-hero-logo">
@@ -50,7 +84,7 @@ export default function Index() {
           </div>
 
           <EditableField
-            value={texts.hero.title}
+            value={texts.hero?.title}
             jsonKey="index.hero.title"
             type="h1"
             className=""
@@ -58,27 +92,33 @@ export default function Index() {
 
           <p className="ds-hero-sub">
             <EditableField
-              value={texts.hero.subtitle}
-              jsonKey="index.hero.subtitle"
+              value={texts.hero?.headline}
+              jsonKey="index.hero.headline"
               type="span"
               className=""
             />
           </p>
 
           <div className="ds-hero-buttons">
-            <Link to="/purificacao" className="ds-btn ds-btn-gold">
+            <a
+              href={whatsappUrl('Olá! Gostaria de saber mais sobre o trabalho.')}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ds-btn ds-btn-gold"
+              aria-label="Iniciar conversa no WhatsApp"
+            >
+              <MessageCircle className="w-4 h-4" />
               <EditableField
-                value={texts.hero.buttons.purification}
-                jsonKey="index.hero.buttons.purification"
+                value={texts.hero?.primaryCta}
+                jsonKey="index.hero.primaryCta"
                 type="span"
                 className="inline"
               />
-              <span className="ds-arrow">›</span>
-            </Link>
-            <Link to="/tratamentos" className="ds-btn ds-btn-ghost-gold ds-btn-hero-ghost">
+            </a>
+            <Link to="/purificacao" className="ds-btn ds-btn-ghost-gold ds-btn-hero-ghost">
               <EditableField
-                value={texts.hero.buttons.treatments}
-                jsonKey="index.hero.buttons.treatments"
+                value={texts.hero?.secondaryCta}
+                jsonKey="index.hero.secondaryCta"
                 type="span"
                 className="inline"
               />
@@ -88,231 +128,135 @@ export default function Index() {
         </div>
       </section>
 
-      {/* ==================== CHALLENGES ("Is what we suffer...") ==================== */}
-      <section className="ds-section-challenges">
-        <div className="ds-challenges-inner max-w-section mx-auto">
+      {/* ==================== RECOGNITION ("Você se reconhece?") ==================== */}
+      <section className="ds-section-recognition">
+        <div className="ds-recognition-inner max-w-section mx-auto">
           <h2 className="ds-section-heading">
             <EditableField
-              value={texts.fisicoEspiritual.title}
-              jsonKey="index.fisicoEspiritual.title"
+              value={texts.recognition?.title}
+              jsonKey="index.recognition.title"
               type="span"
               className=""
             />
           </h2>
           <p className="ds-section-sub">
             <EditableField
-              value={texts.fisicoEspiritual.subtitle}
-              jsonKey="index.fisicoEspiritual.subtitle"
+              value={texts.recognition?.subtitle}
+              jsonKey="index.recognition.subtitle"
               type="span"
               className=""
             />
           </p>
 
-          <div className="ds-challenge-cards">
-            {/* SPIRITUAL (Church) */}
-            <div className="ds-challenge-card spiritual">
-              <div className="ds-challenge-header">
-                <div className="ds-brand-icon church">
-                  <Sun12Rays className="w-5 h-5" />
-                </div>
-                <div className="ds-challenge-title spiritual">
+          <div className="ds-recognition-grid">
+            {(texts.recognition?.cards || []).map(
+              (card: { text: string; icon: string }, i: number) => (
+                <div key={i} className="ds-recognition-card">
+                  <div className="ds-recognition-icon">
+                    {RECOGNITION_ICONS[i] || <Heart className="w-5 h-5" />}
+                  </div>
                   <EditableField
-                    value={texts.fisicoEspiritual.espiritual.title}
-                    jsonKey="index.fisicoEspiritual.espiritual.title"
-                    type="span"
-                    className=""
+                    value={card.text}
+                    jsonKey={`index.recognition.cards[${i}].text`}
+                    type="p"
+                    className="ds-recognition-text"
                   />
                 </div>
-              </div>
-              <div className="ds-challenge-subtitle spiritual">
-                <EditableField
-                  value={texts.fisicoEspiritual.espiritual.subtitle}
-                  jsonKey="index.fisicoEspiritual.espiritual.subtitle"
-                  type="span"
-                  className=""
-                />
-              </div>
-              <div className="ds-challenge-desc">
-                <EditableField
-                  value={texts.fisicoEspiritual.espiritual.description}
-                  jsonKey="index.fisicoEspiritual.espiritual.description"
-                  type="span"
-                  className=""
-                />
-              </div>
-              <ul className="ds-challenge-list">
-                {texts.fisicoEspiritual.espiritual.items.map((item: string, i: number) => (
-                  <li key={i}>
-                    <EditableField
-                      value={item}
-                      jsonKey={`index.fisicoEspiritual.espiritual.items[${i}]`}
-                      type="span"
-                      className=""
-                    />
-                  </li>
-                ))}
-              </ul>
-              <Link to="/purificacao" className="ds-btn ds-btn-gold ds-btn-sm">
-                <EditableField
-                  value={texts.fisicoEspiritual.espiritual.buttonText}
-                  jsonKey="index.fisicoEspiritual.espiritual.buttonText"
-                  type="span"
-                  className="inline"
-                />
-                <span className="ds-arrow">›</span>
-              </Link>
-            </div>
-
-            {/* CLINICAL (Institute) */}
-            <div className="ds-challenge-card clinical">
-              <div className="ds-challenge-header">
-                <div className="ds-brand-icon institute">
-                  <Brain className="w-5 h-5" />
-                </div>
-                <div className="ds-challenge-title clinical">
-                  <EditableField
-                    value={texts.fisicoEspiritual.fisico.title}
-                    jsonKey="index.fisicoEspiritual.fisico.title"
-                    type="span"
-                    className=""
-                  />
-                </div>
-              </div>
-              <div className="ds-challenge-subtitle clinical">
-                <EditableField
-                  value={texts.fisicoEspiritual.fisico.subtitle}
-                  jsonKey="index.fisicoEspiritual.fisico.subtitle"
-                  type="span"
-                  className=""
-                />
-              </div>
-              <div className="ds-challenge-desc">
-                <EditableField
-                  value={texts.fisicoEspiritual.fisico.description}
-                  jsonKey="index.fisicoEspiritual.fisico.description"
-                  type="span"
-                  className=""
-                />
-              </div>
-              <ul className="ds-challenge-list">
-                {texts.fisicoEspiritual.fisico.items.map((item: string, i: number) => (
-                  <li key={i}>
-                    <EditableField
-                      value={item}
-                      jsonKey={`index.fisicoEspiritual.fisico.items[${i}]`}
-                      type="span"
-                      className=""
-                    />
-                  </li>
-                ))}
-              </ul>
-              <Link to="/tratamentos" className="ds-btn ds-btn-sage ds-btn-sm">
-                <EditableField
-                  value={texts.fisicoEspiritual.fisico.buttonText}
-                  jsonKey="index.fisicoEspiritual.fisico.buttonText"
-                  type="span"
-                  className="inline"
-                />
-                <span className="ds-arrow">›</span>
-              </Link>
-            </div>
+              ),
+            )}
           </div>
         </div>
       </section>
 
-      {/* ==================== JOURNEY ("One Journey, Two Stages") ==================== */}
-      <section className="ds-section-journey">
-        <div className="ds-journey-inner max-w-section mx-auto">
-          <h2 className="ds-section-heading">
+      {/* ==================== BRIDGE (insight diferenciador) ==================== */}
+      <section className="ds-section-bridge">
+        <div className="ds-bridge-inner max-w-section mx-auto">
+          <p className="ds-bridge-preamble">
             <EditableField
-              value={texts.caminhos?.title}
-              jsonKey="index.caminhos.title"
+              value={texts.hero?.subheadline}
+              jsonKey="index.hero.subheadline"
+              type="span"
+              className=""
+            />
+          </p>
+          <h2 className="ds-bridge-title">
+            <EditableField
+              value={texts.bridge?.title}
+              jsonKey="index.bridge.title"
               type="span"
               className=""
             />
           </h2>
-          <div className="ds-sun-divider" />
+          <div className="ds-bridge-body">
+            <EditableField
+              value={texts.bridge?.body}
+              jsonKey="index.bridge.body"
+              type="p"
+              className=""
+            />
+          </div>
+          <div className="ds-bridge-highlight">
+            <EditableField
+              value={texts.bridge?.highlight}
+              jsonKey="index.bridge.highlight"
+              type="p"
+              className=""
+            />
+          </div>
+        </div>
+      </section>
 
-          <div className="ds-journey-cards">
-            {/* INSTITUTO */}
-            <div className="ds-journey-card institute">
-              <div className="ds-journey-card-header">
-                <div className="ds-brand-icon institute">
-                  <Brain className="w-5 h-5" />
-                </div>
-                <div className="ds-journey-card-name institute">
-                  <EditableField
-                    value={texts.instituto?.title}
-                    jsonKey="index.instituto.title"
-                    type="span"
-                    className=""
-                  />
-                </div>
-              </div>
-              <div className="ds-journey-card-desc">
-                <EditableField
-                  value={texts.caminhos?.instituto?.resumo}
-                  jsonKey="index.caminhos.instituto.resumo"
-                  type="span"
-                  className=""
-                />
-              </div>
-              <ul className="ds-journey-list">
-                {texts.caminhos?.instituto?.items?.map((item: string, i: number) => (
-                  <li key={i}>
-                    <span className="ds-check institute">✓</span>
-                    <EditableField
-                      value={item}
-                      jsonKey={`index.caminhos.instituto.items[${i}]`}
-                      type="span"
-                      className=""
-                    />
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-auto">
-                <Link to="/tratamentos" className="ds-btn ds-btn-sage ds-btn-full">
-                  <EditableField
-                    value={texts.caminhos?.instituto?.button}
-                    jsonKey="index.caminhos.instituto.button"
-                    type="span"
-                    className="inline"
-                  />
-                  <span className="ds-arrow">›</span>
-                </Link>
-              </div>
-            </div>
+      {/* ==================== TWO PATHS (Igreja + Instituto) ==================== */}
+      <section className="ds-section-paths">
+        <div className="ds-paths-inner max-w-section mx-auto">
+          <h2 className="ds-section-heading">
+            <EditableField
+              value={texts.paths?.title}
+              jsonKey="index.paths.title"
+              type="span"
+              className=""
+            />
+          </h2>
+          <p className="ds-section-sub">
+            <EditableField
+              value={texts.paths?.subtitle}
+              jsonKey="index.paths.subtitle"
+              type="span"
+              className=""
+            />
+          </p>
 
-            {/* IGREJA */}
-            <div className="ds-journey-card church">
-              <div className="ds-journey-card-header">
+          <div className="ds-paths-cards">
+            {/* IGREJA (primary) */}
+            <div className="ds-path-card church">
+              <div className="ds-path-header">
                 <div className="ds-brand-icon church">
                   <Sun12Rays className="w-5 h-5" />
                 </div>
-                <div className="ds-journey-card-name church">
+                <div className="ds-path-name church">
                   <EditableField
-                    value={texts.igreja?.title}
-                    jsonKey="index.igreja.title"
+                    value={texts.paths?.igreja?.title}
+                    jsonKey="index.paths.igreja.title"
                     type="span"
                     className=""
                   />
                 </div>
               </div>
-              <div className="ds-journey-card-desc">
+              <div className="ds-path-desc">
                 <EditableField
-                  value={texts.caminhos?.igreja?.resumo}
-                  jsonKey="index.caminhos.igreja.resumo"
+                  value={texts.paths?.igreja?.description}
+                  jsonKey="index.paths.igreja.description"
                   type="span"
                   className=""
                 />
               </div>
-              <ul className="ds-journey-list">
-                {texts.caminhos?.igreja?.items?.map((item: string, i: number) => (
+              <ul className="ds-path-list">
+                {(texts.paths?.igreja?.items || []).map((item: string, i: number) => (
                   <li key={i}>
                     <span className="ds-check church">✓</span>
                     <EditableField
                       value={item}
-                      jsonKey={`index.caminhos.igreja.items[${i}]`}
+                      jsonKey={`index.paths.igreja.items[${i}]`}
                       type="span"
                       className=""
                     />
@@ -322,8 +266,57 @@ export default function Index() {
               <div className="mt-auto">
                 <Link to="/purificacao" className="ds-btn ds-btn-gold ds-btn-full">
                   <EditableField
-                    value={texts.caminhos?.igreja?.button}
-                    jsonKey="index.caminhos.igreja.button"
+                    value={texts.paths?.igreja?.cta}
+                    jsonKey="index.paths.igreja.cta"
+                    type="span"
+                    className="inline"
+                  />
+                  <span className="ds-arrow">›</span>
+                </Link>
+              </div>
+            </div>
+
+            {/* INSTITUTO (support) */}
+            <div className="ds-path-card institute">
+              <div className="ds-path-header">
+                <div className="ds-brand-icon institute">
+                  <Brain className="w-5 h-5" />
+                </div>
+                <div className="ds-path-name institute">
+                  <EditableField
+                    value={texts.paths?.instituto?.title}
+                    jsonKey="index.paths.instituto.title"
+                    type="span"
+                    className=""
+                  />
+                </div>
+              </div>
+              <div className="ds-path-desc">
+                <EditableField
+                  value={texts.paths?.instituto?.description}
+                  jsonKey="index.paths.instituto.description"
+                  type="span"
+                  className=""
+                />
+              </div>
+              <ul className="ds-path-list">
+                {(texts.paths?.instituto?.items || []).map((item: string, i: number) => (
+                  <li key={i}>
+                    <span className="ds-check institute">✓</span>
+                    <EditableField
+                      value={item}
+                      jsonKey={`index.paths.instituto.items[${i}]`}
+                      type="span"
+                      className=""
+                    />
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-auto">
+                <Link to="/tratamentos" className="ds-btn ds-btn-sage ds-btn-full">
+                  <EditableField
+                    value={texts.paths?.instituto?.cta}
+                    jsonKey="index.paths.instituto.cta"
                     type="span"
                     className="inline"
                   />
@@ -335,56 +328,56 @@ export default function Index() {
         </div>
       </section>
 
-      {/* ==================== HOW CAN WE HELP ==================== */}
-      <section className="ds-section-help">
-        <div className="ds-help-inner max-w-section mx-auto">
+      {/* ==================== SOCIAL PROOF ==================== */}
+      <section className="ds-section-social-proof">
+        <div className="ds-social-inner max-w-section mx-auto">
           <h2 className="ds-section-heading">
             <EditableField
-              value={texts.benefitsSection.title}
-              jsonKey="index.benefitsSection.title"
+              value={texts.socialProof?.title}
+              jsonKey="index.socialProof.title"
               type="span"
               className=""
             />
           </h2>
           <p className="ds-section-sub">
             <EditableField
-              value={texts.benefitsSection.subtitle}
-              jsonKey="index.benefitsSection.subtitle"
+              value={texts.socialProof?.subtitle}
+              jsonKey="index.socialProof.subtitle"
               type="span"
               className=""
             />
           </p>
 
-          <div className="ds-pillars-grid">
-            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-            {texts.instituto.benefits.map((b: any, i: number) => (
-              <div key={i} className="ds-pillar-card">
-                <div className={`ds-pillar-icon ${i === 0 ? 'warm' : i === 1 ? 'balanced' : 'growth'}`}>
-                  {i === 0 && <Sun12Rays className="w-6 h-6" />}
-                  {i === 1 && <Brain className="w-6 h-6" />}
-                  {i === 2 && <TrendingUp className="w-6 h-6" />}
+          <div className="ds-testimonials-grid">
+            {(texts.socialProof?.testimonials || []).map(
+              (t: { name: string; text: string; tag: string }, i: number) => (
+                <div key={i} className="ds-testimonial-card">
+                  <div className="ds-testimonial-quote">"</div>
+                  <EditableField
+                    value={t.text}
+                    jsonKey={`index.socialProof.testimonials[${i}].text`}
+                    type="p"
+                    className="ds-testimonial-body"
+                  />
+                  <div className="ds-testimonial-footer">
+                    <EditableField
+                      value={t.name}
+                      jsonKey={`index.socialProof.testimonials[${i}].name`}
+                      type="span"
+                      className="ds-testimonial-name"
+                    />
+                    <EditableField
+                      value={t.tag}
+                      jsonKey={`index.socialProof.testimonials[${i}].tag`}
+                      type="span"
+                      className="ds-testimonial-tag"
+                    />
+                  </div>
                 </div>
-                <h3>
-                  <EditableField
-                    value={b.title}
-                    jsonKey={`index.instituto.benefits[${i}].title`}
-                    type="span"
-                    className=""
-                  />
-                </h3>
-                <p>
-                  <EditableField
-                    value={b.description}
-                    jsonKey={`index.instituto.benefits[${i}].description`}
-                    type="span"
-                    className=""
-                  />
-                </p>
-              </div>
-            ))}
+              ),
+            )}
           </div>
 
-          {/* Testimonial banner */}
           <div className="ds-testimonial-banner">
             <div className="ds-testimonial-banner-left">
               <div className="ds-testimonial-icon">
@@ -392,27 +385,22 @@ export default function Index() {
               </div>
               <div className="ds-testimonial-text">
                 <EditableField
-                  value={texts.testemunhosCta?.text}
-                  jsonKey="index.testemunhosCta.text"
+                  value={texts.socialProof?.cta}
+                  jsonKey="index.socialProof.cta"
                   type="span"
                   className=""
                 />
               </div>
             </div>
             <Link to="/testemunhos" className="ds-btn ds-btn-navy ds-btn-sm ds-btn-noshrink">
-              <EditableField
-                value={texts.testemunhosCta?.button}
-                jsonKey="index.testemunhosCta.button"
-                type="span"
-                className="inline"
-              />
+              Testemunhos
               <span className="ds-arrow">›</span>
             </Link>
           </div>
         </div>
       </section>
 
-      {/* ==================== LANDSCAPE FOOTER ==================== */}
+      {/* ==================== LANDSCAPE FOOTER + CTA ==================== */}
       <footer className={`ds-footer-section ${FOOTER.sectionClass}`}>
         <div className="relative">
           <FooterBackground
@@ -425,27 +413,33 @@ export default function Index() {
           <div className={FOOTER.containerClass}>
             <div className="max-w-section mx-auto text-center">
               <EditableField
-                value={texts.cta?.title}
-                jsonKey="index.cta.title"
+                value={texts.footerCta?.title}
+                jsonKey="index.footerCta.title"
                 type="h2"
                 className={FOOTER.titleClass}
               />
               <EditableField
-                value={texts.cta?.subtitle}
-                jsonKey="index.cta.subtitle"
+                value={texts.footerCta?.subtitle}
+                jsonKey="index.footerCta.subtitle"
                 type="p"
                 className={FOOTER.subtitleClass}
               />
-              <Link to="/contato">
+              <a
+                href={whatsappUrl('Olá! Gostaria de dar o primeiro passo.')}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Iniciar conversa no WhatsApp"
+              >
                 <Button className={FOOTER.buttonClass}>
+                  <MessageCircle className="w-4 h-4 mr-2" />
                   <EditableField
-                    value={texts.cta?.buttonText}
-                    jsonKey="index.cta.buttonText"
+                    value={texts.footerCta?.buttonText}
+                    jsonKey="index.footerCta.buttonText"
                     type="span"
                     className="inline"
                   />
                 </Button>
-              </Link>
+              </a>
             </div>
 
             <div>

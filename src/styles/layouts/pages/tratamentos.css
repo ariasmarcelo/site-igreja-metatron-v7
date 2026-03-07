@@ -1,66 +1,691 @@
-/* Tratamentos Page Specific Styles */
+/**
+ * TRATAMENTOS — Redesign V8 (visitor-centered)
+ * Uses `.ds-new` base (shared with index) + `.ds-trat` page overrides
+ *
+ * Palette:
+ *   Clinical blue:   #2563EB / #3B82F6 / #1D4ED8
+ *   Navy (shared):   #1C2D3F / #24384D / #151F2B
+ *   Backgrounds:     #F6F3EC / #EFF6FF / #FBF9F5 / #FEFDFB
+ */
 
-/* Background pattern for header */
-.tratamentos-pattern {
-  background-image: repeating-linear-gradient(0deg, #0891b2 0px, transparent 1px, transparent 20px),
-                    repeating-linear-gradient(90deg, #0891b2 0px, transparent 1px, transparent 20px);
+/* ─────────────────────────────────────────────
+   BASE VARIABLES (ensures availability standalone)
+   ───────────────────────────────────────────── */
+.ds-new {
+  --ds-deep-navy:        #1C2D3F;
+  --ds-navy-mid:         #1A2A3C;
+  --ds-navy-footer:      #0C1520;
+  --ds-sacred-gold:      #C4943B;
+  --ds-gold-light:       #D4A84B;
+  --ds-gold-muted:       #8B7240;
+  --ds-gold-glow:        rgba(196, 148, 59, 0.12);
+  --ds-gold-border:      rgba(196, 148, 59, 0.25);
+
+  --ds-bg-page:          #F6F3EC;
+  --ds-bg-sand:          #EDE8DF;
+  --ds-bg-cream:         #FBF9F5;
+  --ds-bg-white:         #FEFDFB;
+
+  --ds-text-dark:        #2D2926;
+  --ds-text-muted:       #6B6259;
+  --ds-text-light:       #8A8179;
+  --ds-text-on-navy:     #E8E2D8;
+  --ds-text-heading-navy:#F2EDE5;
+
+  --ds-border-light:     rgba(139, 114, 64, 0.15);
+  --ds-shadow-sm:        0 2px 12px rgba(44, 41, 38, 0.06);
+  --ds-shadow-md:        0 4px 24px rgba(44, 41, 38, 0.08);
+  --ds-shadow-lg:        0 8px 32px rgba(0, 0, 0, 0.18), 0 2px 8px rgba(0, 0, 0, 0.12);
+  --ds-shadow-float:
+    0 0 50px rgba(255, 255, 255, 0.20),
+    0 0 20px rgba(255, 255, 255, 0.15),
+    0 0 100px rgba(255, 255, 255, 0.10);
+  --ds-radius-sm:        8px;
+  --ds-radius-md:        12px;
+  --ds-radius-lg:        16px;
 }
 
-/* Animação de luz azul pulsante (aparecer/sumir em 3 segundos) */
-@keyframes blue-glow-pulse {
-  0%, 100% {
-    opacity: 1;
-    transform: scale(1.15);
+/* ─────────────────────────────────────────────
+   TRATAMENTOS PAGE OVERRIDES
+   ───────────────────────────────────────────── */
+.ds-trat {
+  --dt-accent:           #2563EB;
+  --dt-accent-light:     #3B82F6;
+  --dt-accent-dark:      #1D4ED8;
+  --dt-accent-muted:     #6B8FCC;
+  --dt-accent-glow:      rgba(37, 99, 235, 0.12);
+  --dt-accent-border:    rgba(37, 99, 235, 0.25);
+  --dt-accent-bg:        #EFF6FF;
+  --dt-accent-bg-subtle: rgba(37, 99, 235, 0.06);
+
+  --ds-shadow-float-accent:
+    0 0 50px rgba(37, 99, 235, 0.20),
+    0 0 20px rgba(37, 99, 235, 0.15),
+    0 0 100px rgba(37, 99, 235, 0.08);
+}
+
+/* Hero h1 glow: blue tint instead of gold */
+.ds-trat .ds-hero h1 {
+  text-shadow:
+    0 0 8px rgba(255, 255, 255, 0.6),
+    0 0 24px rgba(255, 255, 255, 0.3),
+    0 0 48px rgba(255, 255, 255, 0.12),
+    0 0 60px rgba(37, 99, 235, 0.2);
+}
+
+/* Hero icon — azul sólido, glow azul deslocado para flutuação */
+.ds-trat .dt-hero-icon {
+  width: 94px;
+  height: 94px;
+  border-radius: 50%;
+  background: var(--dt-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+  color: #fff;
+  box-shadow:
+    4px 6px 12px rgba(37, 99, 235, 0.5),
+    6px 10px 24px rgba(37, 99, 235, 0.3);
+}
+
+/* Legal notice tooltip */
+.ds-trat .dt-legal-trigger {
+  position: absolute;
+  bottom: 12px;
+  right: 16px;
+  z-index: 20;
+}
+
+.ds-trat .dt-legal-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(251, 191, 36, 0.85);
+  border: 1px solid rgba(251, 191, 36, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3), 0 0 20px rgba(217, 170, 0, 0.3);
+  transition: all 0.3s;
+}
+
+.ds-trat .dt-legal-dot:hover {
+  transform: scale(1.1);
+  box-shadow: 0 3px 16px rgba(0, 0, 0, 0.4), 0 0 28px rgba(217, 170, 0, 0.4);
+}
+
+.ds-trat .dt-legal-tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  right: 0;
+  width: max-content;
+  max-width: 90vw;
+  transition: all 0.3s ease;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.ds-trat .dt-legal-tooltip.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.ds-trat .dt-legal-content {
+  background: #FFFBEB;
+  border: 2px solid #FBBF24;
+  border-radius: var(--ds-radius-md);
+  box-shadow: var(--ds-shadow-lg);
+  padding: 20px;
+  text-align: left;
+}
+
+.ds-trat .dt-legal-content h4 {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #78350F;
+  margin-bottom: 8px;
+}
+
+.ds-trat .dt-legal-content p {
+  font-size: 0.8rem;
+  color: #78350F;
+  line-height: 1.6;
+}
+
+/* ─────────────────────────────────────────────
+   REDESCUBRA SECTION (from index.instituto)
+   ───────────────────────────────────────────── */
+.ds-trat .dt-section-redescubra {
+  background: transparent;
+  padding: var(--section-padding-y) 24px;
+}
+
+.ds-trat .dt-redescubra-inner {
+  background: var(--ds-bg-cream);
+  border-radius: var(--ds-radius-lg);
+  border-top: 3px solid var(--dt-accent);
+  box-shadow: var(--ds-shadow-float);
+  padding: 36px 32px 44px;
+}
+
+@media (min-width: 768px) {
+  .ds-trat .dt-redescubra-inner { padding: 44px 48px 56px; }
+}
+
+.ds-trat .dt-redescubra-quote {
+  background: var(--dt-accent-bg);
+  border: 2px solid var(--dt-accent-border);
+  border-radius: var(--ds-radius-md);
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.ds-trat .dt-redescubra-quote p {
+  font-size: clamp(0.95rem, 2vw, 1.05rem);
+  color: var(--dt-accent-dark);
+  font-weight: 600;
+  font-style: italic;
+  line-height: 1.7;
+}
+
+.ds-trat .dt-redescubra-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.ds-trat .dt-redescubra-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.ds-trat .dt-redescubra-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--dt-accent);
+  margin-top: 10px;
+  flex-shrink: 0;
+}
+
+.ds-trat .dt-redescubra-item p {
+  font-size: 0.95rem;
+  color: var(--ds-text-muted);
+  line-height: 1.7;
+}
+
+.ds-trat .dt-checklist-box {
+  background: var(--dt-accent-bg);
+  border-radius: var(--ds-radius-md);
+  padding: 16px 20px 24px;
+  margin-bottom: 24px;
+  border: 1px solid var(--dt-accent-border);
+}
+
+.ds-trat .dt-checklist-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--dt-accent-dark);
+  text-align: center;
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--dt-accent-border);
+}
+
+.ds-trat .dt-checklist-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+@media (min-width: 640px) {
+  .ds-trat .dt-checklist-grid { grid-template-columns: 1fr 1fr; }
+}
+
+.ds-trat .dt-checklist-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ds-trat .dt-check {
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  background: var(--dt-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  color: white;
+  flex-shrink: 0;
+}
+
+.ds-trat .dt-checklist-item span {
+  font-size: 0.9rem;
+  color: var(--ds-text-dark);
+  font-weight: 500;
+}
+
+.ds-trat .dt-redescubra-footer {
+  background: linear-gradient(135deg, var(--dt-accent), var(--dt-accent-dark));
+  color: #fff;
+  border-radius: var(--ds-radius-md);
+  padding: 12px 24px;
+  text-align: center;
+  width: fit-content;
+  margin: 0 auto;
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.25);
+}
+
+.ds-trat .dt-redescubra-footer p {
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+/* ─────────────────────────────────────────────
+   BRIDGE SECTION (approach — blue accent)
+   ───────────────────────────────────────────── */
+.ds-trat .ds-bridge-inner {
+  background: #1E3352;
+  border: 1px solid var(--dt-accent-border);
+  box-shadow: var(--ds-shadow-float-accent);
+}
+
+.ds-trat .ds-bridge-title {
+  color: var(--dt-accent-light);
+}
+
+.ds-trat .ds-bridge-highlight p {
+  border-top-color: rgba(37, 99, 235, 0.2);
+}
+
+/* ─────────────────────────────────────────────
+   MODALITIES SECTION (accordion)
+   ───────────────────────────────────────────── */
+.ds-trat .dt-section-modalities {
+  background: transparent;
+  padding: var(--section-padding-y) 24px;
+}
+
+.ds-trat .dt-modalities-inner {
+  background: var(--ds-bg-cream);
+  border-radius: var(--ds-radius-lg);
+  border-top: 3px solid var(--dt-accent);
+  box-shadow: var(--ds-shadow-float);
+  padding: 36px 32px 44px;
+}
+
+@media (min-width: 768px) {
+  .ds-trat .dt-modalities-inner { padding: 44px 48px 56px; }
+}
+
+.ds-trat .dt-accordion-item {
+  border: 2px solid rgba(37, 99, 235, 0.15);
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-bg-white);
+  overflow: hidden;
+  transition: all 0.3s;
+}
+
+.ds-trat .dt-accordion-item:hover {
+  border-color: rgba(37, 99, 235, 0.3);
+  box-shadow: var(--ds-shadow-md);
+}
+
+.ds-trat .dt-accordion-trigger {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  padding: 20px 24px;
+  text-align: left;
+  background: transparent;
+}
+
+.ds-trat .dt-trigger-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--ds-radius-md);
+  background: linear-gradient(135deg, var(--dt-accent), var(--dt-accent-dark));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+.ds-trat .dt-trigger-text h3 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--ds-text-dark);
+  margin-bottom: 4px;
+}
+
+.ds-trat .dt-trigger-text p {
+  font-size: 0.85rem;
+  color: var(--ds-text-muted);
+  line-height: 1.5;
+}
+
+.ds-trat .dt-accordion-content {
+  padding: 0 24px 24px;
+}
+
+.ds-trat .dt-detail-block {
+  border-radius: var(--ds-radius-sm);
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.ds-trat .dt-detail-block h4 {
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ds-trat .dt-detail-block p,
+.ds-trat .dt-detail-block li {
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+.ds-trat .dt-detail-block ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ds-trat .dt-detail-block li::before {
+  content: '•';
+  margin-right: 8px;
+  font-weight: bold;
+}
+
+.ds-trat .dt-block-about    { background: #F0F4FF; border-left: 4px solid var(--dt-accent); }
+.ds-trat .dt-block-about h4 { color: var(--dt-accent-dark); }
+.ds-trat .dt-block-about p  { color: #374151; }
+
+.ds-trat .dt-block-indications    { background: #F0FDF4; border-left: 4px solid #059669; }
+.ds-trat .dt-block-indications h4 { color: #065F46; }
+.ds-trat .dt-block-indications p  { color: #065F46; }
+
+.ds-trat .dt-block-benefits    { background: #ECFDF5; border-left: 4px solid #10B981; }
+.ds-trat .dt-block-benefits h4 { color: #047857; }
+.ds-trat .dt-block-benefits p,
+.ds-trat .dt-block-benefits li { color: #047857; }
+
+.ds-trat .dt-block-contra    { background: #FEF2F2; border-left: 4px solid #EF4444; }
+.ds-trat .dt-block-contra h4 { color: #991B1B; }
+.ds-trat .dt-block-contra p  { color: #991B1B; }
+
+.ds-trat .dt-detail-meta {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+@media (min-width: 640px) {
+  .ds-trat .dt-detail-meta { grid-template-columns: 1fr 1fr; }
+}
+
+.ds-trat .dt-meta-block {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: var(--ds-radius-sm);
+  padding: 12px;
+}
+
+.ds-trat .dt-meta-block h5 {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+
+.ds-trat .dt-meta-block p {
+  font-size: 0.8rem;
+  color: #1E293B;
+}
+
+/* ─────────────────────────────────────────────
+   TRIPLA PROTECAO SECTION (cream — destaque visual)
+   ───────────────────────────────────────────── */
+.ds-trat .dt-section-protection {
+  background: transparent;
+  padding: var(--section-padding-y) 24px;
+}
+
+.ds-trat .dt-protection-inner {
+  background: var(--ds-bg-cream);
+  border-radius: var(--ds-radius-lg);
+  border-top: 3px solid var(--dt-accent);
+  box-shadow: var(--ds-shadow-float);
+  padding: var(--section-box-padding-top, 24px) 32px 44px;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .ds-trat .dt-protection-inner { padding: var(--section-box-padding-top, 24px) 48px 56px; }
+}
+
+.ds-trat .dt-shield-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 12px;
+  position: relative;
+}
+
+.ds-trat .dt-shield-icon {
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(3px 4px 6px rgba(0, 0, 0, 0.15));
+}
+
+.ds-trat .dt-protection-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.35rem, 4vw, 1.85rem);
+  font-weight: 500;
+  color: var(--dt-accent-dark);
+  margin-bottom: var(--section-title-to-content, 16px);
+  line-height: 1.25;
+}
+
+.ds-trat .dt-protection-subtitle {
+  font-size: 0.95rem;
+  color: var(--ds-text-muted);
+  max-width: 560px;
+  margin: 0 auto 32px;
+  line-height: 1.7;
+}
+
+.ds-trat .dt-protection-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  margin-bottom: 32px;
+}
+
+@media (min-width: 768px) {
+  .ds-trat .dt-protection-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.ds-trat .dt-protection-card {
+  background: var(--ds-bg-white);
+  border: 1px solid var(--ds-border-light);
+  border-radius: var(--ds-radius-md);
+  padding: 28px 20px;
+  text-align: center;
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.08),
+    0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease;
+}
+
+.ds-trat .dt-protection-card:hover {
+  transform: translateY(-6px);
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, 0.12),
+    0 6px 12px rgba(0, 0, 0, 0.06),
+    0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+/* Borda lateral colorida por pilar */
+.ds-trat .dt-protection-card.dt-prot-card-tech {
+  border-left: 4px solid #0EA5E9;
+}
+.ds-trat .dt-protection-card.dt-prot-card-human {
+  border-left: 4px solid #EC4899;
+}
+.ds-trat .dt-protection-card.dt-prot-card-spirit {
+  border-left: 4px solid #F59E0B;
+}
+
+.ds-trat .dt-protection-card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  color: white;
+}
+
+.ds-trat .dt-prot-icon-tech  { background: linear-gradient(135deg, #0EA5E9, #0284C7); }
+.ds-trat .dt-prot-icon-human { background: linear-gradient(135deg, #F472B6, #EC4899); }
+.ds-trat .dt-prot-icon-spirit { background: linear-gradient(135deg, #F59E0B, #D97706); }
+
+.ds-trat .dt-protection-card h4 {
+  font-size: clamp(1rem, 2.5vw, 1.15rem);
+  font-weight: 600;
+  color: var(--ds-text-dark);
+  margin-bottom: 10px;
+  line-height: 1.25;
+  white-space: pre-line;
+}
+
+.ds-trat .dt-protection-card p {
+  font-size: 0.85rem;
+  color: var(--ds-text-muted);
+  line-height: 1.7;
+}
+
+/* Testimonial banner (same layout as purificacao) */
+.ds-trat .dt-testimonial-banner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 14px;
+  background: var(--ds-bg-white);
+  border: 1px solid var(--dt-accent-border);
+  border-radius: var(--ds-radius-md);
+  padding: 18px 24px;
+  box-shadow:
+    0 3px 12px rgba(0, 0, 0, 0.1),
+    0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+@media (min-width: 768px) {
+  .ds-trat .dt-testimonial-banner {
+    flex-direction: row;
+    text-align: left;
+    justify-content: space-between;
   }
-  50% {
-    opacity: 0.3;
-    transform: scale(0.85);
-  }
 }
 
-.animate-blue-glow {
-  animation: blue-glow-pulse 3s ease-in-out infinite;
+.ds-trat .dt-testimonial-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
 }
 
-.animate-blue-glow-delay-1 {
-  animation: blue-glow-pulse 3s ease-in-out infinite;
-  animation-delay: 0.5s;
+.ds-trat .dt-testimonial-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--dt-accent-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--dt-accent);
+  flex-shrink: 0;
 }
 
-.animate-blue-glow-delay-2 {
-  animation: blue-glow-pulse 3s ease-in-out infinite;
-  animation-delay: 1s;
+.ds-trat .dt-testimonial-text {
+  font-size: 0.9rem;
+  color: var(--ds-text-muted);
 }
 
-/* Gradiente dinâmico do accordion trigger - cada tratamento tem sua cor */
-.accordion-trigger-gradient-psychotherapy {
-  background: linear-gradient(to right, #a855f7, #c084fc);
+.ds-trat .dt-testimonial-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 10px 22px;
+  border-radius: var(--ds-radius-sm);
+  background: linear-gradient(135deg, var(--dt-accent-dark), var(--dt-accent));
+  color: #fff;
+  text-decoration: none;
+  transition: all 0.3s;
+  flex-shrink: 0;
 }
 
-.accordion-trigger-gradient-neurofeedback {
-  background: linear-gradient(to right, #10b981, #059669);
+.ds-trat .dt-testimonial-btn:hover {
+  background: linear-gradient(135deg, var(--dt-accent), var(--dt-accent-light));
+  transform: translateY(-1px);
 }
 
-.accordion-trigger-gradient-breathwork {
-  background: linear-gradient(to right, #06b6d4, #0891b2);
+.ds-trat .dt-arrow {
+  font-size: 1rem;
+  transition: transform 0.2s;
 }
 
-.accordion-trigger-gradient-emdr {
-  background: linear-gradient(to right, #8b5cf6, #7c3aed);
+.ds-trat .dt-testimonial-btn:hover .dt-arrow {
+  transform: translateX(3px);
 }
 
-.accordion-trigger-gradient-biodynamic-massage {
-  background: linear-gradient(to right, #ec4899, #db2777);
+/* ─────────────────────────────────────────────
+   BUTTON VARIANT — BLUE
+   ───────────────────────────────────────────── */
+.ds-trat .ds-btn-blue {
+  background: var(--dt-accent);
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(37, 99, 235, 0.25);
 }
 
-.accordion-trigger-gradient-body-therapy {
-  background: linear-gradient(to right, #059669, #047857);
+.ds-trat .ds-btn-blue:hover {
+  background: var(--dt-accent-light);
+  transform: translateY(-1px);
 }
 
-.accordion-trigger-gradient-spiritual {
-  background: linear-gradient(to right, #d97706, #b45309);
+.ds-trat .ds-btn-ghost-blue {
+  background: transparent;
+  color: var(--dt-accent-light);
+  border: 1.5px solid var(--dt-accent-border);
 }
 
-.accordion-trigger-gradient-pap {
-  background: linear-gradient(to right, #3b0764, #1e0a3c);
+.ds-trat .ds-btn-ghost-blue:hover {
+  border-color: var(--dt-accent-light);
+  background: var(--dt-accent-bg-subtle);
 }
+
+/* Espaçamento entre seções: usa variáveis de design-parameters.css (:root)
+   --section-padding-y, --section-padding-y-hero, --section-padding-y-lg
+   Mesmo padrão da Index. */

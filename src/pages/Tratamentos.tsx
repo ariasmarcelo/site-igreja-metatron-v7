@@ -1,417 +1,327 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Brain, Heart, Wind, Route, Flower2, Sparkles, AlertTriangle, Users, Activity, Stethoscope, Waves, Compass, Sun, HeartHandshake, ChevronRight } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import EditableField from '@/components/ui/EditableField';
-import { Link } from 'react-router-dom';
+/**
+ * Tratamentos — Redesign V8 (visitor-centered)
+ *
+ * Flow: Empathy → Validation → Approach → Modalities (expandable) → Trust → Action
+ * Clinical blue accent (#2563EB). Techniques shown in accordions, not as primary content.
+ * Scoped under `.ds-new.ds-trat` — styles in styles/layouts/pages/tratamentos.css
+ */
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import {
+  Heart, Brain, Wind, Sparkles, Activity, Stethoscope,
+  HeartHandshake, Compass, Sun, AlertTriangle, MessageCircle,
+  Flower2, Route,
+} from 'lucide-react';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import EditableField from '@/components/ui/EditableField';
 import { usePageContent } from '@/hooks/useContent';
-import { FooterBackground } from '@/components/FooterBackground';
-import { FOOTER } from '@/components/footer-constants';
 import { usePageStyles } from '@/hooks/usePageStyles';
 import { PageLoading } from '@/components/PageLoading';
-import '@/styles/layouts/pages/tratamentos.css';
-import '@/styles/waves.css';
+import { FooterBackground } from '@/components/FooterBackground';
+import { FOOTER } from '@/components/footer-constants';
+import { Button } from '@/components/ui/button';
 
+const WHATSAPP_NUMBER = '5511949555555';
+const whatsappUrl = (msg: string) =>
+  `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
 
-interface TratamentosTexts {
-  header: { title: string; subtitle: string };
-  sections: {
-    intro_title: string;
-    treatments_title: string;
-  };
-  intro: { p1: string; p2: string };
-  legal: { title: string; notice: string };
-  treatments: Array<Record<string, string>>;
-  footer?: { copyright: string; trademark: string };
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [key: string]: any;
-}
+const TREATMENT_ICONS = [
+  <Stethoscope key="psy" className="w-6 h-6" />,
+  <Brain key="neuro" className="w-6 h-6" />,
+  <Wind key="breath" className="w-6 h-6" />,
+  <Route key="emdr" className="w-6 h-6" />,
+  <Heart key="bio" className="w-6 h-6" />,
+  <Flower2 key="cbd" className="w-6 h-6" />,
+  <HeartHandshake key="pap" className="w-6 h-6" />,
+  <Sparkles key="extra" className="w-6 h-6" />,
+];
 
 export default function Tratamentos() {
-  usePageStyles('tratamentos');
+  const stylesLoaded = usePageStyles('tratamentos');
   const [showLegal, setShowLegal] = useState(false);
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: texts, loading, error } = usePageContent<any>('tratamentos', { includePages: ['__shared__'] });
-  // Conteúdo da seção "Redescubra" — vive no page_id 'index'
+  const { data: texts, loading } = usePageContent<any>('tratamentos', {
+    includePages: ['__shared__'],
+  });
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: indexTexts } = usePageContent<any>('index');
-  
-  if (loading || !texts) {
-    console.log(`[${new Date().toISOString()}] [TRATAMENTOS] Waiting for data: loading=${loading}`);
+
+  if (!texts || !stylesLoaded || loading) {
     return (
       <PageLoading
         icon={Stethoscope}
         text="Carregando tratamentos..."
-        bgColor="bg-gradient-to-b from-cyan-50 to-blue-50"
-        iconColor="text-cyan-600"
-        textColor="text-cyan-900"
+        bgColor="bg-gradient-to-b from-slate-50 to-blue-50"
+        iconColor="text-blue-600"
+        textColor="text-blue-900"
       />
     );
   }
 
-  const icons = [
-    <Users className="w-12 h-12" />,
-    <Brain className="w-12 h-12" />,
-    <Wind className="w-12 h-12" />,
-    <Route className="w-12 h-12" />,
-    <Heart className="w-12 h-12" />,
-    <Flower2 className="w-12 h-12" />,
-    <HeartHandshake className="w-12 h-12" />,
-    <Sparkles className="w-12 h-12" />
-  ];
-
-  const treatments = texts.treatments;
-
-  // Mapear cores dos treatments para classes CSS
-  const getGradientClass = (index: number) => {
-    const classMap = [
-      'accordion-trigger-gradient-psychotherapy',
-      'accordion-trigger-gradient-neurofeedback',
-      'accordion-trigger-gradient-breathwork',
-      'accordion-trigger-gradient-emdr',
-      'accordion-trigger-gradient-biodynamic-massage',
-      'accordion-trigger-gradient-body-therapy',
-      'accordion-trigger-gradient-pap'
-    ];
-    return classMap[index] || classMap[0];
-  };
+  const treatments = texts.treatments || [];
 
   return (
-    <div className="min-h-screen bg-linear-to-b from-slate-50 to-blue-50">
-      {/* Header */}
-      <section className="section-padding-y-hero bg-linear-to-r from-cyan-600 via-blue-600 to-teal-600 text-white relative overflow-hidden">
-        
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,white,transparent_50%)]"></div>
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,white,transparent_50%)]"></div>
-        </div>
-        <div className="absolute inset-0 opacity-15">
-          <svg viewBox="0 0 100 100" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="50" cy="50" r="20" fill="rgba(255,255,255,0.8)" />
-            {[...Array(12)].map((_, i) => {
-              const angle = (i * 30 * Math.PI) / 180;
-              const x1 = 50 + Math.cos(angle) * 25;
-              const y1 = 50 + Math.sin(angle) * 25;
-              const x2 = 50 + Math.cos(angle) * 40;
-              const y2 = 50 + Math.sin(angle) * 40;
-              return (
-                <line
-                  key={i}
-                  x1={x1}
-                  y1={y1}
-                  x2={x2}
-                  y2={y2}
-                  stroke="rgba(255,255,255,0.8)"
-                  strokeWidth="4.5"
-                  strokeLinecap="round"
-                />
-              );
-            })}
-          </svg>
-        </div>
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-section mx-auto text-center">
-            <div className="flex justify-center mb-6">
-              <div className="w-20 h-20 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center shadow-lg">
-                <Stethoscope className="h-10 w-10" />
-              </div>
-            </div>
+    <div className="ds-new ds-trat min-h-screen">
+      {/* ==================== HERO ==================== */}
+      <section className="ds-hero">
+        <div className="ds-hero-inner max-w-section mx-auto">
+          <div className="dt-hero-icon">
+            <Stethoscope className="w-10 h-10" />
+          </div>
+
+          <EditableField
+            value={texts.header?.title}
+            jsonKey="tratamentos.header.title"
+            type="h1"
+            className=""
+          />
+
+          <p className="ds-hero-sub">
             <EditableField
-              value={texts.header.title}
-              jsonKey="tratamentos.header.title"
-              type="h1"
-              className="text-5xl font-bold mb-4 drop-shadow-lg"
-            />
-            <EditableField
-              value={texts.header.subtitle}
+              value={texts.header?.subtitle}
               jsonKey="tratamentos.header.subtitle"
-              type="p"
-              className="text-xl opacity-90 drop-shadow-md"
+              type="span"
+              className=""
             />
+          </p>
+
+          <div className="ds-hero-buttons">
+            <a
+              href={whatsappUrl('Olá! Gostaria de saber mais sobre os tratamentos terapêuticos.')}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ds-btn ds-btn-blue"
+              aria-label="Iniciar conversa no WhatsApp"
+            >
+              <MessageCircle className="w-4 h-4" />
+              <EditableField
+                value={texts.hero?.primaryCta}
+                jsonKey="tratamentos.hero.primaryCta"
+                type="span"
+                className="inline"
+              />
+            </a>
+            <Link to="/purificacao" className="ds-btn ds-btn-ghost-blue ds-btn-hero-ghost">
+              <EditableField
+                value={texts.hero?.secondaryCta}
+                jsonKey="tratamentos.hero.secondaryCta"
+                type="span"
+                className="inline"
+              />
+              <span className="ds-arrow">›</span>
+            </Link>
           </div>
         </div>
 
-        {/* Aviso Legal - ícone discreto no canto inferior direito */}
-        <div className="absolute bottom-3 right-4 z-20">
+        {/* Legal tooltip */}
+        <div className="dt-legal-trigger">
           <div
-            className="w-7 h-7 rounded-full bg-amber-400 border border-amber-300 flex items-center justify-center cursor-pointer shadow-[0_2px_12px_rgba(0,0,0,0.4),0_0_20px_rgba(217,170,0,0.35)] hover:shadow-[0_3px_16px_rgba(0,0,0,0.5),0_0_28px_rgba(217,170,0,0.45)] hover:scale-105 transition-all duration-300 animate-[pulse_3s_ease-in-out_infinite]"
+            className="dt-legal-dot"
             onClick={() => setShowLegal(!showLegal)}
             onMouseEnter={() => setShowLegal(true)}
             onMouseLeave={() => setShowLegal(false)}
           >
-            <AlertTriangle className="w-4 h-4 text-stone-700 -mt-px" />
+            <AlertTriangle className="w-4 h-4 text-stone-700" />
           </div>
-          {/* Tooltip */}
           <div
-            className={`absolute bottom-full right-0 mb-2 w-max max-w-[90vw] transition-all duration-300 ease-out ${
-              showLegal ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-            }`}
+            className={`dt-legal-tooltip ${showLegal ? 'visible' : ''}`}
             onMouseEnter={() => setShowLegal(true)}
             onMouseLeave={() => setShowLegal(false)}
           >
-            <div className="relative bg-amber-50 border-2 border-amber-400 rounded-xl shadow-2xl p-5 text-left">
-              <div className="absolute top-0 left-0 right-0 h-1 bg-linear-to-r from-amber-400 via-orange-500 to-amber-400 rounded-t-xl"></div>
-              <div className="flex items-start gap-4">
-                <div className="shrink-0 mt-1">
-                  <AlertTriangle className="w-10 h-10 text-amber-600" />
-                </div>
-                <div className="flex-1">
-                  <EditableField
-                    value={texts.legal.title}
-                    jsonKey="tratamentos.legal.title"
-                    type="h4"
-                    className="text-base font-bold text-amber-900 mb-2"
-                  />
-                  <EditableField
-                    value={texts.legal.notice}
-                    jsonKey="tratamentos.legal.notice"
-                    type="p"
-                    className="text-amber-900 text-sm leading-snug"
-                  />
-                </div>
-              </div>
-              {/* Seta apontando para baixo */}
-              <div className="absolute -bottom-2 right-4 w-4 h-4 bg-amber-50 border-r-2 border-b-2 border-amber-400 rotate-45"></div>
+            <div className="dt-legal-content">
+              <EditableField
+                value={texts.legal?.title}
+                jsonKey="tratamentos.legal.title"
+                type="h4"
+                className=""
+              />
+              <EditableField
+                value={texts.legal?.notice}
+                jsonKey="tratamentos.legal.notice"
+                type="p"
+                className=""
+              />
             </div>
           </div>
         </div>
       </section>
 
-      {/* ==================== REDESCUBRA (conteúdo do index) ==================== */}
+      {/* ==================== REDESCUBRA (from index.instituto) ==================== */}
       {indexTexts && (
-      <section className="section-padding-y bg-stone-50">
-        <div className="container mx-auto px-4">
-          <div className="max-w-section mx-auto">
-            <Card className="border border-amber-200/80 shadow-2xl overflow-hidden bg-white">
-              {/* Barra dourada superior */}
-              <div className="h-1.5 bg-linear-to-r from-amber-400 via-amber-500 to-amber-400"></div>
-              <CardContent className="p-6 md:p-8">
-                {/* Título centralizado com coração irradiante */}
-                <div className="text-center mb-10">
-                  <div className="w-20 h-20 bg-linear-to-br from-amber-100 to-amber-50 rounded-full flex items-center justify-center mb-6 mx-auto shadow-[0_0_30px_rgba(217,119,6,0.3)] border-2 border-amber-300/60">
-                    <Heart className="w-10 h-10 text-amber-500 fill-amber-500 drop-shadow-[0_0_8px_rgba(217,119,6,0.6)]" />
+        <section className="dt-section-redescubra">
+          <div className="dt-redescubra-inner max-w-section mx-auto">
+            <h2 className="ds-section-heading">
+              <EditableField
+                value={indexTexts?.instituto?.firstCallTitle}
+                jsonKey="index.instituto.firstCallTitle"
+                type="span"
+                className=""
+              />
+            </h2>
+
+            {indexTexts?.instituto?.firstCall?.[0] && (
+              <div className="dt-redescubra-quote">
+                <EditableField
+                  value={indexTexts.instituto.firstCall[0]}
+                  jsonKey="index.instituto.firstCall[0]"
+                  type="p"
+                  className=""
+                />
+              </div>
+            )}
+
+            {indexTexts?.instituto?.firstCall?.length > 2 && (
+              <div className="dt-redescubra-body">
+                {indexTexts.instituto.firstCall.slice(1, -1).map((p: string, i: number) => (
+                  <div key={i} className="dt-redescubra-item">
+                    <div className="dt-redescubra-dot" />
+                    <EditableField
+                      value={p}
+                      jsonKey={`index.instituto.firstCall[${i + 1}]`}
+                      type="p"
+                      className=""
+                    />
                   </div>
-                  <EditableField 
-                    value={indexTexts?.instituto?.firstCallTitle}
-                    jsonKey="index.instituto.firstCallTitle" 
-                    type="h2"
-                    className="text-3xl font-bold text-amber-800 leading-tight"
-                  />
-                </div>
+                ))}
+              </div>
+            )}
 
-                {/* Conteúdo */}
-                <div className="bg-stone-50 rounded-xl border border-stone-200 p-5 md:p-7 mb-10">
-                  {/* Gancho — pergunta destacada, centralizada */}
-                  {indexTexts?.instituto?.firstCall?.[0] && (
-                    <div className="bg-amber-50 border-2 border-amber-300 rounded-xl px-5 md:px-6 py-5 mb-6 text-center shadow-xl">
-                      <EditableField
-                        value={indexTexts.instituto.firstCall[0]}
-                        jsonKey="index.instituto.firstCall[0]"
-                        type="p"
-                        className="text-base md:text-lg text-amber-800 font-semibold italic leading-relaxed text-center"
-                      />
-                    </div>
-                  )}
-
-                  {/* Corpo explicativo — todos os itens entre o primeiro e o ultimo */}
-                  {indexTexts?.instituto?.firstCall?.length > 2 && (
-                    <div className="space-y-3">
-                      {indexTexts.instituto.firstCall.slice(1, -1).map((p: string, i: number) => (
-                        <div key={i + 1} className="flex items-start gap-3">
-                          <div className="w-1.5 h-1.5 bg-amber-500 rounded-full mt-2.5 shrink-0"></div>
-                          <EditableField
-                            value={p}
-                            jsonKey={`index.instituto.firstCall[${i + 1}]`}
-                            type="p"
-                            className="text-base text-stone-600 leading-relaxed"
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                {/* Checkmarks em 2 colunas — com titulo de transicao (ultimo item do firstCall) */}
-                {(indexTexts?.instituto?.firstCallList?.length || 0) > 0 && (
-                  <div className="bg-amber-50 rounded-2xl pt-4 md:pt-5 pb-6 md:pb-8 px-2 md:px-3 mb-8 border border-amber-200">
-                    {/* Titulo introdutorio movido do bloco de texto */}
-                    {indexTexts?.instituto?.firstCall?.length > 1 && (
-                      <div className="mb-4 pb-4 border-b border-amber-200 text-center">
-                        <EditableField
-                          value={indexTexts.instituto.firstCall[indexTexts.instituto.firstCall.length - 1]}
-                          jsonKey={`index.instituto.firstCall[${indexTexts.instituto.firstCall.length - 1}]`}
-                          type="p"
-                          className="text-base md:text-lg text-amber-800 font-bold text-center"
-                        />
-                      </div>
-                    )}
-                    <div className="grid md:grid-cols-2 gap-4">
-                      {indexTexts.instituto.firstCallList.map((li: string, i: number) => (
-                        <div key={i} className="flex items-start gap-2">
-                          <div className="w-5 h-5 bg-amber-600 rounded-md flex items-center justify-center shrink-0 mt-0.5 shadow">
-                            <span className="text-white text-xs font-bold">✓</span>
-                          </div>
-                          <EditableField
-                            value={li}
-                            jsonKey={`index.instituto.firstCallList[${i}]`}
-                            type="span"
-                            className="text-stone-800 font-medium"
-                          />
-                        </div>
-                      ))}
-                    </div>
+            {(indexTexts?.instituto?.firstCallList?.length || 0) > 0 && (
+              <div className="dt-checklist-box">
+                {indexTexts?.instituto?.firstCall?.length > 1 && (
+                  <div className="dt-checklist-title">
+                    <EditableField
+                      value={indexTexts.instituto.firstCall[indexTexts.instituto.firstCall.length - 1]}
+                      jsonKey={`index.instituto.firstCall[${indexTexts.instituto.firstCall.length - 1}]`}
+                      type="span"
+                      className=""
+                    />
                   </div>
                 )}
-
-                {indexTexts?.instituto?.firstCallFooter && (
-                  <div className="relative bg-linear-to-r from-amber-600 via-amber-500 to-amber-600 text-white rounded-xl shadow-lg overflow-hidden w-fit mx-auto">
-                    <div className="h-0.5 bg-linear-to-r from-transparent via-amber-200/50 to-transparent"></div>
-                    <div className="px-6 md:px-8 py-3 text-center">
+                <div className="dt-checklist-grid">
+                  {indexTexts.instituto.firstCallList.map((li: string, i: number) => (
+                    <div key={i} className="dt-checklist-item">
+                      <div className="dt-check">✓</div>
                       <EditableField
-                        value={indexTexts.instituto.firstCallFooter}
-                        jsonKey="index.instituto.firstCallFooter"
-                        type="p"
-                        className="text-base md:text-lg font-semibold leading-relaxed text-center"
+                        value={li}
+                        jsonKey={`index.instituto.firstCallList[${i}]`}
+                        type="span"
+                        className=""
                       />
                     </div>
-                    <div className="h-0.5 bg-linear-to-r from-transparent via-amber-200/50 to-transparent"></div>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {indexTexts?.instituto?.firstCallFooter && (
+              <div className="dt-redescubra-footer">
+                <EditableField
+                  value={indexTexts.instituto.firstCallFooter}
+                  jsonKey="index.instituto.firstCallFooter"
+                  type="p"
+                  className=""
+                />
+              </div>
+            )}
           </div>
-        </div>
-      </section>
+        </section>
       )}
 
-      {/* Introdução - Destaque Premium */}
-      <section className="pt-3 pb-6">
-        <div className="container mx-auto px-4">
-          <div className="max-w-section mx-auto">
-        <div className="relative bg-linear-to-br from-blue-50 via-cyan-50/90 to-teal-50/80 rounded-3xl shadow-2xl p-8 md:p-10 border-2 border-blue-200/60 overflow-hidden">
-          {/* Efeitos decorativos de fundo */}
-          <div className="absolute inset-0 opacity-20">
-            <div className="absolute top-0 left-0 w-40 h-40 bg-blue-300 rounded-full blur-3xl"></div>
-            <div className="absolute bottom-0 right-0 w-56 h-56 bg-cyan-300 rounded-full blur-3xl"></div>
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-teal-200 rounded-full blur-3xl"></div>
+      {/* ==================== BRIDGE (approach) ==================== */}
+      <section className="ds-section-bridge">
+        <div className="ds-bridge-inner max-w-section mx-auto">
+          <p className="ds-bridge-preamble">
+            <EditableField
+              value={texts.approach?.content}
+              jsonKey="tratamentos.approach.content"
+              type="span"
+              className=""
+            />
+          </p>
+          <h2 className="ds-bridge-title">
+            <EditableField
+              value={texts.approach?.title}
+              jsonKey="tratamentos.approach.title"
+              type="span"
+              className=""
+            />
+          </h2>
+          <div className="ds-bridge-body">
+            <EditableField
+              value={texts.intro?.p1}
+              jsonKey="tratamentos.intro.p1"
+              type="p"
+              className=""
+            />
           </div>
-          
-          {/* Padrão de linhas sutis */}
-          <div className="absolute inset-0 opacity-[0.03] tratamentos-pattern"></div>
-          
-          {/* Título */}
-          <EditableField
-            value={texts.sections?.intro_title}
-            jsonKey="tratamentos.sections.intro_title"
-            type="h2"
-            className="text-3xl md:text-4xl font-bold text-center mb-6 text-slate-800 relative z-10 drop-shadow-sm"
-          />
-          
-          <div className="space-y-5 relative z-10">
-            {/* Primeiro parágrafo com destaque */}
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 md:p-8 shadow-lg border border-blue-100/50">
-              <div className="flex flex-col md:flex-row gap-4">
-                <div className="shrink-0 md:pt-1 flex justify-center md:justify-start">
-                  <div className="w-10 h-10 rounded-full bg-linear-to-br from-blue-500 to-cyan-500 flex items-center justify-center shadow-md">
-                    <Stethoscope className="w-5 h-5 text-white" />
-                  </div>
-                </div>
-                <EditableField
-                  value={texts.intro.p1}
-                  jsonKey="tratamentos.intro.p1"
-                  type="p"
-                  className="text-base md:text-lg text-stone-700 leading-loose text-center md:text-left"
-                />
-              </div>
-            </div>
-            
-            {/* Segundo parágrafo com destaque */}
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 md:p-8 shadow-lg border border-cyan-100/50">
-              <div className="flex flex-col md:flex-row gap-4">
-                <div className="shrink-0 md:pt-1 flex justify-center md:justify-start">
-                  <div className="w-10 h-10 rounded-full bg-linear-to-br from-cyan-500 to-teal-500 flex items-center justify-center shadow-md">
-                    <Heart className="w-5 h-5 text-white" />
-                  </div>
-                </div>
-                <EditableField
-                  value={texts.intro.p2}
-                  jsonKey="tratamentos.intro.p2"
-                  type="p"
-                  className="text-base md:text-lg text-stone-700 leading-loose text-center md:text-left"
-                />
-              </div>
-            </div>
-          </div>
-          
-          {/* Linha decorativa inferior */}
-          <div className="relative z-10 mt-6 flex justify-center">
-            <div className="h-1 w-32 bg-linear-to-r from-transparent via-cyan-400 to-transparent rounded-full"></div>
-          </div>
-        </div>
+          <div className="ds-bridge-highlight">
+            <EditableField
+              value={texts.intro?.p2}
+              jsonKey="tratamentos.intro.p2"
+              type="p"
+              className=""
+            />
           </div>
         </div>
       </section>
 
-      {/* Tratamentos - Accordion em Box Agrupado */}
-      <section className="pb-6">
-        <div className="container mx-auto px-4">
-          <div className="max-w-section mx-auto">
-        <div className="bg-white rounded-2xl shadow-2xl p-6 md:p-8 border border-slate-200">
-          <EditableField
-            value={texts.sections?.treatments_title}
-            jsonKey="tratamentos.sections.treatments_title"
-            type="h2"
-            className="text-3xl md:text-4xl font-bold text-center mb-6 text-slate-800 drop-shadow-sm"
-          />
-          
-          <Accordion type="multiple" className="space-y-4">
-            {treatments.map((treatment, index) => (
-              <AccordionItem 
-                key={index} 
+      {/* ==================== MODALITIES (accordion) ==================== */}
+      <section className="dt-section-modalities">
+        <div className="dt-modalities-inner max-w-section mx-auto">
+          <h2 className="ds-section-heading">
+            <EditableField
+              value={texts.sections?.treatments_title}
+              jsonKey="tratamentos.sections.treatments_title"
+              type="span"
+              className=""
+            />
+          </h2>
+          <p className="ds-section-sub">
+            <EditableField
+              value={texts.modalities?.description}
+              jsonKey="tratamentos.modalities.description"
+              type="span"
+              className=""
+            />
+          </p>
+
+          <Accordion type="multiple" className="flex flex-col gap-4 mt-6">
+            {treatments.map((treatment: Record<string, string>, index: number) => (
+              <AccordionItem
+                key={index}
                 value={`item-${index}`}
-                className="border-2 border-slate-200 rounded-lg shadow-lg hover:shadow-2xl transition-all duration-300 bg-white overflow-hidden"
+                className="dt-accordion-item border-0"
               >
-                <AccordionTrigger 
-                  className={`px-6 py-5 hover:no-underline relative [&>svg]:h-10 [&>svg]:w-10 [&>svg]:text-slate-700 [&>svg]:relative [&>svg]:z-20 ${getGradientClass(index)}`}
-                >
-                  <div className="absolute inset-0 bg-white/75"></div>
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_50%,rgba(255,255,255,0.4),transparent_60%)]"></div>
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_50%,rgba(255,255,255,0.3),transparent_60%)]"></div>
-                  
-                  <div className="flex flex-col md:flex-row items-center gap-4 w-full relative z-10">
-                    <div className="shrink-0 text-slate-700 drop-shadow-[0_1px_2px_rgba(255,255,255,0.5)] flex justify-center md:justify-start">
-                      {icons[index]}
-                    </div>
-                    <div className="flex-1 text-center md:text-left pr-4">
-                      <EditableField
-                        value={treatment.title.includes('(supervisão geral integrada)') 
-                          ? treatment.title.split('(')[0]
-                          : treatment.title
-                        }
-                        jsonKey={`tratamentos.treatments[${index}].title`}
-                        type="h3"
-                        className="text-xl md:text-2xl font-semibold text-slate-800 mb-1"
-                      />
-                      <EditableField
-                        value={treatment.description}
-                        jsonKey={`tratamentos.treatments[${index}].description`}
-                        type="p"
-                        className="text-slate-700 text-sm md:text-base"
-                      />
-                    </div>
+                <AccordionTrigger className="dt-accordion-trigger hover:no-underline [&>svg]:text-slate-400 [&>svg]:w-5 [&>svg]:h-5">
+                  <div className="dt-trigger-icon">
+                    {TREATMENT_ICONS[index] || <Activity className="w-6 h-6" />}
+                  </div>
+                  <div className="dt-trigger-text">
+                    <EditableField
+                      value={treatment.title}
+                      jsonKey={`tratamentos.treatments[${index}].title`}
+                      type="h3"
+                      className=""
+                    />
+                    <EditableField
+                      value={treatment.description}
+                      jsonKey={`tratamentos.treatments[${index}].description`}
+                      type="p"
+                      className=""
+                    />
                   </div>
                 </AccordionTrigger>
 
-                <AccordionContent className="px-6 pb-6 pt-4 bg-linear-to-br from-white to-slate-50">
-                  <div className="space-y-4">
-                    {/* Sobre o Tratamento */}
-                    <div className="bg-white rounded-lg p-4 border-l-4 border-blue-400 shadow-sm">
-                      <h4 className="text-base font-semibold text-slate-800 mb-2 flex items-center gap-2">
-                        <Activity className="w-4 h-4 text-blue-500" />
+                <AccordionContent className="dt-accordion-content">
+                  {treatment.details && (
+                    <div className="dt-detail-block dt-block-about">
+                      <h4>
+                        <Activity className="w-4 h-4" />
                         <EditableField
-                          value={texts.labels.about}
+                          value={texts.labels?.about}
                           jsonKey="tratamentos.labels.about"
                           type="span"
                           className="inline"
@@ -421,259 +331,247 @@ export default function Tratamentos() {
                         value={treatment.details}
                         jsonKey={`tratamentos.treatments[${index}].details`}
                         type="p"
-                        className="text-slate-700 text-sm leading-relaxed"
+                        className=""
                       />
                     </div>
+                  )}
 
-                    {/* Indicações */}
-                    {treatment.indications && (
-                      <div className="bg-teal-50 rounded-lg p-4 border-l-4 border-teal-400">
+                  {treatment.indications && (
+                    <div className="dt-detail-block dt-block-indications">
+                      <h4>
                         <EditableField
-                          value={texts.labels.indications}
+                          value={texts.labels?.indications}
                           jsonKey="tratamentos.labels.indications"
-                          type="h5"
-                          className="text-sm font-semibold text-teal-900 mb-2"
+                          type="span"
+                          className="inline"
                         />
-                        <EditableField
-                          value={treatment.indications}
-                          jsonKey={`tratamentos.treatments[${index}].indications`}
-                          type="p"
-                          className="text-teal-800 text-sm leading-relaxed"
-                        />
-                      </div>
-                    )}
+                      </h4>
+                      <EditableField
+                        value={treatment.indications}
+                        jsonKey={`tratamentos.treatments[${index}].indications`}
+                        type="p"
+                        className=""
+                      />
+                    </div>
+                  )}
 
-                    {/* Benefícios */}
-                    {treatment.benefits && (
-                      <div className="bg-emerald-50 rounded-lg p-4 border-l-4 border-emerald-400">
+                  {treatment.benefits && (
+                    <div className="dt-detail-block dt-block-benefits">
+                      <h4>
                         <EditableField
-                          value={texts.labels.benefits}
+                          value={texts.labels?.benefits}
                           jsonKey="tratamentos.labels.benefits"
-                          type="h5"
-                          className="text-sm font-semibold text-emerald-900 mb-2"
+                          type="span"
+                          className="inline"
                         />
+                      </h4>
+                      {Array.isArray(treatment.benefits) ? (
+                        <ul>
+                          {treatment.benefits.map((b: string, bi: number) => (
+                            <li key={bi}>
+                              <EditableField
+                                value={b}
+                                jsonKey={`tratamentos.treatments[${index}].benefits[${bi}]`}
+                                type="span"
+                                className="inline"
+                              />
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
                         <EditableField
                           value={treatment.benefits}
                           jsonKey={`tratamentos.treatments[${index}].benefits`}
                           type="p"
-                          className="text-emerald-800 text-sm leading-relaxed"
+                          className=""
                         />
-                      </div>
-                    )}
+                      )}
+                    </div>
+                  )}
 
-                    {/* Contraindicações */}
-                    {treatment.contraindications && (
-                      <div className="bg-red-50 rounded-lg p-4 border-l-4 border-red-400">
-                        <h4 className="text-sm font-semibold text-red-900 mb-2 flex items-center gap-2">
-                          <AlertTriangle className="w-4 h-4" />
-                          <EditableField
-                            value={texts.labels.contraindications}
-                            jsonKey="tratamentos.labels.contraindications"
-                            type="span"
-                            className="inline"
-                          />
-                        </h4>
+                  {treatment.contraindications && (
+                    <div className="dt-detail-block dt-block-contra">
+                      <h4>
+                        <AlertTriangle className="w-4 h-4" />
+                        <EditableField
+                          value={texts.labels?.contraindications}
+                          jsonKey="tratamentos.labels.contraindications"
+                          type="span"
+                          className="inline"
+                        />
+                      </h4>
+                      {Array.isArray(treatment.contraindications) ? (
+                        <ul>
+                          {treatment.contraindications.map((c: string, ci: number) => (
+                            <li key={ci}>
+                              <EditableField
+                                value={c}
+                                jsonKey={`tratamentos.treatments[${index}].contraindications[${ci}]`}
+                                type="span"
+                                className="inline"
+                              />
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
                         <EditableField
                           value={treatment.contraindications}
                           jsonKey={`tratamentos.treatments[${index}].contraindications`}
                           type="p"
-                          className="text-red-800 text-sm leading-relaxed"
+                          className=""
+                        />
+                      )}
+                    </div>
+                  )}
+
+                  <div className="dt-detail-meta">
+                    {treatment.duration && (
+                      <div className="dt-meta-block">
+                        <EditableField
+                          value={texts.labels?.duration}
+                          jsonKey="tratamentos.labels.duration"
+                          type="h5"
+                          className=""
+                        />
+                        <EditableField
+                          value={treatment.duration}
+                          jsonKey={`tratamentos.treatments[${index}].duration`}
+                          type="p"
+                          className=""
                         />
                       </div>
                     )}
-
-                    <div className="grid md:grid-cols-2 gap-3">
-                      {/* Duração */}
-                      {treatment.duration && (
-                        <div className="bg-blue-50 rounded-lg p-3 border border-blue-200">
-                          <EditableField
-                            value={texts.labels.duration}
-                            jsonKey="tratamentos.labels.duration"
-                            type="h5"
-                            className="text-xs font-semibold text-blue-900 mb-1"
-                          />
-                          <EditableField
-                            value={treatment.duration}
-                            jsonKey={`tratamentos.treatments[${index}].duration`}
-                            type="p"
-                            className="text-blue-800 text-xs"
-                          />
-                        </div>
-                      )}
-
-                      {/* Profissional */}
-                      {treatment.professional && (
-                        <div className="bg-cyan-50 rounded-lg p-3 border border-cyan-200">
-                          <EditableField
-                            value={texts.labels.professional}
-                            jsonKey="tratamentos.labels.professional"
-                            type="h5"
-                            className="text-xs font-semibold text-cyan-900 mb-1"
-                          />
-                          <EditableField
-                            value={treatment.professional}
-                            jsonKey={`tratamentos.treatments[${index}].professional`}
-                            type="p"
-                            className="text-cyan-800 text-xs"
-                          />
-                        </div>
-                      )}
-                    </div>
+                    {treatment.professional && (
+                      <div className="dt-meta-block">
+                        <EditableField
+                          value={texts.labels?.professional}
+                          jsonKey="tratamentos.labels.professional"
+                          type="h5"
+                          className=""
+                        />
+                        <EditableField
+                          value={treatment.professional}
+                          jsonKey={`tratamentos.treatments[${index}].professional`}
+                          type="p"
+                          className=""
+                        />
+                      </div>
+                    )}
                   </div>
                 </AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>
         </div>
-          </div>
-        </div>
       </section>
 
-      {/* Tripla Proteção - Design Premium com Simbolismo */}
-      <section className="pb-10">
-        <div className="container mx-auto px-4">
-          <div className="max-w-section mx-auto">
-          <div className="relative bg-linear-to-br from-slate-50 via-stone-100 to-slate-50 rounded-3xl shadow-2xl border-2 border-stone-300 overflow-hidden">
-            {/* Padrão decorativo de fundo - simbolizando interconexão */}
-            <div className="absolute inset-0 opacity-[0.03]">
-              <div className="absolute top-10 left-10 w-64 h-64 border-4 border-teal-400 rounded-full"></div>
-              <div className="absolute top-10 right-10 w-64 h-64 border-4 border-amber-400 rounded-full"></div>
-              <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-64 h-64 border-4 border-rose-400 rounded-full"></div>
-            </div>
+      {/* ==================== TRIPLA PROTECAO ==================== */}
+      <section className="dt-section-protection">
+        <div className="dt-protection-inner max-w-section mx-auto">
+          <div className="dt-shield-wrap">
+            <svg className="dt-shield-icon" width="56" height="56" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="shieldMetalLeftTrat" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#e8ecf1" />
+                  <stop offset="35%" stopColor="#c0c8d4" />
+                  <stop offset="60%" stopColor="#8a9bb0" />
+                  <stop offset="100%" stopColor="#5a6e85" />
+                </linearGradient>
+                <linearGradient id="shieldMetalRightTrat" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#cbd5e1" />
+                  <stop offset="35%" stopColor="#94a3b8" />
+                  <stop offset="60%" stopColor="#64748b" />
+                  <stop offset="100%" stopColor="#3b4f65" />
+                </linearGradient>
+              </defs>
+              <path d="M12 2 L3 7 L3 12 C3 17.5 7 21.5 12 23 C12 23 12 23 12 23 L12 2 Z" fill="url(#shieldMetalLeftTrat)" />
+              <path d="M12 2 L21 7 L21 12 C21 17.5 17 21.5 12 23 C12 23 12 23 12 23 L12 2 Z" fill="url(#shieldMetalRightTrat)" />
+              <path d="M12 22C17.5 20.5 20 16.5 20 12V7.5L12 3L4 7.5V12C4 16.5 6.5 20.5 12 22Z" fill="none" stroke="#475569" strokeWidth="0.5" opacity="0.4" />
+            </svg>
+          </div>
+          <h2 className="dt-protection-title">
+            <EditableField
+              value={texts.triplaProtecao?.title}
+              jsonKey="tratamentos.triplaProtecao.title"
+              type="span"
+              className=""
+            />
+          </h2>
+          <p className="dt-protection-subtitle">
+            <EditableField
+              value={texts.triplaProtecao?.subtitle}
+              jsonKey="tratamentos.triplaProtecao.subtitle"
+              type="span"
+              className=""
+            />
+          </p>
 
-            {/* Efeitos de luz suaves */}
-            <div className="absolute inset-0 opacity-20">
-              <div className="absolute top-0 left-1/4 w-96 h-96 bg-teal-200 rounded-full blur-3xl"></div>
-              <div className="absolute top-0 right-1/4 w-96 h-96 bg-amber-200 rounded-full blur-3xl"></div>
-              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-rose-200 rounded-full blur-3xl"></div>
-            </div>
+          <div className="dt-protection-grid">
+            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+            {texts.triplaProtecao?.items?.map((item: any, i: number) => {
+              const icons = [Compass, Heart, Sun];
+              const iconClasses = ['dt-prot-icon-tech', 'dt-prot-icon-human', 'dt-prot-icon-spirit'];
+              const Icon = icons[i];
 
-            <div className="relative z-10 p-8 md:p-12">
-              {/* Header com ícone de proteção */}
-              <div className="text-center mb-10">
-                <div className="inline-flex items-center justify-center mb-4">
-                  <div className="relative">
-                    {/* Luz azul pulsante de fundo com efeito blur - aparecer/sumir em 3 segundos */}
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-12 h-12 bg-blue-400 rounded-full blur-2xl animate-blue-glow"></div>
-                    </div>
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-12 h-12 bg-blue-500 rounded-full blur-xl animate-blue-glow-delay-1"></div>
-                    </div>
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-12 h-12 bg-cyan-300 rounded-full blur-lg animate-blue-glow-delay-2"></div>
-                    </div>
-                    <div className="relative w-32 h-32 rounded-full flex items-center justify-center">
-                      <span className="text-8xl drop-shadow-2xl">🛡️</span>
-                    </div>
+              const cardClasses = ['dt-prot-card-tech', 'dt-prot-card-human', 'dt-prot-card-spirit'];
+              return (
+                <div key={i} className={`dt-protection-card ${cardClasses[i] ?? ''}`}>
+                  <div className={`dt-protection-card-icon ${iconClasses[i]}`}>
+                    <Icon className="w-7 h-7" />
                   </div>
-                </div>
-                
-                <EditableField 
-                  value={texts.triplaProtecao?.title}
-                  jsonKey="tratamentos.triplaProtecao.title"
-                  type="h2"
-                  className="text-3xl md:text-4xl font-bold mb-3 text-slate-800 tracking-tight"
-                />
-                <div className="w-24 h-1 bg-linear-to-r from-transparent via-slate-400 to-transparent mx-auto mb-4"></div>
-                <EditableField 
-                  value={texts.triplaProtecao?.subtitle}
-                  jsonKey="tratamentos.triplaProtecao.subtitle"
-                  type="p"
-                  className="text-lg md:text-xl text-slate-700 mx-auto leading-relaxed font-medium"
-                />
-              </div>
-
-              {/* Grid dos três pilares */}
-              <div className="grid md:grid-cols-3 gap-6 md:gap-8 mx-auto">
-                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                {texts.triplaProtecao?.items?.map((item: any, i: number) => {
-                  const icons = [Compass, Heart, Sun];
-                  const gradients = [
-                    'from-teal-500 to-cyan-600',
-                    'from-pink-400 to-rose-500',
-                    'from-amber-500 to-orange-600'
-                  ];
-                  const glowColors = ['teal-400', 'pink-300', 'amber-400'];
-                  const Icon = icons[i];
-
-                  return (
-                    <div key={i} className="group relative">
-                      {/* Glow effect no hover */}
-                      <div className={`absolute -inset-1 bg-linear-to-r ${gradients[i]} rounded-2xl opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-500`}></div>
-                      
-                      <div className="relative bg-white rounded-2xl p-4 md:p-5 shadow-lg border-2 border-slate-200 group-hover:border-slate-300 transition-all duration-300 group-hover:scale-105 group-hover:shadow-2xl h-full flex flex-col">
-                        {/* Ícone com gradiente e animação */}
-                        <div className="flex justify-center mb-6">
-                          <div className="relative inline-block">
-                            <div className={`absolute inset-0 bg-${glowColors[i]} rounded-2xl blur-md opacity-40 group-hover:opacity-60 transition-opacity`}></div>
-                            <div className={`relative bg-linear-to-br ${gradients[i]} rounded-2xl shadow-xl transform group-hover:rotate-6 transition-transform duration-300 w-16.25 h-16.25 flex items-center justify-center`}>
-                              <Icon className="w-12 h-12 text-white shrink-0" strokeWidth={2} />
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Conteúdo */}
-                        <div className="flex-1 flex flex-col">
-                          <EditableField
-                            value={item.title}
-                            jsonKey={`tratamentos.triplaProtecao.items[${i}].title`}
-                            type="h4"
-                            className="text-xl md:text-2xl font-bold mb-4 text-slate-800 text-center group-hover:text-slate-900 transition-colors"
-                          />
-                          <EditableField
-                            value={item.description}
-                            jsonKey={`tratamentos.triplaProtecao.items[${i}].description`}
-                            type="p"
-                            className="text-slate-600 leading-relaxed text-center text-sm md:text-base group-hover:text-slate-700 transition-colors"
-                          />
-                        </div>
-
-                        {/* Barra decorativa inferior */}
-                        <div className="mt-6 pt-4 border-t border-slate-100">
-                          <div className={`w-full h-1 bg-linear-to-r ${gradients[i]} rounded-full opacity-50 group-hover:opacity-100 transition-opacity`}></div>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-
-              {/* Rodapé com mensagem integrativa */}
-              <div className="mt-10 text-center">
-                <div className="inline-flex items-center gap-2 text-slate-600 text-sm font-medium bg-white/60 backdrop-blur-sm px-6 py-3 rounded-full shadow-md border border-slate-200">
-                  <span className="text-teal-500">●</span>
-                  <span className="text-rose-500">●</span>
-                  <span className="text-amber-500">●</span>
                   <EditableField
-                    value={texts.triplaProtecao?.footerMessage}
-                    jsonKey="tratamentos.triplaProtecao.footerMessage"
-                    type="span"
-                    className="inline"
+                    value={item.title}
+                    jsonKey={`tratamentos.triplaProtecao.items[${i}].title`}
+                    type="h4"
+                    className=""
                   />
-                  <span className="text-teal-500">●</span>
-                  <span className="text-rose-500">●</span>
-                  <span className="text-amber-500">●</span>
+                  <EditableField
+                    value={item.description}
+                    jsonKey={`tratamentos.triplaProtecao.items[${i}].description`}
+                    type="p"
+                    className=""
+                  />
                 </div>
+              );
+            })}
+          </div>
+
+          {/* Testimonial banner */}
+          <div className="dt-testimonial-banner">
+            <div className="dt-testimonial-left">
+              <div className="dt-testimonial-icon">
+                <Heart className="w-4 h-4" />
+              </div>
+              <div className="dt-testimonial-text">
+                <EditableField
+                  value={texts.triplaProtecao?.footerMessage}
+                  jsonKey="tratamentos.triplaProtecao.footerMessage"
+                  type="span"
+                  className=""
+                />
               </div>
             </div>
-          </div>
+            <Link to="/testemunhos" className="dt-testimonial-btn">
+              <EditableField
+                value={texts.labels?.seeTestimonials}
+                jsonKey="tratamentos.labels.seeTestimonials"
+                type="span"
+                className="inline"
+              />
+              <span className="dt-arrow">›</span>
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* Footer CTA Section com fundo céu, terra e água */}
-      <footer className={`${FOOTER.sectionClass} -mt-4`}>
+      {/* ==================== FOOTER CTA (pre-dawn sky) ==================== */}
+      <footer className={`ds-footer-section ${FOOTER.sectionClass}`}>
         <div className="relative">
           <FooterBackground
-            gradientId="skyGradientTratamentos"
-            skyColors={['#1e3a5f', '#2563eb', '#38bdf8']}
-            earthColor="#4a3f2e"
-            waterColors={['#14b8a6', '#0d9488', '#0f766e']}
-            leftIcon={<Activity className="text-[#CFAF5A] stroke-[1.5]" />}
-            leftIconSize={48}
-            rightIcon={<Waves className="text-[#CFAF5A] stroke-[1.5]" />}
-            rightIconSize={48}
+            gradientId="skyGradTrat"
+            skyColors={['#0F1D2F', '#162840', '#1A3550']}
+            earthColor="#1a1508"
+            waterColors={['#0a3a4a', '#083040', '#062530']}
           />
 
           <div className={FOOTER.containerClass}>
@@ -690,8 +588,14 @@ export default function Tratamentos() {
                 type="p"
                 className={FOOTER.subtitleClass}
               />
-              <Link to="/contato">
+              <a
+                href={whatsappUrl('Olá! Gostaria de agendar uma avaliação inicial para tratamentos.')}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Iniciar conversa no WhatsApp"
+              >
                 <Button className={FOOTER.buttonClass}>
+                  <MessageCircle className="w-4 h-4 mr-2" />
                   <EditableField
                     value={texts.cta?.buttonText}
                     jsonKey="tratamentos.cta.buttonText"
@@ -699,7 +603,7 @@ export default function Tratamentos() {
                     className="inline"
                   />
                 </Button>
-              </Link>
+              </a>
             </div>
 
             <div>

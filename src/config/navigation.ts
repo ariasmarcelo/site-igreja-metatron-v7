@@ -24,13 +24,13 @@ export interface NavigationItem {
   name: string;
 }
 
-// Items do menu de navegação — ordem: escuro (noite) → claro (dia) para progressão dos footers
+// Items do menu — ordem: ofertas (caminhos) → credibilidade → prova social → ação
 export const navigationItems: readonly NavigationItem[] = [
   { name: 'Principal', href: '/', id: 'index' },
   { name: 'Purificação e Ascensão', href: '/purificacao', id: 'purificacao' },
   { name: 'Tratamentos Associados', href: '/tratamentos', id: 'tratamentos' },
-  { name: 'Testemunhos', href: '/testemunhos', id: 'testemunhos' },
   { name: 'Quem Somos', href: '/quemsomos', id: 'quemsomos' },
+  { name: 'Testemunhos', href: '/testemunhos', id: 'testemunhos' },
   { name: 'Contato', href: '/contato', id: 'contato' },
 ] as const;
 
