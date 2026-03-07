@@ -89,8 +89,7 @@ export default function Purificacao() {
       <section className="purificacao-section purificacao-section-first">
         <div className="max-w-section mx-auto">
           <Card className="purificacao-card purificacao-card-gold">
-            <div className="purificacao-card-bar gold" />
-            <CardContent className="purificacao-card-content p-5 md:p-8 text-center">
+            <CardContent className="purificacao-card-content text-center">
               <EditableField value={intro.sectionTitle || ''} jsonKey="purificacao.intro.sectionTitle" type="h2" className="purificacao-heading gold" />
               <EditableField value={intro.mainText} jsonKey="purificacao.intro.mainText" type="p" className="purificacao-body mb-3 whitespace-pre-line" />
               <EditableField value={intro.description} jsonKey="purificacao.intro.description" type="p" className="purificacao-body" />
@@ -103,11 +102,10 @@ export default function Purificacao() {
       <section className="purificacao-section">
         <div className="max-w-section mx-auto">
             <Card className="purificacao-card purificacao-timeline-card">
-              <div className="purificacao-card-bar gold" />
-              <CardContent className="purificacao-card-content p-6 md:p-10 relative z-10">
+              <CardContent className="purificacao-card-content relative z-10">
                 <div className="purificacao-section-title-block text-center">
                   <EditableField value={texts.sections?.process_title} jsonKey="purificacao.sections.process_title" type="h2" className="purificacao-heading gold mb-3" />
-                  <p className="purificacao-body muted max-w-full mx-auto mb-4">
+                  <p className="purificacao-body max-w-full mx-auto mb-4">
                     <EditableField value={texts.sections?.process_subtitle} jsonKey="purificacao.sections.process_subtitle" type="span" className="inline" />
                   </p>
                   <div className="purificacao-sun-divider" />
@@ -179,7 +177,7 @@ export default function Purificacao() {
                             {faseIntermediaria.trabalhos.items.map((item: { title: string; content: string }, index: number) => (
                               <div key={index}>
                                 <EditableField value={item.title} jsonKey={`purificacao.faseIntermediaria.trabalhos.items[${index}].title`} type="h6" className="purificacao-subheading" />
-                                <EditableField value={item.content} jsonKey={`purificacao.faseIntermediaria.trabalhos.items[${index}].content`} type="p" className="purificacao-body muted" />
+                                <EditableField value={item.content} jsonKey={`purificacao.faseIntermediaria.trabalhos.items[${index}].content`} type="p" className="purificacao-body" />
                               </div>
                             ))}
                           </div>
@@ -262,7 +260,7 @@ export default function Purificacao() {
               <CardContent className="purificacao-card-content purificacao-psicodelicos-content">
                 <div className="purificacao-papiro-wrap">
                   <div className="papiro-texture" />
-                  <div className="papiro-text text-center text-xl md:text-2xl leading-relaxed font-serif italic" data-json-key="purificacao.psicodelicos.intro" dangerouslySetInnerHTML={{ __html: psicodelicos.intro }} />
+                  <div className="papiro-text purificacao-body text-center" data-json-key="purificacao.psicodelicos.intro" dangerouslySetInnerHTML={{ __html: psicodelicos.intro }} />
                 </div>
 
                 <EditableField value={psicodelicos.applications.title} jsonKey="purificacao.psicodelicos.applications.title" type="h3" className="purificacao-heading gold text-center" />
@@ -277,10 +275,10 @@ export default function Purificacao() {
 
                 <div className="purificacao-papiro-wrap mt-16">
                   <div className="papiro-texture" />
-                  <h4 className="papiro-title purificacao-section-title text-center font-bold text-2xl md:text-3xl text-(--purificacao-text-dark)">
+                  <h4 className="papiro-title purificacao-heading gold text-center">
                     <EditableField value={psicodelicos.conclusion.title} jsonKey="purificacao.psicodelicos.conclusion.title" type="span" className="inline" />
                   </h4>
-                  <p className="papiro-text text-center text-lg md:text-xl leading-relaxed font-serif italic">
+                  <p className="papiro-text purificacao-body text-center">
                     <EditableField value={psicodelicos.conclusion.content} jsonKey="purificacao.psicodelicos.conclusion.content" type="span" className="inline" />
                   </p>
                 </div>
@@ -342,36 +340,32 @@ export default function Purificacao() {
                   <EditableField value={psicodelicos.tripleProtection.cards[2].description} jsonKey="purificacao.psicodelicos.tripleProtection.cards[2].description" type="p" className="purificacao-body" />
                 </div>
               </div>
-            </div>
-          </div>
-      </section>
 
-      {/* Banner de testemunhos — texto editável + link */}
-      <section className="purificacao-section">
-        <div className="max-w-section mx-auto">
-            <div className="purificacao-testimonial-banner">
-              <div className="purificacao-testimonial-left">
-                <div className="purificacao-testimonial-icon">
-                  <Heart className="w-4 h-4" />
+              {/* Testimonial banner */}
+              <div className="purificacao-testimonial-banner">
+                <div className="purificacao-testimonial-left">
+                  <div className="purificacao-testimonial-icon">
+                    <Heart className="w-4 h-4" />
+                  </div>
+                  <div className="purificacao-body">
+                    <EditableField
+                      value={texts.testemunhosCta?.text}
+                      jsonKey="purificacao.testemunhosCta.text"
+                      type="span"
+                      className=""
+                    />
+                  </div>
                 </div>
-                <div className="purificacao-body">
+                <Link to="/testemunhos" className="purificacao-testimonial-btn">
                   <EditableField
-                    value={texts.testemunhosCta?.text}
-                    jsonKey="purificacao.testemunhosCta.text"
+                    value={texts.testemunhosCta?.button}
+                    jsonKey="purificacao.testemunhosCta.button"
                     type="span"
-                    className=""
+                    className="inline"
                   />
-                </div>
+                  <span className="purificacao-arrow">›</span>
+                </Link>
               </div>
-              <Link to="/testemunhos" className="purificacao-testimonial-btn">
-                <EditableField
-                  value={texts.testemunhosCta?.button}
-                  jsonKey="purificacao.testemunhosCta.button"
-                  type="span"
-                  className="inline"
-                />
-                <span className="purificacao-arrow">›</span>
-              </Link>
             </div>
           </div>
       </section>

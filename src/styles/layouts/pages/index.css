@@ -474,12 +474,18 @@
   padding: 28px 20px;
   text-align: center;
   border: 1px solid var(--ds-border-light);
-  transition: all 0.3s;
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.08),
+    0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease;
 }
 
 .ds-new .ds-pillar-card:hover {
-  box-shadow: var(--ds-shadow-md);
-  transform: translateY(-2px);
+  transform: translateY(-6px);
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, 0.12),
+    0 6px 12px rgba(0, 0, 0, 0.06),
+    0 2px 4px rgba(0, 0, 0, 0.04);
 }
 
 .ds-new .ds-pillar-icon {
@@ -520,6 +526,9 @@
   border: 1px solid var(--ds-border-light);
   border-radius: var(--ds-radius-md);
   padding: 18px 24px;
+  box-shadow:
+    0 3px 12px rgba(0, 0, 0, 0.1),
+    0 1px 4px rgba(0, 0, 0, 0.06);
 }
 
 @media (min-width: 768px) {
@@ -758,6 +767,6 @@
     drop-shadow(0 0 0.4px rgba(196, 148, 59, 0.6))
     drop-shadow(0 0 6px  rgba(196, 148, 59, 0.20))
     drop-shadow(0 0 20px rgba(196, 148, 59, 0.10))
-    drop-shadow(0 0 2px rgba(255, 255, 255, 1.0))
+    /* drop-shadow(0 0 2px rgba(255, 255, 255, 1.0)) — removida para teste */
     drop-shadow(0 30px 12px rgba(0, 0, 0, 0.50));
 }
