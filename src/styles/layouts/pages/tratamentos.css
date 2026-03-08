@@ -307,8 +307,18 @@
   box-shadow: var(--ds-shadow-float-accent);
 }
 
+.ds-trat .ds-bridge-preamble {
+  max-width: 720px;
+}
+
 .ds-trat .ds-bridge-title {
-  color: var(--dt-accent-light);
+  font-size: clamp(1.5rem, 4vw, 2.1rem);
+  color: #FFFFFF;
+  text-shadow:
+    0 0 8px rgba(255, 255, 255, 0.6),
+    0 0 24px rgba(255, 255, 255, 0.3),
+    0 0 48px rgba(255, 255, 255, 0.12),
+    0 0 60px rgba(37, 99, 235, 0.3);
 }
 
 .ds-trat .ds-bridge-highlight p {
