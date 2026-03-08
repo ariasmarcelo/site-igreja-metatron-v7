@@ -148,9 +148,9 @@ export default function Purificacao() {
                       })}
                     </svg>
                   </div>
+                  <div className="purificacao-sun-divider" />
                   <EditableField value={texts.sections?.process_title} jsonKey="purificacao.sections.process_title" type="h2" className="purificacao-heading gold mb-3" />
                   <EditableField value={texts.sections?.process_subtitle} jsonKey="purificacao.sections.process_subtitle" type="p" className="purificacao-process-subtitle" />
-                  <div className="purificacao-sun-divider" />
                 </div>
 
                 <div className="relative purificacao-timeline">
