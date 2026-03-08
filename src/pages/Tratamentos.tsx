@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import EditableField from '@/components/ui/EditableField';
+import { useGlossary } from '@/hooks/useGlossary';
 import { usePageContent } from '@/hooks/useContent';
 import { usePageStyles } from '@/hooks/usePageStyles';
 import { PageLoading } from '@/components/PageLoading';
@@ -21,9 +22,6 @@ import { FooterBackground } from '@/components/FooterBackground';
 import { FOOTER } from '@/components/footer-constants';
 import { Button } from '@/components/ui/button';
 
-const WHATSAPP_NUMBER = '5511949555555';
-const whatsappUrl = (msg: string) =>
-  `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
 
 const TREATMENT_ICONS = [
   <Stethoscope key="psy" className="w-6 h-6" />,
@@ -44,6 +42,7 @@ export default function Tratamentos() {
   const { data: texts, loading } = usePageContent<any>('tratamentos', {
     includePages: ['__shared__'],
   });
+  const GLOSSARY = useGlossary(texts?.__shared__);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: indexTexts } = usePageContent<any>('index');
@@ -88,13 +87,7 @@ export default function Tratamentos() {
           </p>
 
           <div className="ds-hero-buttons">
-            <a
-              href={whatsappUrl('Olá! Gostaria de saber mais sobre os tratamentos terapêuticos.')}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="ds-btn ds-btn-blue"
-              aria-label="Iniciar conversa no WhatsApp"
-            >
+            <Link to="/contato" className="ds-btn ds-btn-blue">
               <MessageCircle className="w-4 h-4" />
               <EditableField
                 value={texts.hero?.primaryCta}
@@ -102,7 +95,7 @@ export default function Tratamentos() {
                 type="span"
                 className="inline"
               />
-            </a>
+            </Link>
             <Link to="/purificacao" className="ds-btn ds-btn-ghost-blue ds-btn-hero-ghost">
               <EditableField
                 value={texts.hero?.secondaryCta}
@@ -588,12 +581,7 @@ export default function Tratamentos() {
                 type="p"
                 className={FOOTER.subtitleClass}
               />
-              <a
-                href={whatsappUrl('Olá! Gostaria de agendar uma avaliação inicial para tratamentos.')}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Iniciar conversa no WhatsApp"
-              >
+              <Link to="/contato">
                 <Button className={FOOTER.buttonClass}>
                   <MessageCircle className="w-4 h-4 mr-2" />
                   <EditableField
@@ -603,7 +591,7 @@ export default function Tratamentos() {
                     className="inline"
                   />
                 </Button>
-              </a>
+              </Link>
             </div>
 
             <div>

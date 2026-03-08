@@ -1,0 +1,89 @@
+/* ═══════════════════════════════════════════════════
+   GlossaryTooltip — same pattern as dt-legal-tooltip
+   in Tratamentos: balloon is a container, content
+   inside has data-json-key for the visual editor.
+   ═══════════════════════════════════════════════════ */
+
+.glossary-term {
+  position: relative;
+  cursor: help;
+  border-bottom: 1px dotted rgba(196, 148, 59, 0.6);
+  transition: border-color 0.2s;
+}
+
+.glossary-term:hover {
+  border-bottom-color: rgba(196, 148, 59, 1);
+}
+
+/* Balloon container — no data-json-key, just a wrapper */
+.glossary-balloon {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+
+  width: max-content;
+  max-width: min(560px, 75vw);
+  padding: 16px 20px;
+
+  background: linear-gradient(135deg, #1a1207 0%, #2a1f0e 100%);
+  color: #f5f0e0;
+  font-size: 0.8125rem;
+  font-weight: 400;
+  line-height: 1.7;
+  letter-spacing: 0.01em;
+
+  border: 1px solid rgba(196, 148, 59, 0.35);
+  border-radius: 10px;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(196, 148, 59, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+
+  z-index: 100;
+
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+/* Visible state — controlled by React state */
+.glossary-balloon.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Invisible bridge between term and balloon */
+.glossary-balloon::before {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  height: 16px;
+}
+
+/* Arrow */
+.glossary-balloon::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 7px solid transparent;
+  border-top-color: #2a1f0e;
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .glossary-balloon {
+    left: 0;
+    transform: translateX(0);
+    max-width: 85vw;
+  }
+
+  .glossary-balloon::after {
+    left: 24px;
+    transform: none;
+  }
+}

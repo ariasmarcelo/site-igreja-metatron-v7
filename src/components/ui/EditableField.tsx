@@ -1,5 +1,6 @@
 import React from 'react';
 import { logger } from '@/lib/logger';
+import { applyGlossary, type GlossaryEntry } from '@/components/GlossaryTooltip';
 
 /**
  * Parses lightweight Markdown (**bold** and *italic*) into React fragments.
@@ -67,6 +68,9 @@ export interface EditableFieldProps extends React.HTMLAttributes<HTMLElement> {
   
   /** Placeholder customizado (default: "✎ Clique para editar") */
   placeholder?: string;
+
+  /** Glossary terms to annotate with hover tooltips */
+  glossary?: GlossaryEntry[];
 }
 
 /**
@@ -80,6 +84,7 @@ const EditableField = React.forwardRef<HTMLElement, EditableFieldProps>(
       type = 'span',
       className = '',
       placeholder = '✎ Clique para editar',
+      glossary,
       ...htmlProps
     },
     ref
@@ -103,9 +108,13 @@ const EditableField = React.forwardRef<HTMLElement, EditableFieldProps>(
       ...htmlProps,
     };
 
-    const content: React.ReactNode = isEmpty 
+    let content: React.ReactNode = isEmpty 
       ? placeholder 
       : (typeof value === 'string' ? parseInlineMarkdown(value) : value);
+
+    if (!isEmpty && glossary?.length) {
+      content = applyGlossary(content, glossary);
+    }
 
     // Map de elementos HTML
     const elementMap: Record<string, React.ReactElement> = {

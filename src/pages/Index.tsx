@@ -9,6 +9,7 @@
 import { Link } from 'react-router-dom';
 import { Heart, Brain, Sparkles, Shield, MessageCircle } from 'lucide-react';
 import EditableField from '@/components/ui/EditableField';
+import { useGlossary } from '@/hooks/useGlossary';
 import { Sun12Rays } from '../components/icons/Sun12Rays';
 import { LogoGold } from '../components/icons/LogoGold';
 import { usePageContent } from '@/hooks/useContent';
@@ -18,9 +19,6 @@ import { FooterBackground } from '@/components/FooterBackground';
 import { FOOTER } from '@/components/footer-constants';
 import { Button } from '@/components/ui/button';
 
-const WHATSAPP_NUMBER = '5511949555555';
-const whatsappUrl = (msg: string) =>
-  `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
 
 interface IndexTexts {
   hero: { title: string; headline: string; subheadline: string; primaryCta: string; secondaryCta: string };
@@ -61,6 +59,8 @@ export default function Index() {
   const { data: texts, loading } = usePageContent<IndexTexts>('index', {
     includePages: ['__shared__'],
   });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const GLOSSARY = useGlossary((texts as any)?.__shared__);
 
   if (!texts || !stylesLoaded || loading) {
     return (
@@ -100,13 +100,7 @@ export default function Index() {
           </p>
 
           <div className="ds-hero-buttons">
-            <a
-              href={whatsappUrl('Olá! Gostaria de saber mais sobre o trabalho.')}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="ds-btn ds-btn-gold"
-              aria-label="Iniciar conversa no WhatsApp"
-            >
+            <Link to="/contato" className="ds-btn ds-btn-gold">
               <MessageCircle className="w-4 h-4" />
               <EditableField
                 value={texts.hero?.primaryCta}
@@ -114,7 +108,7 @@ export default function Index() {
                 type="span"
                 className="inline"
               />
-            </a>
+            </Link>
             <Link to="/purificacao" className="ds-btn ds-btn-ghost-gold ds-btn-hero-ghost">
               <EditableField
                 value={texts.hero?.secondaryCta}
@@ -424,12 +418,7 @@ export default function Index() {
                 type="p"
                 className={FOOTER.subtitleClass}
               />
-              <a
-                href={whatsappUrl('Olá! Gostaria de dar o primeiro passo.')}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Iniciar conversa no WhatsApp"
-              >
+              <Link to="/contato">
                 <Button className={FOOTER.buttonClass}>
                   <MessageCircle className="w-4 h-4 mr-2" />
                   <EditableField
@@ -439,7 +428,7 @@ export default function Index() {
                     className="inline"
                   />
                 </Button>
-              </a>
+              </Link>
             </div>
 
             <div>

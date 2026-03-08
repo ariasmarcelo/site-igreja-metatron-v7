@@ -12,6 +12,7 @@ import {
   LineChart, ChevronDown, MessageCircle, Shield, AlertTriangle,
 } from 'lucide-react';
 import EditableField from '@/components/ui/EditableField';
+import { useGlossary } from '@/hooks/useGlossary';
 import { Sun12Rays } from '../components/icons/Sun12Rays';
 import { LogoGold } from '../components/icons/LogoGold';
 import { Link } from 'react-router-dom';
@@ -22,9 +23,6 @@ import { FooterBackground } from '@/components/FooterBackground';
 import { FOOTER } from '@/components/footer-constants';
 import '@/styles/layouts/pages/purificacao.css';
 
-const WHATSAPP_NUMBER = '5511949555555';
-const whatsappUrl = (msg: string) =>
-  `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
 
 interface PurificacaoTexts {
   header: { title: string; subtitle: string };
@@ -40,6 +38,8 @@ export default function Purificacao() {
   const [expandedPhase, setExpandedPhase] = useState<number | null>(null);
   const [showSafety, setShowSafety] = useState(false);
   const { data: texts, loading } = usePageContent<PurificacaoTexts>('purificacao', { includePages: ['__shared__'] });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const GLOSSARY = useGlossary((texts as any)?.__shared__);
 
   const togglePhase = (phase: number) => {
     setExpandedPhase(expandedPhase === phase ? null : phase);
@@ -89,18 +89,12 @@ export default function Purificacao() {
           <div className="purificacao-hero-text relative z-10">
             <EditableField value={header.title} jsonKey="purificacao.header.title" type="h1" className="purificacao-hero-title" />
             <p className="purificacao-hero-sub">
-              <EditableField value={header.subtitle} jsonKey="purificacao.header.subtitle" type="span" className="" />
+              <EditableField value={header.subtitle} jsonKey="purificacao.header.subtitle" type="span" className="" glossary={GLOSSARY} />
             </p>
 
             {/* CTA Buttons */}
             <div className="purificacao-hero-buttons">
-              <a
-                href={whatsappUrl('Olá! Gostaria de saber mais sobre o caminho de purificação espiritual.')}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="purificacao-btn-primary"
-                aria-label="Iniciar conversa no WhatsApp"
-              >
+              <Link to="/contato" className="purificacao-btn-primary">
                 <MessageCircle className="w-4 h-4" />
                 <EditableField
                   value={texts.hero?.primaryCta}
@@ -108,7 +102,7 @@ export default function Purificacao() {
                   type="span"
                   className="inline"
                 />
-              </a>
+              </Link>
               <Link to="/tratamentos" className="purificacao-btn-secondary">
                 <EditableField
                   value={texts.hero?.secondaryCta}
@@ -239,7 +233,7 @@ export default function Purificacao() {
                           <Crown className="w-6 h-6" />
                         </div>
                         <div>
-                          <EditableField value={faseFinal.title} jsonKey="purificacao.faseFinal.title" type="h3" className="purificacao-phase-title" />
+                          <EditableField value={faseFinal.title} jsonKey="purificacao.faseFinal.title" type="h3" className="purificacao-phase-title" glossary={GLOSSARY} />
                           <EditableField value={faseFinal.subtitle} jsonKey="purificacao.faseFinal.subtitle" type="p" className="purificacao-phase-subtitle" />
                         </div>
                         <ChevronDown className={`purificacao-chevron ${expandedPhase === 3 ? 'open' : ''}`} />
@@ -250,12 +244,12 @@ export default function Purificacao() {
 
                       {/* Always visible — the 5 outcomes */}
                       <div className="purificacao-phase-outcomes-list">
-                        <EditableField value={faseFinal.posIniciacao?.title} jsonKey="purificacao.faseFinal.posIniciacao.title" type="h5" className="purificacao-subheading gold" />
+                        <EditableField value={faseFinal.posIniciacao?.title} jsonKey="purificacao.faseFinal.posIniciacao.title" type="h5" className="purificacao-subheading gold" glossary={GLOSSARY} />
                         <ul className="purificacao-list">
                           {faseFinal.posIniciacao?.items?.map((it: string, idx: number) => (
                             <li key={idx}>
                               <span className="bullet metallic">✦</span>
-                              <EditableField value={it} jsonKey={`purificacao.faseFinal.posIniciacao.items[${idx}]`} type="span" className="purificacao-body" />
+                              <EditableField value={it} jsonKey={`purificacao.faseFinal.posIniciacao.items[${idx}]`} type="span" className="purificacao-body" glossary={GLOSSARY} />
                             </li>
                           ))}
                         </ul>
@@ -264,19 +258,16 @@ export default function Purificacao() {
                       {/* Expandable — technical details */}
                       <div className={`purificacao-phase-body ${expandedPhase === 3 ? 'open' : ''}`}>
                         <div>
-                          <EditableField value={faseFinal.iniciacao?.content} jsonKey="purificacao.faseFinal.iniciacao.content" type="p" className="purificacao-body" />
+                          <EditableField value={faseFinal.iniciacao?.content} jsonKey="purificacao.faseFinal.iniciacao.content" type="p" className="purificacao-body" glossary={GLOSSARY} />
                         </div>
                         <div className="purificacao-phase-block metallic">
                           <div className="flex items-center gap-4 mb-4">
                             <Sun12Rays className="w-12 h-12 text-(--purificacao-gold) shrink-0" />
-                            <EditableField value={faseFinal.evento?.title} jsonKey="purificacao.faseFinal.evento.title" type="h5" className="purificacao-subheading gold" />
+                            <EditableField value={faseFinal.evento?.title} jsonKey="purificacao.faseFinal.evento.title" type="h5" className="purificacao-subheading gold" glossary={GLOSSARY} />
                           </div>
                           {faseFinal.evento?.content?.map((para: string, i: number) => (
                             <EditableField key={i} value={para} jsonKey={`purificacao.faseFinal.evento.content[${i}]`} type="p" className={`purificacao-body ${i > 0 ? 'mt-3' : ''}`} />
                           ))}
-                        </div>
-                        <div>
-                          <EditableField value={faseFinal.posIniciacao?.content} jsonKey="purificacao.faseFinal.posIniciacao.content" type="p" className="purificacao-body" />
                         </div>
                         <div className="purificacao-phase-block sage">
                           <EditableField value={faseFinal.adepto?.title} jsonKey="purificacao.faseFinal.adepto.title" type="h5" className="purificacao-subheading" />
@@ -408,17 +399,12 @@ export default function Purificacao() {
                 <div className="purificacao-sacr-block">
                   <div className="purificacao-sacr-cta-area">
                     <div className="purificacao-sacr-divider" />
-                    <a
-                      href={whatsappUrl('Olá! Gostaria de saber mais sobre os Sacramentos e o caminho de despertar espiritual.')}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label="Iniciar conversa no WhatsApp"
-                    >
+                    <Link to="/contato">
                       <Button size="lg" className="purificacao-cta-btn">
                         <MessageCircle className="w-5 h-5 mr-3" />
                         <EditableField value={psicodelicos?.ctaButton} jsonKey="purificacao.psicodelicos.ctaButton" type="span" />
                       </Button>
-                    </a>
+                    </Link>
                   </div>
                 </div>
 
@@ -511,17 +497,12 @@ export default function Purificacao() {
             <div className="max-w-section mx-auto text-center">
               <EditableField value={cta.title} jsonKey="purificacao.cta.title" type="h2" className={FOOTER.titleClass} />
               <EditableField value={cta.subtitle} jsonKey="purificacao.cta.subtitle" type="p" className={FOOTER.subtitleClass} />
-              <a
-                href={whatsappUrl('Olá! Gostaria de iniciar minha jornada de purificação espiritual.')}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Iniciar conversa no WhatsApp"
-              >
+              <Link to="/contato">
                 <Button className={FOOTER.buttonClass}>
                   <MessageCircle className="w-4 h-4 mr-2" />
                   <EditableField value={cta.buttonText} jsonKey="purificacao.cta.buttonText" type="span" className="inline" />
                 </Button>
-              </a>
+              </Link>
             </div>
 
             <div>

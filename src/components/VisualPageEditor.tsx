@@ -98,7 +98,7 @@ const VisualPageEditor = ({ pageId, pageComponent: PageComponent, selectedLangua
   const addSelectionToElement = (htmlEl: HTMLElement) => {
     const jsonKey = htmlEl.getAttribute('data-json-key');
     if (!jsonKey) return;
-    
+
     // Se o elemento já tem ID (React preservou o nó DOM), re-registrar no map
     const existingId = htmlEl.getAttribute('data-edit-id');
     if (existingId) {
@@ -227,14 +227,7 @@ const VisualPageEditor = ({ pageId, pageComponent: PageComponent, selectedLangua
     console.log('🧹 Visual selection removed');
   };
 
-  const openEditor = useCallback((editId: string) => {
-    const mapped = elementMapRef.current.get(editId);
-    if (!mapped) {
-      console.error('❌ Element not found for ID:', editId);
-      return;
-    }
-    
-    const { element, jsonKey } = mapped;
+  const openEditorByKey = useCallback((jsonKey: string) => {
     // Fechar editor anterior se existir
     if (activeEditorRef.current) {
       activeEditorRef.current.remove();
@@ -242,15 +235,9 @@ const VisualPageEditor = ({ pageId, pageComponent: PageComponent, selectedLangua
       existingOverlay?.remove();
     }
 
-    const currentText = element.textContent?.trim() || '';
-    const hasText = currentText.length > 0;
-    
-    // 🔍 LOG DETALHADO para debugging
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     console.log('🎯 EDITOR OPENED (MULTILINGUAL)');
-    console.log('Edit ID:', editId);
     console.log('JSON Key:', jsonKey);
-    console.log('Element tag:', element.tagName);
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
 
     // Extrair o pageId real a partir da chave — pode diferir do pageId da aba.
@@ -337,16 +324,14 @@ const VisualPageEditor = ({ pageId, pageComponent: PageComponent, selectedLangua
       console.log(`  EN-US missing: ${enMissing} (fallbackUsed: ${enWarning?.fallbackUsed}, FALTANDO: ${enWarning?.issues?.some?.((i: string) => i.includes('FALTANDO'))}, vazio: ${!enText})`);
       console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
       
-      renderMultilingualEditor(editId, jsonKey, ptText, enText, ptMissing, enMissing);
+      renderMultilingualEditor(jsonKey, ptText, enText, ptMissing, enMissing);
     }).catch(error => {
       console.error('Erro ao buscar dados multilíngues:', error);
-      // Fallback para editor simples
-      renderSimpleEditor(editId, jsonKey, currentText, hasText);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageId]);
   
-  const renderMultilingualEditor = (editId: string, jsonKey: string, ptText: string, enText: string, ptMissing: boolean, enMissing: boolean) => {
+  const renderMultilingualEditor = (jsonKey: string, ptText: string, enText: string, ptMissing: boolean, enMissing: boolean) => {
     // Criar overlay
     const overlay = document.createElement('div');
     overlay.id = 'editor-overlay';
@@ -374,9 +359,9 @@ const VisualPageEditor = ({ pageId, pageComponent: PageComponent, selectedLangua
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
       z-index: 9999;
       padding: 32px;
-      min-width: 900px;
-      max-width: 1200px;
-      max-height: 85vh;
+      min-width: 90vw;
+      max-width: 96vw;
+      max-height: 92vh;
       overflow-y: auto;
       animation: slideIn 0.3s;
       display: flex;
@@ -422,57 +407,57 @@ const VisualPageEditor = ({ pageId, pageComponent: PageComponent, selectedLangua
     ptSection.style.cssText = `
       display: flex;
       flex-direction: column;
-      border: 2px solid ${ptMissing ? '#fca5a5' : '#86efac'};
+      border: 2px solid ${ptMissing ? '#d4a843' : '#86efac'};
       border-radius: 8px;
       padding: 16px;
-      background: ${ptMissing ? '#fef2f2' : '#f0fdf4'};
+      background: ${ptMissing ? '#fffbeb' : '#f0fdf4'};
     `;
 
     const ptLabel = document.createElement('div');
     ptLabel.style.cssText = `
-      font-size: 16px;
+      font-size: 20px;
       font-weight: 700;
       margin-bottom: 12px;
       display: flex;
       align-items: center;
       gap: 8px;
-      color: ${ptMissing ? '#991b1b' : '#166534'};
+      color: ${ptMissing ? '#92750c' : '#166534'};
     `;
-    ptLabel.innerHTML = `${ptMissing ? '⚠️' : '✅'} Português (pt-BR)`;
+    ptLabel.innerHTML = `${ptMissing ? '📝' : '✅'} Português (pt-BR)`;
 
     const ptStatus = document.createElement('div');
     ptStatus.style.cssText = `
-      font-size: 12px;
+      font-size: 14px;
       margin-bottom: 12px;
       padding: 8px 12px;
       border-radius: 4px;
-      background: ${ptMissing ? '#fecaca' : '#d1fae5'};
-      color: ${ptMissing ? '#7f1d1d' : '#065f46'};
+      background: ${ptMissing ? '#fef3c7' : '#d1fae5'};
+      color: ${ptMissing ? '#78650d' : '#065f46'};
       font-weight: 600;
     `;
-    ptStatus.textContent = ptMissing ? '🔴 FALTANDO - Adicione conteúdo em português' : '🟢 OK - Conteúdo presente';
+    ptStatus.textContent = ptMissing ? 'Conteúdo ausente para este elemento — insira o novo conteúdo no campo abaixo' : 'Conteúdo presente — edite conforme necessário';
 
     const ptTextarea = document.createElement('textarea');
     ptTextarea.value = ptText;
-    ptTextarea.placeholder = ptMissing ? 'Digite o conteúdo em português...' : '';
+    ptTextarea.placeholder = ptMissing ? 'Digite o novo conteúdo em português aqui...' : '';
     ptTextarea.style.cssText = `
       flex-grow: 1;
-      padding: 12px;
-      border: 2px solid ${ptMissing ? '#fca5a5' : '#86efac'};
+      padding: 16px 20px;
+      border: 2px solid ${ptMissing ? '#d4a843' : '#86efac'};
       border-radius: 6px;
-      font-size: 14px;
+      font-size: 18px;
       font-family: inherit;
-      resize: none;
-      min-height: 300px;
-      line-height: 1.5;
+      resize: vertical;
+      min-height: 50vh;
+      line-height: 1.7;
       transition: all 0.2s;
-      ${ptMissing ? 'background: #fefce8; color: #7f1d1d;' : ''}
+      ${ptMissing ? 'background: #fffef5; color: #333;' : ''}
     `;
     ptTextarea.onmouseover = () => {
-      ptTextarea.style.borderColor = ptMissing ? '#f87171' : '#4ade80';
+      ptTextarea.style.borderColor = ptMissing ? '#b8922a' : '#4ade80';
     };
     ptTextarea.onmouseout = () => {
-      ptTextarea.style.borderColor = ptMissing ? '#fca5a5' : '#86efac';
+      ptTextarea.style.borderColor = ptMissing ? '#d4a843' : '#86efac';
     };
 
     ptSection.appendChild(ptLabel);
@@ -484,57 +469,57 @@ const VisualPageEditor = ({ pageId, pageComponent: PageComponent, selectedLangua
     enSection.style.cssText = `
       display: flex;
       flex-direction: column;
-      border: 2px solid ${enMissing ? '#fca5a5' : '#86efac'};
+      border: 2px solid ${enMissing ? '#d4a843' : '#86efac'};
       border-radius: 8px;
       padding: 16px;
-      background: ${enMissing ? '#fef2f2' : '#f0fdf4'};
+      background: ${enMissing ? '#fffbeb' : '#f0fdf4'};
     `;
 
     const enLabel = document.createElement('div');
     enLabel.style.cssText = `
-      font-size: 16px;
+      font-size: 20px;
       font-weight: 700;
       margin-bottom: 12px;
       display: flex;
       align-items: center;
       gap: 8px;
-      color: ${enMissing ? '#991b1b' : '#166534'};
+      color: ${enMissing ? '#92750c' : '#166534'};
     `;
-    enLabel.innerHTML = `${enMissing ? '⚠️' : '✅'} English (en-US)`;
+    enLabel.innerHTML = `${enMissing ? '📝' : '✅'} English (en-US)`;
 
     const enStatus = document.createElement('div');
     enStatus.style.cssText = `
-      font-size: 12px;
+      font-size: 14px;
       margin-bottom: 12px;
       padding: 8px 12px;
       border-radius: 4px;
-      background: ${enMissing ? '#fecaca' : '#d1fae5'};
-      color: ${enMissing ? '#7f1d1d' : '#065f46'};
+      background: ${enMissing ? '#fef3c7' : '#d1fae5'};
+      color: ${enMissing ? '#78650d' : '#065f46'};
       font-weight: 600;
     `;
-    enStatus.textContent = enMissing ? '🔴 FALTANDO - Adicione conteúdo em inglês' : '🟢 OK - Conteúdo presente';
+    enStatus.textContent = enMissing ? 'Content missing for this element — type the new content in the field below' : 'Content present — edit as needed';
 
     const enTextarea = document.createElement('textarea');
     enTextarea.value = enText;
-    enTextarea.placeholder = enMissing ? 'Type content in English...' : '';
+    enTextarea.placeholder = enMissing ? 'Type the new content in English here...' : '';
     enTextarea.style.cssText = `
       flex-grow: 1;
-      padding: 12px;
-      border: 2px solid ${enMissing ? '#fca5a5' : '#86efac'};
+      padding: 16px 20px;
+      border: 2px solid ${enMissing ? '#d4a843' : '#86efac'};
       border-radius: 6px;
-      font-size: 14px;
+      font-size: 18px;
       font-family: inherit;
-      resize: none;
-      min-height: 300px;
-      line-height: 1.5;
+      resize: vertical;
+      min-height: 50vh;
+      line-height: 1.7;
       transition: all 0.2s;
-      ${enMissing ? 'background: #fefce8; color: #7f1d1d;' : ''}
+      ${enMissing ? 'background: #fffef5; color: #333;' : ''}
     `;
     enTextarea.onmouseover = () => {
-      enTextarea.style.borderColor = enMissing ? '#f87171' : '#4ade80';
+      enTextarea.style.borderColor = enMissing ? '#b8922a' : '#4ade80';
     };
     enTextarea.onmouseout = () => {
-      enTextarea.style.borderColor = enMissing ? '#fca5a5' : '#86efac';
+      enTextarea.style.borderColor = enMissing ? '#d4a843' : '#86efac';
     };
 
     enSection.appendChild(enLabel);
@@ -652,16 +637,16 @@ const VisualPageEditor = ({ pageId, pageComponent: PageComponent, selectedLangua
       const { sourcePageId: pendingPageId, cleanKey: pendingCleanKey } = extractSourcePageId(jsonKey);
       setPendingEdit(pendingPageId, pendingCleanKey, newPTText, newENText);
       
-      // Atualizar estado local (para tracking de modificações e save)
+      // Atualizar estado local — usar jsonKey como identificador estável
+      // (data-edit-id é frágil e pode ficar stale após React re-render)
       setFields(prev => {
         const updated = [...prev];
-        const fieldIndex = updated.findIndex(f => f.id === editId);
+        const fieldIndex = updated.findIndex(f => f.jsonKey === jsonKey);
         
         if (fieldIndex >= 0) {
-          // Atualizar campo existente com marcas de multilingual
           updated[fieldIndex] = {
             ...updated[fieldIndex],
-            currentValue: newPTText || newENText,  // Preview com PT principal
+            currentValue: newPTText || newENText,
             isModified: true,
             ptValue: newPTText,
             enValue: newENText,
@@ -669,7 +654,7 @@ const VisualPageEditor = ({ pageId, pageComponent: PageComponent, selectedLangua
           };
         } else {
           updated.push({
-            id: editId,
+            id: jsonKey,
             jsonKey,
             originalValue: ptText || enText,
             currentValue: newPTText || newENText,
@@ -914,28 +899,28 @@ const VisualPageEditor = ({ pageId, pageComponent: PageComponent, selectedLangua
     activeEditorRef.current = editor;
   };
 
-  // 🖱️ Click handler para elementos
+  // 🖱️ Click handler — uses data-json-key (React-managed, always correct)
+  // instead of data-edit-id (imperatively set, can become stale after re-renders)
   const handleElementClick = useCallback((e: Event) => {
     if (!isEditModeRef.current) return;
 
     const mouseEvent = e as MouseEvent;
     const target = mouseEvent.target as HTMLElement;
     
-    const editable = target.closest('[data-edit-id]') as HTMLElement;
+    const editable = target.closest('[data-json-key]') as HTMLElement;
     
     if (editable) {
       mouseEvent.preventDefault();
       mouseEvent.stopPropagation();
       
-      const editId = editable.getAttribute('data-edit-id');
+      const jsonKey = editable.getAttribute('data-json-key');
       
-      if (editId) {
-        const mapped = elementMapRef.current.get(editId);
-        console.log(`🎯 Opening editor for ID: ${editId}, JSON Key: ${mapped?.jsonKey}`);
-        openEditor(editId);
+      if (jsonKey) {
+        console.log(`🎯 Opening editor for JSON Key: ${jsonKey}`);
+        openEditorByKey(jsonKey);
       }
     }
-  }, [openEditor]);
+  }, [openEditorByKey]);
 
   // 🔓 Ativar modo de edição
   const enableEditMode = useCallback(() => {

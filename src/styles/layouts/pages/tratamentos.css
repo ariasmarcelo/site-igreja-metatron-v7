@@ -132,6 +132,15 @@
   pointer-events: auto;
 }
 
+.ds-trat .dt-legal-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  right: 10px;
+  border: 7px solid transparent;
+  border-top-color: #FBBF24;
+}
+
 .ds-trat .dt-legal-content {
   background: #FFFBEB;
   border: 2px solid #FBBF24;
