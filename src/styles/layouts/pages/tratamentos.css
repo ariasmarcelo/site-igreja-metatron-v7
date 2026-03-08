@@ -307,12 +307,16 @@
   box-shadow: var(--ds-shadow-float-accent);
 }
 
+.ds-trat .ds-hero .ds-hero-sub {
+  max-width: 720px;
+}
+
 .ds-trat .ds-bridge-preamble {
   max-width: 720px;
 }
 
 .ds-trat .ds-bridge-title {
-  font-size: clamp(1.5rem, 4vw, 2.1rem);
+  font-size: clamp(1.3rem, 3.5vw, 1.75rem);
   color: #FFFFFF;
   text-shadow:
     0 0 8px rgba(255, 255, 255, 0.6),
@@ -703,6 +707,17 @@
 .ds-trat .ds-btn-ghost-blue:hover {
   border-color: var(--dt-accent-light);
   background: var(--dt-accent-bg-subtle);
+}
+
+.ds-trat .ds-btn-hero-ghost {
+  border-color: rgba(196, 148, 59, 0.4);
+  color: var(--ds-sacred-gold);
+}
+
+.ds-trat .ds-btn-hero-ghost:hover {
+  border-color: var(--ds-sacred-gold);
+  color: #fff;
+  background: rgba(196, 148, 59, 0.15);
 }
 
 /* Espaçamento entre seções: usa variáveis de design-parameters.css (:root)

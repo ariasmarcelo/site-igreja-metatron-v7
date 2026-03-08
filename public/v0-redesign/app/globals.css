@@ -1,0 +1,244 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+/* Igreja de Metatron - Sacred Design System */
+:root {
+  /* Light mode - Ivory/Cream base */
+  --background: #F6F3EC;
+  --foreground: #2D2926;
+  --card: #FBF9F5;
+  --card-foreground: #2D2926;
+  --popover: #FBF9F5;
+  --popover-foreground: #2D2926;
+  
+  /* Primary - Sacred Gold */
+  --primary: #C4943B;
+  --primary-foreground: #0C1520;
+  
+  /* Secondary - Sage Green (Instituto) */
+  --secondary: #4A7B6F;
+  --secondary-foreground: #FBF9F5;
+  
+  /* Muted tones */
+  --muted: #EDE8DF;
+  --muted-foreground: #6B6259;
+  
+  /* Accent - Deep Navy */
+  --accent: #1C2D3F;
+  --accent-foreground: #E8E2D8;
+  
+  /* Fire Red (Purification Phase 1) */
+  --destructive: #8B2020;
+  --destructive-foreground: #FBF9F5;
+  
+  /* Borders and inputs */
+  --border: #D4CFC5;
+  --input: #EDE8DF;
+  --ring: #C4943B;
+  
+  /* Chart colors */
+  --chart-1: #C4943B;
+  --chart-2: #4A7B6F;
+  --chart-3: #1C2D3F;
+  --chart-4: #8B2020;
+  --chart-5: #D4A853;
+  
+  --radius: 0.75rem;
+  
+  /* Custom sacred colors */
+  --gold: #C4943B;
+  --gold-light: #D4A853;
+  --gold-glow: rgba(196, 148, 59, 0.15);
+  --navy: #1C2D3F;
+  --navy-deep: #0C1520;
+  --sage: #4A7B6F;
+  --sage-light: #558980;
+  --fire-red: #8B2020;
+  --fire-red-dark: #6B1A1A;
+  --ivory: #F6F3EC;
+  --cream: #FBF9F5;
+  --sand: #EDE8DF;
+  --text-dark: #2D2926;
+  --text-muted: #6B6259;
+  --text-light: #8A8179;
+  --text-on-dark: #E8E2D8;
+  
+  /* Sidebar */
+  --sidebar: #FBF9F5;
+  --sidebar-foreground: #2D2926;
+  --sidebar-primary: #C4943B;
+  --sidebar-primary-foreground: #0C1520;
+  --sidebar-accent: #EDE8DF;
+  --sidebar-accent-foreground: #2D2926;
+  --sidebar-border: #D4CFC5;
+  --sidebar-ring: #C4943B;
+}
+
+/* Dark sections use navy background */
+.dark, [data-theme="dark"] {
+  --background: #0C1520;
+  --foreground: #E8E2D8;
+  --card: #1C2D3F;
+  --card-foreground: #E8E2D8;
+  --popover: #1C2D3F;
+  --popover-foreground: #E8E2D8;
+  --primary: #D4A853;
+  --primary-foreground: #0C1520;
+  --secondary: #558980;
+  --secondary-foreground: #0C1520;
+  --muted: #1C2D3F;
+  --muted-foreground: #8A8179;
+  --accent: #C4943B;
+  --accent-foreground: #0C1520;
+  --destructive: #8B2020;
+  --destructive-foreground: #E8E2D8;
+  --border: rgba(196, 148, 59, 0.2);
+  --input: #1C2D3F;
+  --ring: #C4943B;
+  --sidebar: #0C1520;
+  --sidebar-foreground: #E8E2D8;
+  --sidebar-primary: #D4A853;
+  --sidebar-primary-foreground: #0C1520;
+  --sidebar-accent: #1C2D3F;
+  --sidebar-accent-foreground: #E8E2D8;
+  --sidebar-border: rgba(196, 148, 59, 0.2);
+  --sidebar-ring: #C4943B;
+}
+
+@theme inline {
+  --font-sans: var(--font-sans), 'Inter', system-ui, sans-serif;
+  --font-serif: var(--font-serif), 'Playfair Display', Georgia, serif;
+  --font-mono: 'Geist Mono', 'Geist Mono Fallback';
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Sacred Typography */
+.font-sacred {
+  font-family: var(--font-serif);
+  font-variant: small-caps;
+  letter-spacing: 0.05em;
+}
+
+/* Gold gradient text */
+.text-gold-gradient {
+  background: linear-gradient(135deg, #C4943B 0%, #D4A853 50%, #C4943B 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Sacred glow effects */
+.glow-gold {
+  box-shadow: 0 0 40px rgba(196, 148, 59, 0.3), 0 0 80px rgba(196, 148, 59, 0.1);
+}
+
+.glow-gold-soft {
+  box-shadow: 0 0 20px rgba(196, 148, 59, 0.15);
+}
+
+/* Glass morphism for cards */
+.glass-card {
+  background: rgba(251, 249, 245, 0.8);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(196, 148, 59, 0.1);
+}
+
+.glass-card-dark {
+  background: rgba(28, 45, 63, 0.8);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(196, 148, 59, 0.2);
+}
+
+/* Sacred geometry background pattern */
+.sacred-pattern {
+  background-image: 
+    radial-gradient(circle at 25% 25%, rgba(196, 148, 59, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, rgba(196, 148, 59, 0.03) 0%, transparent 50%);
+}
+
+/* Animated gold shimmer */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.shimmer-gold {
+  background: linear-gradient(
+    90deg,
+    rgba(196, 148, 59, 0) 0%,
+    rgba(212, 168, 83, 0.3) 50%,
+    rgba(196, 148, 59, 0) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+/* Section divider with gold accent */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--gold) 50%, transparent 100%);
+}
+
+/* Navy section with radial glow */
+.navy-section {
+  background: linear-gradient(180deg, #0C1520 0%, #1C2D3F 50%, #0C1520 100%);
+  position: relative;
+}
+
+.navy-section::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  height: 60%;
+  background: radial-gradient(ellipse, rgba(196, 148, 59, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+}

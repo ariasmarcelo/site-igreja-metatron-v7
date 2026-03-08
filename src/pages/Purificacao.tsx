@@ -123,8 +123,9 @@ export default function Purificacao() {
           <Card className="purificacao-card purificacao-card-gold">
             <CardContent className="purificacao-card-content text-center">
               <EditableField value={intro.sectionTitle || ''} jsonKey="purificacao.intro.sectionTitle" type="h2" className="purificacao-heading gold" />
-              <EditableField value={intro.mainText} jsonKey="purificacao.intro.mainText" type="p" className="purificacao-body mb-3 whitespace-pre-line" />
-              <EditableField value={intro.description} jsonKey="purificacao.intro.description" type="p" className="purificacao-body" />
+              <div className="purificacao-gold-ornament" />
+              <EditableField value={intro.mainText} jsonKey="purificacao.intro.mainText" type="p" className="purificacao-body whitespace-pre-line" />
+              <div className="purificacao-gold-ornament" />
             </CardContent>
           </Card>
         </div>
@@ -136,10 +137,19 @@ export default function Purificacao() {
             <Card className="purificacao-card purificacao-timeline-card">
               <CardContent className="purificacao-card-content relative z-10">
                 <div className="purificacao-section-title-block text-center">
+                  <div className="purificacao-process-icon-wrap">
+                    <svg viewBox="0 0 100 100" className="w-20 h-20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="50" cy="50" r="20" fill="currentColor" />
+                      {[...Array(12)].map((_, i) => {
+                        const angle = (i * 30 * Math.PI) / 180;
+                        const x1 = 50 + Math.cos(angle) * 25, y1 = 50 + Math.sin(angle) * 25;
+                        const x2 = 50 + Math.cos(angle) * 40, y2 = 50 + Math.sin(angle) * 40;
+                        return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke="currentColor" strokeWidth="3" strokeLinecap="round" />;
+                      })}
+                    </svg>
+                  </div>
                   <EditableField value={texts.sections?.process_title} jsonKey="purificacao.sections.process_title" type="h2" className="purificacao-heading gold mb-3" />
-                  <p className="purificacao-body max-w-full mx-auto mb-4">
-                    <EditableField value={texts.sections?.process_subtitle} jsonKey="purificacao.sections.process_subtitle" type="span" className="inline" />
-                  </p>
+                  <EditableField value={texts.sections?.process_subtitle} jsonKey="purificacao.sections.process_subtitle" type="p" className="purificacao-process-subtitle" />
                   <div className="purificacao-sun-divider" />
                 </div>
 

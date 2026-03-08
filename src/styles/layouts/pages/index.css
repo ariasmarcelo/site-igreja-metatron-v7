@@ -248,9 +248,14 @@
   font-family: 'Playfair Display', serif;
   font-size: clamp(1.3rem, 3.5vw, 1.75rem);
   font-weight: 600;
-  color: var(--ds-sacred-gold);
+  color: #FFFFFF;
   margin-bottom: 24px;
   line-height: 1.3;
+  text-shadow:
+    0 0 8px rgba(255, 255, 255, 0.6),
+    0 0 24px rgba(255, 255, 255, 0.3),
+    0 0 48px rgba(255, 255, 255, 0.12),
+    0 0 60px rgba(196, 148, 59, 0.25);
 }
 
 .ds-new .ds-bridge-body p {
@@ -368,6 +373,10 @@
 .ds-new .ds-section-social-proof {
   background: transparent;
   padding: var(--section-padding-y) 24px var(--section-padding-y-lg);
+}
+
+.ds-new .ds-section-social-proof .ds-section-sub {
+  max-width: 694px;
 }
 
 .ds-new .ds-social-inner {

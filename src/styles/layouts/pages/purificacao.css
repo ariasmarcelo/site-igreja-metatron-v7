@@ -183,7 +183,7 @@
 /* Hero título/subtítulo — texto escuro com halo claro para destaque no fundo */
 .purificacao-hero-title {
   font-family: 'Playfair Display', serif;
-  font-size: clamp(2.1rem, 6vw, 3.75rem);
+  font-size: clamp(2rem, 5.5vw, 3.5rem);
   font-weight: 700;
   color: #FFFFFF;
   margin-bottom: 10px;
@@ -290,6 +290,48 @@
   padding-top: 0 !important;
 }
 
+.purificacao-card.purificacao-card-gold {
+  padding: 28px 32px 28px;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .purificacao-card.purificacao-card-gold { padding: 32px 48px 32px; }
+}
+
+.purificacao-card-gold .purificacao-heading.gold {
+  margin-bottom: 0;
+}
+
+.purificacao-gold-ornament {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 16px auto;
+}
+
+.purificacao-gold-ornament::before,
+.purificacao-gold-ornament::after {
+  content: '';
+  width: 64px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--purificacao-gold));
+}
+
+.purificacao-gold-ornament::after {
+  background: linear-gradient(90deg, var(--purificacao-gold), transparent);
+}
+
+.purificacao-card-gold .purificacao-body {
+  font-size: clamp(0.85rem, 2vw, 0.95rem);
+  font-style: italic;
+  letter-spacing: 0.04em;
+  line-height: 1.6;
+  max-width: 810px;
+  margin: 0 auto;
+}
+
 .purificacao-card {
   background: var(--purificacao-cream);
   border-radius: var(--ds-radius-lg, 16px);
@@ -318,6 +360,48 @@
 .purificacao-section-title-block,
 .purificacao-section-title {
   margin-bottom: var(--section-title-to-content, 16px);
+}
+
+.purificacao-section-title-block:has(.purificacao-process-icon-wrap) {
+  padding-top: 16px;
+  padding-bottom: 12px;
+}
+
+@media (min-width: 768px) {
+  .purificacao-section-title-block:has(.purificacao-process-icon-wrap) {
+    padding-top: 24px;
+    padding-bottom: 20px;
+  }
+}
+
+.purificacao-process-icon-wrap {
+  display: flex;
+  justify-content: center;
+  color: #CFAF5A;
+  margin-bottom: 16px;
+  filter:
+    drop-shadow(0 0 8px rgba(255, 255, 255, 0.5))
+    drop-shadow(0 0 20px rgba(212, 168, 75, 0.4))
+    drop-shadow(0 0 40px rgba(212, 168, 75, 0.2));
+}
+
+.purificacao-process-subtitle {
+  font-size: clamp(0.9rem, 2.2vw, 1.05rem);
+  color: var(--purificacao-text-muted);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  line-height: 1.6;
+  max-width: 675px;
+  margin: 0 auto;
+}
+
+.purificacao-section-title-block .purificacao-heading.gold {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.6rem, 4.5vw, 2.2rem);
+  font-weight: 600;
+  line-height: 1.2;
+  margin-bottom: 12px;
 }
 
 .purificacao-heading.gold {
@@ -705,7 +789,7 @@
   font-weight: 400;
   letter-spacing: 0.04em;
   line-height: 1.6;
-  max-width: 540px;
+  max-width: 675px;
   margin: 0 auto;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
 }
