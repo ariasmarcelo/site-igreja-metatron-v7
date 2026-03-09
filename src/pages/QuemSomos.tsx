@@ -25,6 +25,14 @@ import '@/styles/layouts/pages/quemsomos.css';
 interface QuemSomosTexts {
   header: { title: string; subtitle: string };
   origin?: { title: string; content: string };
+  manifesto?: {
+    title: string;
+    subtitle: string;
+    items: string[];
+    buddhaIntro: string;
+    buddhaQuote: string;
+    buddhaAttribution: string;
+  };
   dualNature?: {
     title: string;
     igreja: { title: string; content: string };
@@ -137,6 +145,71 @@ export default function QuemSomos() {
         </div>
       </section>
 
+      {/* ==================== MANIFESTO DE PRINCÍPIOS ==================== */}
+      <section className="qs-section qs-manifesto-section">
+        <div className="max-w-section mx-auto">
+          <div className="qs-manifesto-icon">
+            <img
+              src="/logo-metatron-sem-asas-gold.svg"
+              alt="Sol — Ordem Solar"
+              className="w-16 h-16"
+            />
+          </div>
+
+          <EditableField
+            value={texts.manifesto?.title}
+            jsonKey="quemsomos.manifesto.title"
+            type="h2"
+            className="qs-manifesto-title"
+          />
+          <EditableField
+            value={texts.manifesto?.subtitle}
+            jsonKey="quemsomos.manifesto.subtitle"
+            type="p"
+            className="qs-manifesto-subtitle"
+          />
+
+          <div className="qs-manifesto-divider" />
+
+          <div className="qs-manifesto-items">
+            {(texts.manifesto?.items || []).map((item: string, idx: number) => (
+              <div key={idx} className="qs-manifesto-item">
+                <EditableField
+                  value={item}
+                  jsonKey={`quemsomos.manifesto.items[${idx}]`}
+                  type="p"
+                  className=""
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ==================== BUDDHA QUOTE CALLOUT ==================== */}
+      <section className="qs-section qs-buddha-section">
+        <div className="qs-buddha-card max-w-section mx-auto">
+          <EditableField
+            value={texts.manifesto?.buddhaIntro}
+            jsonKey="quemsomos.manifesto.buddhaIntro"
+            type="p"
+            className="qs-buddha-intro"
+          />
+          <EditableField
+            value={texts.manifesto?.buddhaQuote}
+            jsonKey="quemsomos.manifesto.buddhaQuote"
+            type="p"
+            className="qs-buddha-quote whitespace-pre-line"
+          />
+          <EditableField
+            value={texts.manifesto?.buddhaAttribution}
+            jsonKey="quemsomos.manifesto.buddhaAttribution"
+            type="p"
+            className="qs-buddha-attribution"
+          />
+        </div>
+      </section>
+
       {/* ==================== DUAL NATURE — Igreja + Instituto ==================== */}
       <section className="qs-section qs-section-bridge">
         <div className="max-w-section mx-auto">
@@ -210,34 +283,36 @@ export default function QuemSomos() {
 
           <div className="qs-accordion-wrapper">
             <Accordion type="multiple">
-              {Array.from({ length: 13 }).map((_, idx) => {
-                const item = texts.principios_unificados?.items?.[idx] || { title: '', content: '' };
-                return (
-                  <AccordionItem
-                    key={idx}
-                    value={`principio-${idx}`}
-                    className="qs-accordion-item border-0"
-                  >
-                    <AccordionTrigger className="qs-accordion-trigger hover:no-underline [&>svg]:text-(--qs-accent-muted) [&>svg]:w-5 [&>svg]:h-5">
-                      <span className="qs-accordion-number">{idx + 1}</span>
-                      <EditableField
-                        value={item.title}
-                        jsonKey={`quemsomos.principios_unificados.items[${idx}].title`}
-                        type="span"
-                        className=""
-                      />
-                    </AccordionTrigger>
-                    <AccordionContent className="qs-accordion-content">
-                      <EditableField
-                        value={item.content}
-                        jsonKey={`quemsomos.principios_unificados.items[${idx}].content`}
-                        type="p"
-                        className=""
-                      />
-                    </AccordionContent>
-                  </AccordionItem>
-                );
-              })}
+              {(texts.principios_unificados?.items || [])
+                .slice(0, 12)
+                .map((item: { title: string; content: string } | null, idx: number) => {
+                  if (!item?.title && !item?.content) return null;
+                  return (
+                    <AccordionItem
+                      key={idx}
+                      value={`principio-${idx}`}
+                      className="qs-accordion-item border-0"
+                    >
+                      <AccordionTrigger className="qs-accordion-trigger hover:no-underline [&>svg]:text-(--qs-accent-muted) [&>svg]:w-5 [&>svg]:h-5">
+                        <span className="qs-accordion-number">{idx + 1}</span>
+                        <EditableField
+                          value={item.title}
+                          jsonKey={`quemsomos.principios_unificados.items[${idx}].title`}
+                          type="span"
+                          className=""
+                        />
+                      </AccordionTrigger>
+                      <AccordionContent className="qs-accordion-content">
+                        <EditableField
+                          value={item.content}
+                          jsonKey={`quemsomos.principios_unificados.items[${idx}].content`}
+                          type="p"
+                          className=""
+                        />
+                      </AccordionContent>
+                    </AccordionItem>
+                  );
+                })}
             </Accordion>
           </div>
         </div>
