@@ -184,10 +184,15 @@
   display: flex;
   justify-content: center;
   margin-bottom: 20px;
+  isolation: isolate;
+}
+
+.ds-qs .qs-manifesto-icon img {
   filter:
-    drop-shadow(0 0 8px rgba(255, 255, 255, 0.5))
-    drop-shadow(0 0 20px rgba(196, 148, 59, 0.4))
-    drop-shadow(0 0 40px rgba(196, 148, 59, 0.2));
+    drop-shadow(0 0 0.4px rgba(196, 148, 59, 0.6))
+    drop-shadow(0 0 6px rgba(196, 148, 59, 0.20))
+    drop-shadow(0 0 20px rgba(196, 148, 59, 0.10))
+    drop-shadow(0 30px 12px rgba(0, 0, 0, 0.50));
 }
 
 .ds-qs .qs-manifesto-title {

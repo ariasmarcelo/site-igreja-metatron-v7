@@ -150,9 +150,9 @@ export default function QuemSomos() {
         <div className="max-w-section mx-auto">
           <div className="qs-manifesto-icon">
             <img
-              src="/logo-metatron-sem-asas-gold.svg"
-              alt="Sol — Ordem Solar"
-              className="w-16 h-16"
+              src="/logo-metatron-asas-gold-svgo.svg"
+              alt="Logo Igreja de Metatron"
+              className="w-58 h-auto"
             />
           </div>
 
@@ -403,7 +403,7 @@ export default function QuemSomos() {
             <button
               className="qs-magia-toggle"
               onClick={() => setMagiaOpen(!magiaOpen)}
-              aria-expanded={magiaOpen}
+              {...{ 'aria-expanded': magiaOpen }}
               aria-label="Expandir seção Magia Divina"
             >
               <EditableField
@@ -500,13 +500,13 @@ export default function QuemSomos() {
 
             <div>
               <EditableField
-                value={(texts as any).__shared__?.footer?.copyright}
+                value={(texts as Record<string, Record<string, Record<string, string>>>).__shared__?.footer?.copyright}
                 jsonKey="__shared__.footer.copyright"
                 type="p"
                 className={FOOTER.copyrightClass}
               />
               <EditableField
-                value={(texts as any).__shared__?.footer?.trademark}
+                value={(texts as Record<string, Record<string, Record<string, string>>>).__shared__?.footer?.trademark}
                 jsonKey="__shared__.footer.trademark"
                 type="p"
                 className={FOOTER.trademarkClass}
