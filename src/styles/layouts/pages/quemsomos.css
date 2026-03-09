@@ -244,18 +244,30 @@
 
 .ds-qs .qs-manifesto-item {
   text-align: left;
-  padding: 16px 20px;
-  border-left: 3px solid var(--ds-sacred-gold);
-  background: rgba(196, 148, 59, 0.06);
+  padding: 18px 24px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-left: 3px solid var(--ds-gold-light);
+  background: rgba(196, 148, 59, 0.08);
   border-radius: 0 var(--ds-radius-sm) var(--ds-radius-sm) 0;
-  font-size: clamp(0.85rem, 2vw, 0.95rem);
-  color: var(--ds-text-on-navy);
+  font-size: clamp(0.95rem, 2.3vw, 1.1rem);
+  color: #FFFFFF;
   line-height: 1.7;
-  transition: background 0.3s ease;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+  text-shadow:
+    0 0 8px rgba(255, 255, 255, 0.6),
+    0 0 24px rgba(255, 255, 255, 0.3),
+    0 0 48px rgba(255, 255, 255, 0.12),
+    0 0 60px rgba(196, 148, 59, 0.25);
+  box-shadow:
+    0 0 8px rgba(255, 255, 255, 0.12),
+    0 0 16px rgba(220, 220, 230, 0.08);
 }
 
 .ds-qs .qs-manifesto-item:hover {
-  background: rgba(196, 148, 59, 0.1);
+  background: rgba(196, 148, 59, 0.14);
+  box-shadow:
+    0 0 8px rgba(255, 255, 255, 0.20),
+    0 0 16px rgba(220, 220, 230, 0.12);
 }
 
 /* ─────────────────────────────────────────────
@@ -271,7 +283,9 @@
   border-top: 3px solid var(--ds-sacred-gold);
   box-shadow: var(--ds-shadow-float);
   padding: 36px 32px;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 @media (min-width: 768px) {
@@ -280,32 +294,36 @@
 
 .ds-qs .qs-buddha-intro {
   font-family: 'Playfair Display', serif;
-  font-size: clamp(1.1rem, 3vw, 1.35rem);
+  font-size: clamp(1.25rem, 3.4vw, 1.55rem);
   font-weight: 600;
   color: var(--ds-sacred-gold);
   margin-bottom: 24px;
   line-height: 1.4;
+  text-align: left;
+  padding-left: 23px;
+}
+
+.ds-qs .qs-buddha-block {
+  text-align: left;
 }
 
 .ds-qs .qs-buddha-quote {
-  font-size: clamp(0.85rem, 2vw, 0.95rem);
+  font-size: clamp(0.98rem, 2.3vw, 1.1rem);
   font-style: italic;
   color: var(--ds-text-muted);
   line-height: 1.8;
-  max-width: 560px;
-  margin: 0 auto;
   padding-left: 20px;
   border-left: 3px solid var(--ds-gold-border);
-  text-align: left;
   white-space: pre-line;
 }
 
 .ds-qs .qs-buddha-attribution {
-  font-size: 0.85rem;
+  font-size: clamp(0.98rem, 2.3vw, 1.1rem);
   color: var(--ds-gold-muted);
   margin-top: 16px;
   font-weight: 500;
   letter-spacing: 0.04em;
+  padding-left: 23px;
 }
 
 /* ─────────────────────────────────────────────

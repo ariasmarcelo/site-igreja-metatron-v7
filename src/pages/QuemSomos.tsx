@@ -189,24 +189,26 @@ export default function QuemSomos() {
       {/* ==================== BUDDHA QUOTE CALLOUT ==================== */}
       <section className="qs-section qs-buddha-section">
         <div className="qs-buddha-card max-w-section mx-auto">
-          <EditableField
-            value={texts.manifesto?.buddhaIntro}
-            jsonKey="quemsomos.manifesto.buddhaIntro"
-            type="p"
-            className="qs-buddha-intro"
-          />
-          <EditableField
-            value={texts.manifesto?.buddhaQuote}
-            jsonKey="quemsomos.manifesto.buddhaQuote"
-            type="p"
-            className="qs-buddha-quote whitespace-pre-line"
-          />
-          <EditableField
-            value={texts.manifesto?.buddhaAttribution}
-            jsonKey="quemsomos.manifesto.buddhaAttribution"
-            type="p"
-            className="qs-buddha-attribution"
-          />
+          <div className="qs-buddha-block">
+            <EditableField
+              value={texts.manifesto?.buddhaIntro}
+              jsonKey="quemsomos.manifesto.buddhaIntro"
+              type="p"
+              className="qs-buddha-intro"
+            />
+            <EditableField
+              value={texts.manifesto?.buddhaQuote}
+              jsonKey="quemsomos.manifesto.buddhaQuote"
+              type="p"
+              className="qs-buddha-quote whitespace-pre-line"
+            />
+            <EditableField
+              value={texts.manifesto?.buddhaAttribution}
+              jsonKey="quemsomos.manifesto.buddhaAttribution"
+              type="p"
+              className="qs-buddha-attribution"
+            />
+          </div>
         </div>
       </section>
 
