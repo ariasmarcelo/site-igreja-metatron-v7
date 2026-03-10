@@ -41,7 +41,7 @@ interface QuemSomosTexts {
   principios_unificados?: {
     title: string;
     summary?: string;
-    items: { title: string; content: string }[];
+    items: { title: string; summary?: string; content: string }[];
   };
   hermeticos?: {
     title: string;
@@ -72,6 +72,16 @@ export default function QuemSomos() {
   void GLOSSARY;
 
   const [magiaOpen, setMagiaOpen] = useState(false);
+  const [openPrinciples, setOpenPrinciples] = useState<Set<number>>(new Set());
+
+  const togglePrinciple = (idx: number) => {
+    setOpenPrinciples(prev => {
+      const next = new Set(prev);
+      if (next.has(idx)) next.delete(idx);
+      else next.add(idx);
+      return next;
+    });
+  };
 
   if (!texts || !stylesLoaded || loading) {
     return (
@@ -145,6 +155,32 @@ export default function QuemSomos() {
         </div>
       </section>
 
+      {/* ==================== BUDDHA QUOTE CALLOUT ==================== */}
+      <section className="qs-section qs-buddha-section">
+        <div className="qs-buddha-card max-w-section mx-auto">
+          <div className="qs-buddha-block">
+            <EditableField
+              value={texts.manifesto?.buddhaIntro}
+              jsonKey="quemsomos.manifesto.buddhaIntro"
+              type="p"
+              className="qs-buddha-intro"
+            />
+            <EditableField
+              value={texts.manifesto?.buddhaQuote}
+              jsonKey="quemsomos.manifesto.buddhaQuote"
+              type="p"
+              className="qs-buddha-quote whitespace-pre-line"
+            />
+            <EditableField
+              value={texts.manifesto?.buddhaAttribution}
+              jsonKey="quemsomos.manifesto.buddhaAttribution"
+              type="p"
+              className="qs-buddha-attribution"
+            />
+          </div>
+        </div>
+      </section>
+
       {/* ==================== MANIFESTO DE PRINCÍPIOS ==================== */}
       <section className="qs-section qs-manifesto-section">
         <div className="max-w-section mx-auto">
@@ -182,32 +218,6 @@ export default function QuemSomos() {
                 />
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ==================== BUDDHA QUOTE CALLOUT ==================== */}
-      <section className="qs-section qs-buddha-section">
-        <div className="qs-buddha-card max-w-section mx-auto">
-          <div className="qs-buddha-block">
-            <EditableField
-              value={texts.manifesto?.buddhaIntro}
-              jsonKey="quemsomos.manifesto.buddhaIntro"
-              type="p"
-              className="qs-buddha-intro"
-            />
-            <EditableField
-              value={texts.manifesto?.buddhaQuote}
-              jsonKey="quemsomos.manifesto.buddhaQuote"
-              type="p"
-              className="qs-buddha-quote whitespace-pre-line"
-            />
-            <EditableField
-              value={texts.manifesto?.buddhaAttribution}
-              jsonKey="quemsomos.manifesto.buddhaAttribution"
-              type="p"
-              className="qs-buddha-attribution"
-            />
           </div>
         </div>
       </section>
@@ -264,8 +274,8 @@ export default function QuemSomos() {
         </div>
       </section>
 
-      {/* ==================== PRINCIPIOS UNIFICADOS ==================== */}
-      <section className="qs-section qs-accordion-section">
+      {/* ==================== PRINCÍPIOS E VALORES ==================== */}
+      <section className="qs-section qs-principles-section">
         <div className="qs-card max-w-section mx-auto">
           <div className="qs-accordion-icon">
             <ScrollText className="w-10 h-10" />
@@ -283,39 +293,55 @@ export default function QuemSomos() {
             className="qs-accordion-summary"
           />
 
-          <div className="qs-accordion-wrapper">
-            <Accordion type="multiple">
-              {(texts.principios_unificados?.items || [])
-                .slice(0, 12)
-                .map((item: { title: string; content: string } | null, idx: number) => {
-                  if (!item?.title && !item?.content) return null;
-                  return (
-                    <AccordionItem
-                      key={idx}
-                      value={`principio-${idx}`}
-                      className="qs-accordion-item border-0"
+          <div className="qs-principles-list">
+            {(texts.principios_unificados?.items || [])
+              .slice(0, 7)
+              .map((item: { title: string; summary?: string; content: string } | null, idx: number) => {
+                if (!item?.title && !item?.content) return null;
+                const isOpen = openPrinciples.has(idx);
+                return (
+                  <div
+                    key={idx}
+                    className="qs-principle-card"
+                    data-open={isOpen}
+                  >
+                    <div
+                      className="qs-principle-header"
+                      onClick={() => togglePrinciple(idx)}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') togglePrinciple(idx); }}
                     >
-                      <AccordionTrigger className="qs-accordion-trigger hover:no-underline [&>svg]:text-(--qs-accent-muted) [&>svg]:w-5 [&>svg]:h-5">
-                        <span className="qs-accordion-number">{idx + 1}</span>
+                      <span className="qs-principle-number">{idx + 1}</span>
+                      <div className="qs-principle-meta">
                         <EditableField
                           value={item.title}
                           jsonKey={`quemsomos.principios_unificados.items[${idx}].title`}
                           type="span"
-                          className=""
+                          className="qs-principle-title"
                         />
-                      </AccordionTrigger>
-                      <AccordionContent className="qs-accordion-content">
-                        <EditableField
-                          value={item.content}
-                          jsonKey={`quemsomos.principios_unificados.items[${idx}].content`}
-                          type="p"
-                          className=""
-                        />
-                      </AccordionContent>
-                    </AccordionItem>
-                  );
-                })}
-            </Accordion>
+                        {item.summary && (
+                          <EditableField
+                            value={item.summary}
+                            jsonKey={`quemsomos.principios_unificados.items[${idx}].summary`}
+                            type="span"
+                            className="qs-principle-summary"
+                          />
+                        )}
+                      </div>
+                      <ChevronDown className={`qs-principle-chevron ${isOpen ? 'open' : ''}`} />
+                    </div>
+                    <div className={`qs-principle-body ${isOpen ? 'open' : ''}`}>
+                      <EditableField
+                        value={item.content}
+                        jsonKey={`quemsomos.principios_unificados.items[${idx}].content`}
+                        type="p"
+                        className=""
+                      />
+                    </div>
+                  </div>
+                );
+              })}
           </div>
         </div>
       </section>

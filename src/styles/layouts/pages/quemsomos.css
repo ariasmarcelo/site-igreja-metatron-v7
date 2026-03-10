@@ -538,6 +538,119 @@
 }
 
 /* ─────────────────────────────────────────────
+   PRINCIPLES — expandable vertical cards
+   ───────────────────────────────────────────── */
+.ds-qs .qs-principles-section .qs-card {
+  border-top-color: var(--qs-accent);
+}
+
+.ds-qs .qs-principles-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.ds-qs .qs-principle-card {
+  background: var(--ds-bg-white);
+  border: 1px solid rgba(61, 123, 95, 0.15);
+  border-left: 3px solid var(--qs-accent);
+  border-radius: 0 var(--ds-radius-md) var(--ds-radius-md) 0;
+  overflow: hidden;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.ds-qs .qs-principle-card:hover {
+  border-color: rgba(61, 123, 95, 0.3);
+  box-shadow: 0 2px 12px rgba(61, 123, 95, 0.08);
+}
+
+.ds-qs .qs-principle-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 18px 20px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.ds-qs .qs-principle-number {
+  width: 30px;
+  height: 30px;
+  min-width: 30px;
+  border-radius: 50%;
+  background: var(--qs-accent);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.82rem;
+  font-weight: 700;
+  margin-top: 2px;
+}
+
+.ds-qs .qs-principle-meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.ds-qs .qs-principle-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(0.95rem, 2.5vw, 1.1rem);
+  font-weight: 600;
+  color: var(--ds-text-dark);
+  line-height: 1.3;
+  margin-bottom: 4px;
+}
+
+.ds-qs .qs-principle-summary {
+  font-size: clamp(0.82rem, 2vw, 0.88rem);
+  font-style: italic;
+  color: var(--qs-accent-muted);
+  line-height: 1.5;
+  letter-spacing: 0.01em;
+}
+
+.ds-qs .qs-principle-chevron {
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  color: var(--qs-accent-muted);
+  transition: transform 0.3s ease;
+  margin-top: 4px;
+}
+
+.ds-qs .qs-principle-chevron.open {
+  transform: rotate(180deg);
+}
+
+.ds-qs .qs-principle-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.3s ease;
+  padding: 0 20px 0 64px;
+}
+
+.ds-qs .qs-principle-body.open {
+  max-height: 400px;
+  padding: 0 20px 20px 64px;
+}
+
+.ds-qs .qs-principle-body p,
+.ds-qs .qs-principle-body span {
+  font-size: clamp(0.85rem, 2vw, 0.92rem);
+  color: var(--ds-text-muted);
+  line-height: 1.75;
+}
+
+.ds-qs .qs-principle-card[data-open="true"] {
+  background: var(--qs-accent-bg-subtle);
+  border-left-color: var(--qs-accent-dark);
+}
+
+/* ─────────────────────────────────────────────
    MAGIA DIVINA — collapsible
    ───────────────────────────────────────────── */
 .ds-qs .qs-magia-section .qs-card {
