@@ -9,7 +9,6 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   BookOpen, Sparkles, Stethoscope, ChevronDown,
-  Layers,
 } from 'lucide-react';
 import EditableField from '@/components/ui/EditableField';
 import { useGlossary } from '@/hooks/useGlossary';
@@ -53,7 +52,7 @@ interface QuemSomosTexts {
     introducao?: string[];
     caracteristicas?: {
       title: string;
-      items: { title: string; content: string }[];
+      items: { title: string; summary?: string; content: string }[];
     };
   };
   cta?: { title: string; subtitle: string; buttonText: string };
@@ -70,9 +69,9 @@ export default function QuemSomos() {
   const GLOSSARY = useGlossary((texts as any)?.__shared__);
   void GLOSSARY;
 
-  const [magiaOpen, setMagiaOpen] = useState(false);
   const [openPrinciples, setOpenPrinciples] = useState<Set<number>>(new Set());
   const [openHermeticos, setOpenHermeticos] = useState<Set<number>>(new Set());
+  const [openMagia, setOpenMagia] = useState<Set<number>>(new Set());
 
   const togglePrinciple = (idx: number) => {
     setOpenPrinciples(prev => {
@@ -85,6 +84,15 @@ export default function QuemSomos() {
 
   const toggleHermetic = (idx: number) => {
     setOpenHermeticos(prev => {
+      const next = new Set(prev);
+      if (next.has(idx)) next.delete(idx);
+      else next.add(idx);
+      return next;
+    });
+  };
+
+  const toggleMagia = (idx: number) => {
+    setOpenMagia(prev => {
       const next = new Set(prev);
       if (next.has(idx)) next.delete(idx);
       else next.add(idx);
@@ -433,72 +441,98 @@ export default function QuemSomos() {
         </div>
       </section>
 
-      {/* ==================== MAGIA DIVINA ==================== */}
+      {/* ==================== A MAGIA DIVINA ==================== */}
       {texts.magia && (
         <section className="qs-section qs-magia-section">
           <div className="qs-card max-w-section mx-auto">
-            <div className="qs-accordion-icon">
-              <Layers className="w-10 h-10 text-(--ds-sacred-gold)" />
-            </div>
-
-            <button
-              className="qs-magia-toggle"
-              onClick={() => setMagiaOpen(!magiaOpen)}
-              {...{ 'aria-expanded': magiaOpen }}
-              aria-label="Expandir seção Magia Divina"
-            >
-              <EditableField
-                value={texts.magia.title}
-                jsonKey="quemsomos.magia.title"
-                type="span"
-                className=""
+            <div className="qs-magia-icon">
+              <img
+                src="/logo-metatron-sem-asas-gold.svg"
+                alt="Logo Igreja de Metatron"
+                className="w-14 h-14"
               />
-              <ChevronDown className={`qs-magia-chevron ${magiaOpen ? 'open' : ''}`} />
-            </button>
-
-            <div className={`qs-magia-body ${magiaOpen ? 'open' : ''}`}>
-              <div className="qs-magia-content">
-                {texts.magia.introducao?.map((paragraph: string, index: number) => (
-                  <div key={index} className="qs-magia-paragraph">
-                    <EditableField
-                      value={paragraph}
-                      jsonKey={`quemsomos.magia.introducao[${index}]`}
-                      type="p"
-                      className=""
-                    />
-                  </div>
-                ))}
-
-                {texts.magia.caracteristicas && (
-                  <div className="mt-6">
-                    <EditableField
-                      value={texts.magia.caracteristicas.title}
-                      jsonKey="quemsomos.magia.caracteristicas.title"
-                      type="h4"
-                      className="qs-magia-feature-title"
-                    />
-                    {texts.magia.caracteristicas.items?.map(
-                      (item: { title: string; content: string }, index: number) => (
-                        <div key={index} className="qs-magia-feature-item">
-                          <EditableField
-                            value={item.title}
-                            jsonKey={`quemsomos.magia.caracteristicas.items[${index}].title`}
-                            type="h5"
-                            className=""
-                          />
-                          <EditableField
-                            value={item.content}
-                            jsonKey={`quemsomos.magia.caracteristicas.items[${index}].content`}
-                            type="p"
-                            className=""
-                          />
-                        </div>
-                      )
-                    )}
-                  </div>
-                )}
-              </div>
             </div>
+
+            <EditableField
+              value={texts.magia.title}
+              jsonKey="quemsomos.magia.title"
+              type="h2"
+              className="qs-magia-title"
+            />
+
+            <div className="qs-magia-intro">
+              {texts.magia.introducao?.map((paragraph: string, index: number) => (
+                <div key={index} className="qs-magia-intro-paragraph">
+                  <EditableField
+                    value={paragraph}
+                    jsonKey={`quemsomos.magia.introducao[${index}]`}
+                    type="p"
+                    className=""
+                  />
+                </div>
+              ))}
+            </div>
+
+            {texts.magia.caracteristicas && (
+              <>
+                <EditableField
+                  value={texts.magia.caracteristicas.title}
+                  jsonKey="quemsomos.magia.caracteristicas.title"
+                  type="h3"
+                  className="qs-magia-features-title"
+                />
+
+                <div className="qs-magia-list">
+                  {texts.magia.caracteristicas.items?.map(
+                    (item: { title: string; summary?: string; content: string }, index: number) => {
+                      const isOpen = openMagia.has(index);
+                      return (
+                        <div
+                          key={index}
+                          className="qs-magia-card"
+                          data-open={isOpen}
+                        >
+                          <div
+                            className="qs-magia-header"
+                            onClick={() => toggleMagia(index)}
+                            role="button"
+                            tabIndex={0}
+                            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') toggleMagia(index); }}
+                          >
+                            <span className="qs-magia-number">{index + 1}</span>
+                            <div className="qs-magia-meta">
+                              <EditableField
+                                value={item.title}
+                                jsonKey={`quemsomos.magia.caracteristicas.items[${index}].title`}
+                                type="span"
+                                className="qs-magia-card-title"
+                              />
+                              {item.summary && (
+                                <EditableField
+                                  value={item.summary}
+                                  jsonKey={`quemsomos.magia.caracteristicas.items[${index}].summary`}
+                                  type="span"
+                                  className="qs-magia-summary"
+                                />
+                              )}
+                            </div>
+                            <ChevronDown className={`qs-magia-chevron ${isOpen ? 'open' : ''}`} />
+                          </div>
+                          <div className={`qs-magia-body ${isOpen ? 'open' : ''}`}>
+                            <EditableField
+                              value={item.content}
+                              jsonKey={`quemsomos.magia.caracteristicas.items[${index}].content`}
+                              type="p"
+                              className="whitespace-pre-line"
+                            />
+                          </div>
+                        </div>
+                      );
+                    }
+                  )}
+                </div>
+              </>
+            )}
           </div>
         </section>
       )}
