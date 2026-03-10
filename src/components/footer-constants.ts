@@ -12,10 +12,10 @@ export const FOOTER = {
   viewBoxHeight: 518,
 
   /** Classes Tailwind do container interno (z-10, flex, padding, height) */
-  containerClass: 'relative z-10 flex flex-col items-center justify-between px-4 pt-6 pb-4 h-[269px]',
+  containerClass: 'footer-cta-container relative z-10 flex flex-col items-center justify-between px-4 pt-6 pb-4 h-[269px]',
 
   /** Classes do título CTA (h2) */
-  titleClass: 'text-3xl md:text-4xl font-bold mb-4 text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]',
+  titleClass: 'text-[24px] md:text-[29px] font-bold mb-4 text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]',
 
   /** Classes do subtítulo CTA (p) */
   subtitleClass: 'text-lg mb-5 text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.3)]',

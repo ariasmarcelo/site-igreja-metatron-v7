@@ -166,7 +166,7 @@
   font-size: clamp(0.85rem, 2vw, 0.95rem);
   color: var(--ds-text-muted);
   line-height: 1.7;
-  max-width: 780px;
+  max-width: 585px;
   margin: 0 auto;
   text-align: center;
 }

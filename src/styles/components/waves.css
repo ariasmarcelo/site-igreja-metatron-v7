@@ -76,9 +76,12 @@
 .footer-icon-right {
   position: absolute;
   z-index: 10;
-  width: var(--icon-size, 80px);
-  height: var(--icon-size, 80px);
-  top: calc(1rem + (80px - var(--icon-size, 80px)) / 2);
+  --_base: var(--icon-size, 80px);
+  --_scale: clamp(0.8, (100vw - 320px) / (768px - 320px) * 0.2 + 0.8, 1);
+  --_lift: clamp(0px, (768px - 100vw) / (768px - 320px) * 20px, 20px);
+  width: calc(var(--_base) * var(--_scale));
+  height: calc(var(--_base) * var(--_scale));
+  top: calc(1rem + (80px - calc(var(--_base) * var(--_scale))) / 2 - var(--_lift));
 }
 
 .footer-icon-left > *,
@@ -93,4 +96,10 @@
 
 .footer-icon-right {
   right: clamp(1px, calc((100vw - 320px) * 0.035), 2rem);
+}
+
+/* Container CTA — desce progressivamente em telas estreitas */
+.footer-cta-container {
+  --_push: clamp(0px, (768px - 100vw) / (768px - 320px) * 25px, 25px);
+  padding-top: calc(1.5rem + var(--_push));
 }
