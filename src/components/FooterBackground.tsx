@@ -147,49 +147,6 @@ interface FooterBackgroundProps {
 const defaultSky: [string, string, string] = ['#1e3a5f', '#2563eb', '#38bdf8'];
 const defaultWater: [string, string, string] = ['#3b82f6', '#2563eb', '#1d4ed8'];
 
-/**
- * Derive mountain/valley shades from earthColor.
- * Back mountains: lighter & cooler. Valley/front: darker & warmer.
- */
-function deriveMountainColors(earthColor: string): [string, string, string] {
-  const hex = earthColor.replace('#', '');
-  const r = parseInt(hex.substring(0, 2), 16);
-  const g = parseInt(hex.substring(2, 4), 16);
-  const b = parseInt(hex.substring(4, 6), 16);
-  const backR = Math.min(255, Math.round(r * 0.65 + 20));
-  const backG = Math.min(255, Math.round(g * 0.75 + 30));
-  const backB = Math.min(255, Math.round(b * 0.7 + 25));
-  const frontR = Math.max(0, Math.round(r * 0.55 + 10));
-  const frontG = Math.max(0, Math.round(g * 0.65 + 18));
-  const frontB = Math.max(0, Math.round(b * 0.6 + 15));
-  const toHex = (n: number) => n.toString(16).padStart(2, '0');
-  return [
-    `#${toHex(backR)}${toHex(backG)}${toHex(backB)}`,
-    `#${toHex(frontR)}${toHex(frontG)}${toHex(frontB)}`,
-    `#${toHex(frontR)}${toHex(frontG)}${toHex(frontB)}`,
-  ];
-}
-
-const waveAnimationCSS = `
-@keyframes footerWave1 {
-  0%   { transform: translateX(0); }
-  50%  { transform: translateX(-60px); }
-  100% { transform: translateX(0); }
-}
-@keyframes footerWave2 {
-  0%   { transform: translateX(0); }
-  50%  { transform: translateX(50px); }
-  100% { transform: translateX(0); }
-}
-@keyframes footerWave3 {
-  0%   { transform: translateX(0); }
-  50%  { transform: translateX(-40px); }
-  100% { transform: translateX(0); }
-}
-`;
-
-let waveStyleInjected = false;
-
 export const FooterBackground = ({
   gradientId = "skyGradient",
   skyColors = defaultSky,
@@ -200,14 +157,6 @@ export const FooterBackground = ({
   leftIconSize = 80,
   rightIconSize = 80,
 }: FooterBackgroundProps) => {
-  if (!waveStyleInjected && typeof document !== 'undefined') {
-    const style = document.createElement('style');
-    style.textContent = waveAnimationCSS;
-    document.head.appendChild(style);
-    waveStyleInjected = true;
-  }
-
-  const [backMtn, valley, frontMtn] = deriveMountainColors(earthColor);
 
   return (
     <div className="absolute inset-0 z-0 overflow-hidden">
@@ -261,17 +210,17 @@ export const FooterBackground = ({
         {/* Back mountain range */}
         <path
           d="M0,381 Q75,350 150,322 Q225,361 300,300 Q375,322 450,269 Q525,294 600,244 Q675,277 750,260 Q825,311 900,292 Q975,339 1050,319 Q1125,361 1200,378 L1200,518 L0,518 Z"
-          fill={backMtn}
+          fill="#3d5a4a"
         />
         {/* Valley surface between mountain ranges */}
         <path
           d="M0,386 Q150,364 300,333 Q450,319 600,296 Q750,314 900,325 Q1050,352 1200,384 L1200,518 L0,518 Z"
-          fill={valley}
+          fill="#2d4a3a"
         />
         {/* Front mountain range */}
         <path
           d="M0,389 Q100,372 200,344 Q275,378 350,322 Q425,350 500,292 Q550,311 600,274 Q650,300 700,280 Q800,328 900,311 Q975,356 1050,339 Q1100,372 1200,386 L1200,518 L0,518 Z"
-          fill={frontMtn}
+          fill="#2d4a3a"
         />
         {/* Wave gradient definitions — transparent at crest, colored at depth */}
         <defs>
@@ -292,19 +241,19 @@ export const FooterBackground = ({
           </linearGradient>
         </defs>
         <path
+          className="animate-wave-1"
           d="M-100,482 Q600,398 1300,482 L1300,518 L-100,518 Z"
           fill={`url(#${gradientId}_wg1)`}
-          style={{ animation: 'footerWave1 8s ease-in-out infinite' }}
         />
         <path
+          className="animate-wave-2"
           d="M-100,490 Q600,406 1300,490 L1300,518 L-100,518 Z"
           fill={`url(#${gradientId}_wg2)`}
-          style={{ animation: 'footerWave2 10s ease-in-out infinite 0.5s' }}
         />
         <path
+          className="animate-wave-3"
           d="M-100,496 Q600,412 1300,496 L1300,518 L-100,518 Z"
           fill={`url(#${gradientId}_wg3)`}
-          style={{ animation: 'footerWave3 12s ease-in-out infinite 1s' }}
         />
       </svg>
     </div>
