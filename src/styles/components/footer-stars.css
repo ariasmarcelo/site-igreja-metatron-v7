@@ -1,0 +1,139 @@
+/*
+ * Mapa estelar do footer — hemisfério sul (126 estrelas)
+ * Gerado automaticamente. Cada classe define posição, tamanho e brilho únicos.
+ * Reutilizado identicamente em todos os rodapés do site.
+ */
+
+.footer-star {
+  position: absolute;
+  border-radius: 50%;
+  background: white;
+  z-index: 1;
+}
+
+.s0 { left: 1.0076%; top: 32.9536%; width: 0.41px; height: 0.41px; opacity: 0.4053; }
+.s1 { left: 23.4451%; top: 2%; width: 0.33px; height: 0.33px; opacity: 0.7823; }
+.s2 { left: 21.7125%; top: 13.6525%; width: 0.36px; height: 0.36px; opacity: 0.6093; }
+.s3 { left: 3.3795%; top: 25.2311%; width: 0.99px; height: 0.99px; opacity: 0.4667; }
+.s4 { left: 13.3972%; top: 34.6995%; width: 0.44px; height: 0.44px; opacity: 0.4187; }
+.s5 { left: 6.3699%; top: 44%; width: 2.17px; height: 2.17px; opacity: 0.3681; }
+.s6 { left: 14.1289%; top: 15.7033%; width: 0.41px; height: 0.41px; opacity: 0.5825; }
+.s7 { left: 9.0899%; top: 19.727%; width: 0.46px; height: 0.46px; opacity: 0.53; }
+.s8 { left: 11.4378%; top: 28.8062%; width: 0.6px; height: 0.6px; opacity: 0.4879; }
+.s9 { left: 3.05%; top: 30.8897%; width: 0.77px; height: 0.77px; opacity: 0.4672; }
+.s10 { left: 23.8949%; top: 3.7894%; width: 0.43px; height: 0.43px; opacity: 0.7566; }
+.s11 { left: 5.0956%; top: 32.1405%; width: 0.31px; height: 0.31px; opacity: 0.4058; }
+.s12 { left: 15.661%; top: 19.3922%; width: 0.46px; height: 0.46px; opacity: 0.5268; }
+.s13 { left: 23.6228%; top: 13.0454%; width: 0.5px; height: 0.5px; opacity: 0.6863; }
+.s14 { left: 11.7267%; top: 34.5444%; width: 0.59px; height: 0.59px; opacity: 0.4046; }
+.s15 { left: 19.2663%; top: 15.4853%; width: 0.55px; height: 0.55px; opacity: 0.6163; }
+.s16 { left: 8.07%; top: 21.4349%; width: 0.47px; height: 0.47px; opacity: 0.5727; }
+.s17 { left: 2.4472%; top: 21.0531%; width: 0.51px; height: 0.51px; opacity: 0.5447; }
+.s18 { left: 11.2785%; top: 26.2874%; width: 0.39px; height: 0.39px; opacity: 0.4963; }
+.s19 { left: 6.6044%; top: 24.8885%; width: 1.21px; height: 1.21px; opacity: 0.518; }
+.s20 { left: 19.8967%; top: 22.9901%; width: 0.34px; height: 0.34px; opacity: 0.5767; }
+.s21 { left: 10.0088%; top: 6.4398%; width: 0.38px; height: 0.38px; opacity: 0.6874; }
+.s22 { left: 8.2237%; top: 29.5665%; width: 0.6px; height: 0.6px; opacity: 0.4385; }
+.s23 { left: 16.2223%; top: 21.2629%; width: 0.41px; height: 0.41px; opacity: 0.5228; }
+.s24 { left: 7.8727%; top: 44%; width: 0.94px; height: 0.94px; opacity: 0.3359; }
+.s25 { left: 12.2535%; top: 18.937%; width: 0.42px; height: 0.42px; opacity: 0.5704; }
+.s26 { left: 8.4039%; top: 37.7995%; width: 0.86px; height: 0.86px; opacity: 0.3356; }
+.s27 { left: 9.0775%; top: 29.9157%; width: 1.75px; height: 1.75px; opacity: 0.5273; }
+.s28 { left: 19.2722%; top: 2%; width: 0.56px; height: 0.56px; opacity: 0.7819; }
+.s29 { left: 23.6474%; top: 2%; width: 1.06px; height: 1.06px; opacity: 0.6992; }
+.s30 { left: 26.67%; top: 23.78%; width: 2.8px; height: 2.8px; opacity: 0.8; }
+.s31 { left: 27.33%; top: 19.46%; width: 2.6px; height: 2.6px; opacity: 0.784; }
+.s32 { left: 26%; top: 21.08%; width: 2.2px; height: 2.2px; opacity: 0.76; }
+.s33 { left: 26.67%; top: 17.57%; width: 2.6px; height: 2.6px; opacity: 0.784; }
+.s34 { left: 27.92%; top: 25.68%; width: 1.4px; height: 1.4px; opacity: 0.68; }
+.s35 { left: 31.25%; top: 20.27%; width: 3.2px; height: 3.2px; opacity: 0.8; }
+.s36 { left: 32.5%; top: 22.16%; width: 2.8px; height: 2.8px; opacity: 0.76; }
+.s37 { left: 58.33%; top: 8.11%; width: 3.4px; height: 3.4px; opacity: 0.8; }
+.s38 { left: 79.17%; top: 5.95%; width: 2.8px; height: 2.8px; opacity: 0.784; }
+.s39 { left: 47.0536%; top: 14.7729%; width: 0.68px; height: 0.68px; opacity: 0.4449; }
+.s40 { left: 46.6042%; top: 15.67%; width: 0.9px; height: 0.9px; opacity: 0.47; }
+.s41 { left: 44.9023%; top: 13.3155%; width: 0.98px; height: 0.98px; opacity: 0.509; }
+.s42 { left: 45.0162%; top: 13.8524%; width: 0.73px; height: 0.73px; opacity: 0.4503; }
+.s43 { left: 46.525%; top: 13.0056%; width: 0.67px; height: 0.67px; opacity: 0.4867; }
+.s44 { left: 50.0572%; top: 17.9287%; width: 0.7px; height: 0.7px; opacity: 0.4455; }
+.s45 { left: 49.1488%; top: 19.9323%; width: 0.59px; height: 0.59px; opacity: 0.4447; }
+.s46 { left: 49.4258%; top: 18.6025%; width: 0.52px; height: 0.52px; opacity: 0.502; }
+.s47 { left: 48.3891%; top: 17.4448%; width: 0.84px; height: 0.84px; opacity: 0.5212; }
+.s48 { left: 92.9361%; top: 24.5758%; width: 0.52px; height: 0.52px; opacity: 0.495; }
+.s49 { left: 71.7145%; top: 3.9037%; width: 0.49px; height: 0.49px; opacity: 0.7713; }
+.s50 { left: 51.9013%; top: 37.4681%; width: 2.04px; height: 2.04px; opacity: 0.3953; }
+.s51 { left: 90.9568%; top: 3.9747%; width: 0.44px; height: 0.44px; opacity: 0.7309; }
+.s52 { left: 56.7876%; top: 24.2314%; width: 0.93px; height: 0.93px; opacity: 0.5416; }
+.s53 { left: 37.2041%; top: 33.212%; width: 1.09px; height: 1.09px; opacity: 0.4312; }
+.s54 { left: 34.2625%; top: 20.2387%; width: 2.19px; height: 2.19px; opacity: 0.5547; }
+.s55 { left: 51.4709%; top: 41.6375%; width: 0.85px; height: 0.85px; opacity: 0.3337; }
+.s56 { left: 33.0479%; top: 39.2494%; width: 1.07px; height: 1.07px; opacity: 0.4094; }
+.s57 { left: 88.3889%; top: 8.7187%; width: 0.32px; height: 0.32px; opacity: 0.6543; }
+.s58 { left: 45.7698%; top: 19.7113%; width: 0.99px; height: 0.99px; opacity: 0.5404; }
+.s59 { left: 58.4573%; top: 33.845%; width: 0.9px; height: 0.9px; opacity: 0.4692; }
+.s60 { left: 85.5928%; top: 13.482%; width: 0.5px; height: 0.5px; opacity: 0.6001; }
+.s61 { left: 55.0036%; top: 12.4457%; width: 0.75px; height: 0.75px; opacity: 0.6548; }
+.s62 { left: 54.3061%; top: 7.8789%; width: 0.42px; height: 0.42px; opacity: 0.6741; }
+.s63 { left: 94.1969%; top: 4.0908%; width: 0.38px; height: 0.38px; opacity: 0.7475; }
+.s64 { left: 88.0652%; top: 23.4967%; width: 0.54px; height: 0.54px; opacity: 0.5203; }
+.s65 { left: 37.193%; top: 9.1292%; width: 0.31px; height: 0.31px; opacity: 0.6474; }
+.s66 { left: 76.5607%; top: 10.7621%; width: 0.51px; height: 0.51px; opacity: 0.6899; }
+.s67 { left: 34.7881%; top: 36.9844%; width: 0.45px; height: 0.45px; opacity: 0.4346; }
+.s68 { left: 98.1225%; top: 14.2675%; width: 0.81px; height: 0.81px; opacity: 0.628; }
+.s69 { left: 75.1962%; top: 11.3824%; width: 0.48px; height: 0.48px; opacity: 0.6649; }
+.s70 { left: 47.3296%; top: 29.5051%; width: 0.45px; height: 0.45px; opacity: 0.4762; }
+.s71 { left: 52.0147%; top: 31.084%; width: 1.05px; height: 1.05px; opacity: 0.4525; }
+.s72 { left: 58.751%; top: 15.3452%; width: 0.43px; height: 0.43px; opacity: 0.6442; }
+.s73 { left: 96.0126%; top: 35.293%; width: 0.91px; height: 0.91px; opacity: 0.3595; }
+.s74 { left: 94.5793%; top: 24.4346%; width: 0.52px; height: 0.52px; opacity: 0.5086; }
+.s75 { left: 59.7345%; top: 8.8108%; width: 0.4px; height: 0.4px; opacity: 0.7292; }
+.s76 { left: 81.3533%; top: 29.984%; width: 0.84px; height: 0.84px; opacity: 0.4662; }
+.s77 { left: 68.5995%; top: 28.1311%; width: 0.52px; height: 0.52px; opacity: 0.5084; }
+.s78 { left: 41.4556%; top: 9.9679%; width: 0.84px; height: 0.84px; opacity: 0.7085; }
+.s79 { left: 94.6441%; top: 37.5409%; width: 0.4px; height: 0.4px; opacity: 0.3689; }
+.s80 { left: 67.8354%; top: 33.2677%; width: 1.04px; height: 1.04px; opacity: 0.423; }
+.s81 { left: 32.5928%; top: 10.8903%; width: 0.5px; height: 0.5px; opacity: 0.6925; }
+.s82 { left: 72.288%; top: 33.1133%; width: 0.49px; height: 0.49px; opacity: 0.4782; }
+.s83 { left: 29.9238%; top: 18.3112%; width: 0.56px; height: 0.56px; opacity: 0.5954; }
+.s84 { left: 47.0831%; top: 15.5467%; width: 2.12px; height: 2.12px; opacity: 0.5998; }
+.s85 { left: 61.7199%; top: 7.887%; width: 0.36px; height: 0.36px; opacity: 0.7276; }
+.s86 { left: 81.4319%; top: 15.2103%; width: 0.3px; height: 0.3px; opacity: 0.5813; }
+.s87 { left: 46.928%; top: 26.7474%; width: 1.45px; height: 1.45px; opacity: 0.4964; }
+.s88 { left: 83.4164%; top: 5.7148%; width: 1.97px; height: 1.97px; opacity: 0.751; }
+.s89 { left: 68.1414%; top: 10.7713%; width: 0.46px; height: 0.46px; opacity: 0.6615; }
+.s90 { left: 63.1225%; top: 8.6663%; width: 1.74px; height: 1.74px; opacity: 0.7099; }
+.s91 { left: 84.3223%; top: 23.2676%; width: 0.37px; height: 0.37px; opacity: 0.4848; }
+.s92 { left: 98.3503%; top: 10.8105%; width: 1.73px; height: 1.73px; opacity: 0.666; }
+.s93 { left: 86.3696%; top: 8.7726%; width: 0.81px; height: 0.81px; opacity: 0.7317; }
+.s94 { left: 41.0618%; top: 41.1323%; width: 0.59px; height: 0.59px; opacity: 0.4093; }
+.s95 { left: 84.9148%; top: 33.2007%; width: 1.98px; height: 1.98px; opacity: 0.4263; }
+.s96 { left: 40.2895%; top: 8.4658%; width: 0.56px; height: 0.56px; opacity: 0.7128; }
+.s97 { left: 36.568%; top: 10.518%; width: 1.35px; height: 1.35px; opacity: 0.6461; }
+.s98 { left: 81.8375%; top: 15.3384%; width: 0.45px; height: 0.45px; opacity: 0.5667; }
+.s99 { left: 49.4981%; top: 41.9268%; width: 0.37px; height: 0.37px; opacity: 0.3696; }
+.s100 { left: 83.6887%; top: 23.5702%; width: 0.82px; height: 0.82px; opacity: 0.5491; }
+.s101 { left: 57.1186%; top: 38.0079%; width: 0.88px; height: 0.88px; opacity: 0.4302; }
+.s102 { left: 58.2806%; top: 40.7893%; width: 0.51px; height: 0.51px; opacity: 0.3053; }
+.s103 { left: 79.7653%; top: 46.9815%; width: 0.56px; height: 0.56px; opacity: 0.2483; }
+.s104 { left: 9.2238%; top: 48.1124%; width: 0.53px; height: 0.53px; opacity: 0.3338; }
+.s105 { left: 32.2237%; top: 51.8516%; width: 0.38px; height: 0.38px; opacity: 0.279; }
+.s106 { left: 79.9237%; top: 48.3732%; width: 0.52px; height: 0.52px; opacity: 0.286; }
+.s107 { left: 5.0737%; top: 50.1611%; width: 0.55px; height: 0.55px; opacity: 0.305; }
+.s108 { left: 22.3156%; top: 49.9947%; width: 0.36px; height: 0.36px; opacity: 0.293; }
+.s109 { left: 46.9098%; top: 49.19%; width: 0.51px; height: 0.51px; opacity: 0.3374; }
+.s110 { left: 20.7616%; top: 45.8495%; width: 0.52px; height: 0.52px; opacity: 0.3071; }
+.s111 { left: 41.9408%; top: 47.7696%; width: 0.44px; height: 0.44px; opacity: 0.3157; }
+.s112 { left: 73.8686%; top: 52.7516%; width: 0.37px; height: 0.37px; opacity: 0.2892; }
+.s113 { left: 83.9396%; top: 46.0969%; width: 0.42px; height: 0.42px; opacity: 0.249; }
+.s114 { left: 28.4544%; top: 48.4825%; width: 0.36px; height: 0.36px; opacity: 0.2949; }
+.s115 { left: 12.078%; top: 51.9686%; width: 0.33px; height: 0.33px; opacity: 0.2705; }
+.s116 { left: 70.2177%; top: 51.7197%; width: 0.35px; height: 0.35px; opacity: 0.2589; }
+.s117 { left: 9.6454%; top: 60.163%; width: 0.33px; height: 0.33px; opacity: 0.1294; }
+.s118 { left: 27.7536%; top: 56.1376%; width: 0.48px; height: 0.48px; opacity: 0.1277; }
+.s119 { left: 8.6933%; top: 57.6201%; width: 0.36px; height: 0.36px; opacity: 0.2012; }
+.s120 { left: 40.6713%; top: 59.7277%; width: 0.33px; height: 0.33px; opacity: 0.1384; }
+.s121 { left: 90.8592%; top: 61.7222%; width: 0.47px; height: 0.47px; opacity: 0.1685; }
+.s122 { left: 62.7051%; top: 57.8334%; width: 0.45px; height: 0.45px; opacity: 0.1396; }
+.s123 { left: 45.3013%; top: 60.1178%; width: 0.42px; height: 0.42px; opacity: 0.1495; }
+.s124 { left: 40.7533%; top: 60.1662%; width: 0.31px; height: 0.31px; opacity: 0.1731; }
+.s125 { left: 82.9515%; top: 60.1879%; width: 0.41px; height: 0.41px; opacity: 0.214; }
