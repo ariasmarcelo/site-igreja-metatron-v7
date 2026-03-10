@@ -539,9 +539,34 @@
 
 /* ─────────────────────────────────────────────
    PRINCIPLES — expandable vertical cards
+   Metallic blue / gold palette
    ───────────────────────────────────────────── */
 .ds-qs .qs-principles-section .qs-card {
-  border-top-color: var(--qs-accent);
+  border-top-color: #5A7D9A;
+}
+
+.ds-qs .qs-principles-icon {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.ds-qs .qs-principles-icon img {
+  filter:
+    drop-shadow(0 0 0.4px rgba(196, 148, 59, 0.6))
+    drop-shadow(0 0 6px rgba(196, 148, 59, 0.20))
+    drop-shadow(0 0 20px rgba(90, 125, 154, 0.15));
+}
+
+.ds-qs .qs-principles-section .qs-accordion-title {
+  text-align: center;
+  color: #4A6B8A;
+}
+
+.ds-qs .qs-principles-section .qs-accordion-summary {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto 28px;
 }
 
 .ds-qs .qs-principles-list {
@@ -554,16 +579,16 @@
 
 .ds-qs .qs-principle-card {
   background: var(--ds-bg-white);
-  border: 1px solid rgba(61, 123, 95, 0.15);
-  border-left: 3px solid var(--qs-accent);
+  border: 1px solid rgba(90, 125, 154, 0.18);
+  border-left: 3px solid #5A7D9A;
   border-radius: 0 var(--ds-radius-md) var(--ds-radius-md) 0;
   overflow: hidden;
   transition: border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .ds-qs .qs-principle-card:hover {
-  border-color: rgba(61, 123, 95, 0.3);
-  box-shadow: 0 2px 12px rgba(61, 123, 95, 0.08);
+  border-color: rgba(90, 125, 154, 0.35);
+  box-shadow: 0 2px 12px rgba(90, 125, 154, 0.10);
 }
 
 .ds-qs .qs-principle-header {
@@ -581,7 +606,7 @@
   height: 30px;
   min-width: 30px;
   border-radius: 50%;
-  background: var(--qs-accent);
+  background: linear-gradient(135deg, #5A7D9A, #4A6B8A);
   color: #fff;
   display: flex;
   align-items: center;
@@ -589,6 +614,7 @@
   font-size: 0.82rem;
   font-weight: 700;
   margin-top: 2px;
+  box-shadow: 0 1px 4px rgba(90, 125, 154, 0.25);
 }
 
 .ds-qs .qs-principle-meta {
@@ -597,19 +623,21 @@
 }
 
 .ds-qs .qs-principle-title {
+  display: block;
   font-family: 'Playfair Display', serif;
-  font-size: clamp(0.95rem, 2.5vw, 1.1rem);
+  font-size: clamp(0.95rem, 2.3vw, 1.1rem);
   font-weight: 600;
-  color: var(--ds-text-dark);
+  color: #3D5A73;
   line-height: 1.3;
-  margin-bottom: 4px;
+  margin-bottom: 8px;
 }
 
 .ds-qs .qs-principle-summary {
-  font-size: clamp(0.82rem, 2vw, 0.88rem);
+  display: block;
+  font-size: clamp(0.88rem, 2.2vw, 0.98rem);
   font-style: italic;
-  color: var(--qs-accent-muted);
-  line-height: 1.5;
+  color: var(--ds-gold-muted);
+  line-height: 1.55;
   letter-spacing: 0.01em;
 }
 
@@ -617,7 +645,7 @@
   width: 20px;
   height: 20px;
   min-width: 20px;
-  color: var(--qs-accent-muted);
+  color: #8AABB8;
   transition: transform 0.3s ease;
   margin-top: 4px;
 }
@@ -640,14 +668,14 @@
 
 .ds-qs .qs-principle-body p,
 .ds-qs .qs-principle-body span {
-  font-size: clamp(0.85rem, 2vw, 0.92rem);
+  font-size: clamp(0.88rem, 2.2vw, 0.95rem);
   color: var(--ds-text-muted);
   line-height: 1.75;
 }
 
 .ds-qs .qs-principle-card[data-open="true"] {
-  background: var(--qs-accent-bg-subtle);
-  border-left-color: var(--qs-accent-dark);
+  background: rgba(90, 125, 154, 0.04);
+  border-left-color: var(--ds-sacred-gold);
 }
 
 /* ─────────────────────────────────────────────

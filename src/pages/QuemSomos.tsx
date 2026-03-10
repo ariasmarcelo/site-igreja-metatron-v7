@@ -9,7 +9,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   BookOpen, Sparkles, Stethoscope, ChevronDown,
-  Compass, ScrollText, Layers,
+  Compass, Layers,
 } from 'lucide-react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import EditableField from '@/components/ui/EditableField';
@@ -277,8 +277,12 @@ export default function QuemSomos() {
       {/* ==================== PRINCÍPIOS E VALORES ==================== */}
       <section className="qs-section qs-principles-section">
         <div className="qs-card max-w-section mx-auto">
-          <div className="qs-accordion-icon">
-            <ScrollText className="w-10 h-10" />
+          <div className="qs-principles-icon">
+            <img
+              src="/logo-metatron-sem-asas-gold.svg"
+              alt="Logo Igreja de Metatron"
+              className="w-14 h-14"
+            />
           </div>
           <EditableField
             value={texts.principios_unificados?.title}
