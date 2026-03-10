@@ -1,53 +1,96 @@
-/* Animações de ondas para footers */
+/*
+ * Footer: ondas animadas + posicionamento de ícones celestes
+ * Ondas: 3 camadas com fase, amplitude e opacidade distintas
+ * Expansão (crista) → mais translúcido | Contração (vale) → mais opaco
+ */
+
+/* ── Keyframes das ondas ─────────────────────────────────────────────── */
+
 @keyframes wave-1 {
   0%, 100% {
     transform: translateX(0) translateY(0);
+    opacity: 0.85;
   }
   25% {
-    transform: translateX(-40px) translateY(-12px);
+    transform: translateX(-40px) translateY(-14px);
+    opacity: 0.55;
   }
   75% {
     transform: translateX(0) translateY(20px);
+    opacity: 1;
   }
 }
 
 @keyframes wave-2 {
   0%, 100% {
     transform: translateX(0) translateY(0);
+    opacity: 0.85;
   }
   25% {
-    transform: translateX(40px) translateY(-16px);
+    transform: translateX(40px) translateY(-18px);
+    opacity: 0.5;
   }
   75% {
     transform: translateX(0) translateY(24px);
+    opacity: 1;
   }
 }
 
 @keyframes wave-3 {
   0%, 100% {
     transform: translateX(0) translateY(0);
+    opacity: 0.85;
   }
   25% {
-    transform: translateX(-30px) translateY(-14px);
+    transform: translateX(-30px) translateY(-16px);
+    opacity: 0.55;
   }
   75% {
     transform: translateX(0) translateY(22px);
+    opacity: 1;
   }
 }
 
+/* ── Classes de animação ─────────────────────────────────────────────── */
+
 .animate-wave-1 {
   animation: wave-1 6s ease-in-out infinite;
-  will-change: transform;
+  will-change: transform, opacity;
 }
 
 .animate-wave-2 {
   animation: wave-2 7s ease-in-out infinite;
   animation-delay: 0.5s;
-  will-change: transform;
+  will-change: transform, opacity;
 }
 
 .animate-wave-3 {
   animation: wave-3 8s ease-in-out infinite;
   animation-delay: 1s;
-  will-change: transform;
+  will-change: transform, opacity;
+}
+
+/* ── Ícones celestes (sol/lua) — posicionamento via CSS, tamanho via --icon-size ── */
+
+.footer-icon-left,
+.footer-icon-right {
+  position: absolute;
+  z-index: 10;
+  width: var(--icon-size, 80px);
+  height: var(--icon-size, 80px);
+  top: calc(1rem + (80px - var(--icon-size, 80px)) / 2);
+}
+
+.footer-icon-left > *,
+.footer-icon-right > * {
+  width: 100%;
+  height: 100%;
+}
+
+.footer-icon-left {
+  left: clamp(1px, calc((100vw - 320px) * 0.035), 2rem);
+}
+
+.footer-icon-right {
+  right: clamp(1px, calc((100vw - 320px) * 0.035), 2rem);
 }

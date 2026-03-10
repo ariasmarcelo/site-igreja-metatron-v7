@@ -2,6 +2,12 @@
  * Componente de Background padronizado para footers
  * Horizonte terrestre: céu (gradiente) + estrelas + terra + ondas de água animadas
  * Cada página passa suas próprias cores para progressão noite→dia
+ *
+ * Elementos compartilhados (idênticos em todos os footers):
+ *   - Estrelas, montanhas, forma das ondas, sol/lua default
+ * Elementos variáveis por página:
+ *   - skyColors, earthColor, waterColors (props de cor)
+ *   - leftIcon / rightIcon / tamanhos (props de ícones celestes)
  */
 
 import { FOOTER } from './footer-constants';
@@ -11,14 +17,6 @@ import { FOOTER } from './footer-constants';
  * Renderizadas como divs HTML para manter forma circular perfeita
  * (o SVG da paisagem usa preserveAspectRatio="none" que distorceria circles).
  * Cada estrela: [x%, y%, tamanho em px, opacidade]
- *
- * Referências do hemisfério sul:
- * - Via Láctea: faixa densa diagonal (esquerda → centro)
- * - Cruzeiro do Sul: constelação compacta (~27%, 20%)
- * - Alpha/Beta Centauri: par brilhante (~31-32%, 20-22%)
- * - Canopus: 2ª mais brilhante (~58%, 8%)
- * - Achernar: brilhante isolada (~79%, 6%)
- * - Nuvens de Magalhães: clusters difusos (~45-50%, 13-20%)
  */
 const STARS: [number, number, number, number][] = [
   // ═══ VIA LÁCTEA — faixa densa diagonal ═══
@@ -34,29 +32,25 @@ const STARS: [number, number, number, number][] = [
   [9.0775, 29.9157, 1.75, 0.5273], [19.2722, 2, 0.56, 0.7819], [23.6474, 2, 1.06, 0.6992],
 
   // ═══ CRUZEIRO DO SUL ═══
-  [26.67, 23.78, 2.8, 0.8],    // Acrux (Alpha Crucis) — base
-  [27.33, 19.46, 2.6, 0.784],  // Mimosa (Beta Crucis)
-  [26, 21.08, 2.2, 0.76],      // Gacrux (Gamma)
-  [26.67, 17.57, 2.6, 0.784],  // Delta Crucis
-  [27.92, 25.68, 1.4, 0.68],   // Epsilon Crucis (5ª, menor)
+  [26.67, 23.78, 2.8, 0.8], [27.33, 19.46, 2.6, 0.784], [26, 21.08, 2.2, 0.76],
+  [26.67, 17.57, 2.6, 0.784], [27.92, 25.68, 1.4, 0.68],
 
-  // ═══ ALPHA & BETA CENTAURI (ponteiros) ═══
-  [31.25, 20.27, 3.2, 0.8],    // Alpha Centauri
-  [32.5, 22.16, 2.8, 0.76],    // Beta Centauri (Hadar)
+  // ═══ ALPHA & BETA CENTAURI ═══
+  [31.25, 20.27, 3.2, 0.8], [32.5, 22.16, 2.8, 0.76],
 
-  // ═══ CANOPUS — 2ª mais brilhante do céu ═══
+  // ═══ CANOPUS ═══
   [58.33, 8.11, 3.4, 0.8],
 
   // ═══ ACHERNAR ═══
   [79.17, 5.95, 2.8, 0.784],
 
-  // ═══ NUVENS DE MAGALHÃES (clusters difusos) ═══
+  // ═══ NUVENS DE MAGALHÃES ═══
   [47.0536, 14.7729, 0.68, 0.4449], [46.6042, 15.67, 0.9, 0.47], [44.9023, 13.3155, 0.98, 0.509],
   [45.0162, 13.8524, 0.73, 0.4503], [46.525, 13.0056, 0.67, 0.4867],
   [50.0572, 17.9287, 0.7, 0.4455], [49.1488, 19.9323, 0.59, 0.4447], [49.4258, 18.6025, 0.52, 0.502],
   [48.3891, 17.4448, 0.84, 0.5212],
 
-  // ═══ DISPERSAS — campo aberto (pseudo-aleatória) ═══
+  // ═══ DISPERSAS ═══
   [92.9361, 24.5758, 0.52, 0.495], [71.7145, 3.9037, 0.49, 0.7713], [51.9013, 37.4681, 2.04, 0.3953],
   [90.9568, 3.9747, 0.44, 0.7309], [56.7876, 24.2314, 0.93, 0.5416], [37.2041, 33.212, 1.09, 0.4312],
   [34.2625, 20.2387, 2.19, 0.5547], [51.4709, 41.6375, 0.85, 0.3337], [33.0479, 39.2494, 1.07, 0.4094],
@@ -84,7 +78,7 @@ const STARS: [number, number, number, number][] = [
   [73.8686, 52.7516, 0.37, 0.2892], [83.9396, 46.0969, 0.42, 0.249], [28.4544, 48.4825, 0.36, 0.2949],
   [12.078, 51.9686, 0.33, 0.2705], [70.2177, 51.7197, 0.35, 0.2589],
 
-  // Sub-horizonte — terra cobre a maioria, visíveis nas bordas laterais
+  // Sub-horizonte
   [9.6454, 60.163, 0.33, 0.1294], [27.7536, 56.1376, 0.48, 0.1277], [8.6933, 57.6201, 0.36, 0.2012],
   [40.6713, 59.7277, 0.33, 0.1384], [90.8592, 61.7222, 0.47, 0.1685], [62.7051, 57.8334, 0.45, 0.1396],
   [45.3013, 60.1178, 0.42, 0.1495], [40.7533, 60.1662, 0.31, 0.1731], [82.9515, 60.1879, 0.41, 0.214],
@@ -127,25 +121,23 @@ const DefaultMoon = ({ maskId }: { maskId: string }) => (
 
 interface FooterBackgroundProps {
   gradientId?: string;
-  /** Cores do gradiente de céu [topo, meio, base/horizonte] */
   skyColors?: [string, string, string];
-  /** Cor da terra/horizonte */
   earthColor?: string;
-  /** Cores das 3 camadas de água [onda1, onda2, onda3] */
   waterColors?: [string, string, string];
-  /** Ícone esquerdo — padrão: Sol dourado */
   leftIcon?: React.ReactNode;
-  /** Ícone direito — padrão: Lua crescente */
   rightIcon?: React.ReactNode;
-  /** Tamanho do ícone esquerdo em px — padrão: 80 */
   leftIconSize?: number;
-  /** Tamanho do ícone direito em px — padrão: 80 */
   rightIconSize?: number;
 }
 
-// Defaults: azul médio (design original, usado por Purificação)
 const defaultSky: [string, string, string] = ['#1e3a5f', '#2563eb', '#38bdf8'];
 const defaultWater: [string, string, string] = ['#3b82f6', '#2563eb', '#1d4ed8'];
+
+/**
+ * Constante usada para estender as ondas abaixo do viewBox visível.
+ * Garante que a borda inferior NUNCA fique visível durante a animação.
+ */
+const WAVE_BOTTOM = 580;
 
 export const FooterBackground = ({
   gradientId = "skyGradient",
@@ -160,7 +152,7 @@ export const FooterBackground = ({
 
   return (
     <div className="absolute inset-0 z-0 overflow-hidden">
-      {/* CAMADA 1 — Gradiente do céu (fundo) */}
+      {/* CAMADA 1 — Gradiente do céu */}
       <svg
         className="absolute left-1/2 -translate-x-1/2 h-full w-[max(100%,1200px)] z-0"
         viewBox={`0 0 1200 ${FOOTER.viewBoxHeight}`}
@@ -177,7 +169,7 @@ export const FooterBackground = ({
         <rect width="1200" height={FOOTER.viewBoxHeight} fill={`url(#${gradientId})`} />
       </svg>
 
-      {/* CAMADA 2 — Estrelas (divs circulares sobre o gradiente) */}
+      {/* CAMADA 2 — Estrelas (divs circulares — forma circular perfeita apesar de preserveAspectRatio="none" no SVG) */}
       {STARS.map(([xPct, yPct, size, opacity], i) => (
         <div
           key={`s${i}`}
@@ -186,25 +178,26 @@ export const FooterBackground = ({
         />
       ))}
 
-      {/* ÍCONES CELESTES */}
+      {/* ÍCONES CELESTES — posicionamento via CSS classes + custom property para tamanho */}
       <div
-        className="absolute z-10 drop-shadow-lg [&>*]:w-full [&>*]:h-full"
-        style={{ top: `calc(1rem + ${(80 - leftIconSize) / 2}px)`, left: 'clamp(1px, calc((100vw - 320px) * 0.035), 2rem)', width: leftIconSize, height: leftIconSize }}
+        className="footer-icon-left drop-shadow-lg"
+        style={{ '--icon-size': `${leftIconSize}px` } as React.CSSProperties}
       >
         {leftIcon ?? <DefaultSun />}
       </div>
       <div
-        className="absolute z-10 [&>*]:w-full [&>*]:h-full"
-        style={{ top: `calc(1rem + ${(80 - rightIconSize) / 2}px)`, right: 'clamp(1px, calc((100vw - 320px) * 0.035), 2rem)', width: rightIconSize, height: rightIconSize }}
+        className="footer-icon-right"
+        style={{ '--icon-size': `${rightIconSize}px` } as React.CSSProperties}
       >
         {rightIcon ?? <DefaultMoon maskId={`crescentMask_${gradientId}`} />}
       </div>
 
-      {/* CAMADA 3 — Terra + Água (cobre estrelas abaixo do horizonte) */}
+      {/* CAMADA 3 — Terra + Água (overflow visible para ondas abaixo do viewBox) */}
       <svg
         className="absolute left-1/2 -translate-x-1/2 h-full w-[max(100%,1200px)] z-2"
         viewBox={`0 0 1200 ${FOOTER.viewBoxHeight}`}
         preserveAspectRatio="none"
+        overflow="visible"
         xmlns="http://www.w3.org/2000/svg"
       >
         {/* Back mountain range */}
@@ -212,7 +205,7 @@ export const FooterBackground = ({
           d="M0,381 Q75,350 150,322 Q225,361 300,300 Q375,322 450,269 Q525,294 600,244 Q675,277 750,260 Q825,311 900,292 Q975,339 1050,319 Q1125,361 1200,378 L1200,518 L0,518 Z"
           fill="#3d5a4a"
         />
-        {/* Valley surface between mountain ranges */}
+        {/* Valley surface */}
         <path
           d="M0,386 Q150,364 300,333 Q450,319 600,296 Q750,314 900,325 Q1050,352 1200,384 L1200,518 L0,518 Z"
           fill="#2d4a3a"
@@ -222,37 +215,40 @@ export const FooterBackground = ({
           d="M0,389 Q100,372 200,344 Q275,378 350,322 Q425,350 500,292 Q550,311 600,274 Q650,300 700,280 Q800,328 900,311 Q975,356 1050,339 Q1100,372 1200,386 L1200,518 L0,518 Z"
           fill="#2d4a3a"
         />
-        {/* Wave gradient definitions — transparent at crest, colored at depth */}
+
+        {/* Gradientes das ondas — transparente na crista, colorido na profundidade */}
         <defs>
-          <linearGradient id={`${gradientId}_wg1`} gradientUnits="userSpaceOnUse" x1="0" y1="392" x2="0" y2="518">
+          <linearGradient id={`${gradientId}_wg1`} gradientUnits="userSpaceOnUse" x1="0" y1="385" x2="0" y2="518">
             <stop offset="0%" stopColor={waterColors[0]} stopOpacity="0" />
-            <stop offset="40%" stopColor={waterColors[0]} stopOpacity="0.2" />
+            <stop offset="35%" stopColor={waterColors[0]} stopOpacity="0.2" />
             <stop offset="100%" stopColor={waterColors[0]} stopOpacity="0.5" />
           </linearGradient>
-          <linearGradient id={`${gradientId}_wg2`} gradientUnits="userSpaceOnUse" x1="0" y1="399" x2="0" y2="518">
+          <linearGradient id={`${gradientId}_wg2`} gradientUnits="userSpaceOnUse" x1="0" y1="393" x2="0" y2="518">
             <stop offset="0%" stopColor={waterColors[1]} stopOpacity="0" />
-            <stop offset="40%" stopColor={waterColors[1]} stopOpacity="0.25" />
+            <stop offset="35%" stopColor={waterColors[1]} stopOpacity="0.25" />
             <stop offset="100%" stopColor={waterColors[1]} stopOpacity="0.55" />
           </linearGradient>
-          <linearGradient id={`${gradientId}_wg3`} gradientUnits="userSpaceOnUse" x1="0" y1="406" x2="0" y2="518">
+          <linearGradient id={`${gradientId}_wg3`} gradientUnits="userSpaceOnUse" x1="0" y1="399" x2="0" y2="518">
             <stop offset="0%" stopColor={waterColors[2]} stopOpacity="0" />
-            <stop offset="40%" stopColor={waterColors[2]} stopOpacity="0.3" />
+            <stop offset="35%" stopColor={waterColors[2]} stopOpacity="0.3" />
             <stop offset="100%" stopColor={waterColors[2]} stopOpacity="0.6" />
           </linearGradient>
         </defs>
+
+        {/* Ondas — cristas +15% mais altas, base em y=580 (abaixo do viewport) */}
         <path
           className="animate-wave-1"
-          d="M-100,482 Q600,398 1300,482 L1300,518 L-100,518 Z"
+          d="M-100,482 Q600,385 1300,482 L1300,580 L-100,580 Z"
           fill={`url(#${gradientId}_wg1)`}
         />
         <path
           className="animate-wave-2"
-          d="M-100,490 Q600,406 1300,490 L1300,518 L-100,518 Z"
+          d="M-100,490 Q600,393 1300,490 L1300,580 L-100,580 Z"
           fill={`url(#${gradientId}_wg2)`}
         />
         <path
           className="animate-wave-3"
-          d="M-100,496 Q600,412 1300,496 L1300,518 L-100,518 Z"
+          d="M-100,496 Q600,399 1300,496 L1300,580 L-100,580 Z"
           fill={`url(#${gradientId}_wg3)`}
         />
       </svg>
