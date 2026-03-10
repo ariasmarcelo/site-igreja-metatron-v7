@@ -248,13 +248,16 @@
 }
 
 .ds-qs .qs-manifesto-item {
+  position: relative;
+  display: flex;
+  align-items: center;
   text-align: left;
-  padding: 18px 24px;
+  padding: 18px 24px 18px 40px;
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-left: 3px solid var(--ds-gold-light);
   background: rgba(196, 148, 59, 0.08);
   border-radius: 0 var(--ds-radius-sm) var(--ds-radius-sm) 0;
-  font-size: clamp(0.95rem, 2.3vw, 1.1rem);
+  font-size: 1rem;
   color: #FFFFFF;
   line-height: 1.7;
   transition: background 0.3s ease, box-shadow 0.3s ease;
@@ -268,11 +271,69 @@
     0 0 16px rgba(220, 220, 230, 0.08);
 }
 
+.ds-qs .qs-manifesto-number {
+  position: absolute;
+  left: 0;
+  top: 14px;
+  transform: translate(calc(-50% - 1.5px), 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 33px;
+  height: 33px;
+  min-width: 33px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #E8C547, #C4943B 50%, #8B6914 100%);
+  color: #1a1a2e;
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  font-variant-numeric: lining-nums;
+  line-height: 1;
+  box-shadow:
+    0 0 6px rgba(232, 197, 71, 0.5),
+    0 0 14px rgba(196, 148, 59, 0.35),
+    0 0 28px rgba(196, 148, 59, 0.15),
+    inset 0 1px 2px rgba(255, 255, 255, 0.35);
+  text-shadow: none;
+  z-index: 2;
+}
+
+.ds-qs .qs-manifesto-number::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(232, 197, 71, 0.35);
+  box-shadow: 0 0 8px rgba(232, 197, 71, 0.2);
+}
+
+.ds-qs .qs-manifesto-number::after {
+  content: '';
+  position: absolute;
+  inset: -9px;
+  border-radius: 50%;
+  border: 1px solid rgba(232, 197, 71, 0.15);
+}
+
+.ds-qs .qs-manifesto-item p {
+  flex: 1;
+  min-width: 0;
+}
+
 .ds-qs .qs-manifesto-item:hover {
   background: rgba(196, 148, 59, 0.14);
   box-shadow:
     0 0 8px rgba(255, 255, 255, 0.20),
     0 0 16px rgba(220, 220, 230, 0.12);
+}
+
+.ds-qs .qs-manifesto-item:hover .qs-manifesto-number {
+  box-shadow:
+    0 0 8px rgba(232, 197, 71, 0.65),
+    0 0 18px rgba(196, 148, 59, 0.45),
+    0 0 32px rgba(196, 148, 59, 0.2),
+    inset 0 1px 2px rgba(255, 255, 255, 0.35);
 }
 
 /* ─────────────────────────────────────────────
@@ -705,7 +766,7 @@
 
 .ds-qs .qs-hermeticos-section .qs-accordion-summary {
   text-align: center;
-  max-width: 720px;
+  max-width: 750px;
   margin: 0 auto 28px;
 }
 
