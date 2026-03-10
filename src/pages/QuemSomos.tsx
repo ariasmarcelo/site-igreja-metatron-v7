@@ -9,9 +9,8 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   BookOpen, Sparkles, Stethoscope, ChevronDown,
-  Compass, Layers,
+  Layers,
 } from 'lucide-react';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import EditableField from '@/components/ui/EditableField';
 import { useGlossary } from '@/hooks/useGlossary';
 import { usePageContent } from '@/hooks/useContent';
@@ -73,9 +72,19 @@ export default function QuemSomos() {
 
   const [magiaOpen, setMagiaOpen] = useState(false);
   const [openPrinciples, setOpenPrinciples] = useState<Set<number>>(new Set());
+  const [openHermeticos, setOpenHermeticos] = useState<Set<number>>(new Set());
 
   const togglePrinciple = (idx: number) => {
     setOpenPrinciples(prev => {
+      const next = new Set(prev);
+      if (next.has(idx)) next.delete(idx);
+      else next.add(idx);
+      return next;
+    });
+  };
+
+  const toggleHermetic = (idx: number) => {
+    setOpenHermeticos(prev => {
       const next = new Set(prev);
       if (next.has(idx)) next.delete(idx);
       else next.add(idx);
@@ -350,11 +359,15 @@ export default function QuemSomos() {
         </div>
       </section>
 
-      {/* ==================== FUNDAMENTOS HERMÉTICOS ==================== */}
-      <section className="qs-section qs-accordion-section">
+      {/* ==================== PRINCÍPIOS HERMÉTICOS ==================== */}
+      <section className="qs-section qs-hermeticos-section">
         <div className="qs-card max-w-section mx-auto">
-          <div className="qs-accordion-icon">
-            <Compass className="w-10 h-10" />
+          <div className="qs-hermeticos-icon">
+            <img
+              src="/logo-metatron-sem-asas-gold.svg"
+              alt="Logo Igreja de Metatron"
+              className="w-14 h-14"
+            />
           </div>
           <EditableField
             value={texts.hermeticos?.title}
@@ -362,14 +375,6 @@ export default function QuemSomos() {
             type="h2"
             className="qs-accordion-title"
           />
-          {texts.hermeticos?.subtitle && (
-            <EditableField
-              value={texts.hermeticos.subtitle}
-              jsonKey="quemsomos.hermeticos.subtitle"
-              type="p"
-              className="qs-accordion-summary"
-            />
-          )}
           <EditableField
             value={texts.hermeticos?.summary}
             jsonKey="quemsomos.hermeticos.summary"
@@ -377,47 +382,53 @@ export default function QuemSomos() {
             className="qs-accordion-summary"
           />
 
-          <div className="qs-accordion-wrapper">
-            <Accordion type="multiple">
-              {Array.from({ length: 7 }).map((_, idx) => {
-                const item = texts.hermeticos?.items?.[idx] || { number: String(idx + 1), title: '', description: '' };
-                return (
-                  <AccordionItem
-                    key={idx}
-                    value={`hermetico-${idx}`}
-                    className="qs-accordion-item border-0"
+          <div className="qs-hermeticos-list">
+            {Array.from({ length: 7 }).map((_, idx) => {
+              const item = texts.hermeticos?.items?.[idx] || { number: String(idx + 1), title: '', quote: '', description: '' };
+              const isOpen = openHermeticos.has(idx);
+              return (
+                <div
+                  key={idx}
+                  className="qs-hermetic-card"
+                  data-open={isOpen}
+                >
+                  <div
+                    className="qs-hermetic-header"
+                    onClick={() => toggleHermetic(idx)}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') toggleHermetic(idx); }}
                   >
-                    <AccordionTrigger className="qs-accordion-trigger hover:no-underline [&>svg]:text-(--qs-accent-muted) [&>svg]:w-5 [&>svg]:h-5">
-                      <span className="qs-accordion-number">{item.number || idx + 1}</span>
+                    <span className="qs-hermetic-number">{item.number || idx + 1}</span>
+                    <div className="qs-hermetic-meta">
                       <EditableField
                         value={item.title}
                         jsonKey={`quemsomos.hermeticos.items[${idx}].title`}
                         type="span"
-                        className=""
+                        className="qs-hermetic-title"
                       />
-                    </AccordionTrigger>
-                    <AccordionContent className="qs-accordion-content">
                       {item.quote && (
-                        <div className="qs-accordion-quote">
-                          &ldquo;<EditableField
-                            value={item.quote}
-                            jsonKey={`quemsomos.hermeticos.items[${idx}].quote`}
-                            type="span"
-                            className="inline"
-                          />&rdquo;
-                        </div>
+                        <EditableField
+                          value={item.quote}
+                          jsonKey={`quemsomos.hermeticos.items[${idx}].quote`}
+                          type="span"
+                          className="qs-hermetic-quote"
+                        />
                       )}
-                      <EditableField
-                        value={item.description}
-                        jsonKey={`quemsomos.hermeticos.items[${idx}].description`}
-                        type="p"
-                        className=""
-                      />
-                    </AccordionContent>
-                  </AccordionItem>
-                );
-              })}
-            </Accordion>
+                    </div>
+                    <ChevronDown className={`qs-hermetic-chevron ${isOpen ? 'open' : ''}`} />
+                  </div>
+                  <div className={`qs-hermetic-body ${isOpen ? 'open' : ''}`}>
+                    <EditableField
+                      value={item.description}
+                      jsonKey={`quemsomos.hermeticos.items[${idx}].description`}
+                      type="p"
+                      className="whitespace-pre-line"
+                    />
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
