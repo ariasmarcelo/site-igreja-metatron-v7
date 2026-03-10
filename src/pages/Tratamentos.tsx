@@ -562,9 +562,9 @@ export default function Tratamentos() {
         <div className="relative">
           <FooterBackground
             gradientId="skyGradTrat"
-            skyColors={['#0F1D2F', '#162840', '#1A3550']}
-            earthColor="#1a1508"
-            waterColors={['#0a3a4a', '#083040', '#062530']}
+            skyColors={['#1E3A5F', '#4B6CB7', '#D4A843']}
+            earthColor="#5c4a30"
+            waterColors={['#0ea5e9', '#0284c7', '#0369a1']}
           />
 
           <div className={FOOTER.containerClass}>

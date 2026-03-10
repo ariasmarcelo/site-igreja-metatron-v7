@@ -172,32 +172,6 @@ export default function QuemSomos() {
         </div>
       </section>
 
-      {/* ==================== BUDDHA QUOTE CALLOUT ==================== */}
-      <section className="qs-section qs-buddha-section">
-        <div className="qs-buddha-card max-w-section mx-auto">
-          <div className="qs-buddha-block">
-            <EditableField
-              value={texts.manifesto?.buddhaIntro}
-              jsonKey="quemsomos.manifesto.buddhaIntro"
-              type="p"
-              className="qs-buddha-intro"
-            />
-            <EditableField
-              value={texts.manifesto?.buddhaQuote}
-              jsonKey="quemsomos.manifesto.buddhaQuote"
-              type="p"
-              className="qs-buddha-quote whitespace-pre-line"
-            />
-            <EditableField
-              value={texts.manifesto?.buddhaAttribution}
-              jsonKey="quemsomos.manifesto.buddhaAttribution"
-              type="p"
-              className="qs-buddha-attribution"
-            />
-          </div>
-        </div>
-      </section>
-
       {/* ==================== MANIFESTO DE PRINCÍPIOS ==================== */}
       <section className="qs-section qs-manifesto-section">
         <div className="max-w-section mx-auto">
@@ -227,6 +201,7 @@ export default function QuemSomos() {
           <div className="qs-manifesto-items">
             {(texts.manifesto?.items || []).map((item: string, idx: number) => (
               <div key={idx} className="qs-manifesto-item">
+                <span className="qs-manifesto-number">{idx + 1}</span>
                 <EditableField
                   value={item}
                   jsonKey={`quemsomos.manifesto.items[${idx}]`}
@@ -235,6 +210,32 @@ export default function QuemSomos() {
                 />
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ==================== BUDDHA QUOTE CALLOUT ==================== */}
+      <section className="qs-section qs-buddha-section">
+        <div className="qs-buddha-card max-w-section mx-auto">
+          <div className="qs-buddha-block">
+            <EditableField
+              value={texts.manifesto?.buddhaIntro}
+              jsonKey="quemsomos.manifesto.buddhaIntro"
+              type="p"
+              className="qs-buddha-intro"
+            />
+            <EditableField
+              value={texts.manifesto?.buddhaQuote}
+              jsonKey="quemsomos.manifesto.buddhaQuote"
+              type="p"
+              className="qs-buddha-quote whitespace-pre-line"
+            />
+            <EditableField
+              value={texts.manifesto?.buddhaAttribution}
+              jsonKey="quemsomos.manifesto.buddhaAttribution"
+              type="p"
+              className="qs-buddha-attribution"
+            />
           </div>
         </div>
       </section>
@@ -542,9 +543,9 @@ export default function QuemSomos() {
         <div className="relative">
           <FooterBackground
             gradientId="skyGradientQuemSomos"
-            skyColors={['#60a5fa', '#93c5fd', '#bae6fd']}
+            skyColors={['#3B82F6', '#60A5FA', '#93CFFD']}
             earthColor="#7c6a42"
-            waterColors={['#34d399', '#10b981', '#059669']}
+            waterColors={['#22C55E', '#16A34A', '#15803D']}
           />
 
           <div className={FOOTER.containerClass}>

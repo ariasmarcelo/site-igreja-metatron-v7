@@ -22,10 +22,7 @@ interface Testimonial {
 const CATEGORIES = [
   { id: 'all', labelPt: 'Todos', labelEn: 'All' },
   { id: 'tratamento', labelPt: 'Tratamento Terapêutico', labelEn: 'Therapeutic Treatment' },
-  { id: 'transformacao', labelPt: 'Transformação Pessoal', labelEn: 'Personal Transformation' },
-  { id: 'cura-espiritual', labelPt: 'Cura Espiritual', labelEn: 'Spiritual Healing' },
-  { id: 'purificacao', labelPt: 'Purificação', labelEn: 'Purification' },
-  { id: 'desobsessao', labelPt: 'Desobsessão', labelEn: 'Disobsession' },
+  { id: 'espiritual', labelPt: 'Tratamento Espiritual', labelEn: 'Spiritual Treatment' },
 ] as const;
 
 function getCategoryLabel(categoryId: string | undefined, lang: string): string {
@@ -280,9 +277,9 @@ const Testemunhos = () => {
         <div className="relative">
           <FooterBackground
             gradientId="skyGradientTestemunhos"
-            skyColors={['#1a1520', '#2a1f15', '#3a2a20']}
-            earthColor="#2a1f10"
-            waterColors={['#0a3a3a', '#083030', '#062525']}
+            skyColors={['#60A5FA', '#93CFFD', '#BAE6FD']}
+            earthColor="#8B7A50"
+            waterColors={['#34D399', '#10B981', '#059669']}
           />
 
           <div className={FOOTER.containerClass}>
