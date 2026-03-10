@@ -501,7 +501,7 @@ export default function Purificacao() {
       {/* Rodapé — paisagem padronizada */}
       <footer className={FOOTER.sectionClass}>
         <div className="relative">
-          <FooterBackground gradientId="skyGradientPurificacao" skyColors={['#0F1D35', '#182D4A', '#1E3855']} earthColor="#1a1a10" waterColors={['#083848', '#063040', '#052830']} />
+          <FooterBackground gradientId="skyGradientPurificacao" skyColors={['#0F1D35', '#182D4A', '#1E3855']} earthColor="#1a1a10" waterColors={['#0d3650', '#0a2d44', '#082538']} />
 
           <div className={FOOTER.containerClass}>
             <div className="max-w-section mx-auto text-center">

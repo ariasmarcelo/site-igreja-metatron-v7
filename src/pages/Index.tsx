@@ -401,7 +401,7 @@ export default function Index() {
             gradientId="skyGradIndex"
             skyColors={['#0C1520', '#071020', '#091830']}
             earthColor="#1a1508"
-            waterColors={['#0a3a3a', '#072e2e', '#052222']}
+            waterColors={['#0a2a3d', '#081f30', '#061825']}
           />
 
           <div className={FOOTER.containerClass}>

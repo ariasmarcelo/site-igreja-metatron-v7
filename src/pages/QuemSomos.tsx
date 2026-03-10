@@ -545,7 +545,7 @@ export default function QuemSomos() {
             gradientId="skyGradientQuemSomos"
             skyColors={['#3B82F6', '#60A5FA', '#93CFFD']}
             earthColor="#7c6a42"
-            waterColors={['#22C55E', '#16A34A', '#15803D']}
+            waterColors={['#38bdf8', '#0ea5e9', '#0284c7']}
           />
 
           <div className={FOOTER.containerClass}>

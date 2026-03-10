@@ -279,7 +279,7 @@ const Testemunhos = () => {
             gradientId="skyGradientTestemunhos"
             skyColors={['#60A5FA', '#93CFFD', '#BAE6FD']}
             earthColor="#8B7A50"
-            waterColors={['#34D399', '#10B981', '#059669']}
+            waterColors={['#7dd3fc', '#38bdf8', '#0ea5e9']}
           />
 
           <div className={FOOTER.containerClass}>
