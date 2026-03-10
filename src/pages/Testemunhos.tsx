@@ -1,232 +1,288 @@
+import { useState, useMemo } from 'react';
 import { usePageContent } from '@/hooks/useContent';
 import { FooterBackground } from '@/components/FooterBackground';
 import { FOOTER } from '@/components/footer-constants';
 import EditableField from '@/components/ui/EditableField';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import { Heart, Star, Sun } from 'lucide-react';
+import { Heart, ChevronLeft, ChevronRight } from 'lucide-react';
 import { PageLoading, PageError } from '@/components/PageLoading';
-import '@/styles/waves.css';
+import { useLanguage } from '@/contexts/LanguageContext';
+import '@/styles/layouts/pages/testemunhos.css';
 
-// Adicionar keyframe para batimento cardíaco
-const heartbeatStyle = `
-  @keyframes heartbeat {
-    0%, 100% { transform: scale(0.95); }
-    50% { transform: scale(1.25); }
-  }
-`;
+const ITEMS_PER_PAGE = 6;
 
 interface Testimonial {
   name: string;
   date: string;
   content: string;
+  category?: string;
 }
 
-interface TestemunhosTexts {
-  header?: { title: string; subtitle: string };
-  intro?: { description: string };
-  testimonials?: Testimonial[];
-  disclaimer?: { title: string; content: string };
-  cta?: { title: string; subtitle: string; buttonText: string };
-  footer?: { copyright: string; trademark: string };
+const CATEGORIES = [
+  { id: 'all', labelPt: 'Todos', labelEn: 'All' },
+  { id: 'tratamento', labelPt: 'Tratamento Terapêutico', labelEn: 'Therapeutic Treatment' },
+  { id: 'transformacao', labelPt: 'Transformação Pessoal', labelEn: 'Personal Transformation' },
+  { id: 'cura-espiritual', labelPt: 'Cura Espiritual', labelEn: 'Spiritual Healing' },
+  { id: 'purificacao', labelPt: 'Purificação', labelEn: 'Purification' },
+  { id: 'desobsessao', labelPt: 'Desobsessão', labelEn: 'Disobsession' },
+] as const;
+
+function getCategoryLabel(categoryId: string | undefined, lang: string): string {
+  if (!categoryId) return '';
+  const cat = CATEGORIES.find(c => c.id === categoryId);
+  if (!cat) return categoryId;
+  return lang === 'en-US' ? cat.labelEn : cat.labelPt;
 }
 
 const Testemunhos = () => {
   const { data: texts, loading, error } = usePageContent<any>('testemunhos', { includePages: ['__shared__'] });
+  const { language } = useLanguage();
+  const [activeFilter, setActiveFilter] = useState('all');
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const testimonials: Testimonial[] = texts?.testimonials || [];
+
+  const filteredTestimonials = useMemo(() => {
+    if (activeFilter === 'all') return testimonials;
+    return testimonials.filter(t => t.category === activeFilter);
+  }, [testimonials, activeFilter]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredTestimonials.length / ITEMS_PER_PAGE));
+  const safePage = Math.min(currentPage, totalPages);
+
+  const paginatedTestimonials = useMemo(() => {
+    const start = (safePage - 1) * ITEMS_PER_PAGE;
+    return filteredTestimonials.slice(start, start + ITEMS_PER_PAGE);
+  }, [filteredTestimonials, safePage]);
+
+  const originalIndices = useMemo(() => {
+    return paginatedTestimonials.map(t => testimonials.indexOf(t));
+  }, [paginatedTestimonials, testimonials]);
+
+  const categoryCounts = useMemo(() => {
+    const counts: Record<string, number> = { all: testimonials.length };
+    for (const t of testimonials) {
+      if (t.category) {
+        counts[t.category] = (counts[t.category] || 0) + 1;
+      }
+    }
+    return counts;
+  }, [testimonials]);
+
+  const handleFilterChange = (categoryId: string) => {
+    setActiveFilter(categoryId);
+    setCurrentPage(1);
+  };
 
   if (loading) {
     return (
       <PageLoading
         icon={Heart}
         text="Carregando testemunhos..."
-        bgColor="bg-gradient-to-b from-rose-50 to-pink-100"
-        iconColor="text-rose-600"
-        textColor="text-rose-900"
+        bgColor="bg-linear-to-b from-amber-50 to-orange-50"
+        iconColor="text-amber-700"
+        textColor="text-amber-900"
       />
     );
   }
-  
+
   if (error) {
     return (
       <PageError
         message={error}
-        bgColor="bg-gradient-to-b from-red-50 to-rose-50"
+        bgColor="bg-linear-to-b from-red-50 to-red-50"
         textColor="text-red-700"
       />
     );
   }
-  
+
   if (!texts) return null;
 
-  const testimonials = texts?.testimonials;
-
   return (
-    <>
-      <style dangerouslySetInnerHTML={{ __html: heartbeatStyle }} />
-      <div className="min-h-screen bg-linear-to-b from-rose-50 via-sky-100 to-sky-300">
-      
-      {/* Hero Section */}
-      <section className="relative section-padding-y-hero overflow-hidden bg-pink-400">
-        {/* Animated Metallic Gold Background Effects */}
-        <div className="absolute inset-0 opacity-40">
-          <div className="absolute top-20 left-[10%] w-96 h-96 bg-yellow-300/60 rounded-full blur-3xl animate-pulse orb-1" />
-          <div className="absolute top-40 right-[15%] w-125 h-125 bg-amber-400/50 rounded-full blur-3xl animate-pulse orb-2" />
-          <div className="absolute bottom-20 left-[20%] w-100 h-100 bg-yellow-400/55 rounded-full blur-3xl animate-pulse orb-3" />
-          <div className="absolute top-60 right-[30%] w-80 h-80 bg-amber-300/45 rounded-full blur-3xl animate-pulse orb-4" />
+    <div className="ds-new ds-testem">
+
+      {/* ==================== HERO ==================== */}
+      <section className="ts-hero">
+        <div className="ts-hero-orbs">
+          <div className="ts-hero-orb" />
+          <div className="ts-hero-orb" />
+          <div className="ts-hero-orb" />
         </div>
-        <div className="absolute inset-0 opacity-30">
-          <svg viewBox="0 0 100 100" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="50" cy="50" r="20" fill="rgba(255,255,255,0.8)" />
-            {[...Array(12)].map((_, i) => {
-              const angle = (i * 30 * Math.PI) / 180;
-              const x1 = 50 + Math.cos(angle) * 25;
-              const y1 = 50 + Math.sin(angle) * 25;
-              const x2 = 50 + Math.cos(angle) * 40;
-              const y2 = 50 + Math.sin(angle) * 40;
-              return (
-                <line
-                  key={i}
-                  x1={x1}
-                  y1={y1}
-                  x2={x2}
-                  y2={y2}
-                  stroke="rgba(255,255,255,0.8)"
-                  strokeWidth="4.5"
-                  strokeLinecap="round"
-                />
-              );
-            })}
-          </svg>
-        </div>
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-section mx-auto text-center">
-            <div className="flex justify-center mb-3">
-              <div className="w-16 h-16 rounded-full bg-white/40 backdrop-blur-xl flex items-center justify-center shadow-2xl shadow-white/20 overflow-visible">
-                <Heart className="h-18 w-18 text-yellow-400/60 fill-red-500 stroke-[2.5] animate-[heartbeat_3s_ease-in-out_infinite]" />
-              </div>
-            </div>
-            <EditableField
-              value={texts.testimonialsPage?.header?.title}
-              jsonKey="testemunhos.testimonialsPage.header.title"
-              type="h1"
-              className="text-5xl md:text-6xl font-bold mb-6 text-white drop-shadow-[0_4px_8px_rgba(0,0,0,0.5)]"
-            />
-            <EditableField
-              value={texts.testimonialsPage?.header?.subtitle}
-              jsonKey="testemunhos.testimonialsPage.header.subtitle"
-              type="p"
-              className="text-xl text-white/95 opacity-90 drop-shadow-[0_2px_6px_rgba(0,0,0,0.4)]"
+
+        <div className="ts-hero-content">
+          <div className="ts-hero-icon">
+            <img
+              src="/logo-metatron-sem-asas-gold.svg"
+              alt="Logo Igreja de Metatron"
+              className="w-16 h-16"
             />
           </div>
+          <EditableField
+            value={texts.testimonialsPage?.header?.title}
+            jsonKey="testemunhos.testimonialsPage.header.title"
+            type="h1"
+            className=""
+          />
+          <EditableField
+            value={texts.testimonialsPage?.header?.subtitle}
+            jsonKey="testemunhos.testimonialsPage.header.subtitle"
+            type="p"
+            className="ts-hero-sub"
+          />
         </div>
       </section>
 
-      <div className="container mx-auto px-4 section-content-padding space-y-3 max-w-section">
-        
-        {/* Intro Card */}
-        <div className="max-w-3xl mx-auto bg-linear-to-br from-white/80 via-rose-50/80 to-pink-50/70 backdrop-blur-md rounded-2xl p-6 md:p-8 border border-rose-200/60 shadow-xl shadow-rose-200/30">
+      {/* ==================== INTRO ==================== */}
+      <div className="ts-intro">
+        <div className="ts-intro-card">
           <EditableField
             value={texts.testimonialsPage?.intro?.description}
             jsonKey="testemunhos.testimonialsPage.intro.description"
             type="p"
-            className="text-lg text-rose-950/85 leading-relaxed"
+            className=""
           />
         </div>
       </div>
 
-      {/* Testimonials Grid - 2 COLUMNS */}
-      <section className="pb-16 relative">
-        <div className="container mx-auto px-4">
-          <div className="max-w-section mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {testimonials?.map((testimonial: Testimonial, index: number) => (
-                <div
-                  key={index}
-                  className="group relative"
-                >
-                  {/* Card */}
-                  <div className="h-full bg-linear-to-br from-white/90 via-rose-50/80 to-pink-50/70 backdrop-blur-md rounded-2xl p-8 border border-rose-200/50 hover:border-rose-300/70 shadow-xl hover:shadow-2xl hover:shadow-rose-300/40 transition-all duration-500">
-                    
-                    {/* Star Icon */}
-                    <div className="flex items-start gap-4 mb-6">
-                      <div className="shrink-0 w-10 h-10 rounded-full bg-linear-to-br from-rose-400/30 to-pink-400/30 border border-rose-300/50 flex items-center justify-center group-hover:from-rose-400/40 group-hover:to-pink-400/40 transition-all">
-                        <Star className="w-5 h-5 text-rose-600 fill-amber-400/70" />
-                      </div>
-                      
-                      {/* Name & Date */}
-                      <div className="flex-1">
-                        <div className="flex items-center justify-between gap-3 flex-wrap">
-                        <EditableField
-                          value={testimonial.name}
-                          jsonKey={`testemunhos.testimonials[${index}].name`}
-                          type="h3"
-                          className="text-xl font-semibold text-rose-900"
-                        />
-                        <EditableField
-                          value={testimonial.date}
-                          jsonKey={`testemunhos.testimonials[${index}].date`}
-                          type="span"
-                          className="text-sm text-rose-700/70"
-                        />
-                        </div>
-                      </div>
-                    </div>
+      {/* ==================== FILTERS ==================== */}
+      <div className="ts-filter-section">
+        <div className="ts-filter-bar">
+          {CATEGORIES.map(cat => {
+            const count = categoryCounts[cat.id] || 0;
+            if (cat.id !== 'all' && count === 0) return null;
+            const label = language === 'en-US' ? cat.labelEn : cat.labelPt;
+            return (
+              <button
+                key={cat.id}
+                className={`ts-filter-pill ${activeFilter === cat.id ? 'active' : ''}`}
+                onClick={() => handleFilterChange(cat.id)}
+              >
+                {label}
+                <span className="ts-filter-count">{count}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
 
-                    {/* Content */}
+      {/* ==================== GRID ==================== */}
+      <div className="ts-grid-section">
+        <div className="ts-grid">
+          {paginatedTestimonials.length === 0 ? (
+            <div className="ts-empty-state">
+              {language === 'en-US'
+                ? 'No testimonials found for this category.'
+                : 'Nenhum testemunho encontrado para esta categoria.'}
+            </div>
+          ) : (
+            paginatedTestimonials.map((testimonial, idx) => {
+              const originalIdx = originalIndices[idx];
+              return (
+                <div key={originalIdx} className="ts-card">
+                  <div className="ts-card-quote">&ldquo;</div>
+                  <div className="ts-card-header">
+                    <EditableField
+                      value={testimonial.name}
+                      jsonKey={`testemunhos.testimonials[${originalIdx}].name`}
+                      type="h3"
+                      className="ts-card-name"
+                    />
+                    <EditableField
+                      value={testimonial.date}
+                      jsonKey={`testemunhos.testimonials[${originalIdx}].date`}
+                      type="span"
+                      className="ts-card-date"
+                    />
+                  </div>
+                  <div className="ts-card-body">
                     <EditableField
                       value={testimonial.content}
-                      jsonKey={`testemunhos.testimonials[${index}].content`}
+                      jsonKey={`testemunhos.testimonials[${originalIdx}].content`}
                       type="p"
-                      className="text-rose-950/80 leading-relaxed"
+                      className=""
                     />
-
-                    {/* Hover glow */}
-                    <div className="absolute inset-0 rounded-2xl bg-linear-to-br from-rose-300/0 via-pink-200/15 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                   </div>
+                  {testimonial.category && (
+                    <div className="ts-card-footer">
+                      <span className="ts-card-category-badge">
+                        {getCategoryLabel(testimonial.category, language)}
+                      </span>
+                    </div>
+                  )}
                 </div>
-              ))}
-            </div>
+              );
+            })
+          )}
+        </div>
+      </div>
+
+      {/* ==================== PAGINATION ==================== */}
+      {totalPages > 1 && (
+        <div className="ts-pagination">
+          <button
+            className="ts-page-btn"
+            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+            disabled={safePage <= 1}
+            aria-label="Página anterior"
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </button>
+
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+            <button
+              key={page}
+              className={`ts-page-btn ${safePage === page ? 'active' : ''}`}
+              onClick={() => setCurrentPage(page)}
+            >
+              {page}
+            </button>
+          ))}
+
+          <button
+            className="ts-page-btn"
+            onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+            disabled={safePage >= totalPages}
+            aria-label="Próxima página"
+          >
+            <ChevronRight className="w-4 h-4" />
+          </button>
+
+          <span className="ts-page-info">
+            {safePage}/{totalPages}
+          </span>
+        </div>
+      )}
+
+      {/* ==================== DISCLAIMER ==================== */}
+      <div className="ts-disclaimer-section">
+        <div className="ts-disclaimer">
+          <Heart className="ts-disclaimer-icon" />
+          <div>
+            <EditableField
+              value={texts.testimonialsPage?.disclaimer?.title}
+              jsonKey="testemunhos.testimonialsPage.disclaimer.title"
+              type="h3"
+              className=""
+            />
+            <EditableField
+              value={texts.testimonialsPage?.disclaimer?.content}
+              jsonKey="testemunhos.testimonialsPage.disclaimer.content"
+              type="p"
+              className=""
+            />
           </div>
         </div>
-      </section>
+      </div>
 
-      {/* Disclaimer */}
-      <section className="section-padding-y-lg relative">
-        <div className="container mx-auto px-4">
-          <div className="max-w-section mx-auto">
-            <div className="bg-linear-to-br from-white/80 via-rose-50/70 to-pink-50/60 backdrop-blur-md rounded-2xl p-8 border border-rose-200/60 shadow-lg shadow-rose-200/20">
-              <div className="flex items-start gap-4">
-                <Heart className="w-6 h-6 text-rose-500 shrink-0 mt-1 fill-rose-400/50" />
-                <div>
-                  <EditableField 
-                    value={texts.testimonialsPage?.disclaimer?.title}
-                    jsonKey="testemunhos.testimonialsPage.disclaimer.title"
-                    type="h3"
-                    className="text-xl font-semibold text-rose-900 mb-3"
-                  />
-                  <EditableField 
-                    value={texts.testimonialsPage?.disclaimer?.content}
-                    jsonKey="testemunhos.testimonialsPage.disclaimer.content"
-                    type="p"
-                    className="text-rose-950/80 leading-relaxed"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer — paisagem padronizada */}
-      <footer className={`${FOOTER.sectionClass} mt-16`}>
+      {/* ==================== FOOTER ==================== */}
+      <footer className={FOOTER.sectionClass}>
         <div className="relative">
           <FooterBackground
             gradientId="skyGradientTestemunhos"
-            skyColors={['#3b82f6', '#60a5fa', '#93c5fd']}
-            earthColor="#6b5a3e"
-            waterColors={['#22d3ee', '#06b6d4', '#0891b2']}
-            rightIcon={<Heart className="text-[#CFAF5A] fill-rose-300/80 stroke-[1.5]" />}
-            rightIconSize={48}
+            skyColors={['#1a1520', '#2a1f15', '#3a2a20']}
+            earthColor="#2a1f10"
+            waterColors={['#0a3a3a', '#083030', '#062525']}
           />
 
           <div className={FOOTER.containerClass}>
@@ -272,8 +328,7 @@ const Testemunhos = () => {
           </div>
         </div>
       </footer>
-      </div>
-    </>
+    </div>
   );
 };
 
