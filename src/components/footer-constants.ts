@@ -18,7 +18,7 @@ export const FOOTER = {
   titleClass: 'text-[24px] md:text-[29px] font-bold mb-4 text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]',
 
   /** Classes do subtítulo CTA (p) */
-  subtitleClass: 'text-lg mb-5 text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.3)]',
+  subtitleClass: 'text-lg -mt-[5px] mb-5 text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.3)]',
 
   /** Classes do copyright no rodapé */
   copyrightClass: 'text-xs text-white/40 text-center',

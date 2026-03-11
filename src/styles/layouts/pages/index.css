@@ -128,12 +128,20 @@
 }
 
 .ds-new .ds-hero-buttons {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 14px;
-  justify-content: center;
-  flex-wrap: wrap;
+  width: fit-content;
+  margin: 0 auto;
   position: relative;
   z-index: 1;
+}
+
+.ds-new .ds-hero-buttons > * {
+  white-space: nowrap;
+  width: 100%;
+  justify-content: center;
+  text-align: center;
 }
 
 .ds-new .ds-hero-buttons .ds-btn {
@@ -204,9 +212,6 @@
 }
 
 .ds-new .ds-recognition-text {
-  font-size: var(--typo-body);
-  color: var(--ds-text-dark);
-  line-height: 1.6;
   margin: 0;
 }
 
@@ -272,7 +277,7 @@
   color: #FFFFFF;
   font-style: italic;
   line-height: 1.7;
-  max-width: 600px;
+  max-width: 660px;
   margin: 0 auto;
   padding-top: 24px;
   border-top: 1px solid rgba(196, 148, 59, 0.2);
@@ -433,9 +438,10 @@
 }
 
 .ds-new .ds-testimonial-body {
-  font-size: var(--typo-body-sm);
-  color: var(--ds-text-muted);
-  line-height: var(--typo-body-sm-lh);
+  font-size: var(--typo-body);
+  color: var(--ds-text-dark);
+  line-height: var(--typo-body-lh);
+  font-style: italic;
   flex-grow: 1;
   margin-bottom: 16px;
 }

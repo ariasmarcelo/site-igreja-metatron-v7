@@ -143,13 +143,6 @@ export default function QuemSomos() {
             className="qs-hero-sub"
           />
 
-          <div className="qs-hero-buttons">
-            <Link to="/contato">
-              <Button className="qs-btn qs-btn-sage">
-                Fale Conosco
-              </Button>
-            </Link>
-          </div>
         </div>
       </section>
 

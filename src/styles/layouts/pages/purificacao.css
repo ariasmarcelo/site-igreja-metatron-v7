@@ -177,7 +177,7 @@
   z-index: 10;
   display: flex;
   justify-content: center;
-  filter: drop-shadow(0 0 12px rgba(212, 168, 75, 0.4)) drop-shadow(0 9px 20px rgba(0, 0, 0, 0.55));
+  filter: drop-shadow(0 20px 14px rgba(0, 0, 0, 1));
 }
 
 /* Hero título/subtítulo — texto escuro com halo claro para destaque no fundo */
@@ -217,13 +217,21 @@
 
 /* Hero CTA buttons */
 .purificacao-hero-buttons {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 14px;
-  justify-content: center;
-  flex-wrap: wrap;
+  width: fit-content;
+  margin: 0 auto;
+  margin-bottom: var(--hero-sub-to-next, 60px);
   position: relative;
   z-index: 1;
-  margin-bottom: var(--hero-sub-to-next, 36px);
+}
+
+.purificacao-hero-buttons > * {
+  white-space: nowrap;
+  width: 100%;
+  justify-content: center;
+  text-align: center;
 }
 
 .purificacao-btn-primary {
@@ -239,14 +247,18 @@
   gap: 8px;
   letter-spacing: 0.3px;
   line-height: 1.4;
-  background: linear-gradient(135deg, var(--purificacao-gold-muted), var(--purificacao-gold));
-  color: #fff;
-  box-shadow: 0 4px 20px rgba(196, 148, 59, 0.35), 0 6px 16px rgba(0, 0, 0, 0.40);
+  background: rgba(40, 30, 15, 0.45);
+  backdrop-filter: blur(4px);
+  color: rgba(255, 255, 255, 0.95);
+  border: 1.5px solid rgba(100, 200, 130, 0.45);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.40);
   transition: all 0.3s ease;
 }
 
 .purificacao-btn-primary:hover {
-  background: linear-gradient(135deg, var(--purificacao-gold), var(--purificacao-gold-light));
+  background: rgba(40, 30, 15, 0.6);
+  border-color: rgba(100, 200, 130, 0.7);
+  color: #fff;
   transform: translateY(-1px);
 }
 
@@ -262,16 +274,18 @@
   gap: 8px;
   letter-spacing: 0.3px;
   line-height: 1.4;
-  background: transparent;
-  color: rgba(255, 255, 255, 0.9);
-  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  background: rgba(40, 30, 15, 0.45);
+  backdrop-filter: blur(4px);
+  color: rgba(255, 255, 255, 0.95);
+  border: 1.5px solid rgba(100, 160, 220, 0.75);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.40);
   transition: all 0.3s ease;
 }
 
 .purificacao-btn-secondary:hover {
-  border-color: var(--purificacao-gold);
-  color: var(--purificacao-gold-light);
+  background: rgba(40, 30, 15, 0.6);
+  border-color: rgba(100, 160, 220, 0.9);
+  color: #fff;
 }
 
 /* Safety — moved to Sacramentos section below */
@@ -288,6 +302,7 @@
 /* Primeira seção — gap de 36px (hero-sub-to-next) entre subtitle e card, como na Index. */
 .purificacao-section-first {
   padding-top: 0 !important;
+  margin-top: 60px;
 }
 
 .purificacao-card.purificacao-card-gold {

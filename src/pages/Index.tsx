@@ -7,7 +7,7 @@
  * Scoped under CSS class `.ds-new` — styles in styles/layouts/pages/index.css
  */
 import { Link } from 'react-router-dom';
-import { Heart, Brain, Sparkles, Shield, MessageCircle } from 'lucide-react';
+import { CloudLightning, Moon, Lock, Flame, Activity, Unplug, MessageCircle, Sparkles, Heart, Brain } from 'lucide-react';
 import EditableField from '@/components/ui/EditableField';
 import { useGlossary } from '@/hooks/useGlossary';
 import { Sun12Rays } from '../components/icons/Sun12Rays';
@@ -45,12 +45,12 @@ interface IndexTexts {
 }
 
 const RECOGNITION_ICONS = [
-  <Heart key="h" className="w-5 h-5" />,
-  <Brain key="b" className="w-5 h-5" />,
-  <Shield key="s" className="w-5 h-5" />,
-  <Sparkles key="sp" className="w-5 h-5" />,
-  <Heart key="h2" className="w-5 h-5" />,
-  <Sun12Rays key="sr" className="w-5 h-5" />,
+  <CloudLightning key="cl" className="w-5 h-5" />,
+  <Moon key="m" className="w-5 h-5" />,
+  <Lock key="l" className="w-5 h-5" />,
+  <Flame key="f" className="w-5 h-5" />,
+  <Activity key="a" className="w-5 h-5" />,
+  <Unplug key="u" className="w-5 h-5" />,
 ];
 
 export default function Index() {

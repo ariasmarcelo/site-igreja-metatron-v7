@@ -56,6 +56,7 @@
 
 .ds-qs .qs-hero h1 {
   font-family: var(--font-heading);
+  
   font-size: var(--typo-hero);
   font-weight: var(--typo-hero-weight);
   color: #FFFFFF;
@@ -77,13 +78,6 @@
   margin-left: auto;
   margin-right: auto;
   opacity: 0.85;
-}
-
-.ds-qs .qs-hero-buttons {
-  display: flex;
-  gap: 14px;
-  justify-content: center;
-  flex-wrap: wrap;
 }
 
 /* ─────────────────────────────────────────────
@@ -260,15 +254,11 @@
   font-size: 1rem;
   color: #FFFFFF;
   line-height: var(--typo-body-lh);
-  transition: background 0.3s ease, box-shadow 0.3s ease;
+  transition: background 0.3s ease;
   text-shadow:
     0 0 8px rgba(255, 255, 255, 0.6),
-    0 0 24px rgba(255, 255, 255, 0.3),
-    0 0 48px rgba(255, 255, 255, 0.12),
-    0 0 60px rgba(196, 148, 59, 0.25);
-  box-shadow:
-    0 0 8px rgba(255, 255, 255, 0.12),
-    0 0 16px rgba(220, 220, 230, 0.08);
+    0 0 24px rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.12);
 }
 
 .ds-qs .qs-manifesto-number {
@@ -290,30 +280,11 @@
   font-weight: var(--font-bold);
   font-variant-numeric: lining-nums;
   line-height: 1;
-  box-shadow:
-    0 0 6px rgba(232, 197, 71, 0.5),
-    0 0 14px rgba(196, 148, 59, 0.35),
-    0 0 28px rgba(196, 148, 59, 0.15),
-    inset 0 1px 2px rgba(255, 255, 255, 0.35);
+  box-shadow: 0 0 6px rgba(232, 197, 71, 0.5);
+  outline: 1.5px solid rgba(232, 197, 71, 0.35);
+  outline-offset: 3px;
   text-shadow: none;
   z-index: 2;
-}
-
-.ds-qs .qs-manifesto-number::before {
-  content: '';
-  position: absolute;
-  inset: -4px;
-  border-radius: 50%;
-  border: 1.5px solid rgba(232, 197, 71, 0.35);
-  box-shadow: 0 0 8px rgba(232, 197, 71, 0.2);
-}
-
-.ds-qs .qs-manifesto-number::after {
-  content: '';
-  position: absolute;
-  inset: -9px;
-  border-radius: 50%;
-  border: 1px solid rgba(232, 197, 71, 0.15);
 }
 
 .ds-qs .qs-manifesto-item p {
@@ -323,17 +294,7 @@
 
 .ds-qs .qs-manifesto-item:hover {
   background: rgba(196, 148, 59, 0.14);
-  box-shadow:
-    0 0 8px rgba(255, 255, 255, 0.20),
-    0 0 16px rgba(220, 220, 230, 0.12);
-}
-
-.ds-qs .qs-manifesto-item:hover .qs-manifesto-number {
-  box-shadow:
-    0 0 8px rgba(232, 197, 71, 0.65),
-    0 0 18px rgba(196, 148, 59, 0.45),
-    0 0 32px rgba(196, 148, 59, 0.2),
-    inset 0 1px 2px rgba(255, 255, 255, 0.35);
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.25);
 }
 
 /* ─────────────────────────────────────────────
@@ -475,11 +436,11 @@
 }
 
 .ds-qs .qs-dual-card-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.15rem;
-  font-weight: 600;
+  font-family: var(--font-heading);
+  font-size: var(--typo-h3);
+  font-weight: var(--typo-h3-weight);
   margin-bottom: 12px;
-  line-height: 1.3;
+  line-height: var(--typo-h3-lh);
 }
 
 .ds-qs .qs-dual-card.igreja .qs-dual-card-title {
@@ -491,9 +452,9 @@
 }
 
 .ds-qs .qs-dual-card-body {
-  font-size: var(--typo-body);
+  font-size: var(--typo-body-lg);
   color: var(--ds-text-on-navy);
-  line-height: var(--typo-body-lh);
+  line-height: var(--typo-body-lg-lh);
   opacity: 0.85;
 }
 
@@ -774,7 +735,7 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  max-width: 800px;
+  max-width: 840px;
   margin: 0 auto;
 }
 
@@ -1047,44 +1008,6 @@
   border-left-color: var(--ds-sacred-gold);
 }
 
-/* ─────────────────────────────────────────────
-   BUTTONS
-   ───────────────────────────────────────────── */
-.ds-qs .qs-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 28px;
-  border-radius: var(--ds-radius-md);
-  font-weight: var(--font-semibold);
-  font-size: 0.95rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-decoration: none;
-  border: none;
-}
-
-.ds-qs .qs-btn-sage {
-  background: var(--qs-accent);
-  color: #fff;
-  box-shadow: 0 4px 20px rgba(61, 123, 95, 0.25);
-}
-
-.ds-qs .qs-btn-sage:hover {
-  background: var(--qs-accent-light);
-  transform: translateY(-1px);
-}
-
-.ds-qs .qs-btn-ghost-gold {
-  background: transparent;
-  color: var(--ds-sacred-gold);
-  border: 1.5px solid var(--ds-gold-border);
-}
-
-.ds-qs .qs-btn-ghost-gold:hover {
-  border-color: var(--ds-sacred-gold);
-  background: var(--ds-church-bg-subtle);
-}
 
 /* ─────────────────────────────────────────────
    FOOTER SECTION
