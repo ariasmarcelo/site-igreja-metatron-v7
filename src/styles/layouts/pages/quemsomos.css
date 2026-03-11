@@ -72,7 +72,7 @@
 .ds-qs .qs-hero-sub {
   font-size: var(--typo-subtitle);
   color: var(--ds-text-on-navy);
-  margin-bottom: 36px;
+  margin-bottom: 16px;
   line-height: 1.7;
   max-width: 680px;
   margin-left: auto;
