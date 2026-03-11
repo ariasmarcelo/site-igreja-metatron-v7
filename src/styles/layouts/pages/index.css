@@ -144,6 +144,14 @@
   text-align: center;
 }
 
+@media (max-width: 480px) {
+  .ds-new .ds-hero-buttons {
+    grid-template-columns: 1fr;
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
 .ds-new .ds-hero-buttons .ds-btn {
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.40);
 }
@@ -606,6 +614,7 @@
 .ds-new .ds-btn-ghost-gold:hover {
   border-color: var(--ds-sacred-gold);
   background: var(--ds-church-bg-subtle);
+  transform: translateY(-1px);
 }
 
 .ds-new .ds-btn-hero-ghost {
@@ -615,6 +624,7 @@
 .ds-new .ds-btn-hero-ghost:hover {
   border-color: var(--ds-sacred-gold);
   color: var(--ds-sacred-gold);
+  transform: translateY(-1px);
 }
 
 .ds-new .ds-btn-sage {

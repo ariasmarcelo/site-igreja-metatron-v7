@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
 import {
   Heart, Brain, Wind, Sparkles, Activity, Stethoscope,
   HeartHandshake, Compass, Sun, AlertTriangle, MessageCircle,
-  Flower2, Route,
+  Flower2, Route, ChevronRight,
 } from 'lucide-react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import EditableField from '@/components/ui/EditableField';
@@ -102,7 +102,7 @@ export default function Tratamentos() {
                 type="span"
                 className="inline"
               />
-              <span className="ds-arrow">›</span>
+              <ChevronRight className="w-4 h-4" />
             </Link>
           </div>
         </div>
@@ -550,7 +550,7 @@ export default function Tratamentos() {
                 type="span"
                 className="inline"
               />
-              <span className="dt-arrow">›</span>
+              <ChevronRight className="w-4 h-4" />
             </Link>
           </div>
         </div>

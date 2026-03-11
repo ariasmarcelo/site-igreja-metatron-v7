@@ -15,7 +15,7 @@ export const FOOTER = {
   containerClass: 'footer-cta-container relative z-10 flex flex-col items-center justify-between px-4 pt-6 pb-4 h-[269px]',
 
   /** Classes do título CTA (h2) */
-  titleClass: 'text-[24px] md:text-[29px] font-bold mb-4 text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]',
+  titleClass: 'text-[28px] md:text-[33px] font-bold mb-4 text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]',
 
   /** Classes do subtítulo CTA (p) */
   subtitleClass: 'text-lg -mt-[5px] mb-5 text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.3)]',

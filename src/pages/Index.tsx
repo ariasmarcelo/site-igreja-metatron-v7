@@ -7,7 +7,7 @@
  * Scoped under CSS class `.ds-new` — styles in styles/layouts/pages/index.css
  */
 import { Link } from 'react-router-dom';
-import { CloudLightning, Moon, Lock, Flame, Activity, Unplug, MessageCircle, Sparkles, Heart, Brain } from 'lucide-react';
+import { CloudLightning, Moon, Lock, Flame, Activity, Unplug, MessageCircle, Sparkles, Heart, Brain, ChevronRight } from 'lucide-react';
 import EditableField from '@/components/ui/EditableField';
 import { useGlossary } from '@/hooks/useGlossary';
 import { Sun12Rays } from '../components/icons/Sun12Rays';
@@ -115,7 +115,7 @@ export default function Index() {
                 type="span"
                 className="inline"
               />
-              <span className="ds-arrow">›</span>
+              <ChevronRight className="w-4 h-4" />
             </Link>
           </div>
         </div>
@@ -264,7 +264,7 @@ export default function Index() {
                     type="span"
                     className="inline"
                   />
-                  <span className="ds-arrow">›</span>
+                  <ChevronRight className="w-4 h-4" />
                 </Link>
               </div>
             </div>
@@ -313,7 +313,7 @@ export default function Index() {
                     type="span"
                     className="inline"
                   />
-                  <span className="ds-arrow">›</span>
+                  <ChevronRight className="w-4 h-4" />
                 </Link>
               </div>
             </div>
@@ -387,7 +387,7 @@ export default function Index() {
             </div>
             <Link to="/testemunhos" className="ds-btn ds-btn-navy ds-btn-sm ds-btn-noshrink">
               Testemunhos
-              <span className="ds-arrow">›</span>
+              <ChevronRight className="w-4 h-4" />
             </Link>
           </div>
         </div>

@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import {
   Sparkles, Crown, Compass, Heart, Infinity as InfinityIcon,
-  LineChart, ChevronDown, MessageCircle, Shield, AlertTriangle,
+  LineChart, ChevronDown, ChevronRight, MessageCircle, Shield, AlertTriangle,
 } from 'lucide-react';
 import EditableField from '@/components/ui/EditableField';
 import { useGlossary } from '@/hooks/useGlossary';
@@ -110,7 +110,7 @@ export default function Purificacao() {
                   type="span"
                   className="inline"
                 />
-                <span className="purificacao-arrow">›</span>
+                <ChevronRight className="w-4 h-4" />
               </Link>
             </div>
           </div>
@@ -491,7 +491,7 @@ export default function Purificacao() {
                     type="span"
                     className="inline"
                   />
-                  <span className="purificacao-arrow">›</span>
+                  <ChevronRight className="w-4 h-4" />
                 </Link>
               </div>
             </div>
