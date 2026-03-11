@@ -20,7 +20,6 @@ import { usePageStyles } from '@/hooks/usePageStyles';
 import { PageLoading } from '@/components/PageLoading';
 import { FooterBackground } from '@/components/FooterBackground';
 import { FOOTER } from '@/components/footer-constants';
-import { Button } from '@/components/ui/button';
 
 
 const TREATMENT_ICONS = [
@@ -581,17 +580,6 @@ export default function Tratamentos() {
                 type="p"
                 className={FOOTER.subtitleClass}
               />
-              <Link to="/contato">
-                <Button className={FOOTER.buttonClass}>
-                  <MessageCircle className="w-4 h-4 mr-2" />
-                  <EditableField
-                    value={texts.cta?.buttonText}
-                    jsonKey="tratamentos.cta.buttonText"
-                    type="span"
-                    className="inline"
-                  />
-                </Button>
-              </Link>
             </div>
 
             <div>

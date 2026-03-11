@@ -3,8 +3,6 @@ import { usePageContent } from '@/hooks/useContent';
 import { FooterBackground } from '@/components/FooterBackground';
 import { FOOTER } from '@/components/footer-constants';
 import EditableField from '@/components/ui/EditableField';
-import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
 import { Heart, ChevronLeft, ChevronRight } from 'lucide-react';
 import { PageLoading, PageError } from '@/components/PageLoading';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -296,16 +294,6 @@ const Testemunhos = () => {
                 type="p"
                 className={FOOTER.subtitleClass}
               />
-              <Link to="/contato">
-                <Button className={FOOTER.buttonClass}>
-                  <EditableField
-                    value={texts.testimonialsPage?.cta?.buttonText}
-                    jsonKey="testemunhos.testimonialsPage.cta.buttonText"
-                    type="span"
-                    className="inline"
-                  />
-                </Button>
-              </Link>
             </div>
 
             <div>

@@ -107,12 +107,12 @@
 }
 
 .ds-testem .ts-hero h1 {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-heading);
   font-size: clamp(2rem, 5.5vw, 3.2rem);
-  font-weight: 700;
+  font-weight: var(--typo-hero-weight);
   color: #fff;
   margin-bottom: 16px;
-  line-height: 1.15;
+  line-height: var(--typo-hero-lh);
   text-shadow:
     0 0 12px rgba(255, 255, 255, 0.5),
     0 0 30px rgba(255, 255, 255, 0.2),
@@ -123,7 +123,7 @@
   font-size: clamp(1rem, 2.4vw, 1.25rem);
   color: var(--ds-text-on-navy);
   opacity: 0.9;
-  line-height: 1.6;
+  line-height: var(--typo-subtitle-lh);
   max-width: 680px;
   margin: 0 auto;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
@@ -151,7 +151,7 @@
 .ds-testem .ts-intro-card p {
   font-size: clamp(0.95rem, 2.2vw, 1.05rem);
   color: var(--ds-text-muted);
-  line-height: 1.75;
+  line-height: var(--typo-body-lg-lh);
   text-align: center;
 }
 
@@ -181,7 +181,7 @@
   background: var(--ts-warm-white);
   color: var(--ts-accent-muted);
   font-size: 0.875rem;
-  font-weight: 500;
+  font-weight: var(--font-medium);
   cursor: pointer;
   transition: all 0.25s ease;
   -webkit-user-select: none;
@@ -209,8 +209,8 @@
   height: 20px;
   padding: 0 5px;
   border-radius: 999px;
-  font-size: 0.72rem;
-  font-weight: 700;
+  font-size: var(--typo-badge);
+  font-weight: var(--font-bold);
   background: rgba(184, 115, 51, 0.12);
   color: var(--ts-accent);
 }
@@ -273,7 +273,7 @@
 }
 
 .ds-testem .ts-card-quote {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-heading);
   font-size: 2.8rem;
   line-height: 1;
   color: var(--ts-accent-light);
@@ -291,14 +291,14 @@
 }
 
 .ds-testem .ts-card-name {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-heading);
   font-size: 1.1rem;
-  font-weight: 600;
+  font-weight: var(--font-semibold);
   color: var(--ds-text-dark);
 }
 
 .ds-testem .ts-card-date {
-  font-size: 0.8rem;
+  font-size: var(--typo-caption);
   color: var(--ds-text-light);
 }
 
@@ -309,7 +309,7 @@
 .ds-testem .ts-card-body p {
   font-size: clamp(0.88rem, 2vw, 0.95rem);
   color: var(--ds-text-muted);
-  line-height: 1.75;
+  line-height: var(--typo-body-lg-lh);
 }
 
 .ds-testem .ts-card-footer {
@@ -327,8 +327,8 @@
   gap: 4px;
   padding: 3px 10px;
   border-radius: 999px;
-  font-size: 0.72rem;
-  font-weight: 600;
+  font-size: var(--typo-badge);
+  font-weight: var(--font-semibold);
   letter-spacing: 0.02em;
   text-transform: uppercase;
   background: var(--ts-accent-bg);
@@ -359,7 +359,7 @@
   background: var(--ts-warm-white);
   color: var(--ts-accent-muted);
   font-size: 0.875rem;
-  font-weight: 500;
+  font-weight: var(--font-medium);
   cursor: pointer;
   transition: all 0.2s ease;
   -webkit-user-select: none;
@@ -385,7 +385,7 @@
 }
 
 .ds-testem .ts-page-info {
-  font-size: 0.8rem;
+  font-size: var(--typo-caption);
   color: var(--ds-text-light);
   margin: 0 8px;
 }
@@ -421,9 +421,9 @@
 }
 
 .ds-testem .ts-disclaimer h3 {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-heading);
   font-size: 1.05rem;
-  font-weight: 600;
+  font-weight: var(--font-semibold);
   color: var(--ds-text-dark);
   margin-bottom: 8px;
 }
@@ -431,7 +431,7 @@
 .ds-testem .ts-disclaimer p {
   font-size: clamp(0.85rem, 2vw, 0.92rem);
   color: var(--ds-text-muted);
-  line-height: 1.7;
+  line-height: var(--typo-body-lh);
 }
 
 /* ─────────────────────────────────────────────

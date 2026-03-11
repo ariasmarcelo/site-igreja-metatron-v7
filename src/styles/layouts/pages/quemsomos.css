@@ -55,9 +55,9 @@
 }
 
 .ds-qs .qs-hero h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(2rem, 5.5vw, 3.5rem);
-  font-weight: 700;
+  font-family: var(--font-heading);
+  font-size: var(--typo-hero);
+  font-weight: var(--typo-hero-weight);
   color: #FFFFFF;
   margin-bottom: 16px;
   line-height: 1.2;
@@ -69,7 +69,7 @@
 }
 
 .ds-qs .qs-hero-sub {
-  font-size: clamp(1rem, 2.4vw, 1.35rem);
+  font-size: var(--typo-subtitle);
   color: var(--ds-text-on-navy);
   margin-bottom: 36px;
   line-height: 1.7;
@@ -107,9 +107,9 @@
 }
 
 .ds-qs .qs-section-heading {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-heading);
   font-size: clamp(1.35rem, 4vw, 1.85rem);
-  font-weight: 500;
+  font-weight: var(--font-medium);
   color: var(--ds-text-dark);
   text-align: center;
   margin-bottom: 12px;
@@ -122,7 +122,7 @@
   text-align: center;
   max-width: 680px;
   margin: 0 auto 28px;
-  line-height: 1.7;
+  line-height: var(--typo-body-lh);
 }
 
 .ds-qs .qs-gold-divider {
@@ -153,19 +153,19 @@
 }
 
 .ds-qs .qs-origin-title {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(1.3rem, 3.5vw, 1.75rem);
-  font-weight: 600;
+  font-family: var(--font-heading);
+  font-size: var(--typo-h2);
+  font-weight: var(--typo-h2-weight);
   color: var(--ds-sacred-gold);
   text-align: center;
   margin-bottom: 0;
-  line-height: 1.3;
+  line-height: var(--typo-h2-lh);
 }
 
 .ds-qs .qs-origin-body {
   font-size: clamp(0.85rem, 2vw, 0.95rem);
   color: var(--ds-text-muted);
-  line-height: 1.7;
+  line-height: var(--typo-body-lh);
   max-width: 585px;
   margin: 0 auto;
   text-align: center;
@@ -196,12 +196,12 @@
 }
 
 .ds-qs .qs-manifesto-title {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-heading);
   font-size: clamp(1.5rem, 4vw, 2rem);
-  font-weight: 700;
+  font-weight: var(--font-bold);
   color: #FFFFFF;
   margin-bottom: 4px;
-  line-height: 1.2;
+  line-height: var(--typo-h1-lh);
   text-shadow:
     0 0 8px rgba(255, 255, 255, 0.6),
     0 0 24px rgba(255, 255, 255, 0.3),
@@ -259,7 +259,7 @@
   border-radius: 0 var(--ds-radius-sm) var(--ds-radius-sm) 0;
   font-size: 1rem;
   color: #FFFFFF;
-  line-height: 1.7;
+  line-height: var(--typo-body-lh);
   transition: background 0.3s ease, box-shadow 0.3s ease;
   text-shadow:
     0 0 8px rgba(255, 255, 255, 0.6),
@@ -287,7 +287,7 @@
   color: #1a1a2e;
   font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
   font-size: 1rem;
-  font-weight: 700;
+  font-weight: var(--font-bold);
   font-variant-numeric: lining-nums;
   line-height: 1;
   box-shadow:
@@ -387,7 +387,7 @@
   font-size: clamp(0.98rem, 2.3vw, 1.1rem);
   color: var(--ds-gold-muted);
   margin-top: 16px;
-  font-weight: 500;
+  font-weight: var(--font-medium);
   letter-spacing: 0.04em;
   padding-left: 23px;
 }
@@ -401,13 +401,13 @@
 }
 
 .ds-qs .qs-bridge-title {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(1.3rem, 3.5vw, 1.75rem);
-  font-weight: 600;
+  font-family: var(--font-heading);
+  font-size: var(--typo-h2);
+  font-weight: var(--typo-h2-weight);
   color: #FFFFFF;
   text-align: center;
   margin-bottom: 32px;
-  line-height: 1.3;
+  line-height: var(--typo-h2-lh);
   text-shadow:
     0 0 8px rgba(255, 255, 255, 0.6),
     0 0 24px rgba(255, 255, 255, 0.3),
@@ -491,9 +491,9 @@
 }
 
 .ds-qs .qs-dual-card-body {
-  font-size: 0.9rem;
+  font-size: var(--typo-body);
   color: var(--ds-text-on-navy);
-  line-height: 1.7;
+  line-height: var(--typo-body-lh);
   opacity: 0.85;
 }
 
@@ -512,23 +512,23 @@
 }
 
 .ds-qs .qs-accordion-title {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(1.3rem, 3.5vw, 1.75rem);
-  font-weight: 600;
+  font-family: var(--font-heading);
+  font-size: var(--typo-h2);
+  font-weight: var(--typo-h2-weight);
   color: var(--qs-accent-dark);
   text-align: left;
-  line-height: 1.3;
+  line-height: var(--typo-h2-lh);
   margin-bottom: 8px;
 }
 
 .ds-qs .qs-accordion-summary {
-  font-size: 0.9rem;
+  font-size: var(--typo-body);
   font-style: italic;
   color: var(--ds-text-muted);
   text-align: left;
   max-width: 800px;
   margin: 0 0 24px;
-  line-height: 1.7;
+  line-height: var(--typo-body-lh);
   letter-spacing: 0.02em;
 }
 
@@ -561,7 +561,7 @@
   width: 100%;
   padding: 16px 20px;
   font-size: 0.95rem;
-  font-weight: 600;
+  font-weight: var(--font-semibold);
   color: var(--ds-text-dark);
   text-align: left;
   cursor: pointer;
@@ -576,8 +576,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.8rem;
-  font-weight: 700;
+  font-size: var(--typo-caption);
+  font-weight: var(--font-bold);
   flex-shrink: 0;
 }
 
@@ -594,8 +594,8 @@
   font-style: italic;
   color: var(--qs-accent-dark);
   margin-bottom: 8px;
-  font-size: 0.85rem;
-  line-height: 1.6;
+  font-size: var(--typo-body-sm);
+  line-height: var(--typo-subtitle-lh);
 }
 
 /* ─────────────────────────────────────────────
@@ -673,7 +673,7 @@
   align-items: center;
   justify-content: center;
   font-size: 0.82rem;
-  font-weight: 700;
+  font-weight: var(--font-bold);
   margin-top: 2px;
   box-shadow: 0 1px 4px rgba(90, 125, 154, 0.25);
 }
@@ -685,17 +685,17 @@
 
 .ds-qs .qs-principle-title {
   display: block;
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-heading);
   font-size: clamp(0.95rem, 2.3vw, 1.1rem);
-  font-weight: 600;
+  font-weight: var(--font-semibold);
   color: #3D5A73;
-  line-height: 1.3;
+  line-height: var(--typo-h3-lh);
   margin-bottom: 8px;
 }
 
 .ds-qs .qs-principle-summary {
   display: block;
-  font-size: clamp(0.88rem, 2.2vw, 0.98rem);
+  font-size: var(--typo-quote);
   font-style: italic;
   color: var(--ds-gold-muted);
   line-height: 1.55;
@@ -731,7 +731,7 @@
 .ds-qs .qs-principle-body span {
   font-size: clamp(0.88rem, 2.2vw, 0.95rem);
   color: var(--ds-text-muted);
-  line-height: 1.75;
+  line-height: var(--typo-body-lg-lh);
 }
 
 .ds-qs .qs-principle-card[data-open="true"] {
@@ -813,7 +813,7 @@
   align-items: center;
   justify-content: center;
   font-size: 0.82rem;
-  font-weight: 700;
+  font-weight: var(--font-bold);
   margin-top: 2px;
   box-shadow: 0 1px 4px rgba(196, 148, 59, 0.3);
 }
@@ -825,17 +825,17 @@
 
 .ds-qs .qs-hermetic-title {
   display: block;
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-heading);
   font-size: clamp(0.95rem, 2.3vw, 1.1rem);
-  font-weight: 600;
+  font-weight: var(--font-semibold);
   color: #6B5020;
-  line-height: 1.3;
+  line-height: var(--typo-h3-lh);
   margin-bottom: 8px;
 }
 
 .ds-qs .qs-hermetic-quote {
   display: block;
-  font-size: clamp(0.88rem, 2.2vw, 0.98rem);
+  font-size: var(--typo-quote);
   font-style: italic;
   color: var(--ds-gold-muted);
   line-height: 1.55;
@@ -873,7 +873,7 @@
 .ds-qs .qs-hermetic-body span {
   font-size: clamp(0.88rem, 2.2vw, 0.95rem);
   color: var(--ds-text-muted);
-  line-height: 1.75;
+  line-height: var(--typo-body-lg-lh);
 }
 
 .ds-qs .qs-hermetic-card[data-open="true"] {
@@ -902,12 +902,12 @@
 }
 
 .ds-qs .qs-magia-section .qs-magia-title {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(1.3rem, 3.5vw, 1.75rem);
-  font-weight: 600;
+  font-family: var(--font-heading);
+  font-size: var(--typo-h2);
+  font-weight: var(--typo-h2-weight);
   color: #8B3A3A;
   text-align: center;
-  line-height: 1.3;
+  line-height: var(--typo-h2-lh);
   margin-bottom: 8px;
 }
 
@@ -930,9 +930,9 @@
 }
 
 .ds-qs .qs-magia-features-title {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(1rem, 2.5vw, 1.15rem);
-  font-weight: 600;
+  font-family: var(--font-heading);
+  font-size: var(--typo-h4);
+  font-weight: var(--typo-h4-weight);
   color: #6B2222;
   text-align: center;
   margin-bottom: 20px;
@@ -981,7 +981,7 @@
   align-items: center;
   justify-content: center;
   font-size: 0.82rem;
-  font-weight: 700;
+  font-weight: var(--font-bold);
   margin-top: 2px;
   box-shadow: 0 1px 4px rgba(139, 58, 58, 0.3);
 }
@@ -993,17 +993,17 @@
 
 .ds-qs .qs-magia-card-title {
   display: block;
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-heading);
   font-size: clamp(0.95rem, 2.3vw, 1.1rem);
-  font-weight: 600;
+  font-weight: var(--font-semibold);
   color: #6B2222;
-  line-height: 1.3;
+  line-height: var(--typo-h3-lh);
   margin-bottom: 8px;
 }
 
 .ds-qs .qs-magia-summary {
   display: block;
-  font-size: clamp(0.88rem, 2.2vw, 0.98rem);
+  font-size: var(--typo-quote);
   font-style: italic;
   color: #A06060;
   line-height: 1.55;
@@ -1039,7 +1039,7 @@
 .ds-qs .qs-magia-body span {
   font-size: clamp(0.88rem, 2.2vw, 0.95rem);
   color: var(--ds-text-muted);
-  line-height: 1.75;
+  line-height: var(--typo-body-lg-lh);
 }
 
 .ds-qs .qs-magia-card[data-open="true"] {
@@ -1056,7 +1056,7 @@
   gap: 8px;
   padding: 12px 28px;
   border-radius: var(--ds-radius-md);
-  font-weight: 600;
+  font-weight: var(--font-semibold);
   font-size: 0.95rem;
   cursor: pointer;
   transition: all 0.3s ease;

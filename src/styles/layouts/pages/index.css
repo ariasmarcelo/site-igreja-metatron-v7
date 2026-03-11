@@ -99,9 +99,9 @@
 }
 
 .ds-new .ds-hero h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(2rem, 5.5vw, 3.5rem);
-  font-weight: 700;
+  font-family: var(--font-heading);
+  font-size: var(--typo-hero);
+  font-weight: var(--typo-hero-weight);
   color: #FFFFFF;
   margin-bottom: 16px;
   line-height: 1.2;
@@ -115,7 +115,7 @@
 }
 
 .ds-new .ds-hero .ds-hero-sub {
-  font-size: clamp(1rem, 2.4vw, 1.35rem);
+  font-size: var(--typo-subtitle);
   color: var(--ds-text-on-navy);
   margin-bottom: 36px;
   line-height: 1.7;
@@ -204,7 +204,7 @@
 }
 
 .ds-new .ds-recognition-text {
-  font-size: 0.9rem;
+  font-size: var(--typo-body);
   color: var(--ds-text-dark);
   line-height: 1.6;
   margin: 0;
@@ -245,12 +245,12 @@
 }
 
 .ds-new .ds-bridge-title {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(1.3rem, 3.5vw, 1.75rem);
-  font-weight: 600;
+  font-family: var(--font-heading);
+  font-size: var(--typo-h2);
+  font-weight: var(--typo-h2-weight);
   color: #FFFFFF;
   margin-bottom: 24px;
-  line-height: 1.3;
+  line-height: var(--typo-h2-lh);
   text-shadow:
     0 0 8px rgba(255, 255, 255, 0.6),
     0 0 24px rgba(255, 255, 255, 0.3),
@@ -259,7 +259,7 @@
 }
 
 .ds-new .ds-bridge-body p {
-  font-size: clamp(0.95rem, 2vw, 1.05rem);
+  font-size: var(--typo-body-lg);
   color: var(--ds-text-on-navy);
   line-height: 1.8;
   max-width: 680px;
@@ -338,15 +338,15 @@
 
 .ds-new .ds-path-name {
   font-size: clamp(1.1rem, 2.8vw, 1.3rem);
-  font-weight: 600;
+  font-weight: var(--font-semibold);
 }
 .ds-new .ds-path-name.church    { color: var(--ds-church-accent); }
 .ds-new .ds-path-name.institute { color: var(--ds-inst-accent); }
 
 .ds-new .ds-path-desc {
-  font-size: 0.9rem;
-  color: var(--ds-text-muted);
-  line-height: 1.7;
+  font-size: var(--typo-body-desc);
+  line-height: var(--typo-body-desc-lh);
+  color: var(--ds-text-dark);
   margin-bottom: 20px;
 }
 
@@ -360,8 +360,8 @@
 }
 
 .ds-new .ds-path-list li {
-  font-size: 0.85rem;
-  color: var(--ds-text-dark);
+  font-size: var(--typo-body-sm);
+  color: var(--ds-text-muted);
   display: flex;
   align-items: center;
   gap: 10px;
@@ -424,7 +424,7 @@
 }
 
 .ds-new .ds-testimonial-quote {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-heading);
   font-size: 3rem;
   line-height: 1;
   color: var(--ds-sacred-gold);
@@ -433,9 +433,9 @@
 }
 
 .ds-new .ds-testimonial-body {
-  font-size: 0.85rem;
+  font-size: var(--typo-body-sm);
   color: var(--ds-text-muted);
-  line-height: 1.7;
+  line-height: var(--typo-body-sm-lh);
   flex-grow: 1;
   margin-bottom: 16px;
 }
@@ -449,15 +449,15 @@
 }
 
 .ds-new .ds-testimonial-name {
-  font-size: 0.85rem;
-  font-weight: 600;
+  font-size: var(--typo-body-sm);
+  font-weight: var(--font-semibold);
   color: var(--ds-text-dark);
 }
 
 .ds-new .ds-testimonial-tag {
   font-size: 0.75rem;
   color: var(--ds-sacred-gold);
-  font-weight: 500;
+  font-weight: var(--font-medium);
 }
 
 /* ─────────────────────────────────────────────
@@ -465,7 +465,7 @@
    ───────────────────────────────────────────── */
 .ds-new .ds-section-heading {
   font-size: clamp(1.35rem, 4vw, 1.85rem);
-  font-weight: 500;
+  font-weight: var(--font-medium);
   color: var(--ds-text-dark);
   text-align: center;
   margin-bottom: 12px;
@@ -478,7 +478,7 @@
   text-align: center;
   max-width: 560px;
   margin: 0 auto;
-  line-height: 1.7;
+  line-height: var(--typo-body-lh);
 }
 
 .ds-new .ds-brand-icon {
@@ -559,7 +559,7 @@
 }
 
 .ds-new .ds-testimonial-text {
-  font-size: 0.9rem;
+  font-size: var(--typo-body);
   color: var(--ds-text-muted);
 }
 
@@ -567,8 +567,8 @@
    BUTTON SYSTEM
    ───────────────────────────────────────────── */
 .ds-new .ds-btn {
-  font-size: 0.9rem;
-  font-weight: 500;
+  font-size: var(--typo-body);
+  font-weight: var(--font-medium);
   padding: 12px 26px;
   border-radius: var(--ds-radius-sm);
   border: none;

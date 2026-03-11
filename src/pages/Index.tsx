@@ -17,7 +17,6 @@ import { usePageStyles } from '@/hooks/usePageStyles';
 import { PageLoading } from '@/components/PageLoading';
 import { FooterBackground } from '@/components/FooterBackground';
 import { FOOTER } from '@/components/footer-constants';
-import { Button } from '@/components/ui/button';
 
 
 interface IndexTexts {
@@ -418,17 +417,6 @@ export default function Index() {
                 type="p"
                 className={FOOTER.subtitleClass}
               />
-              <Link to="/contato">
-                <Button className={FOOTER.buttonClass}>
-                  <MessageCircle className="w-4 h-4 mr-2" />
-                  <EditableField
-                    value={texts.footerCta?.buttonText}
-                    jsonKey="index.footerCta.buttonText"
-                    type="span"
-                    className="inline"
-                  />
-                </Button>
-              </Link>
             </div>
 
             <div>

@@ -1,0 +1,10 @@
+refactor: centralized typography scale + EditableField perf + footer CTA cleanup
+
+- Add 14 responsive typography tokens (--typo-hero through --typo-tiny) in design-parameters.css
+- Conservative migration: replace only exact-match values across 5 page CSS files, preserving all page-specific font-style, letter-spacing, and custom clamp values
+- New --typo-body-desc token for intermediate description hierarchy
+- Fix path cards visual hierarchy (description dark + larger, items muted + smaller)
+- EditableField: React.memo + React.createElement (eliminate 7 wasted elements per render)
+- Guard logger.debug with DEBUG_ENABLED flag
+- Remove footer CTA button from all pages (keep title/subtitle only)
+- Remove buttonClass from footer-constants

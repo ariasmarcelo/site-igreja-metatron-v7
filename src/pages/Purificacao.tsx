@@ -507,12 +507,6 @@ export default function Purificacao() {
             <div className="max-w-section mx-auto text-center">
               <EditableField value={cta.title} jsonKey="purificacao.cta.title" type="h2" className={FOOTER.titleClass} />
               <EditableField value={cta.subtitle} jsonKey="purificacao.cta.subtitle" type="p" className={FOOTER.subtitleClass} />
-              <Link to="/contato">
-                <Button className={FOOTER.buttonClass}>
-                  <MessageCircle className="w-4 h-4 mr-2" />
-                  <EditableField value={cta.buttonText} jsonKey="purificacao.cta.buttonText" type="span" className="inline" />
-                </Button>
-              </Link>
             </div>
 
             <div>

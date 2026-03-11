@@ -182,12 +182,12 @@
 
 /* Hero título/subtítulo — texto escuro com halo claro para destaque no fundo */
 .purificacao-hero-title {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(2rem, 5.5vw, 3.5rem);
-  font-weight: 700;
+  font-family: var(--font-heading);
+  font-size: var(--typo-hero);
+  font-weight: var(--typo-hero-weight);
   color: #FFFFFF;
   margin-bottom: 10px;
-  line-height: 1.15;
+  line-height: var(--typo-hero-lh);
   text-shadow:
     0 0 8px rgba(255, 255, 255, 0.6),
     0 0 24px rgba(255, 255, 255, 0.3),
@@ -204,7 +204,7 @@
 .purificacao-hero-sub {
   font-size: clamp(1rem, 2.4vw, 1.5rem);
   font-style: italic;
-  font-weight: 500;
+  font-weight: var(--font-medium);
   color: rgba(255, 255, 255, 0.92);
   letter-spacing: 0.06em;
   text-shadow:
@@ -227,8 +227,8 @@
 }
 
 .purificacao-btn-primary {
-  font-size: 0.9rem;
-  font-weight: 500;
+  font-size: var(--typo-body);
+  font-weight: var(--font-medium);
   padding: 12px 26px;
   border-radius: 8px;
   border: none;
@@ -251,8 +251,8 @@
 }
 
 .purificacao-btn-secondary {
-  font-size: 0.9rem;
-  font-weight: 500;
+  font-size: var(--typo-body);
+  font-weight: var(--font-medium);
   padding: 12px 26px;
   border-radius: 8px;
   cursor: pointer;
@@ -349,9 +349,9 @@
 }
 
 .purificacao-heading {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-heading);
   font-size: clamp(1.35rem, 4vw, 1.85rem);
-  font-weight: 500;
+  font-weight: var(--font-medium);
   color: var(--purificacao-text-dark);
   margin-bottom: var(--section-title-to-content, 16px);
   line-height: 1.25;
@@ -389,7 +389,7 @@
   font-size: clamp(0.9rem, 2.2vw, 1.05rem);
   color: var(--purificacao-text-muted);
   font-style: italic;
-  font-weight: 400;
+  font-weight: var(--font-normal);
   letter-spacing: 0.04em;
   line-height: 1.6;
   max-width: 675px;
@@ -397,10 +397,10 @@
 }
 
 .purificacao-section-title-block .purificacao-heading.gold {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-heading);
   font-size: clamp(1.6rem, 4.5vw, 2.2rem);
-  font-weight: 600;
-  line-height: 1.2;
+  font-weight: var(--font-semibold);
+  line-height: var(--typo-h1-lh);
   margin-bottom: 12px;
 }
 
@@ -409,9 +409,9 @@
 }
 
 .purificacao-body {
-  font-size: 0.9rem;
+  font-size: var(--typo-body);
   color: var(--purificacao-text-muted);
-  line-height: 1.7;
+  line-height: var(--typo-body-lh);
 }
 
 .purificacao-body.dark {
@@ -419,8 +419,8 @@
 }
 
 .purificacao-subheading {
-  font-size: clamp(1rem, 2.5vw, 1.15rem);
-  font-weight: 600;
+  font-size: var(--typo-h4);
+  font-weight: var(--typo-h4-weight);
   color: var(--purificacao-text-dark);
   margin-bottom: 10px;
 }
@@ -488,7 +488,7 @@
   height: 32px;
   border-radius: 50%;
   font-size: 0.875rem;
-  font-weight: 700;
+  font-weight: var(--font-bold);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -576,7 +576,7 @@
 
 .purificacao-phase-title {
   font-size: clamp(1.05rem, 2.8vw, 1.25rem);
-  font-weight: 600;
+  font-weight: var(--font-semibold);
   color: var(--purificacao-text-dark);
 }
 
@@ -600,7 +600,7 @@
 .purificacao-phase-outcome {
   font-size: 0.875rem;
   color: var(--purificacao-text-muted);
-  line-height: 1.75;
+  line-height: var(--typo-body-lg-lh);
   padding-top: 16px;
   margin-top: 16px;
   border-top: 1px solid rgba(139, 114, 64, 0.1);
@@ -700,7 +700,7 @@
 
 .purificacao-list .bullet.fire {
   color: var(--purificacao-fire);
-  font-weight: 700;
+  font-weight: var(--font-bold);
 }
 
 .purificacao-list .bullet.fire:empty::before {
@@ -709,7 +709,7 @@
 
 .purificacao-list .bullet.metallic {
   color: var(--purificacao-gold);
-  font-weight: 700;
+  font-weight: var(--font-bold);
 }
 
 /* ─────────────────────────────────────────────
@@ -771,11 +771,11 @@
 }
 
 .purificacao-psicodelicos-title {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-heading);
   font-size: clamp(1.6rem, 4.5vw, 2.2rem);
-  font-weight: 600;
+  font-weight: var(--font-semibold);
   color: #FFFFFF;
-  line-height: 1.2;
+  line-height: var(--typo-h1-lh);
   margin-bottom: 12px;
   text-shadow:
     0 0 8px rgba(255, 255, 255, 0.5),
@@ -787,7 +787,7 @@
   font-size: clamp(0.9rem, 2.2vw, 1.05rem);
   color: rgba(255, 255, 255, 0.82);
   font-style: italic;
-  font-weight: 400;
+  font-weight: var(--font-normal);
   letter-spacing: 0.04em;
   line-height: 1.6;
   max-width: 675px;
@@ -829,13 +829,13 @@
 
 /* ─── Subsection titles (Objectives, Precepts) ─── */
 .purificacao-sacr-subtitle {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-heading);
   font-size: clamp(1.15rem, 3vw, 1.4rem);
-  font-weight: 500;
+  font-weight: var(--font-medium);
   color: var(--purificacao-gold-muted);
   text-align: center;
   margin: 0 0 24px;
-  line-height: 1.3;
+  line-height: var(--typo-h3-lh);
 }
 
 /* ─── Objectives ─── */
@@ -858,7 +858,7 @@
 
 .purificacao-sacr-objective-bullet {
   color: var(--purificacao-gold);
-  font-size: 0.65rem;
+  font-size: var(--typo-tiny);
   flex-shrink: 0;
   margin-top: 2px;
 }
@@ -866,7 +866,7 @@
 .purificacao-sacr-objective p {
   font-size: 0.875rem;
   color: var(--purificacao-text-muted);
-  line-height: 1.7;
+  line-height: var(--typo-body-lh);
 }
 
 /* ─── Papiro (Rhythm card style) ─── */
@@ -892,13 +892,13 @@
 }
 
 .purificacao-sacr-papiro-title {
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-heading);
   font-size: clamp(1.15rem, 3vw, 1.4rem);
-  font-weight: 500;
+  font-weight: var(--font-medium);
   color: var(--purificacao-gold-muted);
   text-align: center;
   margin: 0 0 24px;
-  line-height: 1.3;
+  line-height: var(--typo-h3-lh);
   position: relative;
   z-index: 1;
 }
@@ -950,17 +950,17 @@
 }
 
 .purificacao-sacr-gain-title {
-  font-size: clamp(1rem, 2.5vw, 1.15rem);
-  font-weight: 600;
+  font-size: var(--typo-h4);
+  font-weight: var(--typo-h4-weight);
   color: var(--purificacao-text-dark);
   margin-bottom: 10px;
-  line-height: 1.35;
+  line-height: var(--typo-h4-lh);
 }
 
 .purificacao-sacr-gain-text {
-  font-size: 0.85rem;
+  font-size: var(--typo-body-sm);
   color: var(--purificacao-text-muted);
-  line-height: 1.7;
+  line-height: var(--typo-body-sm-lh);
 }
 
 /* ─── Rhythm ─── */
@@ -1005,7 +1005,7 @@
 .purificacao-sacr-precept p {
   font-size: 0.875rem;
   color: var(--purificacao-text-muted);
-  line-height: 1.7;
+  line-height: var(--typo-body-lh);
 }
 
 /* ─── Safety ─── */
@@ -1026,9 +1026,9 @@
   border: none;
   cursor: pointer;
   color: var(--purificacao-gold-muted);
-  font-family: 'Playfair Display', serif;
+  font-family: var(--font-heading);
   font-size: 0.95rem;
-  font-weight: 500;
+  font-weight: var(--font-medium);
   letter-spacing: 0.01em;
   transition: background 0.25s;
 }
@@ -1080,7 +1080,7 @@
 .purificacao-sacr-safety-item p {
   font-size: 0.8125rem;
   color: var(--purificacao-text-muted);
-  line-height: 1.7;
+  line-height: var(--typo-body-lh);
 }
 
 /* ─── CTA ─── */
@@ -1221,17 +1221,17 @@
 
 .purificacao-triple-card h3,
 .purificacao-triple-card .purificacao-subheading {
-  font-size: clamp(1rem, 2.5vw, 1.15rem);
-  font-weight: 600;
+  font-size: var(--typo-h4);
+  font-weight: var(--typo-h4-weight);
   color: var(--purificacao-text-dark);
   margin-bottom: 10px;
 }
 
 .purificacao-triple-card p,
 .purificacao-triple-card .purificacao-body {
-  font-size: 0.85rem;
+  font-size: var(--typo-body-sm);
   color: var(--purificacao-text-muted);
-  line-height: 1.7;
+  line-height: var(--typo-body-sm-lh);
 }
 
 .purificacao-application-item {
@@ -1246,7 +1246,7 @@
 
 .purificacao-app-bullet {
   color: var(--purificacao-gold);
-  font-weight: 700;
+  font-weight: var(--font-bold);
   flex-shrink: 0;
 }
 
@@ -1298,8 +1298,8 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-size: 0.85rem;
-  font-weight: 500;
+  font-size: var(--typo-body-sm);
+  font-weight: var(--font-medium);
   padding: 10px 22px;
   border-radius: var(--ds-radius-sm, 8px);
   background: linear-gradient(135deg, #3d3220, #4a3d28);
@@ -1326,7 +1326,7 @@
 .purificacao-cta-btn {
   background: linear-gradient(135deg, var(--purificacao-gold-muted), var(--purificacao-gold)) !important;
   color: white !important;
-  font-weight: 600;
+  font-weight: var(--font-semibold);
   padding: 16px 32px;
   border-radius: var(--ds-radius-sm, 8px);
   box-shadow: 0 4px 20px rgba(196, 148, 59, 0.35);

@@ -10,7 +10,7 @@
  *   logger.error('erro crítico');  // sempre exibido
  */
 
-const DEBUG_ENABLED = import.meta.env.VITE_DEBUG_LOGS === 'true';
+export const DEBUG_ENABLED = import.meta.env.VITE_DEBUG_LOGS === 'true';
 
 const noop = () => {};
 

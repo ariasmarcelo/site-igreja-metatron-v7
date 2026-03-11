@@ -169,6 +169,7 @@ export default function QuemSomos() {
             type="p"
             className="qs-origin-body whitespace-pre-line"
           />
+          <div className="qs-gold-divider" />
         </div>
       </section>
 
@@ -562,16 +563,6 @@ export default function QuemSomos() {
                 type="p"
                 className={FOOTER.subtitleClass}
               />
-              <Link to="/contato">
-                <Button className={FOOTER.buttonClass}>
-                  <EditableField
-                    value={texts.cta?.buttonText}
-                    jsonKey="quemsomos.cta.buttonText"
-                    type="span"
-                    className="inline"
-                  />
-                </Button>
-              </Link>
             </div>
 
             <div>

@@ -20,9 +20,6 @@ export const FOOTER = {
   /** Classes do subtítulo CTA (p) */
   subtitleClass: 'text-lg mb-5 text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.3)]',
 
-  /** Classes do botão CTA */
-  buttonClass: 'bg-[#CFAF5A] text-white font-semibold px-6 py-4 text-base rounded-lg shadow-[0_6px_20px_rgba(0,0,0,0.5)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.6)] transition-all duration-300 hover:scale-105',
-
   /** Classes do copyright no rodapé */
   copyrightClass: 'text-xs text-white/40 text-center',
 

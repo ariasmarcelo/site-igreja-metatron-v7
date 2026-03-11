@@ -60,7 +60,7 @@
     --font-heading: 'Playfair Display', serif;
     --font-body: 'Inter', sans-serif;
     
-    /* Tamanhos - Mobile First */
+    /* Tamanhos fixos (legado — mantidos para compatibilidade) */
     --text-xs: 0.75rem;      /* 12px */
     --text-sm: 0.875rem;     /* 14px */
     --text-base: 1rem;       /* 16px */
@@ -72,6 +72,68 @@
     --text-5xl: 3rem;        /* 48px */
     --text-6xl: 3.75rem;     /* 60px */
     --text-7xl: 4.5rem;      /* 72px */
+
+    /* ── Escala tipográfica semântica (responsiva) ── */
+
+    /* Hero — títulos de página */
+    --typo-hero:        clamp(2rem, 5.5vw, 3.5rem);
+    --typo-hero-lh:     1.15;
+    --typo-hero-weight: 700;
+
+    /* H1 — títulos grandes de seção (Manifesto, Sacramentos) */
+    --typo-h1:          clamp(1.5rem, 4.5vw, 2.2rem);
+    --typo-h1-lh:       1.2;
+    --typo-h1-weight:   600;
+
+    /* H2 — títulos padrão de seção (Origin, Bridge, Accordion) */
+    --typo-h2:          clamp(1.3rem, 3.5vw, 1.75rem);
+    --typo-h2-lh:       1.3;
+    --typo-h2-weight:   600;
+
+    /* H3 — títulos de card (DualNature, BuddhaIntro) */
+    --typo-h3:          clamp(1.19rem, 3.23vw, 1.47rem);
+    --typo-h3-lh:       1.3;
+    --typo-h3-weight:   600;
+
+    /* H4 — subtítulos (phase titles, card h4) */
+    --typo-h4:          clamp(1rem, 2.5vw, 1.15rem);
+    --typo-h4-lh:       1.35;
+    --typo-h4-weight:   600;
+
+    /* Subtitle — subtítulos de hero */
+    --typo-subtitle:    clamp(1rem, 2.4vw, 1.35rem);
+    --typo-subtitle-lh: 1.6;
+
+    /* Body large — parágrafos proeminentes (bridge, intro) */
+    --typo-body-lg:     clamp(0.95rem, 2vw, 1.05rem);
+    --typo-body-lg-lh:  1.75;
+
+    /* Body — texto padrão */
+    --typo-body:        0.9rem;
+    --typo-body-lh:     1.7;
+
+    /* Body desc — descrições subordinadas, listas descritivas */
+    --typo-body-desc:   0.875rem;
+    --typo-body-desc-lh: 1.7;
+
+    /* Body small — texto secundário, itens de lista */
+    --typo-body-sm:     0.85rem;
+    --typo-body-sm-lh:  1.7;
+
+    /* Quote — citações, resumos (italic) */
+    --typo-quote:       clamp(0.88rem, 2.2vw, 0.98rem);
+    --typo-quote-lh:    1.7;
+
+    /* Caption — metadados, datas, legal */
+    --typo-caption:     0.8rem;
+    --typo-caption-lh:  1.5;
+
+    /* Badge — badges, tags, contadores */
+    --typo-badge:       0.72rem;
+    --typo-badge-weight: 600;
+
+    /* Tiny — bullets, decorativo */
+    --typo-tiny:        0.65rem;
     
     /* Pesos */
     --font-normal: 400;
