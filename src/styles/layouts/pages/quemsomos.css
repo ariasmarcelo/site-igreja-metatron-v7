@@ -124,7 +124,9 @@
   align-items: center;
   justify-content: center;
   gap: 12px;
-  margin: 16px auto 20px;
+  margin: 20px auto;
+  position: relative;
+  z-index: 1;
 }
 
 .ds-qs .qs-gold-divider::before,
@@ -133,6 +135,7 @@
   width: 64px;
   height: 1px;
   background: linear-gradient(90deg, transparent, var(--ds-sacred-gold));
+  flex-shrink: 0;
 }
 
 .ds-qs .qs-gold-divider::after {
@@ -144,6 +147,14 @@
    ───────────────────────────────────────────── */
 .ds-qs .qs-origin-card {
   border-top-color: var(--ds-sacred-gold);
+  background:
+    linear-gradient(to right, rgba(0,0,0,0.03) 0%, transparent 8%, transparent 48%, rgba(0,0,0,0.06) 50%, transparent 52%, transparent 92%, rgba(0,0,0,0.03) 100%),
+    linear-gradient(135deg, #FAF6EE, #F5EFE3);
+  box-shadow:
+    var(--ds-shadow-float),
+    inset 2px 0 8px rgba(0,0,0,0.04),
+    inset -2px 0 8px rgba(0,0,0,0.04);
+  position: relative;
 }
 
 .ds-qs .qs-origin-title {
@@ -154,15 +165,19 @@
   text-align: center;
   margin-bottom: 0;
   line-height: var(--typo-h2-lh);
+  position: relative;
+  z-index: 1;
 }
 
 .ds-qs .qs-origin-body {
-  font-size: clamp(0.85rem, 2vw, 0.95rem);
+  font-size: var(--typo-body-lg);
   color: var(--ds-text-muted);
-  line-height: var(--typo-body-lh);
-  max-width: 585px;
+  line-height: var(--typo-body-lg-lh);
+  max-width: 740px;
   margin: 0 auto;
   text-align: center;
+  position: relative;
+  z-index: 1;
 }
 
 /* ─────────────────────────────────────────────

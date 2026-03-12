@@ -315,6 +315,14 @@
 .purificacao-card.purificacao-card-gold {
   padding: 28px 32px 28px;
   text-align: center;
+  background:
+    linear-gradient(to right, rgba(0,0,0,0.03) 0%, transparent 8%, transparent 48%, rgba(0,0,0,0.06) 50%, transparent 52%, transparent 92%, rgba(0,0,0,0.03) 100%),
+    linear-gradient(135deg, #FAF6EE, #F5EFE3);
+  box-shadow:
+    var(--ds-shadow-md, 0 4px 24px rgba(0, 0, 0, 0.08)),
+    inset 2px 0 8px rgba(0,0,0,0.04),
+    inset -2px 0 8px rgba(0,0,0,0.04);
+  position: relative;
 }
 
 @media (min-width: 768px) {
